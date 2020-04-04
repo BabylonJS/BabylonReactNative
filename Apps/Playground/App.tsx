@@ -9,14 +9,14 @@ import React, { useState, FunctionComponent } from 'react';
 import { SafeAreaView, StatusBar, Button, View, Text, ViewProps } from 'react-native';
 
 import { EngineView, useEngine } from 'react-native-babylon';
-import { Scene, Vector3, Mesh, ArcRotateCamera, Engine, Camera, PBRMetallicRoughnessMaterial, Color3, PromisePolyfill } from '@babylonjs/core';
+import { Scene, Vector3, Mesh, ArcRotateCamera, Engine, Camera, PBRMetallicRoughnessMaterial, Color3 } from '@babylonjs/core';
 
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const [toggleView, setToggleView] = useState(false);
   const [camera, setCamera] = useState<Camera>();
 
   useEngine((engine: Engine) => {
-    var scene = new Scene(engine);
+    const scene = new Scene(engine);
     scene.createDefaultCamera(true);
     if (scene.activeCamera != null) {
       (scene.activeCamera as ArcRotateCamera).beta -= Math.PI / 8;
