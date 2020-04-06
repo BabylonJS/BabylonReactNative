@@ -5,15 +5,18 @@
  * @format
  */
 
-import React, { useState, FunctionComponent } from 'react';
+import React, { useState, FunctionComponent, useEffect } from 'react';
 import { SafeAreaView, StatusBar, Button, View, Text, ViewProps } from 'react-native';
 
 import { EngineView, useEngine } from 'react-native-babylon';
 import { Scene, Vector3, Mesh, ArcRotateCamera, Engine, Camera, PBRMetallicRoughnessMaterial, Color3 } from '@babylonjs/core';
+import Slider from '@react-native-community/slider';
 
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const [toggleView, setToggleView] = useState(false);
   const [camera, setCamera] = useState<Camera>();
+  const [box, setBox] = useState<Mesh>();
+  const [scale, setScale] = useState<number>(1);
 
   useEngine((engine: Engine) => {
     const scene = new Scene(engine);
@@ -25,6 +28,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
     scene.createDefaultLight(true);
 
     const box = Mesh.CreateBox("box", 0.3, scene);
+    setBox(box);
     const mat = new PBRMetallicRoughnessMaterial("mat", scene);
     mat.metallic = 1;
     mat.roughness = 0.5;
@@ -36,11 +40,21 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
     };
   });
 
+  useEffect(() => {
+    if (box) {
+      box.scaling = new Vector3(scale, scale, scale);
+    }
+  }, [box, scale]);
+
   return (
     <>
       <View style={props.style}>
+        <Button title="Toggle EngineView" onPress={() => { setToggleView(!toggleView) }} />
         { !toggleView &&
-          <EngineView style={props.style} camera={camera} />
+          <View style={{flex: 1}}>
+            <EngineView style={props.style} camera={camera} />
+            <Slider style={{position: 'absolute', minHeight: 50, margin: 10, left: 0, right: 0, bottom: 0}} minimumValue={0.2} maximumValue={2} value={scale} onValueChange={setScale} />
+          </View>
         }
         { toggleView &&
           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -48,7 +62,6 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
             <Text style={{fontSize: 12}}>Render loop stopped, but engine is still alive.</Text>
           </View>
         }
-        <Button title="Toggle EngineView" onPress={() => { setToggleView(!toggleView) }} />
       </View>
     </>
   );
