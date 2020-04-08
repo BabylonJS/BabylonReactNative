@@ -13,10 +13,12 @@ import { Scene, Vector3, Mesh, ArcRotateCamera, Engine, Camera, PBRMetallicRough
 import Slider from '@react-native-community/slider';
 
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
+  const defaultScale = 1;
+
   const [toggleView, setToggleView] = useState(false);
   const [camera, setCamera] = useState<Camera>();
   const [box, setBox] = useState<Mesh>();
-  const [scale, setScale] = useState<number>(1);
+  const [scale, setScale] = useState<number>(defaultScale);
   const [fps, setFps] = useState<number>(0);
 
   useEngine((engine: Engine) => {
@@ -40,12 +42,12 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
       scene.meshes[0].rotate(Vector3.Up(), 0.005 * scene.getAnimationRatio());
     };
 
-    const timerHandle = setTimeout(() => {
+    const timerHandle = setInterval(() => {
       setFps(engine.getFps());
     }, 1000);
 
     return () => {
-      clearTimeout(timerHandle);
+      clearInterval(timerHandle);
     };
   });
 
@@ -62,7 +64,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
         { !toggleView &&
           <View style={{flex: 1}}>
             <EngineView style={props.style} camera={camera} />
-            <Slider style={{position: 'absolute', minHeight: 50, margin: 10, left: 0, right: 0, bottom: 0}} minimumValue={0.2} maximumValue={2} value={scale} onValueChange={setScale} />
+            <Slider style={{position: 'absolute', minHeight: 50, margin: 10, left: 0, right: 0, bottom: 0}} minimumValue={0.2} maximumValue={2} value={defaultScale} onValueChange={setScale} />
             <Text style={{color: 'yellow', position: 'absolute', margin: 10, right: 0, top: 0}}>FPS: {Math.round(fps)}</Text>
           </View>
         }
