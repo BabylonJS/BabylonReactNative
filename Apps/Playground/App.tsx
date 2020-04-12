@@ -8,7 +8,7 @@
 import React, { useState, FunctionComponent, useEffect } from 'react';
 import { SafeAreaView, StatusBar, Button, View, Text, ViewProps } from 'react-native';
 
-import { EngineView, useEngine, useAsyncEffect } from 'react-native-babylon';
+import { EngineView, useEngine } from 'react-native-babylon';
 import { Scene, Vector3, Mesh, ArcRotateCamera, Engine, Camera, PBRMetallicRoughnessMaterial, Color3 } from '@babylonjs/core';
 import Slider from '@react-native-community/slider';
 
