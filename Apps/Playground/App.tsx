@@ -8,37 +8,40 @@
 import React, { useState, FunctionComponent, useEffect } from 'react';
 import { SafeAreaView, StatusBar, Button, View, Text, ViewProps } from 'react-native';
 
-import { EngineView, useEngine } from 'react-native-babylon';
+import { EngineView, useEngine, useAsyncEffect } from 'react-native-babylon';
 import { Scene, Vector3, Mesh, ArcRotateCamera, Engine, Camera, PBRMetallicRoughnessMaterial, Color3 } from '@babylonjs/core';
 import Slider from '@react-native-community/slider';
 
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const defaultScale = 1;
 
+  const engine = useEngine();
   const [toggleView, setToggleView] = useState(false);
   const [camera, setCamera] = useState<Camera>();
   const [box, setBox] = useState<Mesh>();
   const [scale, setScale] = useState<number>(defaultScale);
 
-  useEngine((engine: Engine) => {
-    const scene = new Scene(engine);
-    scene.createDefaultCamera(true);
-    (scene.activeCamera as ArcRotateCamera).beta -= Math.PI / 8;
-    setCamera(scene.activeCamera!);
-    scene.createDefaultLight(true);
+  useEffect(() => {
+    if (engine) {
+      const scene = new Scene(engine);
+      scene.createDefaultCamera(true);
+      (scene.activeCamera as ArcRotateCamera).beta -= Math.PI / 8;
+      setCamera(scene.activeCamera!);
+      scene.createDefaultLight(true);
 
-    const box = Mesh.CreateBox("box", 0.3, scene);
-    setBox(box);
-    const mat = new PBRMetallicRoughnessMaterial("mat", scene);
-    mat.metallic = 1;
-    mat.roughness = 0.5;
-    mat.baseColor = Color3.Red();
-    box.material = mat;
+      const box = Mesh.CreateBox("box", 0.3, scene);
+      setBox(box);
+      const mat = new PBRMetallicRoughnessMaterial("mat", scene);
+      mat.metallic = 1;
+      mat.roughness = 0.5;
+      mat.baseColor = Color3.Red();
+      box.material = mat;
 
-    scene.beforeRender = function () {
-      scene.meshes[0].rotate(Vector3.Up(), 0.005 * scene.getAnimationRatio());
-    };
-  });
+      scene.beforeRender = function () {
+        scene.meshes[0].rotate(Vector3.Up(), 0.005 * scene.getAnimationRatio());
+      };
+    }
+  }, [engine]);
 
   useEffect(() => {
     if (box) {
