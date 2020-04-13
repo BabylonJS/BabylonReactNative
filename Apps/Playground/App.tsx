@@ -38,7 +38,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
       box.material = mat;
 
       scene.beforeRender = function () {
-        scene.meshes[0].rotate(Vector3.Up(), 0.005 * scene.getAnimationRatio());
+        box.rotate(Vector3.Up(), 0.005 * scene.getAnimationRatio());
       };
     }
   }, [engine]);
