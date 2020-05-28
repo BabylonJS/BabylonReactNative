@@ -13,11 +13,17 @@ Babylon React Native is in the early phase of its development, and has the follo
 
 This quick overview will help you understand the constructs provided by Babylon React Native and how to use them in a React Native application. See the Playground app's [App.tsx](Apps/Playground/App.tsx) for example usage.
 
-Note that this package has several **peer dependencies**. If these dependencies are unmet, `react-native` will emit warnings. Be sure to add these dependencies to your project.
+### Dependencies
 
-### Additional Android Requirements
+This package has several **peer dependencies**. If these dependencies are unmet, `react-native` will emit warnings. Be sure to add these dependencies to your project.
 
-The minimum Android SDK version is 24. This must be set as `minSdkVersion` in the consuming project's `build.gradle` file. 
+### C++ Build Requirements
+
+This package includes C++ source, so platform specific tooling to build C++ code must be installed.
+
+### Android Requirements
+
+The minimum Android SDK version is 24. This must be set as `minSdkVersion` in the consuming project's `build.gradle` file.
 
 ### `useEngine`
 
