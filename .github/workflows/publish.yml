@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: '12.x'
           registry-url: 'https://npm.pkg.github.com'
-          scope: '@ryantrem'
+          scope: '@babylonjs'
       - name: Version & Publish Package
         run: |
           npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
