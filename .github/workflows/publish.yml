@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2.2.0
+      - name: Checkout submodules
+        uses: textbook/git-checkout-submodule-action@2.1.1
       - name: Setup Node.js
         uses: actions/setup-node@v1.4.2
         with:
