@@ -7,9 +7,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Repo
         uses: actions/checkout@v2.2.0
-      - name: Checkout submodules
+      - name: Checkout Submodules
         uses: textbook/git-checkout-submodule-action@2.1.1
       - name: Setup Node.js
         uses: actions/setup-node@v1.4.2
