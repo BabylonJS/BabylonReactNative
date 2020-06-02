@@ -15,12 +15,12 @@ jobs:
         uses: actions/setup-node@v1.4.2
         with:
           node-version: '12.x'
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@babylonjs'
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@ryantrem'
       - name: Version & Publish Package
         run: |
           npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
           npm publish
         working-directory: ./Apps/Playground/node_modules/@babylonjs/react-native
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
