@@ -82,7 +82,7 @@ After having run the above command, you can also open `Apps/Playground/android` 
 If you want to test using a local build of the NPM package with your own React Native app, you can do so with the `npm pack` command on either Mac or Windows.
 
 ```
-cd Apps/Playground/node_modules/react-native-babylon
+cd Apps/Playground/node_modules/@babylonjs/react-native
 npm pack
 ```
 
