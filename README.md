@@ -41,6 +41,13 @@ cd Apps/Playground
 yarn install
 ```
 
+For iOS, CocoaPods are also used, and these must be installed.
+
+```
+cd Apps/Playground/ios
+pod install --repo-update
+```
+
 ### **Configuring a Mac Dev Environment**
 
 **Required Tools:** [Android Studio](https://developer.android.com/studio/), [CMake](https://cmake.org/)
@@ -70,12 +77,23 @@ export ANDROID_AVD_HOME=~/.android/avd
 
 On either Mac or Windows, NPX is used to build and run the Playground sample/test app from the command line. Open a command prompt at the root of the BabylonReactNative repo if you don't have one already open.
 
+#### Android
+
 ```
 cd Apps/Playground
 npx react-native run-android
 ```
 
 After having run the above command, you can also open `Apps/Playground/android` in Android Studio and run the app from there.
+
+#### iOS
+
+```
+cd Apps/Playground
+npx react-native run-ios
+```
+
+After having run the above command, you can also open `Apps/Playground/ios/Playground.xcworkspace` in XCode and run the app from there.
 
 ### **Building the NPM Package**
 
