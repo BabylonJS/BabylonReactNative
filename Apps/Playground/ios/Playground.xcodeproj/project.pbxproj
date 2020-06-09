@@ -19,6 +19,8 @@
 		2DCD954D1E0B4F2C00145EB5 /* PlaygroundTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* PlaygroundTests.m */; };
 		76A5C9314E69F53B9308D45C /* libPods-PlaygroundTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A27E99BCBBA16817330523FA /* libPods-PlaygroundTests.a */; };
 		8A62F202248B062D0013B6F1 /* Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A62F201248B062D0013B6F1 /* Placeholder.swift */; };
+		8A992A76249035EB000ACD23 /* libBabylonNative.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992A75249035EB000ACD23 /* libBabylonNative.a */; };
+		8A992A7824903631000ACD23 /* libnapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992A7724903631000ACD23 /* libnapi.a */; };
 		BC17671D40F4DD48338295AB /* libPods-Playground.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F6BC394028D7BAE8A003F7EF /* libPods-Playground.a */; };
 		DC0E086EEC7F13FF7B7A6ACC /* libPods-Playground-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EFE1A6A1208FCAF679B3028D /* libPods-Playground-tvOSTests.a */; };
 /* End PBXBuildFile section */
@@ -61,6 +63,8 @@
 		6BCB9591CE7C52AE32A2296E /* Pods-PlaygroundTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlaygroundTests.release.xcconfig"; path = "Target Support Files/Pods-PlaygroundTests/Pods-PlaygroundTests.release.xcconfig"; sourceTree = "<group>"; };
 		8A62F200248B062D0013B6F1 /* Playground-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Playground-Bridging-Header.h"; sourceTree = "<group>"; };
 		8A62F201248B062D0013B6F1 /* Placeholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Placeholder.swift; sourceTree = "<group>"; };
+		8A992A75249035EB000ACD23 /* libBabylonNative.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libBabylonNative.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A992A7724903631000ACD23 /* libnapi.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libnapi.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		99C45ADF56518ABFCCFCB01B /* Pods-Playground-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Playground-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Playground-tvOSTests/Pods-Playground-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A27E99BCBBA16817330523FA /* libPods-PlaygroundTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PlaygroundTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C876831BED593CF1A1FCBD19 /* Pods-Playground.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Playground.release.xcconfig"; path = "Target Support Files/Pods-Playground/Pods-Playground.release.xcconfig"; sourceTree = "<group>"; };
@@ -85,6 +89,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A992A7824903631000ACD23 /* libnapi.a in Frameworks */,
+				8A992A76249035EB000ACD23 /* libBabylonNative.a in Frameworks */,
 				BC17671D40F4DD48338295AB /* libPods-Playground.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -144,6 +150,8 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8A992A7724903631000ACD23 /* libnapi.a */,
+				8A992A75249035EB000ACD23 /* libBabylonNative.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				F6BC394028D7BAE8A003F7EF /* libPods-Playground.a */,
