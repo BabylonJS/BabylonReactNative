@@ -18,7 +18,6 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* PlaygroundTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* PlaygroundTests.m */; };
 		76A5C9314E69F53B9308D45C /* libPods-PlaygroundTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A27E99BCBBA16817330523FA /* libPods-PlaygroundTests.a */; };
-		8A62F202248B062D0013B6F1 /* Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A62F201248B062D0013B6F1 /* Placeholder.swift */; };
 		8A992A76249035EB000ACD23 /* libBabylonNative.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992A75249035EB000ACD23 /* libBabylonNative.a */; };
 		8A992A7824903631000ACD23 /* libnapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992A7724903631000ACD23 /* libnapi.a */; };
 		8A992A7E2491A0F3000ACD23 /* libJsRuntime.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992A7D2491A0F3000ACD23 /* libJsRuntime.a */; };
@@ -87,8 +86,6 @@
 		5BF3DEA5030AD445D3CF62D1 /* Pods-Playground-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Playground-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Playground-tvOS/Pods-Playground-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		68FACB011E63361C5C3BD1B4 /* Pods-Playground-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Playground-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Playground-tvOS/Pods-Playground-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		6BCB9591CE7C52AE32A2296E /* Pods-PlaygroundTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlaygroundTests.release.xcconfig"; path = "Target Support Files/Pods-PlaygroundTests/Pods-PlaygroundTests.release.xcconfig"; sourceTree = "<group>"; };
-		8A62F200248B062D0013B6F1 /* Playground-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Playground-Bridging-Header.h"; sourceTree = "<group>"; };
-		8A62F201248B062D0013B6F1 /* Placeholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Placeholder.swift; sourceTree = "<group>"; };
 		8A992A75249035EB000ACD23 /* libBabylonNative.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libBabylonNative.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A992A7724903631000ACD23 /* libnapi.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libnapi.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A992A7D2491A0F3000ACD23 /* libJsRuntime.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libJsRuntime.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -239,8 +236,6 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				8A62F201248B062D0013B6F1 /* Placeholder.swift */,
-				8A62F200248B062D0013B6F1 /* Playground-Bridging-Header.h */,
 			);
 			name = Playground;
 			sourceTree = "<group>";
@@ -690,7 +685,6 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
-				8A62F202248B062D0013B6F1 /* Placeholder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -743,7 +737,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CC776FD0C9DEA942DC9C8F18 /* Pods-PlaygroundTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -767,7 +760,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6BCB9591CE7C52AE32A2296E /* Pods-PlaygroundTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = PlaygroundTests/Info.plist;
