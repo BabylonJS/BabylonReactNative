@@ -46,6 +46,8 @@
 		8A992AD02491B132000ACD23 /* libspirv-cross-hlsl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992ACF2491B132000ACD23 /* libspirv-cross-hlsl.a */; };
 		8A992AD22491B13B000ACD23 /* libspirv-cross-glsl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992AD12491B13B000ACD23 /* libspirv-cross-glsl.a */; };
 		8A992AD42491B155000ACD23 /* libspirv-cross-core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992AD32491B155000ACD23 /* libspirv-cross-core.a */; };
+		8A992AD72493FE5E000ACD23 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992AD52493FE5D000ACD23 /* MetalKit.framework */; };
+		8A992AD82493FE5E000ACD23 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992AD62493FE5E000ACD23 /* Metal.framework */; };
 		BC17671D40F4DD48338295AB /* libPods-Playground.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F6BC394028D7BAE8A003F7EF /* libPods-Playground.a */; };
 		DC0E086EEC7F13FF7B7A6ACC /* libPods-Playground-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EFE1A6A1208FCAF679B3028D /* libPods-Playground-tvOSTests.a */; };
 /* End PBXBuildFile section */
@@ -134,6 +136,8 @@
 		8A992ACF2491B132000ACD23 /* libspirv-cross-hlsl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libspirv-cross-hlsl.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A992AD12491B13B000ACD23 /* libspirv-cross-glsl.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libspirv-cross-glsl.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A992AD32491B155000ACD23 /* libspirv-cross-core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libspirv-cross-core.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A992AD52493FE5D000ACD23 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
+		8A992AD62493FE5E000ACD23 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		99C45ADF56518ABFCCFCB01B /* Pods-Playground-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Playground-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Playground-tvOSTests/Pods-Playground-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A27E99BCBBA16817330523FA /* libPods-PlaygroundTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PlaygroundTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C876831BED593CF1A1FCBD19 /* Pods-Playground.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Playground.release.xcconfig"; path = "Target Support Files/Pods-Playground/Pods-Playground.release.xcconfig"; sourceTree = "<group>"; };
@@ -158,6 +162,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A992AD72493FE5E000ACD23 /* MetalKit.framework in Frameworks */,
+				8A992AD82493FE5E000ACD23 /* Metal.framework in Frameworks */,
 				8A992AD42491B155000ACD23 /* libspirv-cross-core.a in Frameworks */,
 				8A992AD22491B13B000ACD23 /* libspirv-cross-glsl.a in Frameworks */,
 				8A992AD02491B132000ACD23 /* libspirv-cross-hlsl.a in Frameworks */,
@@ -244,6 +250,8 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8A992AD62493FE5E000ACD23 /* Metal.framework */,
+				8A992AD52493FE5D000ACD23 /* MetalKit.framework */,
 				8A992AD32491B155000ACD23 /* libspirv-cross-core.a */,
 				8A992AD12491B13B000ACD23 /* libspirv-cross-glsl.a */,
 				8A992ACF2491B132000ACD23 /* libspirv-cross-hlsl.a */,
