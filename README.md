@@ -84,16 +84,20 @@ cd Apps/Playground
 npx react-native run-android
 ```
 
-After having run the above command, you can also open `Apps/Playground/android` in Android Studio and run the app from there.
+After having run the above commands, you can also open `Apps/Playground/android` in Android Studio and run the app from there.
 
 #### iOS
 
 ```
+pushd Apps/Playground/ios
+cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../submodules/BabylonNative/Dependencies/ios-cmake/ios.toolchain.cmake -DPLATFORM=OS64COMBINED -DENABLE_ARC=0 -DDEPLOYMENT_TARGET=12 -DENABLE_GLSLANG_BINARIES=OFF -DSPIRV_CROSS_CLI=OFF .
+popd
+
 cd Apps/Playground
 npx react-native run-ios
 ```
 
-After having run the above command, you can also open `Apps/Playground/ios/Playground.xcworkspace` in XCode and run the app from there.
+After having run the above commands, you can also open `Apps/Playground/ios/Playground.xcworkspace` in XCode and run the app from there.
 
 ### **Building the NPM Package**
 
