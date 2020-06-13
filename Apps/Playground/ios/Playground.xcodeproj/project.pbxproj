@@ -45,7 +45,6 @@
 		8A992AD02491B132000ACD23 /* libspirv-cross-hlsl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992ACF2491B132000ACD23 /* libspirv-cross-hlsl.a */; };
 		8A992AD22491B13B000ACD23 /* libspirv-cross-glsl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992AD12491B13B000ACD23 /* libspirv-cross-glsl.a */; };
 		8A992AD42491B155000ACD23 /* libspirv-cross-core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992AD32491B155000ACD23 /* libspirv-cross-core.a */; };
-		8A992AD72493FE5E000ACD23 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992AD52493FE5D000ACD23 /* MetalKit.framework */; };
 		BC17671D40F4DD48338295AB /* libPods-Playground.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F6BC394028D7BAE8A003F7EF /* libPods-Playground.a */; };
 		DC0E086EEC7F13FF7B7A6ACC /* libPods-Playground-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EFE1A6A1208FCAF679B3028D /* libPods-Playground-tvOSTests.a */; };
 /* End PBXBuildFile section */
@@ -158,7 +157,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A992AD72493FE5E000ACD23 /* MetalKit.framework in Frameworks */,
 				8A992AD42491B155000ACD23 /* libspirv-cross-core.a in Frameworks */,
 				8A992AD22491B13B000ACD23 /* libspirv-cross-glsl.a in Frameworks */,
 				8A992AD02491B132000ACD23 /* libspirv-cross-hlsl.a in Frameworks */,
