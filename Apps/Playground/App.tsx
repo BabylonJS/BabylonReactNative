@@ -9,7 +9,7 @@ import React, { useState, FunctionComponent, useEffect } from 'react';
 import { SafeAreaView, StatusBar, Button, View, Text, ViewProps } from 'react-native';
 
 import { EngineView, useEngine } from 'react-native-babylon';
-import { Scene, Vector3, Mesh, ArcRotateCamera, Engine, Camera, PBRMetallicRoughnessMaterial, Color3 } from '@babylonjs/core';
+import { Scene, Vector3, Mesh, ArcRotateCamera, Engine, Camera, PBRMetallicRoughnessMaterial, Color3, TransformNode } from '@babylonjs/core';
 import Slider from '@react-native-community/slider';
 
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
@@ -24,22 +24,45 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   useEffect(() => {
     if (engine) {
       const scene = new Scene(engine);
-      scene.createDefaultCamera(true);
-      (scene.activeCamera as ArcRotateCamera).beta -= Math.PI / 8;
-      setCamera(scene.activeCamera!);
-      scene.createDefaultLight(true);
 
-      const box = Mesh.CreateBox("box", 0.3, scene);
-      setBox(box);
-      const mat = new PBRMetallicRoughnessMaterial("mat", scene);
-      mat.metallic = 1;
-      mat.roughness = 0.5;
-      mat.baseColor = Color3.Red();
-      box.material = mat;
+      var root = new TransformNode("root", scene);
+
+      var size = 2;
+      for (var i = -size; i <= size; i++) {
+          for (var j = -size; j <= size; j++) {
+              for (var k = -size; k <= size; k++) {
+                  var sphere = Mesh.CreateSphere("sphere" + i + j + k, 32, 0.9, scene);
+                  sphere.position.x = i;
+                  sphere.position.y = j;
+                  sphere.position.z = k;
+                  sphere.parent = root;
+              }
+          }
+      }
 
       scene.beforeRender = function () {
-        box.rotate(Vector3.Up(), 0.005 * scene.getAnimationRatio());
+        root.rotate(Vector3.Up(), 0.005 * scene.getAnimationRatio());
       };
+
+      scene.createDefaultCamera(true);
+      setCamera(scene.activeCamera!);
+      scene.createDefaultLight();
+
+      // (scene.activeCamera as ArcRotateCamera).beta -= Math.PI / 8;
+      // setCamera(scene.activeCamera!);
+      // scene.createDefaultLight(true);
+
+      // const box = Mesh.CreateBox("box", 0.3, scene);
+      // setBox(box);
+      // const mat = new PBRMetallicRoughnessMaterial("mat", scene);
+      // mat.metallic = 1;
+      // mat.roughness = 0.5;
+      // mat.baseColor = Color3.Red();
+      // box.material = mat;
+
+      // scene.beforeRender = function () {
+      //   box.rotate(Vector3.Up(), 0.005 * scene.getAnimationRatio());
+      // };
     }
   }, [engine]);
 
@@ -55,7 +78,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
         <Button title="Toggle EngineView" onPress={() => { setToggleView(!toggleView) }} />
         { !toggleView &&
           <View style={{flex: 1}}>
-            <EngineView style={props.style} camera={camera} />
+            <EngineView style={props.style} camera={camera} displayFrameRate={true} />
             <Slider style={{position: 'absolute', minHeight: 50, margin: 10, left: 0, right: 0, bottom: 0}} minimumValue={0.2} maximumValue={2} value={defaultScale} onValueChange={setScale} />
           </View>
         }
