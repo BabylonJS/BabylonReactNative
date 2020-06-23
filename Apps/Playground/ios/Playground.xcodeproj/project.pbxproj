@@ -18,26 +18,6 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* PlaygroundTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* PlaygroundTests.m */; };
 		76A5C9314E69F53B9308D45C /* libPods-PlaygroundTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A27E99BCBBA16817330523FA /* libPods-PlaygroundTests.a */; };
-		8A6C9D9224A17E51004260D1 /* libbgfx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A6C9D9124A17E51004260D1 /* libbgfx.a */; };
-		8A6C9D9424A17E51004260D1 /* libbx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A6C9D9324A17E51004260D1 /* libbx.a */; };
-		8A6C9D9624A17EB8004260D1 /* libbimg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A6C9D9524A17EB8004260D1 /* libbimg.a */; };
-		8A992A76249035EB000ACD23 /* libBabylonNative.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992A75249035EB000ACD23 /* libBabylonNative.a */; };
-		8A992A7824903631000ACD23 /* libnapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992A7724903631000ACD23 /* libnapi.a */; };
-		8A992A7E2491A0F3000ACD23 /* libJsRuntime.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992A7D2491A0F3000ACD23 /* libJsRuntime.a */; };
-		8A992A802491A296000ACD23 /* libNativeInput.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992A7F2491A296000ACD23 /* libNativeInput.a */; };
-		8A992A822491A29E000ACD23 /* libNativeEngine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992A812491A29E000ACD23 /* libNativeEngine.a */; };
-		8A992A842491A2A8000ACD23 /* libNativeWindow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992A832491A2A8000ACD23 /* libNativeWindow.a */; };
-		8A992A862491A2B3000ACD23 /* libWindow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992A852491A2B3000ACD23 /* libWindow.a */; };
-		8A992AA62491A52A000ACD23 /* libastc-codec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992AA52491A52A000ACD23 /* libastc-codec.a */; };
-		8A992AA82491A52A000ACD23 /* libastc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992AA72491A52A000ACD23 /* libastc.a */; };
-		8A992AB02491AF28000ACD23 /* libglslang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992AAF2491AF28000ACD23 /* libglslang.a */; };
-		8A992AB22491AF4D000ACD23 /* libOSDependent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992AB12491AF4D000ACD23 /* libOSDependent.a */; };
-		8A992AB42491AF71000ACD23 /* libOGLCompiler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992AB32491AF71000ACD23 /* libOGLCompiler.a */; };
-		8A992AB62491B00C000ACD23 /* libSPIRV.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992AB52491B00C000ACD23 /* libSPIRV.a */; };
-		8A992AB82491B020000ACD23 /* libspirv-cross-msl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992AB72491B020000ACD23 /* libspirv-cross-msl.a */; };
-		8A992AD02491B132000ACD23 /* libspirv-cross-hlsl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992ACF2491B132000ACD23 /* libspirv-cross-hlsl.a */; };
-		8A992AD22491B13B000ACD23 /* libspirv-cross-glsl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992AD12491B13B000ACD23 /* libspirv-cross-glsl.a */; };
-		8A992AD42491B155000ACD23 /* libspirv-cross-core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A992AD32491B155000ACD23 /* libspirv-cross-core.a */; };
 		BC17671D40F4DD48338295AB /* libPods-Playground.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F6BC394028D7BAE8A003F7EF /* libPods-Playground.a */; };
 		DC0E086EEC7F13FF7B7A6ACC /* libPods-Playground-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EFE1A6A1208FCAF679B3028D /* libPods-Playground-tvOSTests.a */; };
 /* End PBXBuildFile section */
@@ -140,26 +120,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A6C9D9624A17EB8004260D1 /* libbimg.a in Frameworks */,
-				8A6C9D9224A17E51004260D1 /* libbgfx.a in Frameworks */,
-				8A6C9D9424A17E51004260D1 /* libbx.a in Frameworks */,
-				8A992AD42491B155000ACD23 /* libspirv-cross-core.a in Frameworks */,
-				8A992AD22491B13B000ACD23 /* libspirv-cross-glsl.a in Frameworks */,
-				8A992AD02491B132000ACD23 /* libspirv-cross-hlsl.a in Frameworks */,
-				8A992AB82491B020000ACD23 /* libspirv-cross-msl.a in Frameworks */,
-				8A992AB62491B00C000ACD23 /* libSPIRV.a in Frameworks */,
-				8A992AB42491AF71000ACD23 /* libOGLCompiler.a in Frameworks */,
-				8A992AB22491AF4D000ACD23 /* libOSDependent.a in Frameworks */,
-				8A992AB02491AF28000ACD23 /* libglslang.a in Frameworks */,
-				8A992AA62491A52A000ACD23 /* libastc-codec.a in Frameworks */,
-				8A992AA82491A52A000ACD23 /* libastc.a in Frameworks */,
-				8A992A862491A2B3000ACD23 /* libWindow.a in Frameworks */,
-				8A992A842491A2A8000ACD23 /* libNativeWindow.a in Frameworks */,
-				8A992A822491A29E000ACD23 /* libNativeEngine.a in Frameworks */,
-				8A992A802491A296000ACD23 /* libNativeInput.a in Frameworks */,
-				8A992A7E2491A0F3000ACD23 /* libJsRuntime.a in Frameworks */,
-				8A992A7824903631000ACD23 /* libnapi.a in Frameworks */,
-				8A992A76249035EB000ACD23 /* libBabylonNative.a in Frameworks */,
 				BC17671D40F4DD48338295AB /* libPods-Playground.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
