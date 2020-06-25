@@ -116,3 +116,7 @@ npm pack
 ```
 
 This will produce a zipped local NPM package that can be installed into a React Native application for testing purposes.
+
+## Security
+
+If you believe you have found a security vulnerability in this repository, please see [SECURITY.md](SECURITY.md).
