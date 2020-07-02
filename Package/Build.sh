@@ -7,6 +7,12 @@ xcodebuild -sdk iphoneos -configuration Release -project ReactNativeBabylon.xcod
 xcodebuild -sdk iphonesimulator -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO
 popd
 
+pushd ../Apps/Playground/android
+pwd
+./gradlew babylonjs_react-native:assembleRelease
+popd
+
+
 mkdir -p Assembled
 cp ../Apps/Playground/node_modules/@babylonjs/react-native/package.json Assembled
 cp ../Apps/Playground/node_modules/@babylonjs/react-native/README.md Assembled
@@ -25,3 +31,15 @@ for lib in iOS/Build/Release-iphoneos/*.a
 do
     lipo -create $lib iOS/Build/Release-iphonesimulator/$(basename $lib) -output Assembled/ios/libs/$(basename $lib)
 done
+
+
+mkdir -p Assembled/android
+cp Android/build.gradle Assembled/android
+
+mkdir -p Assembled/android/src/main
+cp ../Apps/Playground/node_modules/@babylonjs/react-native/android/src/main/AndroidManifest.xml Assembled/android/src/main
+
+mkdir -p Assembled/android/src/main/java
+cp -R ../Apps/Playground/node_modules/@babylonjs/react-native/android/src/main/java Assembled/android/src/main
+cp -R ../Apps/Playground/node_modules/@babylonjs/react-native/android/build/intermediates/library_and_local_jars_jni/release/jni Assembled/android/src/main
+mv Assembled/android/src/main/jni Assembled/android/src/main/jniLibs
