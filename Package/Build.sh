@@ -19,5 +19,9 @@ cp ../Apps/Playground/node_modules/@babylonjs/react-native/ios/*.mm Assembled/io
 # This xcodeproj is garbage that we don't need in the package, but `pod install` ignores the package if it doesn't contain at least one xcodeproj. 🤷🏼‍♂️
 cp -R iOS/Build/ReactNativeBabylon.xcodeproj Assembled/ios
 
+# Merge each supported lib architecture into a single "universal library" that can be used with any of the supported architectures.
 mkdir -p Assembled/ios/libs
-cp iOS/Build/Release-iphoneos/*.a Assembled/ios/libs
+for lib in iOS/Build/Release-iphoneos/*.a
+do
+    lipo -create $lib iOS/Build/Release-iphonesimulator/$(basename $lib) -output Assembled/ios/libs/$(basename $lib)
+done
