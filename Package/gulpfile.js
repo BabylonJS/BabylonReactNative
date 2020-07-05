@@ -7,7 +7,7 @@ const readdirAsync = util.promisify(fs.readdir);
 const log = require('fancy-log');
 const del = require('del');
 const gulp = require('gulp');
-const parseArgsStringToArgv = require('string-argv').parseArgsStringToArgv
+const parseArgsStringToArgv = require('string-argv').parseArgsStringToArgv;
 
 async function runCommand(command, options = null, logCommand = true) {
   if (logCommand) {
@@ -51,7 +51,7 @@ async function runProcess(command, options = {}, logCommand = true) {
 
 const clean = async () => {
   await del('Assembled', {force:true});
-}
+};
 
 const makeXCodeProj = async () => {
   await runCommand('mkdir -p iOS/Build');
