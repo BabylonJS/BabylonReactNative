@@ -7,6 +7,7 @@ const readdirAsync = util.promisify(fs.readdir);
 const log = require('fancy-log');
 const del = require('del');
 const gulp = require('gulp');
+const parseArgsStringToArgv = require('string-argv').parseArgsStringToArgv
 
 async function runCommand(command, options = null, logCommand = true) {
   if (logCommand) {
@@ -22,16 +23,16 @@ async function runCommand(command, options = null, logCommand = true) {
   }
 }
 
-async function runProcess(processName, arguments = null, options = null, logCommand = true) {
+async function runProcess(command, options = {}, logCommand = true) {
   if (logCommand) {
-    if (!arguments) {
-      arguments = [];
-    }
-    log(`${processName} ${arguments.join(' ')}`);
+    log(command);
   }
 
+  const arguments = parseArgsStringToArgv(command);
+  command = arguments.shift();
+
   await new Promise((resolve, reject) => {
-    const process = spawn(processName, arguments, options);
+    const process = spawn(command, arguments, options);
 
     process.on('close', code => code ? reject(code) : resolve());
 
@@ -53,30 +54,22 @@ const clean = async () => {
 }
 
 const makeXCodeProj = async () => {
-//gulp.task('Make XCode Project', async function() {
   await runCommand('mkdir -p iOS/Build');
-  //await runCommand('cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../../Apps/Playground/node_modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/ios-cmake/ios.toolchain.cmake -DPLATFORM=OS64COMBINED -DENABLE_ARC=0 -DDEPLOYMENT_TARGET=12 -DENABLE_GLSLANG_BINARIES=OFF -DSPIRV_CROSS_CLI=OFF ..', {cwd: 'iOS/Build'});
-  await runProcess('cmake', ['-G', 'Xcode', '-DCMAKE_TOOLCHAIN_FILE=../../../Apps/Playground/node_modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/ios-cmake/ios.toolchain.cmake', '-DPLATFORM=OS64COMBINED', '-DENABLE_ARC=0', '-DDEPLOYMENT_TARGET=12', '-DENABLE_GLSLANG_BINARIES=OFF', '-DSPIRV_CROSS_CLI=OFF', '..'], {cwd: 'iOS/Build'});
+  await runProcess('cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../../Apps/Playground/node_modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/ios-cmake/ios.toolchain.cmake -DPLATFORM=OS64COMBINED -DENABLE_ARC=0 -DDEPLOYMENT_TARGET=12 -DENABLE_GLSLANG_BINARIES=OFF -DSPIRV_CROSS_CLI=OFF ..', {cwd: 'iOS/Build'});
 };
 
 const buildIphoneOS = async () => {
-//gulp.task('Build XCode iphoneos', ['Make XCode Project'], async function() {
-  //await runCommand('xcodebuild -sdk iphoneos -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', {cwd: 'iOS/Build'});
-  await runProcess('xcodebuild', ['-sdk', 'iphoneos', '-configuration', 'Release', '-project', 'ReactNativeBabylon.xcodeproj', '-scheme', 'BabylonNative', 'build', 'CODE_SIGNING_ALLOWED=NO'], {cwd: 'iOS/Build'});
+  await runProcess('xcodebuild -sdk iphoneos -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', {cwd: 'iOS/Build'});
 };
 
 const buildIphoneSimulator = async () => {
-//gulp.task('Build XCode iphonesimulator', ['Make XCode Project'], async function() {
-  //await runCommand('xcodebuild -sdk iphonesimulator -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', {cwd: 'iOS/Build'});
-  await runProcess('xcodebuild', ['-sdk', 'iphonesimulator', '-configuration', 'Release', '-project', 'ReactNativeBabylon.xcodeproj', '-scheme', 'BabylonNative', 'build', 'CODE_SIGNING_ALLOWED=NO'], {cwd: 'iOS/Build'});
+  await runProcess('xcodebuild -sdk iphonesimulator -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', {cwd: 'iOS/Build'});
 };
 
-//const buildIOS = gulp.series(makeXCodeProj, gulp.parallel(buildIphoneOS, buildIphoneSimulator));
 const buildIOS = gulp.series(makeXCodeProj, buildIphoneOS, buildIphoneSimulator);
-//const buildIOS = gulp.parallel('Build XCode iphoneos', 'Build XCode iphonesimulator');
 
 const buildAndroid = async () => {
-  await runProcess('./gradlew', ['babylonjs_react-native:assembleRelease'], {cwd: '../Apps/Playground/android'});
+  await runProcess('./gradlew babylonjs_react-native:assembleRelease', {cwd: '../Apps/Playground/android'});
 };
 
 const copyCommonFiles = async () => {
