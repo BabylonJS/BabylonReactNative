@@ -8,10 +8,12 @@ set(PACKAGED_LIBS
     bgfx
     bimg
     bx
+    GenericCodeGen
     glslang
     JsRuntime
     OGLCompiler
     OSDependent
+    MachineIndependent
     napi
     NativeEngine
     NativeInput
