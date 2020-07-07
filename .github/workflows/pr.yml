@@ -25,5 +25,5 @@ jobs:
         run: npm install
         working-directory: ./Package
       - name: Gulp (Android)
-        run: gulp buildAndroid
+        run: npx gulp buildAndroid
         working-directory: ./Package
