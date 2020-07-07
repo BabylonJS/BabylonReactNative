@@ -16,30 +16,7 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m,mm}"
   s.requires_arc = true
 
-  s.vendored_libraries = 'ios/libs/libastc-codec.a',
-                         'ios/libs/libastc.a',
-                         'ios/libs/libBabylonNative.a',
-                         'ios/libs/libbgfx.a',
-                         'ios/libs/libbimg.a',
-                         'ios/libs/libbx.a',
-                         'ios/libs/libGenericCodeGen.a',
-                         'ios/libs/libglslang.a',
-                         'ios/libs/libjsRuntime.a',
-                         'ios/libs/libOGLCompiler.a',
-                         'ios/libs/libOSDependent.a',
-                         'ios/libs/libMachineIndependent.a',
-                         'ios/libs/libnapi.a',
-                         'ios/libs/libNativeEngine.a',
-                         'ios/libs/libNativeInput.a',
-                         'ios/libs/libNativeWindow.a',
-                         'ios/libs/libNativeXR.a',
-                         'ios/libs/libSPIRV.a',
-                         'ios/libs/libspirv-cross-core.a',
-                         'ios/libs/libspirv-cross-glsl.a',
-                         'ios/libs/libspirv-cross-hlsl.a',
-                         'ios/libs/libspirv-cross-msl.a',
-                         'ios/libs/libWindow.a',
-                         'ios/libs/libxr.a'
+  s.vendored_libraries = 'ios/libs/*.a'
 
   s.frameworks = "MetalKit", "ARKit"
 
