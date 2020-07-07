@@ -7,7 +7,7 @@ const del = require('del');
 const gulp = require('gulp');
 const parseArgsStringToArgv = require('string-argv').parseArgsStringToArgv;
 
-async function exec(command, options = {}, logCommand = true) {
+function exec(command, options = {}, logCommand = true) {
   if (logCommand) {
     log(command);
   }
@@ -15,7 +15,7 @@ async function exec(command, options = {}, logCommand = true) {
   const arguments = parseArgsStringToArgv(command);
   command = arguments.shift();
 
-  await new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const process = spawn(command, arguments, options);
 
     process.on('close', code => code ? reject(code) : resolve());
@@ -56,7 +56,7 @@ const buildAndroid = async () => {
   await exec('./gradlew babylonjs_react-native:assembleRelease', {cwd: '../Apps/Playground/android'});
 };
 
-const copyCommonFiles = async () => {
+const copyCommonFiles = () => {
   return  gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/package.json')
     .pipe(gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/README.md'))
     .pipe(gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/*.ts*'))
@@ -64,7 +64,7 @@ const copyCommonFiles = async () => {
     .pipe(gulp.dest('Assembled'));
 };
 
-const copyIOSFiles = async () => {
+const copyIOSFiles = () => {
   return  gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/ios/*.h')
     .pipe(gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/ios/*.mm'))
     // This xcodeproj is garbage that we don't need in the package, but `pod install` ignores the package if it doesn't contain at least one xcodeproj. 🤷🏼‍♂️
