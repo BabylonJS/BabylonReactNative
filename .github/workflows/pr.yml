@@ -18,6 +18,8 @@ jobs:
           node-version: '12.x'
           registry-url: 'https://registry.npmjs.org'
           scope: '@babylonjs'
+      - name: Setup Ninja
+        run: brew install ninja
       - name: Yarn Install (Playground)
         run: yarn install
         working-directory: ./Apps/Playground
