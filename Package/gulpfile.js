@@ -1,59 +1,45 @@
 const util = require('util');
 const fs = require('fs');
-const spawn = require('child_process').spawn;
 const readdirAsync = util.promisify(fs.readdir);
 const log = require('fancy-log');
-const del = require('del');
 const gulp = require('gulp');
-const parseArgsStringToArgv = require('string-argv').parseArgsStringToArgv;
+const shelljs = require('shelljs');
 
-function exec(command, options = {}, logCommand = true) {
+function exec(command, workingDirectory = '.', logCommand = true) {
   if (logCommand) {
     log(command);
   }
 
-  const arguments = parseArgsStringToArgv(command);
-  command = arguments.shift();
-
-  return new Promise((resolve, reject) => {
-    const process = spawn(command, arguments, options);
-
-    process.on('close', code => code ? reject(code) : resolve());
-
-    process.stdout.on('data', data => {
-      const message = data.toString();
-      if (message !== '\n') {
-        log(message);
-      }
-    });
-
-    process.stderr.on('data', data => {
-      log.error(data.toString());
-    })
-  });
+  shelljs.pushd(workingDirectory);
+  if (shelljs.exec(command, {fatal: true})) {
+    throw `'${command}' finished with non-zero exit code.`;
+  }
+  shelljs.popd();
 }
 
 const clean = async () => {
-  await del('Assembled', {force:true});
+  if (shelljs.test('-d', 'Assembled')) {
+    shelljs.rm('-r', 'Assembled');
+  }
 };
 
 const makeXCodeProj = async () => {
-  await exec('mkdir -p iOS/Build');
-  await exec('cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../../Apps/Playground/node_modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/ios-cmake/ios.toolchain.cmake -DPLATFORM=OS64COMBINED -DENABLE_ARC=0 -DDEPLOYMENT_TARGET=12 -DENABLE_GLSLANG_BINARIES=OFF -DSPIRV_CROSS_CLI=OFF ..', {cwd: 'iOS/Build'});
+  shelljs.mkdir('-p', 'iOS/Build');
+  exec('cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../../Apps/Playground/node_modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/ios-cmake/ios.toolchain.cmake -DPLATFORM=OS64COMBINED -DENABLE_ARC=0 -DDEPLOYMENT_TARGET=12 -DENABLE_GLSLANG_BINARIES=OFF -DSPIRV_CROSS_CLI=OFF ..', 'iOS/Build');
 };
 
 const buildIphoneOS = async () => {
-  await exec('xcodebuild -sdk iphoneos -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', {cwd: 'iOS/Build'});
+  exec('xcodebuild -sdk iphoneos -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', 'iOS/Build');
 };
 
 const buildIphoneSimulator = async () => {
-  await exec('xcodebuild -sdk iphonesimulator -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', {cwd: 'iOS/Build'});
+  exec('xcodebuild -sdk iphonesimulator -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', 'iOS/Build');
 };
 
 const buildIOS = gulp.series(makeXCodeProj, buildIphoneOS, buildIphoneSimulator);
 
 const buildAndroid = async () => {
-  await exec('./gradlew babylonjs_react-native:assembleRelease', {cwd: '../Apps/Playground/android'});
+  exec('./gradlew babylonjs_react-native:assembleRelease', '../Apps/Playground/android');
 };
 
 const copyCommonFiles = () => {
@@ -73,9 +59,9 @@ const copyIOSFiles = () => {
 };
 
 const createIOSUniversalLibs = async () => {
-  await exec('mkdir -p Assembled/ios/libs');
+  exec('mkdir -p Assembled/ios/libs');
   const libs = await readdirAsync('iOS/Build/Release-iphoneos');
-  await Promise.all(libs.map(lib => exec(`lipo -create iOS/Build/Release-iphoneos/${lib} iOS/Build/Release-iphonesimulator/${lib} -output Assembled/ios/libs/${lib}`)));
+  libs.map(lib => exec(`lipo -create iOS/Build/Release-iphoneos/${lib} iOS/Build/Release-iphonesimulator/${lib} -output Assembled/ios/libs/${lib}`));
 };
 
 const copyAndroidFiles = async () => {
@@ -95,7 +81,7 @@ const copyAndroidFiles = async () => {
 };
 
 const createPackage = async () => {
-  await exec('npm pack', {cwd: 'Assembled'});
+  exec('npm pack', 'Assembled');
 };
 
 const copyFiles = gulp.parallel(copyCommonFiles, copyIOSFiles, copyAndroidFiles);
