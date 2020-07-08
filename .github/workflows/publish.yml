@@ -34,10 +34,13 @@ jobs:
           node-version: '12.x'
           registry-url: 'https://npm.pkg.github.com'
           scope: '@babylonjs'
-      - name: Version & Publish Package
-        run: |
-          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
-          npm publish
+      - name: Build Package (temp)
+        run: npm pack
         working-directory: ./Package/Assembled
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       - name: Version & Publish Package
+#         run: |
+#           npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
+#           npm publish
+#         working-directory: ./Package/Assembled
+#         env:
+#           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
