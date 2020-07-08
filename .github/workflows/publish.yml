@@ -5,14 +5,25 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2.2.0
-      - name: Checkout Submodules
-        uses: textbook/git-checkout-submodule-action@2.1.1
+        uses: actions/checkout@v2.3.1
+        with:
+          submodules: 'recursive'
+      - name: Setup Ninja
+        run: brew install ninja
+      - name: Yarn Install (Playground)
+        run: yarn install
+        working-directory: ./Apps/Playground
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Gulp
+        run: npx gulp
+        working-directory: ./Package
       - name: Setup Node.js
-        uses: actions/setup-node@v1.4.2
+        uses: actions/setup-node@v2.1.0
         with:
           node-version: '12.x'
           registry-url: 'https://registry.npmjs.org'
@@ -21,6 +32,6 @@ jobs:
         run: |
           npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
           npm publish --access public
-        working-directory: ./Apps/Playground/node_modules/@babylonjs/react-native
+        working-directory: ./Package/Assembled
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

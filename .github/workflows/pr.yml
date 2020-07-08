@@ -1,0 +1,42 @@
+name: PR Build
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-android:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.1
+        with:
+          submodules: 'recursive'
+      - name: Setup Ninja
+        run: brew install ninja
+      - name: Yarn Install (Playground)
+        run: yarn install
+        working-directory: ./Apps/Playground
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Gulp (Android)
+        run: npx gulp buildAndroid
+        working-directory: ./Package
+
+  build-iOS:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.1
+        with:
+          submodules: 'recursive'
+      - name: Yarn Install (Playground)
+        run: yarn install
+        working-directory: ./Apps/Playground
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Gulp (iOS)
+        run: npx gulp buildIOS
+        working-directory: ./Package
