@@ -10,11 +10,14 @@ function exec(command, workingDirectory = '.', logCommand = true) {
     log(command);
   }
 
-  shelljs.pushd(workingDirectory);
-  if (shelljs.exec(command, {fatal: true})) {
-    throw `'${command}' finished with non-zero exit code.`;
+  shelljs.pushd('-q', workingDirectory);
+  try {
+    if (shelljs.exec(command, {fatal: true}).code) {
+      throw `'${command}' finished with non-zero exit code.`;
+    }
+  } finally {
+    shelljs.popd('-q');
   }
-  shelljs.popd();
 }
 
 const clean = async () => {
@@ -59,7 +62,7 @@ const copyIOSFiles = () => {
 };
 
 const createIOSUniversalLibs = async () => {
-  exec('mkdir -p Assembled/ios/libs');
+  shelljs.mkdir('-p', 'Assembled/ios/libs');
   const libs = await readdirAsync('iOS/Build/Release-iphoneos');
   libs.map(lib => exec(`lipo -create iOS/Build/Release-iphoneos/${lib} iOS/Build/Release-iphonesimulator/${lib} -output Assembled/ios/libs/${lib}`));
 };
