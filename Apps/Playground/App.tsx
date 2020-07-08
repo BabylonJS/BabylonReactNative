@@ -5,11 +5,11 @@
  * @format
  */
 
-import React, { useState, FunctionComponent, useEffect } from 'react';
+import React, { useState, FunctionComponent, useEffect, useCallback } from 'react';
 import { SafeAreaView, StatusBar, Button, View, Text, ViewProps } from 'react-native';
 
-import { EngineView, useEngine } from 'react-native-babylon';
-import { Scene, Vector3, Mesh, ArcRotateCamera, Engine, Camera, PBRMetallicRoughnessMaterial, Color3, TransformNode } from '@babylonjs/core';
+import { EngineView, useEngine } from '@babylonjs/react-native';
+import { Scene, Vector3, Mesh, ArcRotateCamera, Camera, PBRMetallicRoughnessMaterial, Color3, TargetCamera, WebXRSessionManager } from '@babylonjs/core';
 import Slider from '@react-native-community/slider';
 
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
@@ -19,50 +19,30 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const [toggleView, setToggleView] = useState(false);
   const [camera, setCamera] = useState<Camera>();
   const [box, setBox] = useState<Mesh>();
+  const [scene, setScene] = useState<Scene>();
+  const [xrSession, setXrSession] = useState<WebXRSessionManager>();
   const [scale, setScale] = useState<number>(defaultScale);
 
   useEffect(() => {
     if (engine) {
       const scene = new Scene(engine);
+      setScene(scene);
+      scene.createDefaultCamera(true);
+      (scene.activeCamera as ArcRotateCamera).beta -= Math.PI / 8;
+      setCamera(scene.activeCamera!);
+      scene.createDefaultLight(true);
 
-      var root = new TransformNode("root", scene);
-
-      var size = 2;
-      for (var i = -size; i <= size; i++) {
-          for (var j = -size; j <= size; j++) {
-              for (var k = -size; k <= size; k++) {
-                  var sphere = Mesh.CreateSphere("sphere" + i + j + k, 32, 0.9, scene);
-                  sphere.position.x = i;
-                  sphere.position.y = j;
-                  sphere.position.z = k;
-                  sphere.parent = root;
-              }
-          }
-      }
+      const box = Mesh.CreateBox("box", 0.3, scene);
+      setBox(box);
+      const mat = new PBRMetallicRoughnessMaterial("mat", scene);
+      mat.metallic = 1;
+      mat.roughness = 0.5;
+      mat.baseColor = Color3.Red();
+      box.material = mat;
 
       scene.beforeRender = function () {
-        root.rotate(Vector3.Up(), 0.005 * scene.getAnimationRatio());
+        box.rotate(Vector3.Up(), 0.005 * scene.getAnimationRatio());
       };
-
-      scene.createDefaultCamera(true);
-      setCamera(scene.activeCamera!);
-      scene.createDefaultLight();
-
-      // (scene.activeCamera as ArcRotateCamera).beta -= Math.PI / 8;
-      // setCamera(scene.activeCamera!);
-      // scene.createDefaultLight(true);
-
-      // const box = Mesh.CreateBox("box", 0.3, scene);
-      // setBox(box);
-      // const mat = new PBRMetallicRoughnessMaterial("mat", scene);
-      // mat.metallic = 1;
-      // mat.roughness = 0.5;
-      // mat.baseColor = Color3.Red();
-      // box.material = mat;
-
-      // scene.beforeRender = function () {
-      //   box.rotate(Vector3.Up(), 0.005 * scene.getAnimationRatio());
-      // };
     }
   }, [engine]);
 
@@ -72,13 +52,34 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
     }
   }, [box, scale]);
 
+  const onToggleXr = useCallback(() => {
+    (async () => {
+      if (xrSession) {
+        await xrSession.exitXRAsync();
+        setXrSession(undefined);
+      } else {
+        if (box !== undefined && scene !== undefined) {
+          const xr = await scene.createDefaultXRExperienceAsync({ disableDefaultUI: true, disableTeleportation: true })
+          const session = await xr.baseExperience.enterXRAsync("immersive-ar", "unbounded", xr.renderTarget);
+          setXrSession(session);
+          // TODO: Figure out why getFrontPosition stopped working
+          //box.position = (scene.activeCamera as TargetCamera).getFrontPosition(2);
+          const cameraRay = scene.activeCamera!.getForwardRay(1);
+          box.position = cameraRay.origin.add(cameraRay.direction.scale(cameraRay.length)); 
+          box.rotate(Vector3.Up(), 3.14159);
+        }
+      }
+    })();
+  }, [box, scene, xrSession]);
+
   return (
     <>
       <View style={props.style}>
         <Button title="Toggle EngineView" onPress={() => { setToggleView(!toggleView) }} />
+        <Button title={ xrSession ? "Stop XR" : "Start XR"} onPress={onToggleXr} />
         { !toggleView &&
           <View style={{flex: 1}}>
-            <EngineView style={props.style} camera={camera} displayFrameRate={true} />
+            <EngineView style={props.style} camera={camera} />
             <Slider style={{position: 'absolute', minHeight: 50, margin: 10, left: 0, right: 0, bottom: 0}} minimumValue={0.2} maximumValue={2} value={defaultScale} onValueChange={setScale} />
           </View>
         }

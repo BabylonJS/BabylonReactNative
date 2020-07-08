@@ -10,11 +10,13 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "@babylonjs/core": "4.2.0-alpha.16",
+    "@babylonjs/core": "4.2.0-alpha.21",
+    "@babylonjs/react-native": "./node_modules/@babylonjs/react-native",
     "@react-native-community/slider": "^2.0.9",
+    "logkitty": "^0.7.1",
     "react": "16.9.0",
     "react-native": "0.62.1",
-    "react-native-babylon": "./node_modules/react-native-babylon"
+    "react-native-permissions": "^2.1.4"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

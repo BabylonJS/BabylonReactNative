@@ -1,0 +1,26 @@
+name: Publish Package
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2.2.0
+      - name: Checkout Submodules
+        uses: textbook/git-checkout-submodule-action@2.1.1
+      - name: Setup Node.js
+        uses: actions/setup-node@v1.4.2
+        with:
+          node-version: '12.x'
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@babylonjs'
+      - name: Version & Publish Package
+        run: |
+          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
+          npm publish --access public
+        working-directory: ./Apps/Playground/node_modules/@babylonjs/react-native
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
