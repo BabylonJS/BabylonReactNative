@@ -32,12 +32,12 @@ jobs:
         uses: actions/setup-node@v2.1.0
         with:
           node-version: '12.x'
-          registry-url: 'https://npm.pkg.github.com'
+          registry-url: 'https://registry.npmjs.org'
           scope: '@babylonjs'
       - name: Version & Publish Package
         run: |
           npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
-          npm publish
+          npm publish --access public
         working-directory: ./Package/Assembled
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
