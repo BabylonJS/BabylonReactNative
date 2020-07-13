@@ -59,7 +59,7 @@ pod install --repo-update
 - The `ANDROID_HOME` environment variable must be defined (typically ~/Library/Android/sdk).
 - The `ANDROID_SDK_ROOT` environment variable must be defined (typically ~/Library/Android/sdk).
 - The `ANDROID_AVD_HOME` environment variable must be defined if you plan to use Android emulators (typically ~/.android/avd).
-- The `JAVA_HOME` environment variable must be defined to point to point to the correct version of the JDK (typically /usr/libexec/java_home -v 13).
+- The `JAVA_HOME` environment variable must be defined to point to the correct version of the JDK (typically /usr/libexec/java_home -v 13).
 
 You can typically configure your environment by editing `~/.zshrc` and adding the following:
 
