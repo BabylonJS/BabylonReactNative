@@ -8,7 +8,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 set(NAPI_JAVASCRIPT_ENGINE "JSI" CACHE STRING "The JavaScript engine to power N-API")
 
 get_filename_component(REACTNATIVE_DIR "${CMAKE_CURRENT_LIST_DIR}/../../../react-native" ABSOLUTE)
-add_subdirectory(${REACTNATIVE_DIR}/ReactCommon/jsi/jsi ${CMAKE_CURRENT_BINARY_DIR}/jsi)
+# The CMake generator for XCode produces relative paths to source files. Additionally, when an XCode project
+# that lives in a sym linked directory is added to an XCode workspace, XCode resolves the actual path of the
+# XCode project. This combination results in incorrect relative paths, so just copy the jsi directory locally.
+file(COPY ${REACTNATIVE_DIR}/ReactCommon/jsi/jsi DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/jsi)
+add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/jsi/jsi ${CMAKE_CURRENT_BINARY_DIR}/jsi)
 target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR}/ReactCommon/jsi)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/")
