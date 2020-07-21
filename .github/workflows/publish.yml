@@ -13,8 +13,8 @@ jobs:
           submodules: 'recursive'
       - name: Setup Ninja
         run: brew install ninja
-      - name: Yarn Install (Playground)
-        run: yarn install
+      - name: NPM Install (Playground)
+        run: npm install
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install
