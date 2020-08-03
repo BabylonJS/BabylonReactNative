@@ -137,6 +137,8 @@ If you want to consume `@babylonjs/react-native` as source in your React Native 
 ```
 cd <directory of your React Native app>
 npm install <root directory of your BabylonReactNative clone>/Modules/@babylonjs/react-native
+cd ios
+pod install
 ```
 
 This will create a symbolic link in your `node_modules` directory to the `@babylonjs/react-native` source directory. For iOS the XCode project needs to be generated with `CMake` as described [above](#ios) and added to your `xcworkspace`.
