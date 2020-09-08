@@ -1,5 +1,5 @@
-import React, { FunctionComponent, Component, useEffect, useState } from 'react';
-import { requireNativeComponent, NativeModules, ViewProps, AppState, AppStateStatus, View, Text } from 'react-native';
+import React, { FunctionComponent, Component, useEffect, useState, useRef, useCallback } from 'react';
+import { requireNativeComponent, NativeModules, ViewProps, AppState, AppStateStatus, View, Text, findNodeHandle, UIManager } from 'react-native';
 import { Camera } from '@babylonjs/core';
 import { IsEngineDisposed } from './EngineHelpers';
 import { BabylonModule } from './BabylonModule';
@@ -32,6 +32,7 @@ export interface EngineViewProps extends ViewProps {
 export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineViewProps) => {
     const [failedInitialization, setFailedInitialization] = useState(false);
     const [fps, setFps] = useState<number>();
+    const engineViewRef = React.createRef();
 
     useEffect(() => {
         (async () => {
@@ -90,10 +91,17 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
         setFps(undefined);
     }, [props.camera, props.displayFrameRate]);
 
+    useCallback(() => {
+        UIManager.dispatchViewManagerCommand(
+            findNodeHandle(engineViewRef),
+            UIManager.getViewManagerConfig("EngineView").Commands.takeSnapshot,
+            []);
+    },[])
+
     if (!failedInitialization) {
         return (
             <View style={[props.style, {overflow: "hidden"}]}>
-                <NativeEngineView style={{flex: 1}} />
+                <NativeEngineView ref={engineViewRef} style={{flex: 1}} />
                 { fps && <Text style={{color: 'yellow', position: 'absolute', margin: 10, right: 0, top: 0}}>FPS: {Math.round(fps)}</Text> }
             </View>
         );
