@@ -32,7 +32,7 @@ export interface EngineViewProps extends ViewProps {
 export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineViewProps) => {
     const [failedInitialization, setFailedInitialization] = useState(false);
     const [fps, setFps] = useState<number>();
-    const engineViewRef = React.createRef();
+    const engineViewRef = useRef<Component<NativeEngineViewProps & ViewProps>>(null);
 
     useEffect(() => {
         (async () => {
@@ -93,7 +93,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
 
     useCallback(() => {
         UIManager.dispatchViewManagerCommand(
-            findNodeHandle(engineViewRef),
+            findNodeHandle(engineViewRef.current),
             UIManager.getViewManagerConfig("EngineView").Commands.takeSnapshot,
             []);
     },[])
