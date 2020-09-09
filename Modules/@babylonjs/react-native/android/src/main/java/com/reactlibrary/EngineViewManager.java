@@ -12,6 +12,7 @@ import java.util.Map;
 
 public final class EngineViewManager extends SimpleViewManager<EngineView> {
     public static final int COMMAND_TAKE_SNAPSHOT = 0;
+    public static final String COMMAND_TAKE_SNAPSHOT_NAME = "takeSnapshot";
 
     @NonNull
     @Override
@@ -34,18 +35,26 @@ public final class EngineViewManager extends SimpleViewManager<EngineView> {
     @Override
     public Map<String,Integer> getCommandsMap() {
         return MapBuilder.of(
-            "takeSnapshot",
+            COMMAND_TAKE_SNAPSHOT_NAME,
             COMMAND_TAKE_SNAPSHOT
         );
     }
 
     @Override
     public void receiveCommand(final EngineView view, int commandId, ReadableArray args) {
-    // This will be called whenever a command is sent from react-native.
-    switch (commandId) {
-      case COMMAND_TAKE_SNAPSHOT:
-        view.takeSnapshot();
-        break;
+        // This will be called whenever a command is sent from react-native.
+        switch (commandId) {
+            case COMMAND_TAKE_SNAPSHOT:
+                view.takeSnapshot();
+                break;
+        }
     }
-  }
+
+    @Override
+    public Map getExportedCustomDirectEventTypeConstants() {
+        return MapBuilder.builder()
+                .put(SnapshotDataReturnedEvent.EVENT_NAME,
+                    MapBuilder.of("registrationName", SnapshotDataReturnedEvent.EVENT_NAME))
+                .build();
+    }
 }

@@ -10,7 +10,8 @@ public class SnapshotDataReturnedEvent extends Event<SnapshotDataReturnedEvent> 
     public static final String DATA_NAME = "data";
     private final WritableMap payload;
 
-    public SnapshotDataReturnedEvent(String imageData) {
+    public SnapshotDataReturnedEvent(int viewId, String imageData) {
+        super(viewId);
         this.payload = Arguments.createMap();
         this.payload.putString(DATA_NAME, imageData);
     }

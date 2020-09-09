@@ -6,9 +6,9 @@
  */
 
 import React, { useState, FunctionComponent, useEffect, useCallback } from 'react';
-import { SafeAreaView, StatusBar, Button, View, Text, ViewProps } from 'react-native';
+import { SafeAreaView, StatusBar, Button, View, Text, ViewProps, Image } from 'react-native';
 
-import { EngineView, useEngine } from '@babylonjs/react-native';
+import { EngineView, useEngine, EngineViewHooks } from '@babylonjs/react-native';
 import { Scene, Vector3, Mesh, ArcRotateCamera, Camera, PBRMetallicRoughnessMaterial, Color3, TargetCamera, WebXRSessionManager } from '@babylonjs/core';
 import Slider from '@react-native-community/slider';
 
@@ -22,6 +22,9 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const [scene, setScene] = useState<Scene>();
   const [xrSession, setXrSession] = useState<WebXRSessionManager>();
   const [scale, setScale] = useState<number>(defaultScale);
+  const [screenshotData, setScreenshotData] = useState<string>();
+  let screenshotDataString: string = "";
+  let engineViewHooks: EngineViewHooks | undefined;
 
   useEffect(() => {
     if (engine) {
@@ -65,21 +68,39 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
           // TODO: Figure out why getFrontPosition stopped working
           //box.position = (scene.activeCamera as TargetCamera).getFrontPosition(2);
           const cameraRay = scene.activeCamera!.getForwardRay(1);
-          box.position = cameraRay.origin.add(cameraRay.direction.scale(cameraRay.length)); 
+          box.position = cameraRay.origin.add(cameraRay.direction.scale(cameraRay.length));
           box.rotate(Vector3.Up(), 3.14159);
         }
       }
     })();
   }, [box, scene, xrSession]);
 
+  const onScreenshot = async () => {
+        if (screenshotData) {
+            console.log(screenshotData);
+            setScreenshotData(undefined);
+        }
+        else if (engineViewHooks) {
+            screenshotDataString = "data:image/jpeg;base64," + (await engineViewHooks?.takeScreenshot()).replace(/(\r\n|\n|\r)/gm, "");
+            setScreenshotData(screenshotDataString);
+        }
+  };
+
   return (
     <>
       <View style={props.style}>
         <Button title="Toggle EngineView" onPress={() => { setToggleView(!toggleView) }} />
         <Button title={ xrSession ? "Stop XR" : "Start XR"} onPress={onToggleXr} />
+        <Button title={"Take Screenshot"} onPress={onScreenshot}/>
         { !toggleView &&
           <View style={{flex: 1}}>
-            <EngineView style={props.style} camera={camera} />
+            { screenshotData &&
+                <Image style={{flex: 1}} source={{uri: screenshotData }} />
+            }
+            {!screenshotData && 
+                <EngineView style={props.style} camera={camera} initialized={(viewHooks: EngineViewHooks) => { engineViewHooks = viewHooks; }} />
+            }
+
             <Slider style={{position: 'absolute', minHeight: 50, margin: 10, left: 0, right: 0, bottom: 0}} minimumValue={0.2} maximumValue={2} value={defaultScale} onValueChange={setScale} />
           </View>
         }

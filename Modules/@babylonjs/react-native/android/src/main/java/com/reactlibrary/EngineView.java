@@ -59,8 +59,8 @@ public final class EngineView extends SurfaceView implements SurfaceHolder.Callb
         final Handler helperThreadHandler = new Handler(helperThread.getLooper());
 
         final Bitmap bitmap = Bitmap.createBitmap(
-                getRootView().getWidth(),
-                getRootView().getHeight(),
+                getWidth(),
+                getHeight(),
                 Bitmap.Config.ARGB_8888);
 
         PixelCopy.request(this, bitmap, (copyResult) ->  {
@@ -76,7 +76,8 @@ public final class EngineView extends SurfaceView implements SurfaceHolder.Callb
                     encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
                 }
 
-                reactEventDispatcher.dispatchEvent(new SnapshotDataReturnedEvent(encoded));
+                SnapshotDataReturnedEvent snapshotEvent = new SnapshotDataReturnedEvent(this.getId(), encoded);
+                reactEventDispatcher.dispatchEvent(snapshotEvent);
                 helperThread.quitSafely();
             }
         }, helperThreadHandler);
