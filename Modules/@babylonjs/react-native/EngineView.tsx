@@ -27,12 +27,17 @@ const NativeEngineView: {
 export interface EngineViewProps extends ViewProps {
     camera?: Camera;
     displayFrameRate?: boolean;
+    initalized?: (view: EngineViewHooks) => void;
+}
+
+export interface EngineViewHooks {
+    takeScreenshot: () => Promise<string>;
 }
 
 export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineViewProps) => {
     const [failedInitialization, setFailedInitialization] = useState(false);
     const [fps, setFps] = useState<number>();
-    const engineViewRef = useRef<Component<NativeEngineViewProps & ViewProps>>(null);
+    const engineViewRef = useRef<Component<NativeEngineViewProps>>(null);
 
     useEffect(() => {
         (async () => {
@@ -91,12 +96,19 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
         setFps(undefined);
     }, [props.camera, props.displayFrameRate]);
 
-    useCallback(() => {
-        UIManager.dispatchViewManagerCommand(
-            findNodeHandle(engineViewRef.current),
-            UIManager.getViewManagerConfig("EngineView").Commands.takeSnapshot,
-            []);
-    },[])
+    // Call initialized and include the hook to takeScreeenshot
+    if (props.initalized) {
+        props.initalized(
+            {
+                takeScreenshot: () => {
+                    UIManager.dispatchViewManagerCommand(
+                        findNodeHandle(engineViewRef.current),
+                        UIManager.getViewManagerConfig("EngineView").Commands.takeSnapshot,
+                        []);
+                    return Promise.resolve("");
+            }
+        });
+    }
 
     if (!failedInitialization) {
         return (
