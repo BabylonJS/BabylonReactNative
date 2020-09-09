@@ -113,8 +113,6 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
                         setScreenshotPromise({ promise: promise, resolve: resolutionFunctions.resolve, reject: resolutionFunctions.reject });
                     }
 
-                    let nodeHandle = findNodeHandle(engineViewRef.current)
-                    let commandID = UIManager.getViewManagerConfig("EngineView").Commands["takeSnapshot"]
                     UIManager.dispatchViewManagerCommand(
                         findNodeHandle(engineViewRef.current),
                         UIManager.getViewManagerConfig("EngineView").Commands["takeSnapshot"],
