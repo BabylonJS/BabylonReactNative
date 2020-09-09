@@ -98,34 +98,35 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
         setFps(undefined);
     }, [props.camera, props.displayFrameRate]);
 
-    // Call initialized and include the hook to takeScreeenshot
+    // Call initialized and include the hook to takeScreenshot
     if (props.initialized) {
         props.initialized(
             {
                 takeScreenshot: () => {
                     if (!screenshotPromise) {
-                    let resolutionFunctions: { resolve: (data: string) => void, reject: () => void } | undefined;
-                    const promise = new Promise<string>((resolutionFunc, rejectionFunc) => {
-                        resolutionFunctions = {resolve: resolutionFunc, reject: rejectionFunc};
-                    });
+                        let resolutionFunctions: { resolve: (data: string) => void, reject: () => void } | undefined;
+                        const promise = new Promise<string>((resolutionFunc, rejectionFunc) => {
+                            resolutionFunctions = {resolve: resolutionFunc, reject: rejectionFunc};
+                        });
 
-                    if (resolutionFunctions) {
-                        setScreenshotPromise({ promise: promise, resolve: resolutionFunctions.resolve, reject: resolutionFunctions.reject });
+                        if (resolutionFunctions) {
+                            setScreenshotPromise({ promise: promise, resolve: resolutionFunctions.resolve, reject: resolutionFunctions.reject });
+                        }
+
+                        UIManager.dispatchViewManagerCommand(
+                            findNodeHandle(engineViewRef.current),
+                            UIManager.getViewManagerConfig("EngineView").Commands["takeSnapshot"],
+                            []);
+
+                        return promise;
                     }
 
-                    UIManager.dispatchViewManagerCommand(
-                        findNodeHandle(engineViewRef.current),
-                        UIManager.getViewManagerConfig("EngineView").Commands["takeSnapshot"],
-                        []);
-
-                    return promise;
-                 }
-
-                 return screenshotPromise.promise;
+                    return screenshotPromise.promise;
             }
         });
     }
 
+    // Handle snapshot data returned.
     const snapshotDataReturnedHandler = (event: SyntheticEvent) => {
         let { data } = event.nativeEvent;
         if (screenshotPromise) {
