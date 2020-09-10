@@ -52,18 +52,18 @@
 }
 
 - (void)takeSnapshot {
-    // We must take the screenshot on the main thread otherwise we might fail to get a handle on the view after screen updates.
+    // We must take the screenshot on the main thread otherwise we might fail to get a valid handle on the view's image.
     dispatch_async(dispatch_get_main_queue(), ^{
         // Start the graphics context.
-        UIGraphicsBeginImageContextWithOptions(self.bounds.size, YES, 0.0f);
+        UIGraphicsBeginImageContextWithOptions(self.bounds.size, YES /* opaque */, 0.0f);
         
-        // Draw the current state of the view into the graphics context after screen updates occur.
-        [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:YES];
+        // Draw the current state of the view into the graphics context.
+        [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:NO];
         
         // Grab the image from the graphics context, and convert into a base64 encoded JPG.
         UIImage *capturedImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
-        NSData *jpgData = UIImageJPEGRepresentation(capturedImage, 100.0f);
+        NSData *jpgData = UIImageJPEGRepresentation(capturedImage, 1.0f);
         NSString *encodedData = [jpgData base64EncodedStringWithOptions:0];
         
         // Fire the onSnapshotDataReturned event if hooked up.
