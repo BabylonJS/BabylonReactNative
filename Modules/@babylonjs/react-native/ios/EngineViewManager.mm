@@ -51,45 +51,19 @@
     [BabylonNativeInterop reportTouchEvent:touches withEvent:event];
 }
 
-- (void)takeSnapshot {
-    // Grab a reference to the currently presented drawable on us or a subview.
-    id<MTLTexture> currentDrawable = nil;
-    while (currentDrawable == nil) {
-        if (self.subviews != nil && self.subviews.count > 0) {
-            MTKView *xrView = (MTKView *)self.subviews[0];
-            currentDrawable = [xrView.currentDrawable texture];
+- (void)takeSnapshot {   
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIGraphicsBeginImageContextWithOptions(self.bounds.size, YES, 0.0f);
+        [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:YES];
+        UIImage *uiImage = UIGraphicsGetImageFromCurrentImageContext();
+        NSData *jpgData = UIImageJPEGRepresentation(uiImage, 100.0f);
+        NSString *encodedData = [jpgData base64EncodedStringWithOptions:0];
+        if (self.onSnapshotDataReturned != nil && encodedData != nil) {
+            self.onSnapshotDataReturned(@{ @"data":encodedData});
         }
-        else {
-            currentDrawable = [self.currentDrawable texture];
-        }
-    }
-    
-    int width = (int)[currentDrawable width];
-    int height = (int)[currentDrawable height];
-    int rowBytes = width * 4;
-    int textureSize = width * height * 4;
-    
-    // Allocate the bitmap, and load in the bytes
-    void* bitMap = malloc (textureSize);
-    [currentDrawable getBytes:bitMap bytesPerRow:rowBytes fromRegion:MTLRegionMake2D(0, 0, width, height) mipmapLevel:0];
-    
-    // Create the CGImage representation.
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGBitmapInfo bitmapInfo = kCGBitmapByteOrder32Little | kCGImageAlphaFirst;
-    CGDataProviderRef provider = CGDataProviderCreateWithData(nil, bitMap, textureSize, nil);
-    CGImageRef cgImageRef = CGImageCreate(width, height, 8, 32, rowBytes, colorSpace, bitmapInfo, provider, nil, true, (CGColorRenderingIntent)kCGRenderingIntentDefault);
-    
-    // Create the UIImage from the CG Image.
-    UIImage *uiImage = [UIImage imageWithCGImage:cgImageRef];
-    
-    NSData *pngData = UIImagePNGRepresentation(uiImage);
-    NSString *encodedData = [pngData base64EncodedStringWithOptions:0];
-    if (self.onSnapshotDataReturned != nil && encodedData != nil) {
-        self.onSnapshotDataReturned(@{ @"data":encodedData});
-    }
-    
-    CFRelease(cgImageRef);
-    free(bitMap);
+        
+        UIGraphicsEndImageContext();
+    });
 }
 
 @end
