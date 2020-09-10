@@ -17,7 +17,7 @@ if (EngineViewManager && EngineViewManager.setJSThread && !isRemoteDebuggingEnab
 }
 
 interface NativeEngineViewProps extends ViewProps {
-    snapshotDataReturned: (event: SyntheticEvent) => void;
+    onSnapshotDataReturned: (event: SyntheticEvent) => void;
 }
 
 const NativeEngineView: {
@@ -138,7 +138,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
     if (!failedInitialization) {
         return (
             <View style={[props.style, {overflow: "hidden"}]}>
-                <NativeEngineView ref={engineViewRef} style={{flex: 1}} snapshotDataReturned={snapshotDataReturnedHandler} />
+                <NativeEngineView ref={engineViewRef} style={{flex: 1}} onSnapshotDataReturned={snapshotDataReturnedHandler} />
                 { fps && <Text style={{color: 'yellow', position: 'absolute', margin: 10, right: 0, top: 0}}>FPS: {Math.round(fps)}</Text> }
             </View>
         );

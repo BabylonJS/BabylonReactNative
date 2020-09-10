@@ -94,12 +94,8 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
         <Button title={"Take Screenshot"} onPress={onScreenshot}/>
         { !toggleView &&
           <View style={{flex: 1}}>
-            { screenshotData &&
-                <Image style={{flex: 1}} source={{uri: screenshotData }} />
-            }
-            {!screenshotData && 
-                <EngineView style={props.style} camera={camera} initialized={(viewHooks: EngineViewHooks) => { engineViewHooks = viewHooks; }} />
-            }
+            <Image style={{width:100, height:100}} source={{uri: screenshotData }} />
+            <EngineView style={props.style} camera={camera} initialized={(viewHooks: EngineViewHooks) => { engineViewHooks = viewHooks; }} />
             <Slider style={{position: 'absolute', minHeight: 50, margin: 10, left: 0, right: 0, bottom: 0}} minimumValue={0.2} maximumValue={2} value={defaultScale} onValueChange={setScale} />
           </View>
         }

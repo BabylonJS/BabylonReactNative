@@ -6,7 +6,7 @@ import com.facebook.react.uimanager.events.Event;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 public class SnapshotDataReturnedEvent extends Event<SnapshotDataReturnedEvent> {
-    public static final String EVENT_NAME = "snapshotDataReturned";
+    public static final String EVENT_NAME = "onSnapshotDataReturned";
     public static final String DATA_NAME = "data";
     private final WritableMap payload;
 
