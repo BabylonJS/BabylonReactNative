@@ -51,18 +51,25 @@
     [BabylonNativeInterop reportTouchEvent:touches withEvent:event];
 }
 
-- (void)takeSnapshot {   
+- (void)takeSnapshot {
+    // We must take the screenshot on the main thread otherwise we might fail to get a handle on the view after screen updates.
     dispatch_async(dispatch_get_main_queue(), ^{
+        // Start the graphics context.
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, YES, 0.0f);
+        
+        // Draw the current state of the view into the graphics context after screen updates occur.
         [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:YES];
-        UIImage *uiImage = UIGraphicsGetImageFromCurrentImageContext();
-        NSData *jpgData = UIImageJPEGRepresentation(uiImage, 100.0f);
+        
+        // Grab the image from the graphics context, and convert into a base64 encoded JPG.
+        UIImage *capturedImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        NSData *jpgData = UIImageJPEGRepresentation(capturedImage, 100.0f);
         NSString *encodedData = [jpgData base64EncodedStringWithOptions:0];
-        if (self.onSnapshotDataReturned != nil && encodedData != nil) {
+        
+        // Fire the onSnapshotDataReturned event if hooked up.
+        if (self.onSnapshotDataReturned != nil) {
             self.onSnapshotDataReturned(@{ @"data":encodedData});
         }
-        
-        UIGraphicsEndImageContext();
     });
 }
 
@@ -81,10 +88,10 @@ RCT_EXPORT_MODULE(EngineViewManager)
 RCT_EXPORT_VIEW_PROPERTY(onSnapshotDataReturned, RCTDirectEventBlock)
 
 RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber*) reactTag) {
+    // Marshal the takeSnapshot call to the appropriate EngineView.
     [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
         EngineView *view = (EngineView *)viewRegistry[reactTag];
         if (!view || ![view isKindOfClass:[EngineView class]]) {
-            RCTLogError(@"Cannot find EngineView with tag #%@", reactTag);
             return;
         }
         [view takeSnapshot];
