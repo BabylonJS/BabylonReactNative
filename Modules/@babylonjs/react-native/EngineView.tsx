@@ -17,7 +17,7 @@ if (EngineViewManager && EngineViewManager.setJSThread && !isRemoteDebuggingEnab
 }
 
 interface NativeEngineViewProps extends ViewProps {
-    onSnapshotDataReturned: (event: SyntheticEvent) => void;
+    onPixelDataReturned: (event: SyntheticEvent) => void;
 }
 
 const NativeEngineView: {
@@ -32,14 +32,14 @@ export interface EngineViewProps extends ViewProps {
 }
 
 export interface EngineViewHooks {
-    takeScreenshot: () => Promise<string>;
+    takeSnapshot: () => Promise<string>;
 }
 
 export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineViewProps) => {
     const [failedInitialization, setFailedInitialization] = useState(false);
     const [fps, setFps] = useState<number>();
     const engineViewRef = useRef<Component<NativeEngineViewProps>>(null);
-    const [screenshotPromise, setScreenshotPromise] = useState<{promise: Promise<string>, resolve: (data: string) => void, reject: () => void}>();
+    const [snapshotPromise, setSnapshotPromise] = useState<{promise: Promise<string>, resolve: (data: string) => void, reject: () => void}>();
 
     useEffect(() => {
         (async () => {
@@ -98,19 +98,19 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
         setFps(undefined);
     }, [props.camera, props.displayFrameRate]);
 
-    // Call initialized and include the hook to takeScreenshot
+    // Call initialized and include the hook to takeSnapshot
     if (props.initialized) {
         props.initialized(
             {
-                takeScreenshot: () => {
-                    if (!screenshotPromise) {
+                takeSnapshot: () => {
+                    if (!snapshotPromise) {
                         let resolutionFunctions: { resolve: (data: string) => void, reject: () => void } | undefined;
                         const promise = new Promise<string>((resolutionFunc, rejectionFunc) => {
                             resolutionFunctions = {resolve: resolutionFunc, reject: rejectionFunc};
                         });
 
                         if (resolutionFunctions) {
-                            setScreenshotPromise({ promise: promise, resolve: resolutionFunctions.resolve, reject: resolutionFunctions.reject });
+                            setSnapshotPromise({ promise: promise, resolve: resolutionFunctions.resolve, reject: resolutionFunctions.reject });
                         }
 
                         UIManager.dispatchViewManagerCommand(
@@ -121,7 +121,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
                         return promise;
                     }
 
-                    return screenshotPromise.promise;
+                    return snapshotPromise.promise;
             }
         });
     }
@@ -129,9 +129,9 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
     // Handle snapshot data returned.
     const snapshotDataReturnedHandler = (event: SyntheticEvent) => {
         let { data } = event.nativeEvent;
-        if (screenshotPromise) {
-            screenshotPromise.resolve(data);
-            setScreenshotPromise(undefined);
+        if (snapshotPromise) {
+            snapshotPromise.resolve(data);
+            setSnapshotPromise(undefined);
         }
     }
 

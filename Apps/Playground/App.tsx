@@ -14,6 +14,7 @@ import Slider from '@react-native-community/slider';
 
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const defaultScale = 1;
+  const enableSnapshots = false;
 
   const engine = useEngine();
   const [toggleView, setToggleView] = useState(false);
@@ -22,8 +23,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const [scene, setScene] = useState<Scene>();
   const [xrSession, setXrSession] = useState<WebXRSessionManager>();
   const [scale, setScale] = useState<number>(defaultScale);
-  const [screenshotData, setScreenshotData] = useState<string>();
-  let screenshotDataString: string = "";
+  const [snapshotData, setSnapshotData] = useState<string>();
   let engineViewHooks: EngineViewHooks | undefined;
 
   useEffect(() => {
@@ -75,14 +75,9 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
     })();
   }, [box, scene, xrSession]);
 
-  const onScreenshot = async () => {
-        if (screenshotData) {
-            console.log(screenshotData);
-            setScreenshotData(undefined);
-        }
-        else if (engineViewHooks) {
-            screenshotDataString = "data:image/jpeg;base64," + (await engineViewHooks?.takeScreenshot()).replace(/(\r\n|\n|\r)/gm, "");
-            setScreenshotData(screenshotDataString);
+  const onSnapshot = async () => {
+        if (engineViewHooks) {
+            setSnapshotData("data:image/jpeg;base64," + (await engineViewHooks?.takeSnapshot()).replace(/(\r\n|\n|\r)/gm, ""));
         }
   };
 
@@ -91,10 +86,14 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
       <View style={props.style}>
         <Button title="Toggle EngineView" onPress={() => { setToggleView(!toggleView) }} />
         <Button title={ xrSession ? "Stop XR" : "Start XR"} onPress={onToggleXr} />
-        <Button title={"Take Screenshot"} onPress={onScreenshot}/>
         { !toggleView &&
           <View style={{flex: 1}}>
-            <Image style={{width:100, height:100}} source={{uri: screenshotData }} />
+            { enableSnapshots && 
+                <View style ={{flex: 1}}>
+                    <Button title={"Take Snapshot"} onPress={onSnapshot}/>
+                    <Image style={{flex: 1}} source={{uri: snapshotData }} />
+                </View>
+            }
             <EngineView style={props.style} camera={camera} initialized={(viewHooks: EngineViewHooks) => { engineViewHooks = viewHooks; }} />
             <Slider style={{position: 'absolute', minHeight: 50, margin: 10, left: 0, right: 0, bottom: 0}} minimumValue={0.2} maximumValue={2} value={defaultScale} onValueChange={setScale} />
           </View>
