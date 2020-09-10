@@ -2,6 +2,7 @@ package com.reactlibrary;
 
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Base64;
@@ -52,34 +53,38 @@ public final class EngineView extends SurfaceView implements SurfaceHolder.Callb
 
     @TargetApi(24)
     public void takeSnapshot() {
-        // no-op for now.
-        // Offload the screenshot to a helper thread.
-        final HandlerThread helperThread = new HandlerThread("ScreenCapture",-1);
-        helperThread.start();
-        final Handler helperThreadHandler = new Handler(helperThread.getLooper());
+        // Only supported on API level 24 and up, return a blank image.
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            SnapshotDataReturnedEvent snapshotEvent = new SnapshotDataReturnedEvent(this.getId(), "");
+            reactEventDispatcher.dispatchEvent(snapshotEvent);
+        }
 
+        // Create a bitmap that matches the width and height of the EngineView.
         final Bitmap bitmap = Bitmap.createBitmap(
                 getWidth(),
                 getHeight(),
                 Bitmap.Config.ARGB_8888);
 
+        // Offload the snapshot worker to a helper thread.
+        final HandlerThread helperThread = new HandlerThread("ScreenCapture",-1);
+        helperThread.start();
+        final Handler helperThreadHandler = new Handler(helperThread.getLooper());
+
+        // Request the pixel copy.
         PixelCopy.request(this, bitmap, (copyResult) ->  {
+            // If the pixel copy was a success then convert the image to a base 64 encoded jpeg and fire the event.
+            String encoded ="";
             if (copyResult == PixelCopy.SUCCESS) {
-                // Encode the result to base64.
                 ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayStream);
-                String encoded = "";
-                {
-                    byte[] byteArray = byteArrayStream.toByteArray();
-                    bitmap.recycle();
-
-                    encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                }
-
-                SnapshotDataReturnedEvent snapshotEvent = new SnapshotDataReturnedEvent(this.getId(), encoded);
-                reactEventDispatcher.dispatchEvent(snapshotEvent);
-                helperThread.quitSafely();
+                byte[] byteArray = byteArrayStream.toByteArray();
+                bitmap.recycle();
+                encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
             }
+
+            SnapshotDataReturnedEvent snapshotEvent = new SnapshotDataReturnedEvent(this.getId(), encoded);
+            reactEventDispatcher.dispatchEvent(snapshotEvent);
+            helperThread.quitSafely();
         }, helperThreadHandler);
     }
 }

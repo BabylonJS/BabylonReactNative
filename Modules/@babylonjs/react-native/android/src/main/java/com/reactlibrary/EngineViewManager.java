@@ -41,10 +41,10 @@ public final class EngineViewManager extends SimpleViewManager<EngineView> {
     }
 
     @Override
-    public void receiveCommand(final EngineView view, int commandId, ReadableArray args) {
+    public void receiveCommand(final EngineView view, String commandId, ReadableArray args) {
         // This will be called whenever a command is sent from react-native.
         switch (commandId) {
-            case COMMAND_TAKE_SNAPSHOT:
+            case COMMAND_TAKE_SNAPSHOT_NAME:
                 view.takeSnapshot();
                 break;
         }

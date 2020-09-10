@@ -94,7 +94,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
                     <Image style={{flex: 1}} source={{uri: snapshotData }} />
                 </View>
             }
-            <EngineView style={props.style} camera={camera} initialized={(viewHooks: EngineViewHooks) => { engineViewHooks = viewHooks; }} />
+            <EngineView style={props.style} camera={camera} onInitialized={(viewHooks: EngineViewHooks) => { engineViewHooks = viewHooks; }} />
             <Slider style={{position: 'absolute', minHeight: 50, margin: 10, left: 0, right: 0, bottom: 0}} minimumValue={0.2} maximumValue={2} value={defaultScale} onValueChange={setScale} />
           </View>
         }

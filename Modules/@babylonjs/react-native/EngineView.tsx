@@ -17,7 +17,7 @@ if (EngineViewManager && EngineViewManager.setJSThread && !isRemoteDebuggingEnab
 }
 
 interface NativeEngineViewProps extends ViewProps {
-    onPixelDataReturned: (event: SyntheticEvent) => void;
+    onSnapshotDataReturned: (event: SyntheticEvent) => void;
 }
 
 const NativeEngineView: {
@@ -28,7 +28,7 @@ const NativeEngineView: {
 export interface EngineViewProps extends ViewProps {
     camera?: Camera;
     displayFrameRate?: boolean;
-    initialized?: (view: EngineViewHooks) => void;
+    onInitialized?: (view: EngineViewHooks) => void;
 }
 
 export interface EngineViewHooks {
@@ -98,10 +98,9 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
         setFps(undefined);
     }, [props.camera, props.displayFrameRate]);
 
-    // Call initialized and include the hook to takeSnapshot
-    if (props.initialized) {
-        props.initialized(
-            {
+    // Call onInitialized if provided, and include the callback for takeSnapshot.
+    if (props.onInitialized) {
+        props.onInitialized({
                 takeSnapshot: () => {
                     if (!snapshotPromise) {
                         let resolutionFunctions: { resolve: (data: string) => void, reject: () => void } | undefined;
@@ -109,13 +108,17 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
                             resolutionFunctions = {resolve: resolutionFunc, reject: rejectionFunc};
                         });
 
+                        // Resolution functions should always be initialized.
                         if (resolutionFunctions) {
                             setSnapshotPromise({ promise: promise, resolve: resolutionFunctions.resolve, reject: resolutionFunctions.reject });
+                        }
+                        else {
+                            throw "Resolution functions not initialized after snapshot promise creation.";
                         }
 
                         UIManager.dispatchViewManagerCommand(
                             findNodeHandle(engineViewRef.current),
-                            UIManager.getViewManagerConfig("EngineView").Commands["takeSnapshot"],
+                            "takeSnapshot",
                             []);
 
                         return promise;
