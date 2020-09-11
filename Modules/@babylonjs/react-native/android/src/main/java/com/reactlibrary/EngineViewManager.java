@@ -47,6 +47,9 @@ public final class EngineViewManager extends SimpleViewManager<EngineView> {
             case COMMAND_TAKE_SNAPSHOT_NAME:
                 view.takeSnapshot();
                 break;
+            default:
+                throw new IllegalArgumentException(
+                    String.format("Invalid command %s specified for EngineView.  Supported Commands: takeSnapshot", commandId));
         }
     }
 

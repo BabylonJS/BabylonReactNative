@@ -39,7 +39,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
     const [failedInitialization, setFailedInitialization] = useState(false);
     const [fps, setFps] = useState<number>();
     const engineViewRef = useRef<Component<NativeEngineViewProps>>(null);
-    const [snapshotPromise, setSnapshotPromise] = useState<{promise: Promise<string>, resolve: (data: string) => void, reject: () => void}>();
+    const snapshotPromise = useRef<{promise: Promise<string>, resolve: (data: string) => void}>();
 
     useEffect(() => {
         (async () => {
@@ -103,7 +103,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
         if (props.onInitialized) {
             props.onInitialized({
                 takeSnapshot: () => {
-                    if (!snapshotPromise) {
+                    if (!snapshotPromise.current) {
                         let resolutionFunctions: { resolve: (data: string) => void, reject: () => void } | undefined;
                         const promise = new Promise<string>((resolutionFunc, rejectionFunc) => {
                             resolutionFunctions = {resolve: resolutionFunc, reject: rejectionFunc};
@@ -111,7 +111,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
 
                         // Resolution functions should always be initialized.
                         if (resolutionFunctions) {
-                            setSnapshotPromise({ promise: promise, resolve: resolutionFunctions.resolve, reject: resolutionFunctions.reject });
+                            snapshotPromise.current = { promise: promise, resolve: resolutionFunctions.resolve, reject: resolutionFunctions.reject };
                         }
                         else {
                             throw "Resolution functions not initialized after snapshot promise creation.";
@@ -134,11 +134,11 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
     // Handle snapshot data returned.
     const snapshotDataReturnedHandler = useCallback((event: SyntheticEvent) => {
         const { data } = event.nativeEvent;
-        if (snapshotPromise) {
-            snapshotPromise.resolve(data);
-            setSnapshotPromise(undefined);
+        if (snapshotPromise.current) {
+            snapshotPromise.current.resolve(data);
+            snapshotPromise.current = undefined;
         }
-    }, [snapshotPromise]);
+    }, []);
 
     if (!failedInitialization) {
         return (
