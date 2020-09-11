@@ -1,4 +1,4 @@
-import React, { FunctionComponent, Component, useEffect, useState, useRef, SyntheticEvent } from 'react';
+import React, { Component, FunctionComponent, SyntheticEvent, useCallback, useEffect, useState, useRef } from 'react';
 import { requireNativeComponent, NativeModules, ViewProps, AppState, AppStateStatus, View, Text, findNodeHandle, UIManager } from 'react-native';
 import { Camera } from '@babylonjs/core';
 import { IsEngineDisposed } from './EngineHelpers';
@@ -28,10 +28,10 @@ const NativeEngineView: {
 export interface EngineViewProps extends ViewProps {
     camera?: Camera;
     displayFrameRate?: boolean;
-    onInitialized?: (view: EngineViewHooks) => void;
+    onInitialized?: (view: EngineViewCallbacks) => void;
 }
 
-export interface EngineViewHooks {
+export interface EngineViewCallbacks {
     takeSnapshot: () => Promise<string>;
 }
 
@@ -99,8 +99,9 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
     }, [props.camera, props.displayFrameRate]);
 
     // Call onInitialized if provided, and include the callback for takeSnapshot.
-    if (props.onInitialized) {
-        props.onInitialized({
+    useEffect(() => {
+        if (props.onInitialized) {
+            props.onInitialized({
                 takeSnapshot: () => {
                     if (!snapshotPromise) {
                         let resolutionFunctions: { resolve: (data: string) => void, reject: () => void } | undefined;
@@ -125,18 +126,19 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
                     }
 
                     return snapshotPromise.promise;
-            }
-        });
-    }
+                }
+            });
+        }
+    }, [props.onInitialized]);
 
     // Handle snapshot data returned.
-    const snapshotDataReturnedHandler = (event: SyntheticEvent) => {
+    const snapshotDataReturnedHandler = useCallback((event: SyntheticEvent) => {
         let { data } = event.nativeEvent;
         if (snapshotPromise) {
             snapshotPromise.resolve(data);
             setSnapshotPromise(undefined);
         }
-    }
+    }, [snapshotPromise]);
 
     if (!failedInitialization) {
         return (

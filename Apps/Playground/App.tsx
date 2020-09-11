@@ -8,8 +8,8 @@
 import React, { useState, FunctionComponent, useEffect, useCallback } from 'react';
 import { SafeAreaView, StatusBar, Button, View, Text, ViewProps, Image } from 'react-native';
 
-import { EngineView, useEngine, EngineViewHooks } from '@babylonjs/react-native';
-import { Scene, Vector3, Mesh, ArcRotateCamera, Camera, PBRMetallicRoughnessMaterial, Color3, TargetCamera, WebXRSessionManager } from '@babylonjs/core';
+import { EngineView, useEngine, EngineViewCallbacks } from '@babylonjs/react-native';
+import { Scene, Vector3, Mesh, ArcRotateCamera, Camera, PBRMetallicRoughnessMaterial, Color3, TargetCamera, WebXRSessionManager, Engine } from '@babylonjs/core';
 import Slider from '@react-native-community/slider';
 
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
@@ -24,7 +24,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const [xrSession, setXrSession] = useState<WebXRSessionManager>();
   const [scale, setScale] = useState<number>(defaultScale);
   const [snapshotData, setSnapshotData] = useState<string>();
-  let engineViewHooks: EngineViewHooks | undefined;
+  const [engineViewCallbacks, setEngineViewCallbacks] = useState<EngineViewCallbacks>();
 
   useEffect(() => {
     if (engine) {
@@ -75,11 +75,15 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
     })();
   }, [box, scene, xrSession]);
 
-  const onSnapshot = async () => {
-        if (engineViewHooks) {
-            setSnapshotData("data:image/jpeg;base64," + (await engineViewHooks?.takeSnapshot()).replace(/(\r\n|\n|\r)/gm, ""));
-        }
-  };
+  const onInitialized = useCallback(async(engineViewCallbacks: EngineViewCallbacks) => {
+    setEngineViewCallbacks(engineViewCallbacks);
+  }, [engine]);
+
+  const onSnapshot = useCallback(async () => {
+    if (engineViewCallbacks) {
+      setSnapshotData("data:image/jpeg;base64," + await engineViewCallbacks?.takeSnapshot());
+    }
+  }, [engineViewCallbacks]);
 
   return (
     <>
@@ -89,12 +93,12 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
         { !toggleView &&
           <View style={{flex: 1}}>
             { enableSnapshots && 
-                <View style ={{flex: 1}}>
-                    <Button title={"Take Snapshot"} onPress={onSnapshot}/>
-                    <Image style={{flex: 1}} source={{uri: snapshotData }} />
-                </View>
+              <View style ={{flex: 1}}>
+                <Button title={"Take Snapshot"} onPress={onSnapshot}/>
+                <Image style={{flex: 1}} source={{uri: snapshotData }} />
+              </View>
             }
-            <EngineView style={props.style} camera={camera} onInitialized={(viewHooks: EngineViewHooks) => { engineViewHooks = viewHooks; }} />
+            <EngineView style={props.style} camera={camera} onInitialized={onInitialized} />
             <Slider style={{position: 'absolute', minHeight: 50, margin: 10, left: 0, right: 0, bottom: 0}} minimumValue={0.2} maximumValue={2} value={defaultScale} onValueChange={setScale} />
           </View>
         }
