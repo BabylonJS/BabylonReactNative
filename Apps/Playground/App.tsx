@@ -81,7 +81,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
 
   const onSnapshot = useCallback(async () => {
     if (engineViewCallbacks) {
-      setSnapshotData("data:image/jpeg;base64," + await engineViewCallbacks?.takeSnapshot());
+      setSnapshotData("data:image/jpeg;base64," + await engineViewCallbacks.takeSnapshot());
     }
   }, [engineViewCallbacks]);
 
