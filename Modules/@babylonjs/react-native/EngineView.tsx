@@ -133,7 +133,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
 
     // Handle snapshot data returned.
     const snapshotDataReturnedHandler = useCallback((event: SyntheticEvent) => {
-        let { data } = event.nativeEvent;
+        const { data } = event.nativeEvent;
         if (snapshotPromise) {
             snapshotPromise.resolve(data);
             setSnapshotPromise(undefined);

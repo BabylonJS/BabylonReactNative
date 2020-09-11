@@ -73,7 +73,7 @@ public final class EngineView extends SurfaceView implements SurfaceHolder.Callb
         // Request the pixel copy.
         PixelCopy.request(this, bitmap, (copyResult) ->  {
             // If the pixel copy was a success then convert the image to a base 64 encoded jpeg and fire the event.
-            String encoded ="";
+            String encoded = "";
             if (copyResult == PixelCopy.SUCCESS) {
                 ByteArrayOutputStream byteArrayStream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayStream);

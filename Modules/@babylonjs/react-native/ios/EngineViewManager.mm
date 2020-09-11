@@ -61,10 +61,10 @@
         [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:NO];
         
         // Grab the image from the graphics context, and convert into a base64 encoded JPG.
-        UIImage *capturedImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIImage* capturedImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
-        NSData *jpgData = UIImageJPEGRepresentation(capturedImage, 1.0f);
-        NSString *encodedData = [jpgData base64EncodedStringWithOptions:0];
+        NSData* jpgData = UIImageJPEGRepresentation(capturedImage, 1.0f);
+        NSString* encodedData = [jpgData base64EncodedStringWithOptions:0];
         
         // Fire the onSnapshotDataReturned event if hooked up.
         if (self.onSnapshotDataReturned != nil) {
@@ -89,8 +89,8 @@ RCT_EXPORT_VIEW_PROPERTY(onSnapshotDataReturned, RCTDirectEventBlock)
 
 RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber*) reactTag) {
     // Marshal the takeSnapshot call to the appropriate EngineView.
-    [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *,UIView *> *viewRegistry) {
-        EngineView *view = (EngineView *)viewRegistry[reactTag];
+    [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber*,UIView*>* viewRegistry) {
+        EngineView* view = (EngineView*)viewRegistry[reactTag];
         if (!view || ![view isKindOfClass:[EngineView class]]) {
             return;
         }
