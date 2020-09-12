@@ -102,16 +102,16 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
     useEffect(() => {
         if (props.onInitialized) {
             props.onInitialized({
-                takeSnapshot: () => {
+                takeSnapshot: (): Promise<string> => {
                     if (!snapshotPromise.current) {
-                        let resolutionFunctions: { resolve: (data: string) => void, reject: () => void } | undefined;
-                        const promise = new Promise<string>((resolutionFunc, rejectionFunc) => {
-                            resolutionFunctions = {resolve: resolutionFunc, reject: rejectionFunc};
+                        let resolveFunction: ((data: string) => void) | undefined;
+                        const promise = new Promise<string>((resolutionFunc) => {
+                            resolveFunction = resolutionFunc;
                         });
 
                         // Resolution functions should always be initialized.
-                        if (resolutionFunctions) {
-                            snapshotPromise.current = { promise: promise, resolve: resolutionFunctions.resolve, reject: resolutionFunctions.reject };
+                        if (resolveFunction) {
+                            snapshotPromise.current = { promise: promise, resolve: resolveFunction };
                         }
                         else {
                             throw "Resolution functions not initialized after snapshot promise creation.";
@@ -121,11 +121,9 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
                             findNodeHandle(engineViewRef.current),
                             "takeSnapshot",
                             []);
-
-                        return promise;
                     }
 
-                    return snapshotPromise.promise;
+                    return snapshotPromise.current.promise;
                 }
             });
         }
