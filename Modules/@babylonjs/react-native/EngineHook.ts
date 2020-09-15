@@ -76,9 +76,8 @@ export function useEngine(): Engine | undefined {
         })();
 
         // NOTE: This is a workaround for https://github.com/BabylonJS/BabylonReactNative/issues/60
-        let continueHeartbeat = true;
         function heartbeat() {
-            if (continueHeartbeat) {
+            if (!disposed) {
                 setTimeout(heartbeat, 10);
             }
         }
@@ -92,7 +91,6 @@ export function useEngine(): Engine | undefined {
                 }
                 return undefined;
             });
-            continueHeartbeat = false;
         };
     }, []);
 
