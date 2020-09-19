@@ -117,12 +117,12 @@ static NSMutableArray* activeTouches;
 }
 
 + (void)setCurrentNativeInstance:(RCTBridge*)bridge mtkView:(MTKView*)mtkView width:(int)width height:(int)height {
+    [BabylonNativeInterop setCurrentView:mtkView];
+
     {
         const std::lock_guard<std::mutex> lock(mapMutex);
 
         currentBridge = bridge;
-
-        [BabylonNativeInterop setCurrentView:mtkView];
 
         currentNativeInstance.reset();
 
