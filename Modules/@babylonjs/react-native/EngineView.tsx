@@ -117,7 +117,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
                             snapshotPromise.current = { promise: promise, resolve: resolveFunction };
                         }
                         else {
-                            throw "Resolution functions not initialized after snapshot promise creation.";
+                            throw new Error("Resolution functions not initialized after snapshot promise creation.");
                         }
 
                         UIManager.dispatchViewManagerCommand(
@@ -151,7 +151,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
     } else {
         const message = "Could not initialize Babylon Native.";
         if (!__DEV__) {
-            throw Error(message)
+            throw new Error(message);
         }
 
         return (
