@@ -17,6 +17,8 @@
 #include <sstream>
 #include <unistd.h>
 
+#include "../shared/SetTimeout.h"
+
 namespace Babylon
 {
     using namespace facebook;
@@ -43,11 +45,12 @@ namespace Babylon
 
         auto run_loop_scheduler = std::make_shared<arcana::run_loop_scheduler>(arcana::run_loop_scheduler::get_for_current_thread());
 
-        JsRuntime::DispatchFunctionT dispatchFunction{[env = m_impl->env, run_loop_scheduler = std::move(run_loop_scheduler)](std::function<void(Napi::Env)> func)
+        JsRuntime::DispatchFunctionT dispatchFunction{[env = m_impl->env, run_loop_scheduler = std::move(run_loop_scheduler), setTimeout = GetSetTimeout(*jsiRuntime)](std::function<void(Napi::Env)> func)
         {
-            (*run_loop_scheduler)([env, func = std::move(func)]()
+            (*run_loop_scheduler)([env, func = std::move(func), setTimeout]()
             {
                 func(env);
+                setTimeout->call((static_cast<napi_env>(env))->rt, {});
             });
         }};
 

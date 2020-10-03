@@ -21,6 +21,8 @@
 
 #include <jsi/jsi.h>
 
+#include "../../../../shared/SetTimeout.h"
+
 namespace Babylon
 {
     namespace
@@ -38,12 +40,14 @@ namespace Babylon
         Native(facebook::jsi::Runtime* jsiRuntime, ANativeWindow* windowPtr)
             : m_env{ Napi::Attach<facebook::jsi::Runtime&>(*jsiRuntime) }
         {
+            using looper_scheduler_t = arcana::looper_scheduler<sizeof(std::weak_ptr<Napi::Env>) + sizeof(std::function<void(Napi::Env)>) + sizeof(std::shared_ptr<facebook::jsi::Function>)>;
             auto looper_scheduler = std::make_shared<looper_scheduler_t>(looper_scheduler_t::get_for_current_thread());
 
-            JsRuntime::DispatchFunctionT dispatchFunction{[env = m_env, looper_scheduler = std::move(looper_scheduler)](std::function<void(Napi::Env)> func) {
-                (*looper_scheduler)([env, func = std::move(func)]()
+            JsRuntime::DispatchFunctionT dispatchFunction{[env = m_env, looper_scheduler = std::move(looper_scheduler), setTimeout = GetSetTimeout(*jsiRuntime)](std::function<void(Napi::Env)> func) {
+                (*looper_scheduler)([env, func = std::move(func), setTimeout]()
                 {
                     func(env);
+                    setTimeout->call((static_cast<napi_env>(env))->rt, {});
                 });
             }};
 
@@ -97,8 +101,6 @@ namespace Babylon
         }
 
     private:
-        using looper_scheduler_t = arcana::looper_scheduler<sizeof(std::weak_ptr<Napi::Env>) + sizeof(std::function<void(Napi::Env)>)>;
-
         Napi::Env m_env;
         JsRuntime* m_runtime;
         Plugins::NativeInput* m_nativeInput;
