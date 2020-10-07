@@ -17,7 +17,7 @@ It is also worth noting that Babylon React Native relies heavily on newer React 
 
 ## Usage
 
-See the [package usage](Apps/Playground/node_modules/@babylonjs/react-native/README.md) for installation instructions and/or the Playground app's [App.tsx](Apps/Playground/App.tsx) for example usage.
+See the [package usage](Modules/@babylonjs/react-native/README.md) for installation instructions and/or the Playground app's [App.tsx](Apps/Playground/App.tsx) for example usage.
 
 ## Contributing
 
@@ -144,7 +144,9 @@ cd ios
 pod install
 ```
 
-This will create a symbolic link in your `node_modules` directory to the `@babylonjs/react-native` source directory. For iOS the XCode project needs to be generated with `CMake` as described [above](#ios) and added to your `xcworkspace`.
+This will create a symbolic link in your `node_modules` directory to the `@babylonjs/react-native` source directory. However, this also requires a custom `metro.config.js` as the Metro bundler does not support symbolic links by default. See the [GitHub issue](https://github.com/react-native-community/cli/issues/1238#issue-673055870) on this for a solution.
+
+For iOS the XCode project needs to be generated with `CMake` as described [above](#ios) and added to your `xcworkspace`.
 
 ## Security
 
