@@ -58,7 +58,7 @@ namespace Babylon
         };
 
         JsRuntime::DispatchFunctionT dispatchFunction =
-            [env = m_impl->env, data = std::make_shared<DispatchData>(m_env)](std::function<void(Napi::Env)> func)
+            [env = m_impl->env, data = std::make_shared<DispatchData>(m_impl->env)](std::function<void(Napi::Env)> func)
             {
                 (*data->scheduler)([env, func = std::move(func), &data]()
                 {
