@@ -60,7 +60,7 @@ namespace Babylon
         JsRuntime::DispatchFunctionT dispatchFunction =
             [env = m_impl->env, data = std::make_shared<DispatchData>(m_env)](std::function<void(Napi::Env)> func)
             {
-                (*run_loop_scheduler)([env, func = std::move(func), &data]()
+                (*data->scheduler)([env, func = std::move(func), &data]()
                 {
                     func(env);
                     data->flushedQueue.Call({});
