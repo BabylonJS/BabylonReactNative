@@ -75,6 +75,8 @@ namespace Babylon
         m_impl->m_graphics->AddToJavaScript(m_impl->env);
 
         Polyfills::Window::Initialize(m_impl->env);
+        // NOTE: React Native's XMLHttpRequest is slow and allocates a lot of memory. This does not override
+        // React Native's implementation, but rather adds a second one scoped to Babylon and used by WebRequest.ts.
         Polyfills::XMLHttpRequest::Initialize(m_impl->env);
 
         Plugins::NativeWindow::Initialize(m_impl->env, windowPtr, width, height);
