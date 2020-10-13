@@ -4,10 +4,8 @@ import { PERMISSIONS, check, request } from 'react-native-permissions';
 import { Engine, NativeEngine, WebXRSessionManager } from '@babylonjs/core';
 import { BabylonModule } from './BabylonModule';
 import { DisposeEngine } from './EngineHelpers';
-import { validateBabylonJSVersion } from './VersionValidation';
+import './VersionValidation';
 import * as base64 from 'base-64';
-
-validateBabylonJSVersion();
 
 // These are errors that are normally thrown by WebXR's requestSession, so we should throw the same errors under similar circumstances so app code can be written the same for browser or native.
 // https://developer.mozilla.org/en-US/docs/Web/API/XRSystem/requestSession
