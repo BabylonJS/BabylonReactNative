@@ -150,6 +150,7 @@ Assembled/android/src/main/jniLibs/arm64-v8a
 Assembled/android/src/main/jniLibs/arm64-v8a/libBabylonNative.so
 Assembled/react-native-babylon.podspec
 Assembled/index.ts
+Assembled/VersionValidation.ts
 Assembled/BabylonModule.ts
 `;
 
