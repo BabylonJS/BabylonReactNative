@@ -10,7 +10,6 @@ import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.JavaScriptContextHolder;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.turbomodule.core.CallInvokerHolderImpl;
 import com.facebook.react.turbomodule.core.interfaces.CallInvokerHolder;
 
 import java.util.Hashtable;

@@ -24,7 +24,7 @@ set(BABYLON_NATIVE_PLATFORM "Android")
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
-# configure Babylon Native to use JSI
+# Configure Babylon Native to use JSI
 set(NAPI_JAVASCRIPT_ENGINE "JSI" CACHE STRING "The JavaScript engine to power N-API")
 add_subdirectory(${REACTNATIVE_DIR}/ReactCommon/jsi/jsi ${CMAKE_CURRENT_BINARY_DIR}/jsi)
 target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR}/ReactCommon/jsi)
@@ -39,21 +39,19 @@ set_target_properties(fbjni PROPERTIES
     IMPORTED_LOCATION ${FBJNI_LIBPATH}/${ANDROID_ABI}/libfbjni.so
     INTERFACE_INCLUDE_DIRECTORIES ${FBJNI_INCPATH})
 
-list(APPEND REACTNATIVE_INC_DIRS "${REACTNATIVE_DIR}/ReactCommon/callinvoker")
-list(APPEND REACTNATIVE_INC_DIRS "${REACTNATIVE_DIR}/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni")
-# add_library(reactnative SHARED IMPORTED)
+# Define a minimal version of libturbomodulejsijni.so that includes CallInvokerHolder.cpp.
+# This is the only part of the TurboModule system we need for now. Eventually when TurboModule
+# support ships with React Native, we'll need to strip this back out.
+list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR}/ReactCommon/callinvoker")
+list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR}/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni")
 add_library(turbomodulejsijni SHARED
     ${REACTNATIVE_DIR}/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni/ReactCommon/CallInvokerHolder.cpp)
-target_include_directories(turbomodulejsijni PUBLIC "${REACTNATIVE_INC_DIRS}")
-# set_target_properties(reactnative PROPERTIES
-#     INTERFACE_INCLUDE_DIRECTORIES "${REACTNATIVE_INC_DIRS}")
+target_include_directories(turbomodulejsijni PUBLIC "${TURBOMODULE_INC_DIRS}")
 target_link_libraries(turbomodulejsijni
     fbjni)
 
 add_library(BabylonNative SHARED
     src/main/cpp/BabylonNativeInterop.cpp)
-
-#target_include_directories(BabylonNative PRIVATE "${REACTNATIVE_INC_DIRS}")
 
 target_link_libraries(BabylonNative
     GLESv3

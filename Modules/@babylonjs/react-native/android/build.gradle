@@ -110,7 +110,7 @@ dependencies {
     implementation 'com.facebook.react:react-native:+'  // From node_modules
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'com.google.ar:core:1.14.0'
-    //implementation 'com.facebook.fbjni:fbjni:0.0.2'
+
     api("com.facebook.fbjni:fbjni-java-only:0.0.3")
 
     natives 'com.google.ar:core:1.14.0'
