@@ -40,9 +40,9 @@ namespace Babylon
             : m_env{ Napi::Attach<facebook::jsi::Runtime&>(*jsiRuntime) }
         {
             JsRuntime::DispatchFunctionT dispatchFunction =
-                [env = m_env, jsiRuntime, callInvoker](std::function<void(Napi::Env)> func)
+                [env = m_env, callInvoker](std::function<void(Napi::Env)> func)
                 {
-                    callInvoker->invokeAsync([env, jsiRuntime, func = std::move(func)]
+                    callInvoker->invokeAsync([env, func = std::move(func)]
                     {
                         func(env);
                     });
