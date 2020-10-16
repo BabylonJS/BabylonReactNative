@@ -22,6 +22,9 @@
 #include <unistd.h>
 
 #include <jsi/jsi.h>
+#include <ReactCommon/CallInvokerHolder.h>
+//#include "/Users/ryantremblay/Repos/BabylonReactNative2/Apps/Playground/node_modules/react-native/ReactCommon/callinvoker/ReactCommon/CallInvoker.h"
+//#include "/Users/ryantremblay/Repos/BabylonReactNative2/Apps/Playground/node_modules/react-native/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni/ReactCommon/CallInvokerHolder.h"
 
 #include "../../../../shared/Shared.h"
 
@@ -39,7 +42,7 @@ namespace Babylon
     {
     public:
         // This class must be constructed from the JavaScript thread
-        Native(facebook::jsi::Runtime* jsiRuntime, ANativeWindow* windowPtr)
+        Native(facebook::jsi::Runtime* jsiRuntime, std::shared_ptr<facebook::react::CallInvoker> callInvoker, ANativeWindow* windowPtr)
             : m_env{ Napi::Attach<facebook::jsi::Runtime&>(*jsiRuntime) }
         {
             struct DispatchData
@@ -57,16 +60,23 @@ namespace Babylon
             };
 
             JsRuntime::DispatchFunctionT dispatchFunction =
-                [env = m_env, data = std::make_shared<DispatchData>(m_env)](std::function<void(Napi::Env)> func)
+                [env = m_env, callInvoker](std::function<void(Napi::Env)> func)
                 {
-                    (data->scheduler)([env, func = std::move(func), &data]()
+                    callInvoker->invokeAsync([env, func = std::move(func)]
                     {
                         func(env);
-                        // NOTE: This doesn't work quite right on iOS, so we'll use a different work around until
-                        // we have a better solution (see Shared.h and EngineHook.ts for more details).
-                        //data->flushedQueue.Call({});
                     });
                 };
+//                [env = m_env, data = std::make_shared<DispatchData>(m_env)](std::function<void(Napi::Env)> func)
+//                {
+//                    (data->scheduler)([env, func = std::move(func), &data]()
+//                    {
+//                        func(env);
+//                        // NOTE: This doesn't work quite right on iOS, so we'll use a different work around until
+//                        // we have a better solution (see Shared.h and EngineHook.ts for more details).
+//                        //data->flushedQueue.Call({});
+//                    });
+//                };
 
             m_runtime = &JsRuntime::CreateForJavaScript(m_env, dispatchFunction);
 
@@ -153,11 +163,26 @@ extern "C" JNIEXPORT void JNICALL Java_com_reactlibrary_BabylonNativeInterop_res
     android::global::Resume();
 }
 
-extern "C" JNIEXPORT jlong JNICALL Java_com_reactlibrary_BabylonNativeInterop_create(JNIEnv* env, jclass obj, jlong jsiRuntimeRef, jobject surface)
+extern "C" JNIEXPORT jlong JNICALL Java_com_reactlibrary_BabylonNativeInterop_create(JNIEnv* env, jclass obj, jlong jsiRuntimeRef, jobject jsCallInvokerHolder, jobject surface)
 {
     auto jsiRuntime = reinterpret_cast<facebook::jsi::Runtime*>(jsiRuntimeRef);
+    //jni::alias_ref<CallInvokerHolder::javaobject>
+    // "Lcom/facebook/react/turbomodule/core/CallInvokerHolderImpl;";
+    //facebook::react::CallInvokerHolder::
+    //facebook::jni::alias_ref<facebook::react::CallInvokerHolder::javaobject> callInvoke
+//    _jobject* a = jsCallInvokerHolder;
+//    facebook::jni::JObject::_javaobject* b = a;
+//    facebook::jni::JObject::javaobject c = b;
+//    facebook::jni::HybridClass::javaobject d = c;
+//    makeNativeMethod()
+    //facebook::jni::HybridClass::javaobject d{};
+    //facebook::react::CallInvokerHolder::javaobject e = d;
+//    facebook::react::CallInvokerHolder::javaobject x = jsCallInvokerHolder;
+    auto a = facebook::jni::alias_ref<facebook::react::CallInvokerHolder::javaobject> {(facebook::react::CallInvokerHolder::javaobject)jsCallInvokerHolder};
+    auto b = a->cthis()->getCallInvoker();
+    //auto callInvoker = facebook::jni::alias_ref<facebook::react::CallInvokerHolder::javaobject> {(facebook::react::CallInvokerHolder::javaobject)jsCallInvokerHolder}->cthis()->getCallInvoker();
     ANativeWindow* windowPtr = ANativeWindow_fromSurface(env, surface);
-    auto native = new Babylon::Native(jsiRuntime, windowPtr);
+    auto native = new Babylon::Native(jsiRuntime, b, windowPtr);
     return reinterpret_cast<intptr_t>(native);
 }
 

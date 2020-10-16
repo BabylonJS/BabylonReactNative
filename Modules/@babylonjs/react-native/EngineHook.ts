@@ -76,12 +76,12 @@ export function useEngine(): Engine | undefined {
         })();
 
         // NOTE: This is a workaround for https://github.com/BabylonJS/BabylonReactNative/issues/60
-        function heartbeat() {
-            if (!disposed) {
-                setTimeout(heartbeat, 10);
-            }
-        }
-        heartbeat();
+        // function heartbeat() {
+        //     if (!disposed) {
+        //         setTimeout(heartbeat, 10);
+        //     }
+        // }
+        // heartbeat();
 
         return () => {
             disposed = true;

@@ -34,8 +34,26 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/src/")
 set(BABYLON_NATIVE_DIR "${CMAKE_CURRENT_LIST_DIR}/../submodules/BabylonNative")
 add_subdirectory(${BABYLON_NATIVE_DIR} ${BABYLON_NATIVE_DIR}/build/Android_${CMAKE_ANDROID_ARCH_ABI}/)
 
+add_library(fbjni SHARED IMPORTED)
+set_target_properties(fbjni PROPERTIES
+    IMPORTED_LOCATION ${FBJNI_LIBPATH}/${ANDROID_ABI}/libfbjni.so
+    INTERFACE_INCLUDE_DIRECTORIES ${FBJNI_INCPATH})
+
+list(APPEND REACTNATIVE_INC_DIRS "${REACTNATIVE_DIR}/ReactCommon/callinvoker")
+list(APPEND REACTNATIVE_INC_DIRS "${REACTNATIVE_DIR}/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni")
+# add_library(reactnative SHARED IMPORTED)
+add_library(turbomodulejsijni SHARED
+    ${REACTNATIVE_DIR}/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni/ReactCommon/CallInvokerHolder.cpp)
+target_include_directories(turbomodulejsijni PUBLIC "${REACTNATIVE_INC_DIRS}")
+# set_target_properties(reactnative PROPERTIES
+#     INTERFACE_INCLUDE_DIRECTORIES "${REACTNATIVE_INC_DIRS}")
+target_link_libraries(turbomodulejsijni
+    fbjni)
+
 add_library(BabylonNative SHARED
     src/main/cpp/BabylonNativeInterop.cpp)
+
+#target_include_directories(BabylonNative PRIVATE "${REACTNATIVE_INC_DIRS}")
 
 target_link_libraries(BabylonNative
     GLESv3
@@ -44,7 +62,9 @@ target_link_libraries(BabylonNative
     log
     -lz
     arcana
+    fbjni
     jsi
+    turbomodulejsijni
     AndroidExtensions
     Graphics
     JsRuntime

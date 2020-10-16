@@ -2,6 +2,7 @@
 #import "BabylonNative.h"
 
 #import <React/RCTBridge+Private.h>
+//#import "/Users/ryantremblay/Repos/BabylonReactNative2/Apps/Playground/node_modules/react-native/ReactCommon/callinvoker/ReactCommon/CallInvoker.h"
 #import <jsi/jsi.h>
 
 #import <Foundation/Foundation.h>
@@ -14,9 +15,17 @@
 
 using namespace facebook;
 
+@interface RCTBridge (RCTTurboModule)
+- (std::shared_ptr<facebook::react::CallInvoker>)jsCallInvoker;
+@end
+
 namespace {
     jsi::Runtime* GetJSIRuntime(RCTBridge* bridge) {
         RCTCxxBridge* cxxBridge = reinterpret_cast<RCTCxxBridge*>(bridge);
+//        auto x = bridge.jsCallInvoker;
+//        x->invokeAsync([jsiRuntime = reinterpret_cast<jsi::Runtime*>(cxxBridge.runtime)](){
+//            throw facebook::jsi::JSError{*jsiRuntime, "FOOOO"};
+//        });
         return reinterpret_cast<jsi::Runtime*>(cxxBridge.runtime);
     }
 }
@@ -128,7 +137,7 @@ static NSMutableArray* activeTouches;
 
         jsi::Runtime* jsiRuntime = GetJSIRuntime(currentBridge);
         if (jsiRuntime) {
-            currentNativeInstance = std::make_unique<Babylon::Native>(GetJSIRuntime(currentBridge), (__bridge void*)mtkView, width, height);
+            currentNativeInstance = std::make_unique<Babylon::Native>(GetJSIRuntime(currentBridge), currentBridge.jsCallInvoker, (__bridge void*)mtkView, width, height);
         }
     }
 
