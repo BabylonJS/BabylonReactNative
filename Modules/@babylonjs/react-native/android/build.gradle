@@ -219,7 +219,7 @@ task extractFBJNIHeaders {
     }
 }
 
-task extractJNIFiles {
+task extractFBJNILibs {
     doLast {
         configurations.fbjniLibs.files.each { f ->
             copy {
@@ -235,7 +235,7 @@ tasks.whenTaskAdded { task ->
     if (task.name.contains("external") && !task.name.contains("Clean")) {
         task.dependsOn(extractNativeLibraries)
         task.dependsOn(extractFBJNIHeaders)
-        task.dependsOn(extractJNIFiles)
+        task.dependsOn(extractFBJNILibs)
     }
 }
 
