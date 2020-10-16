@@ -45,7 +45,6 @@ namespace Babylon
                     callInvoker->invokeAsync([env, jsiRuntime, func = std::move(func)]
                     {
                         func(env);
-                        //throw facebook::jsi::JSError{*jsiRuntime, "FOO"};
                     });
                 };
 
