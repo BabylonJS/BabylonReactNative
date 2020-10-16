@@ -2,7 +2,6 @@
 #import "BabylonNative.h"
 
 #import <React/RCTBridge+Private.h>
-//#import "/Users/ryantremblay/Repos/BabylonReactNative2/Apps/Playground/node_modules/react-native/ReactCommon/callinvoker/ReactCommon/CallInvoker.h"
 #import <jsi/jsi.h>
 
 #import <Foundation/Foundation.h>
@@ -22,10 +21,6 @@ using namespace facebook;
 namespace {
     jsi::Runtime* GetJSIRuntime(RCTBridge* bridge) {
         RCTCxxBridge* cxxBridge = reinterpret_cast<RCTCxxBridge*>(bridge);
-//        auto x = bridge.jsCallInvoker;
-//        x->invokeAsync([jsiRuntime = reinterpret_cast<jsi::Runtime*>(cxxBridge.runtime)](){
-//            throw facebook::jsi::JSError{*jsiRuntime, "FOOOO"};
-//        });
         return reinterpret_cast<jsi::Runtime*>(cxxBridge.runtime);
     }
 }

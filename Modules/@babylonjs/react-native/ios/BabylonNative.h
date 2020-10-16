@@ -1,7 +1,7 @@
 #pragma once
 
 #include <jsi/jsi.h>
-#include "/Users/ryantremblay/Repos/BabylonReactNative2/Apps/Playground/node_modules/react-native/ReactCommon/callinvoker/ReactCommon/CallInvoker.h"
+#include <ReactCommon/CallInvoker.h>
 
 namespace Babylon
 {
