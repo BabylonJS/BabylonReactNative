@@ -19,8 +19,6 @@
 #include <sstream>
 #include <unistd.h>
 
-#include "../shared/Shared.h"
-
 namespace Babylon
 {
     using namespace facebook;
