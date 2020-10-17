@@ -46,18 +46,6 @@ namespace Babylon
             m_impl->m_graphics = Graphics::InitializeFromWindow<void*>(windowPtr, width, height);
         });
 
-        struct DispatchData
-        {
-            arcana::run_loop_scheduler scheduler;
-            std::shared_ptr<facebook::jsi::Function> setTimeout;
-
-            DispatchData(facebook::jsi::Runtime& rt)
-                : scheduler{ arcana::run_loop_scheduler::get_for_current_thread() }
-                , setTimeout{ GetSetTimeout(rt) }
-            {
-            }
-        };
-
         JsRuntime::DispatchFunctionT dispatchFunction =
             [env = m_impl->env, callInvoker = m_impl->jsCallInvoker](std::function<void(Napi::Env)> func)
             {
@@ -66,16 +54,6 @@ namespace Babylon
                     func(env);
                 });
             };
-//            [env = m_impl->env, data = std::make_shared<DispatchData>(*jsiRuntime)](std::function<void(Napi::Env)> func)
-//            {
-//                (data->scheduler)([env, func = std::move(func), &data]()
-//                {
-//                    func(env);
-//                    // NOTE: This doesn't work quite right on iOS, so we'll use a different work around until
-//                    // we have a better solution (see Shared.h and EngineHook.ts for more details).
-//                    //data->setTimeout->call((static_cast<napi_env>(env))->rt, {});
-//                });
-//            };
 
         m_impl->runtime = &JsRuntime::CreateForJavaScript(m_impl->env, std::move(dispatchFunction));
         
