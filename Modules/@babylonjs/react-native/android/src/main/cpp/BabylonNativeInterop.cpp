@@ -22,7 +22,7 @@
 #include <jsi/jsi.h>
 #include <ReactCommon/CallInvokerHolder.h>
 
-#include "../../../../shared/DispatchFunction.h"
+#include <DispatchFunction.h>
 
 using namespace facebook;
 

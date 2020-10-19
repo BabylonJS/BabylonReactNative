@@ -19,7 +19,7 @@
 #include <sstream>
 #include <unistd.h>
 
-#include "../shared/DispatchFunction.h"
+#include <DispatchFunction.h>
 
 namespace Babylon
 {
