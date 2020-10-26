@@ -30,7 +30,13 @@ add_subdirectory(${BABYLON_REACT_NATIVE_SHARED_DIR} ${CMAKE_CURRENT_BINARY_DIR}/
 
 add_library(BabylonNative
     ${CMAKE_CURRENT_LIST_DIR}/src/BabylonNative.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/BabylonNative.cpp)
+    ${CMAKE_CURRENT_LIST_DIR}/src/BabylonNative.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/BabylonModule.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/BabylonModule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/EngineView.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/EngineView.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/EngineViewManager.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/EngineViewManager.cpp)
 
 target_include_directories(BabylonNative PUBLIC c/src)
 
