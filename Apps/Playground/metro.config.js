@@ -4,9 +4,9 @@
  *
  * @format
  */
-
 const path = require('path');
 const fs = require('fs');
+const blacklist = require('metro-config/src/defaults/blacklist');
 
 // NOTE: The Metro bundler does not support symlinks (see https://github.com/facebook/metro/issues/1), which NPM uses for local packages.
 //       To work around this, we explicity tell the metro bundler where to find local/linked packages.
@@ -62,18 +62,27 @@ module.exports = {
   resolver: {
     // Register an "extra modules proxy" for resolving modules outside of the normal resolution logic.
     extraNodeModules: new Proxy(
-        // Provide the set of known local package mappings.
-        moduleMappings,
-        {
-            // Provide a mapper function, which uses the above mappings for associated package ids,
-            // otherwise fall back to the standard behavior and just look in the node_modules directory.
-            get: (target, name) => name in target ? target[name] : path.join(__dirname, `node_modules/${name}`),
-        },
+      // Provide the set of known local package mappings.
+      moduleMappings,
+      {
+        // Provide a mapper function, which uses the above mappings for associated package ids,
+        // otherwise fall back to the standard behavior and just look in the node_modules directory.
+        get: (target, name) => name in target ? target[name] : path.join(__dirname, `node_modules/${name}`),
+      },
     ),
-  },
+    
+    projectRoot: path.resolve(__dirname),
 
-  projectRoot: path.resolve(__dirname),
+    // Also additionally watch all the mapped local directories for changes to support live updates.
+    watchFolders: Object.values(moduleMappings),
 
-  // Also additionally watch all the mapped local directories for changes to support live updates.
-  watchFolders: Object.values(moduleMappings),
+    blacklistRE: blacklist([
+      // This stops "react-native run-windows" from causing the metro server to crash if its already running
+      new RegExp(
+        `${path.resolve(__dirname, 'windows').replace(/[/\\]/g, '/')}.*`,
+      ),
+      // This prevents "react-native run-windows" from hitting: EBUSY: resource busy or locked, open msbuild.ProjectImports.zip
+      /.*\.ProjectImports\.zip/,
+    ]),
+  }
 };

@@ -5,6 +5,7 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "windows": "react-native run-windows",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
@@ -17,7 +18,8 @@
     "logkitty": "^0.7.1",
     "react": "16.13.1",
     "react-native": "0.63.1",
-    "react-native-permissions": "^2.1.4"
+    "react-native-permissions": "^2.1.4",
+    "react-native-windows": "^0.63.0-0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
@@ -35,7 +37,8 @@
     "metro-react-native-babel-preset": "^0.59.0",
     "prettier": "^2.0.4",
     "react-test-renderer": "16.13.1",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "react-native-windows-init": "latest"
   },
   "jest": {
     "preset": "react-native",
