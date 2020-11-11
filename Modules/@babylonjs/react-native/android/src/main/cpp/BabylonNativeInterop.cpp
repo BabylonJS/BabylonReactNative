@@ -16,6 +16,7 @@
 
 #include <optional>
 #include <sstream>
+#include <thread>
 #include <unistd.h>
 
 #include <jsi/jsi.h>
@@ -29,10 +30,12 @@ namespace Babylon
 {
     namespace
     {
-        void log(const char *str)
-        {
-            __android_log_print(ANDROID_LOG_VERBOSE, "BabylonNative", "%s", str);
-        }
+//        void log(const char *str)
+//        {
+//            __android_log_print(ANDROID_LOG_VERBOSE, "BabylonNative", "%s", str);
+//        }
+
+        bool isShuttingDown{false};
     }
 
     class Native final
@@ -42,7 +45,9 @@ namespace Babylon
         Native(jsi::Runtime& jsiRuntime, std::shared_ptr<react::CallInvoker> callInvoker, ANativeWindow* windowPtr)
             : m_env{ Napi::Attach<jsi::Runtime&>(jsiRuntime) }
         {
-            m_runtime = &JsRuntime::CreateForJavaScript(m_env, CreateJsRuntimeDispatcher(m_env, jsiRuntime, callInvoker));
+            isShuttingDown = false;
+
+            m_runtime = &JsRuntime::CreateForJavaScript(m_env, CreateJsRuntimeDispatcher(m_env, jsiRuntime, callInvoker, isShuttingDown));
 
             auto width = static_cast<size_t>(ANativeWindow_getWidth(windowPtr));
             auto height = static_cast<size_t>(ANativeWindow_getHeight(windowPtr));
@@ -63,6 +68,20 @@ namespace Babylon
 
         ~Native()
         {
+            log("DESTROYING NATIVE INTEROP INSTANCE");
+            //auto& localIsShuttingDown = isShuttingDown;
+            m_runtime->Dispatch([graphics{m_graphics}](Napi::Env env){
+                log("IN DISPATCH FOR CLEANUP");
+                auto native = JsRuntime::NativeObject::GetFromJavaScript(env);
+                auto engine = native.Get("engineInstance").As<Napi::Object>();
+                auto dispose = engine.Get("dispose").As<Napi::Function>();
+                auto isUndefined = dispose.IsUndefined();
+                dispose.Call(engine, {});
+                //Napi::Eval(env, "_native.engineInstance.dispose()", "");
+                isShuttingDown = true;
+            });
+            while(!isShuttingDown){ std::this_thread::yield(); }
+
             // TODO: Figure out why this causes the app to crash
             //Napi::Detach(m_env);
         }
@@ -93,7 +112,7 @@ namespace Babylon
         }
 
     private:
-        std::unique_ptr<Graphics> m_graphics{};
+        std::shared_ptr<Graphics> m_graphics{};
         Napi::Env m_env;
         JsRuntime* m_runtime;
         Plugins::NativeInput* m_nativeInput;

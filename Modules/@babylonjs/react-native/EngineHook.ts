@@ -79,11 +79,14 @@ export function useEngine(): Engine | undefined {
             {
                 await _native.graphicsInitializationPromise;
                 engine = new NativeEngine();
+                console.log("SETTING _native.engineInstance");
+                (_native as any).engineInstance = engine;
                 setEngine(engine);
             }
         })();
 
         return () => {
+            console.log("DISPOSING");
             disposed = true;
             // NOTE: Do not use setEngine with a callback to dispose the engine instance as that callback does not get called during component unmount when compiled in release.
             if (engine) {

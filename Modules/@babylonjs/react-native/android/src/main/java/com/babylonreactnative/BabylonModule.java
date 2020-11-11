@@ -24,7 +24,8 @@ public final class BabylonModule extends ReactContextBaseJavaModule {
 
     @Override
     public void onCatalystInstanceDestroy() {
-        new Handler(Looper.getMainLooper()).post(BabylonNativeInterop::deinitialize);
+        //new Handler(Looper.getMainLooper()).post(BabylonNativeInterop::deinitialize);
+        BabylonNativeInterop.deinitialize();
     }
 
     @ReactMethod
