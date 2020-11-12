@@ -1,10 +1,11 @@
 #import "BabylonNativeInterop.h"
 
 #import <React/RCTBridgeModule.h>
+#import <React/RCTInvalidating.h>
 
 #import <Foundation/Foundation.h>
 
-@interface BabylonModule : NSObject <RCTBridgeModule>
+@interface BabylonModule : NSObject <RCTBridgeModule, RCTInvalidating>
 @end
 
 @implementation BabylonModule
@@ -19,6 +20,17 @@ RCT_EXPORT_METHOD(initialize:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseR
 
 RCT_EXPORT_METHOD(whenInitialized:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     [BabylonNativeInterop whenInitialized:self.bridge resolve:resolve];
+}
+
+- (dispatch_queue_t)methodQueue
+{
+  //return dispatch_get_main_queue();
+    return RCTJSThread;
+}
+
+- (void)invalidate
+{
+    [BabylonNativeInterop reset];
 }
 
 @end

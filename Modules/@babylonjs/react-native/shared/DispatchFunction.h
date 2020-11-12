@@ -4,7 +4,7 @@
 
 #include <jsi/jsi.h>
 #include <ReactCommon/CallInvoker.h>
-#include <android/log.h>
+//#include <android/log.h>
 
 namespace Babylon
 {
@@ -14,7 +14,7 @@ namespace Babylon
     //{
         void log(const char *str)
         {
-            __android_log_print(ANDROID_LOG_VERBOSE, "BabylonNative", "%s", str);
+            //__android_log_print(ANDROID_LOG_VERBOSE, "BabylonNative", "%s", str);
         }
     //}
 

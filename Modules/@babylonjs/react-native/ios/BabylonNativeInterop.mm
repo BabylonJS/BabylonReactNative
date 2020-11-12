@@ -127,6 +127,11 @@ static NSMutableArray* activeTouches;
         const std::lock_guard<std::mutex> lock(mapMutex);
 
         currentBridge = bridge;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+            selector:@selector(handleBridgeWillBeInvalidatedNotification:)
+            name:RCTBridgeWillInvalidateModulesNotification
+            object:bridge];
 
         currentNativeInstance.reset();
 
@@ -144,6 +149,15 @@ static NSMutableArray* activeTouches;
 
         initializationPromises.erase(initializationPromisesIterator);
     }
+}
+
++ (void)handleBridgeWillBeInvalidatedNotification:(NSNotification *)notification
+{
+    currentNativeInstance.reset();
+}
+
++ (void)reset {
+    currentNativeInstance.reset();
 }
 
 @end
