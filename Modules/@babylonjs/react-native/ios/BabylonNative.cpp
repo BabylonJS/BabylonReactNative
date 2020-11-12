@@ -71,6 +71,9 @@ namespace Babylon
         m_impl->nativeInput = &Babylon::Plugins::NativeInput::CreateForJavaScript(m_impl->env);
     }
 
+    // NOTE: This only happens when the JS engine is shutting down (other than when the app exits, this only
+    //       happens during a dev mode reload). In this case, EngineHook.ts won't call NativeEngine.dispose,
+    //       so we need to manually do it here to properly clean up these resources.
     Native::~Native()
     {
         auto native = JsRuntime::NativeObject::GetFromJavaScript(m_impl->env);
