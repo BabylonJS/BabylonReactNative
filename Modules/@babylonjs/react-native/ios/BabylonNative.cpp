@@ -45,7 +45,7 @@ namespace Babylon
 
         Napi::Env env;
         std::shared_ptr<facebook::react::CallInvoker> jsCallInvoker;
-        std::shared_ptr<Graphics> graphics{};
+        std::unique_ptr<Graphics> graphics{};
         JsRuntime* runtime{};
         Plugins::NativeInput* nativeInput{};
     };
