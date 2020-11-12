@@ -54,9 +54,7 @@ namespace Babylon
         : m_impl{ std::make_unique<Native::Impl>(jsiRuntime, callInvoker) }
     {
         isShuttingDown = false;
-        //dispatch_sync(dispatch_get_main_queue(), ^{
-            m_impl->graphics = Graphics::CreateGraphics(reinterpret_cast<void*>(windowPtr), width, height);
-        //});
+        m_impl->graphics = Graphics::CreateGraphics(reinterpret_cast<void*>(windowPtr), width, height);
 
         m_impl->runtime = &JsRuntime::CreateForJavaScript(m_impl->env, CreateJsRuntimeDispatcher(m_impl->env, jsiRuntime, callInvoker, isShuttingDown));
         
@@ -75,18 +73,11 @@ namespace Babylon
 
     Native::~Native()
     {
-//        m_impl->runtime->Dispatch([graphics{m_impl->graphics}](Napi::Env env){
-            auto native = JsRuntime::NativeObject::GetFromJavaScript(m_impl->env);
-            auto engine = native.Get("engineInstance").As<Napi::Object>();
-            auto dispose = engine.Get("dispose").As<Napi::Function>();
-            dispose.Call(engine, {});
-            isShuttingDown = true;
-//        });
-//
-//        while (!isShuttingDown)
-//        {
-//            std::this_thread::yield();
-//        }
+        auto native = JsRuntime::NativeObject::GetFromJavaScript(m_impl->env);
+        auto engine = native.Get("engineInstance").As<Napi::Object>();
+        auto dispose = engine.Get("dispose").As<Napi::Function>();
+        dispose.Call(engine, {});
+        isShuttingDown = true;
     }
 
     void Native::Refresh(void* windowPtr, size_t width, size_t height)
