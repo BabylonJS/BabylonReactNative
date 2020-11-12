@@ -56,8 +56,8 @@ namespace Babylon
         isShuttingDown = false;
         m_impl->graphics = Graphics::CreateGraphics(reinterpret_cast<void*>(windowPtr), width, height);
 
-        m_impl->runtime = &JsRuntime::CreateForJavaScript(m_impl->env, CreateJsRuntimeDispatcher(m_impl->env, jsiRuntime, callInvoker, isShuttingDown));
-        
+        m_impl->runtime = &JsRuntime::CreateForJavaScript(m_impl->env, CreateJsRuntimeDispatcher(m_impl->env, jsiRuntime, std::move(callInvoker), isShuttingDown));
+
         m_impl->graphics->AddToJavaScript(m_impl->env);
 
         Polyfills::Window::Initialize(m_impl->env);

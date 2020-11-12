@@ -27,6 +27,7 @@ namespace Babylon
             {
                 try
                 {
+                    // If JS engine shutdown is in progress, don't dispatch any new work.
                     if (!isShuttingDown)
                     {
                         func(env);
