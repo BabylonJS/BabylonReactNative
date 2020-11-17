@@ -9,7 +9,7 @@ import React, { useState, FunctionComponent, useEffect, useCallback } from 'reac
 import { SafeAreaView, StatusBar, Button, View, Text, ViewProps, Image } from 'react-native';
 
 import { EngineView, useEngine, EngineViewCallbacks } from '@babylonjs/react-native';
-import { Scene, Vector3, ArcRotateCamera, Camera, WebXRSessionManager, SceneLoader, AbstractMesh, TransformNode } from '@babylonjs/core';
+import { Scene, Vector3, ArcRotateCamera, Camera, WebXRSessionManager, SceneLoader, TransformNode, DeviceSourceManager, DeviceType, DeviceSource, PointerInput } from '@babylonjs/core';
 import '@babylonjs/loaders';
 import Slider from '@react-native-community/slider';
 
@@ -35,17 +35,31 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
       (scene.activeCamera as ArcRotateCamera).beta -= Math.PI / 8;
       setCamera(scene.activeCamera!);
       scene.createDefaultLight(true);
-      const node = new TransformNode("Root Container", scene);
-      setRootNode(node);
+      const rootNode = new TransformNode("Root Container", scene);
+      setRootNode(rootNode);
 
-      scene.beforeRender = function () {
-        node.rotate(Vector3.Up(), 0.005 * scene.getAnimationRatio());
-      };
+      const deviceSourceManager = new DeviceSourceManager(engine);
+      deviceSourceManager.onDeviceConnectedObservable.add(device => {
+        if (device.deviceType === DeviceType.Touch) {
+          const touch: DeviceSource<DeviceType.Touch> = deviceSourceManager.getDeviceSource(device.deviceType, device.deviceSlot)!;
+          touch.onInputChangedObservable.add(touchEvent => {
+            if (touchEvent.inputIndex === PointerInput.Horizontal) {
+              if (touchEvent.currentState && touchEvent.previousState) {
+                rootNode.rotate(Vector3.Down(), (touchEvent.currentState - touchEvent.previousState) * 0.005);
+              }
+            }
+          })
+        }
+      })
 
       const transformContainer = new TransformNode("Transform Container", scene);
-      transformContainer.parent = node;
+      transformContainer.parent = rootNode;
       transformContainer.scaling.scaleInPlace(0.2);
       transformContainer.position.y -= .2;
+
+      scene.beforeRender = function () {
+        transformContainer.rotate(Vector3.Up(), 0.005 * scene.getAnimationRatio());
+      };
 
       SceneLoader.ImportMeshAsync("", "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF-Binary/BoxAnimated.glb").then(result => {
         const mesh = result.meshes[0];
