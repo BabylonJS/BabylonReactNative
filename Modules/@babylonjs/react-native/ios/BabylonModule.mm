@@ -1,8 +1,13 @@
 #import "BabylonNativeInterop.h"
 
 #import <React/RCTBridgeModule.h>
+#import <ReactCommon/CallInvoker.h>
 
 #import <Foundation/Foundation.h>
+
+@interface RCTBridge (RCTTurboModule)
+- (std::shared_ptr<facebook::react::CallInvoker>)jsCallInvoker;
+@end
 
 @interface BabylonModule : NSObject <RCTBridgeModule>
 @end
@@ -22,8 +27,10 @@ RCT_EXPORT_METHOD(whenInitialized:(RCTPromiseResolveBlock)resolve reject:(RCTPro
 }
 
 RCT_EXPORT_METHOD(reset:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
-    [BabylonNativeInterop reset];
-    resolve([NSNull null]);
+    self.bridge.jsCallInvoker->invokeAsync([resolve]() {
+        [BabylonNativeInterop reset];
+        resolve([NSNull null]);
+    });
 }
 
 @end
