@@ -87,6 +87,31 @@ export JAVA_HOME=$(/usr/libexec/java_home -v 13)
 - The `ANDROID_HOME` environment variable must be defined (typically %LOCALAPPDATA%/Android/sdk).
 - The `JAVA_HOME` environment variable must be defined (typically %ProgramFiles%/Android/Android Studio/jre).
 
+### **Configuring a Linux Dev Environment**
+
+**Required Tools:** [Android Studio](https://developer.android.com/studio/) (including NDK 21.3.6528147)
+
+With Ubuntu, you can install needed packages by this command:
+
+```
+sudo apt-get install adb ninja-build openjdk-14-jdk android-sdk
+```
+
+Update PATH with this commands:
+
+```
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+```
+
+**Troubleshootings:**
+- If the Metro server is not started with `npm run android` , you can start it manually by running `npm run start` in a terminal.
+- Android Studio is the tool of choice for downloading the various versions of NDK.
+- If something goes wrong with the build `npm run android --verbose` can give some hints.
+- If the emulator is not launched by the build, you can run `~/Android/Sdk/emulator/emulator @name_of_your_image`.
 
 ### **Building and Running the Playground App**
 
@@ -115,6 +140,23 @@ npm run ios
 ```
 
 After having run the above commands, you can also open `Apps/Playground/ios/Playground.xcworkspace` in XCode and run the app from there.
+
+### **Testing in the Playground App** ###
+
+When making local changes, the following manual test steps should be performed within the Playground app to prevent regressions. These should be checked on Android and iOS, and ideally in both debug and release, but minimally in release.
+
+1. **Basic rendering** - launch the Playground app and make sure the model loaded and is rendering at 60fps.
+1. **Animation** - make sure the loaded model is animating.
+1. **Input handling** - swipe across the display and make sure the model rotates around the y-axis.
+1. **Display rotation** - rotate the device 90 degrees and make sure the view rotates and renders correctly.
+1. **View replacement** - tap the *Toggle EngineView* button twice to replace the render target view.
+1. **Engine dispose** - tap the *Toggle EngineScreen* button twice to dispose and re-instantiate the Babylon engine.
+1. **Suspend/resume** - switch to a different app and then back to the Playground and make sure it is still rendering correctly.
+1. **Dev mode reload** - in the Metro server console window, press the `R` key on the keyboard to reload the JS engine and make sure rendering restarts successfully.
+1. **XR mode** - tap the *Start XR* button and make sure XR mode is working.
+1. **XR display rotation** - rotate the device 90 degrees and make sure the view rotates and renders correctly.
+1. **XR view replacement** - tap the *Toggle EngineView* button twice to replace the render target view.
+1. **XR suspend/resume** - switch to a different app and then back to the Playground and make sure it is still rendering correctly.
 
 ### **Building the NPM Package**
 

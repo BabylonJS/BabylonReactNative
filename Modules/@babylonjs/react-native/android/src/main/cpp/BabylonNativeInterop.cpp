@@ -2,7 +2,6 @@
 
 #include <Babylon/Graphics.h>
 #include <Babylon/JsRuntime.h>
-#include <Babylon/Plugins/NativeWindow.h>
 #include <Babylon/Plugins/NativeEngine.h>
 #include <Babylon/Plugins/NativeInput.h>
 #include <Babylon/Plugins/NativeXr.h>
@@ -34,6 +33,8 @@ namespace Babylon
         {
             __android_log_print(ANDROID_LOG_VERBOSE, "BabylonNative", "%s", str);
         }
+
+        bool isShuttingDown{false};
     }
 
     class Native final
@@ -43,16 +44,17 @@ namespace Babylon
         Native(jsi::Runtime& jsiRuntime, std::shared_ptr<react::CallInvoker> callInvoker, ANativeWindow* windowPtr)
             : m_env{ Napi::Attach<jsi::Runtime&>(jsiRuntime) }
         {
-            m_runtime = &JsRuntime::CreateForJavaScript(m_env, CreateJsRuntimeDispatcher(m_env, jsiRuntime, callInvoker));
+            isShuttingDown = false;
+
+            m_runtime = &JsRuntime::CreateForJavaScript(m_env, CreateJsRuntimeDispatcher(m_env, jsiRuntime, std::move(callInvoker), isShuttingDown));
 
             auto width = static_cast<size_t>(ANativeWindow_getWidth(windowPtr));
             auto height = static_cast<size_t>(ANativeWindow_getHeight(windowPtr));
 
-            m_graphics = Graphics::InitializeFromWindow<void*>(windowPtr, width, height);
+            m_graphics = Graphics::CreateGraphics(reinterpret_cast<void*>(windowPtr), width, height);
             m_graphics->AddToJavaScript(m_env);
 
-            Plugins::NativeEngine::Initialize(m_env);
-            Plugins::NativeWindow::Initialize(m_env, windowPtr, width, height);
+            Plugins::NativeEngine::Initialize(m_env, true);
             Plugins::NativeXr::Initialize(m_env);
 
             Polyfills::Window::Initialize(m_env);
@@ -63,18 +65,26 @@ namespace Babylon
             m_nativeInput = &Babylon::Plugins::NativeInput::CreateForJavaScript(m_env);
         }
 
+        // NOTE: This only happens when the JS engine is shutting down (other than when the app exits, this only
+        //       happens during a dev mode reload). In this case, EngineHook.ts won't call NativeEngine.dispose,
+        //       so we need to manually do it here to properly clean up these resources.
         ~Native()
         {
-            // TODO: Figure out why this causes the app to crash
-            //Napi::Detach(m_env);
+            auto native = JsRuntime::NativeObject::GetFromJavaScript(m_env);
+            auto engine = native.Get("engineInstance").As<Napi::Object>();
+            auto dispose = engine.Get("dispose").As<Napi::Function>();
+            dispose.Call(engine, {});
+            isShuttingDown = true;
+
+            Napi::Detach(m_env);
         }
 
         void Refresh(ANativeWindow* windowPtr)
         {
             auto width = static_cast<size_t>(ANativeWindow_getWidth(windowPtr));
             auto height = static_cast<size_t>(ANativeWindow_getHeight(windowPtr));
-            m_graphics->ReinitializeFromWindow<void*>(windowPtr, width, height);
-            Plugins::NativeWindow::Reinitialize(m_env, windowPtr, width, height);
+            m_graphics->UpdateWindow<void*>(windowPtr);
+            m_graphics->UpdateSize(width, height);
         }
 
         void SetPointerButtonState(uint32_t pointerId, uint32_t buttonId, bool isDown, uint32_t x, uint32_t y)
