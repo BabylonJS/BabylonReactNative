@@ -108,7 +108,7 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 ```
 
 **Troubleshootings:**
-- If the metro server is not started with `npm run android` , you can start it manually by running `npm run start` in a terminal.
+- If the Metro server is not started with `npm run android` , you can start it manually by running `npm run start` in a terminal.
 - Android studio is the tool of choice for downloading the various versions of NDK.
 - If something goes wrong with the build `npm run android --verbose` can give some hints.
 - If the emulator is not launched by the build, you can run `~/Android/Sdk/emulator/emulator @name_of_your_image`.
