@@ -111,11 +111,13 @@
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
     <ClCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\..\..\..\Modules\@babylonjs\react-native\submodules\BabylonNative\Dependencies\napi\napi-direct\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
     <ClCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)..\..\..\..\Modules\@babylonjs\react-native\submodules\BabylonNative\Dependencies\napi\napi-direct\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -149,6 +151,20 @@
     <Text Include="readme.txt">
       <DeploymentContent>false</DeploymentContent>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Core\JsRuntime\JsRuntime.vcxproj">
+      <Project>{adb67bd9-7869-362f-8448-ddc7fee9b0c1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Dependencies\napi\napi-direct\napi.vcxproj">
+      <Project>{21661162-f18e-3b60-b7fe-cf68c113cd87}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Polyfills\Console\Console.vcxproj">
+      <Project>{ba07d780-e295-3fc9-b08c-03787bc2d477}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Polyfills\Window\Window.vcxproj">
+      <Project>{bce97be2-764f-36bc-9dd2-1f58f770b604}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ReactNativeWindowsTargets">
