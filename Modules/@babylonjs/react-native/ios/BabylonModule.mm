@@ -22,7 +22,8 @@ RCT_EXPORT_METHOD(whenInitialized:(RCTPromiseResolveBlock)resolve reject:(RCTPro
 }
 
 RCT_EXPORT_METHOD(reset:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
-    [BabylonNativeInterop reset:self.bridge resolve:resolve];
+    [BabylonNativeInterop reset];
+    resolve([NSNull null]);
 }
 
 @end
