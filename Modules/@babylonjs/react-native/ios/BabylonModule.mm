@@ -21,4 +21,8 @@ RCT_EXPORT_METHOD(whenInitialized:(RCTPromiseResolveBlock)resolve reject:(RCTPro
     [BabylonNativeInterop whenInitialized:self.bridge resolve:resolve];
 }
 
+RCT_EXPORT_METHOD(reset:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    [BabylonNativeInterop reset:self.bridge resolve:resolve];
+}
+
 @end

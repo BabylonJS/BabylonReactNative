@@ -115,6 +115,13 @@ static NSMutableArray* activeTouches;
     }
 }
 
++ (void)reset:(RCTBridge*)bridge resolve:(RCTPromiseResolveBlock)resolve {
+    if (currentNativeInstance) {
+        currentNativeInstance->Reset();
+    }
+    resolve([NSNull null]);
+}
+
 + (void)setCurrentView:(MTKView*)mtkView {
     currentView = mtkView;
     activeTouches = [NSMutableArray new];
