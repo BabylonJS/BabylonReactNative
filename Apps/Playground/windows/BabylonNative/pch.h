@@ -17,7 +17,6 @@
 #include <winrt/Microsoft.ReactNative.h>
 
 // BabylonNative
-// Required project references Console, JsRuntime, napi, Window
 #ifndef NODE_ADDON_API_DISABLE_NODE_SPECIFIC
 #define NODE_ADDON_API_DISABLE_NODE_SPECIFIC
 #endif
@@ -29,6 +28,14 @@
 // Add "../../../../Modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/napi/napi-direct/include" to additional include directories
 #include "napi/env.h"
 
+// Add "../../../../Modules/@babylonjs/react-native/submodules/BabylonNative/Core/JsRuntime/Include" to additional include directories
+#include "Babylon/JsRuntime.h"
+
+// Add "../../../../Modules/@babylonjs/react-native/submodules/BabylonNative/Core/Graphics/Include" to additional include directories
+#include "Babylon/Graphics.h"
+
 #include "../../../../Modules/@babylonjs/react-native/submodules/BabylonNative/Polyfills/Console/Include/Babylon/Polyfills/Console.h"
 #include "../../../../Modules/@babylonjs/react-native/submodules/BabylonNative/Polyfills/Window/Include/Babylon/Polyfills/Window.h"
 #include "../../../../Modules/@babylonjs/react-native/submodules/BabylonNative/Polyfills/XMLHttpRequest/Include/Babylon/Polyfills/XMLHttpRequest.h"
+#include "../../../../Modules/@babylonjs/react-native/submodules/BabylonNative/Plugins/NativeEngine/Include/Babylon/Plugins/NativeEngine.h"
+#include "../../../../Modules/@babylonjs/react-native/submodules/BabylonNative/Plugins/NativeXr/Include/Babylon/Plugins/NativeXr.h"
