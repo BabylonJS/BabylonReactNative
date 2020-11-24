@@ -5,14 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug Android",
+            "name": "Build & Debug Android",
             "cwd": "${workspaceFolder}/Apps/Playground",
             "type": "reactnativedirect",
             "request": "launch",
             "platform": "android"
         },
         {
-            "name": "Debug iOS on Device",
+            "name": "Build & Debug iOS on Device",
             "cwd": "${workspaceFolder}/Apps/Playground",
             "type": "reactnativedirect",
             "request": "launch",
