@@ -224,7 +224,7 @@
     <ProjectReference Include="..\..\..\..\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Dependencies\glslang\SPIRV\SPIRV.vcxproj">
       <Project>{9acda922-925e-37c0-982e-c6322d2efd6d}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Dependencies\napi\napi-direct\napi.vcxproj">
+    <ProjectReference Include="..\..\..\..\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Dependencies\napi\napi-jsi\napi.vcxproj">
       <Project>{21661162-f18e-3b60-b7fe-cf68c113cd87}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Dependencies\SPIRV-Cross\spirv-cross-core.vcxproj">
@@ -244,6 +244,9 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Dependencies\xr\xr.vcxproj">
       <Project>{657f9714-4109-3385-b6ab-092b05fce3f4}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\jsi\jsi.vcxproj">
+      <Project>{81b821a8-38f6-36b4-953b-e267a473e93f}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Plugins\NativeEngine\NativeEngine.vcxproj">
       <Project>{328d4c1a-144e-3c8b-a312-f78a99785441}</Project>

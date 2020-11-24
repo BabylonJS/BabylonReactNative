@@ -13,7 +13,7 @@ namespace winrt::BabylonNative::implementation {
         {
             reactContext.ExecuteJsi([&](facebook::jsi::Runtime& jsiRuntime) {
                 // TODO, this needs to be updated to use jsi compared to chakra
-                auto env = Napi::Attach<>();
+                auto env = Napi::Attach<facebook::jsi::Runtime&>(jsiRuntime);
 
                 bool isShuttingDown = false;
                 auto runtime = &Babylon::JsRuntime::CreateForJavaScript(env, CreateJsRuntimeDispatcher(env, jsiRuntime, reactContext.JSDispatcher(), isShuttingDown));
