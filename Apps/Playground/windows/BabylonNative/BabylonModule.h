@@ -22,26 +22,26 @@ namespace winrt::BabylonNative::implementation {
                 void* windowPtr;
                 copy_to_abi(coreWindow, windowPtr);
 
-                auto displayScale = static_cast<float>(Windows::Graphics::Display::DisplayInformation::GetForCurrentView().RawPixelsPerViewPixel());
+                auto displayScale = static_cast<float>(winrt::Windows::Graphics::Display::DisplayInformation::GetForCurrentView().RawPixelsPerViewPixel());
                 auto width = static_cast<size_t>(coreWindow.Bounds().Width * displayScale);
                 auto height = static_cast<size_t>(coreWindow.Bounds().Height * displayScale);
 
                 auto graphics = Babylon::Graphics::CreateGraphics(windowPtr, width, height);
                 graphics->AddToJavaScript(env);
 
-                // Populate polyfills
-                Babylon::Polyfills::Window::Initialize(env);
-                Babylon::Polyfills::XMLHttpRequest::Initialize(env);
-                Babylon::Polyfills::Console::Initialize(env, [](const char* message, auto)
-                {
-                    OutputDebugStringA(message);
-                });
+                //// Populate polyfills
+                //Babylon::Polyfills::Window::Initialize(env);
+                //Babylon::Polyfills::XMLHttpRequest::Initialize(env);
+                //Babylon::Polyfills::Console::Initialize(env, [](const char* message, auto)
+                //{
+                //    OutputDebugStringA(message);
+                //});
 
-                // Populate plugins
-                Babylon::Plugins::NativeEngine::Initialize(env, true);
-                Babylon::Plugins::NativeXr::Initialize(env);
+                //// Populate plugins
+                //Babylon::Plugins::NativeEngine::Initialize(env, true);
+                //Babylon::Plugins::NativeXr::Initialize(env);
 
-                // TODO hook up NativeInput
+                //// TODO hook up NativeInput
             });
         }
 
