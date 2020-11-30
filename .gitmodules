@@ -1,3 +1,6 @@
 [submodule "Core/react-native-babylon/submodules/BabylonNative"]
 	path = Modules/@babylonjs/react-native/submodules/BabylonNative
 	url = https://github.com/chrisfromwork/BabylonNative.git
+[submodule "submodules/react-native-windows"]
+	path = submodules/react-native-windows
+	url = https://github.com/microsoft/react-native-windows.git
