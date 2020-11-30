@@ -75,23 +75,8 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
     }
   }, [rootNode, scale]);
 
-  const trackingStateToString = (trackingState: WebXRTrackingState | undefined) : string =>
-  {
-    if (trackingState == undefined) {
-      return ""
-    }
-
-    switch(trackingState) {
-      case WebXRTrackingState.NOT_TRACKING:
-        return "Not Tracking";
-        break;
-      case WebXRTrackingState.TRACKING:
-        return "Tracking";
-        break;
-      case WebXRTrackingState.TRACKING_LOST:
-        return "Tracking Lost";
-        break;
-    }
+  const trackingStateToString = (trackingState: WebXRTrackingState | undefined) : string => {
+    return trackingState === undefined ? "" : WebXRTrackingState[trackingState];
   }
 
   const onToggleXr = useCallback(() => {
@@ -107,9 +92,9 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
           setXrSession(session);
 
           setTrackingState(xr.baseExperience.camera.trackingState);
-          xr.baseExperience.camera.onTrackingStateChanged.add((newTrackingState) =>{
+          xr.baseExperience.camera.onTrackingStateChanged.add((newTrackingState) => {
             setTrackingState(newTrackingState);
-          })
+          });
 
           // TODO: Figure out why getFrontPosition stopped working
           //box.position = (scene.activeCamera as TargetCamera).getFrontPosition(2);
