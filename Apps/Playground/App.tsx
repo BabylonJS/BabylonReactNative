@@ -77,7 +77,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
 
   const trackingStateToString = (trackingState: WebXRTrackingState | undefined) : string => {
     return trackingState === undefined ? "" : WebXRTrackingState[trackingState];
-  }
+  };
 
   const onToggleXr = useCallback(() => {
     (async () => {
