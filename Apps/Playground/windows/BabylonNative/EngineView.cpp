@@ -6,14 +6,13 @@
 #include "JSValueXaml.h"
 #include "NativeModules.h"
 
-using namespace winrt;
-using namespace Microsoft::ReactNative;
-using namespace Windows::Foundation;
-using namespace Windows::Foundation::Collections;
+using namespace winrt::Microsoft::ReactNative;
+using namespace winrt::Windows::Foundation;
+using namespace winrt::Windows::Foundation::Collections;
 
-using namespace Windows::UI::Xaml;
-using namespace Windows::UI::Xaml::Media;
-using namespace Windows::UI::Xaml::Controls;
+using namespace winrt::Windows::UI::Xaml;
+using namespace winrt::Windows::UI::Xaml::Media;
+using namespace winrt::Windows::UI::Xaml::Controls;
 
 namespace winrt::BabylonNative::implementation {
     typedef InkCanvas ControlType;

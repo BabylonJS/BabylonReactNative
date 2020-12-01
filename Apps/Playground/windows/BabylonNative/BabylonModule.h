@@ -1,5 +1,7 @@
 #pragma once
+
 #include "NativeModules.h"
+#include "JSI/JsiApi.h"
 
 #include "winrt/Windows.UI.Core.h"
 #include "winrt/Windows.Graphics.Display.h"
@@ -11,12 +13,12 @@ namespace winrt::BabylonNative::implementation {
         REACT_INIT(Initialize);
         void Initialize(winrt::Microsoft::ReactNative::ReactContext const& reactContext) noexcept
         {
-            reactContext.ExecuteJsi([&](facebook::jsi::Runtime& jsiRuntime) {
-                // TODO, this needs to be updated to use jsi compared to chakra
+            auto dispatcher = reactContext.JSDispatcher();
+            winrt::Microsoft::ReactNative::ExecuteJsi(reactContext, [&](facebook::jsi::Runtime& jsiRuntime) {
                 auto env = Napi::Attach<facebook::jsi::Runtime&>(jsiRuntime);
 
                 bool isShuttingDown = false;
-                auto runtime = &Babylon::JsRuntime::CreateForJavaScript(env, CreateJsRuntimeDispatcher(env, jsiRuntime, reactContext.JSDispatcher(), isShuttingDown));
+                auto runtime = &Babylon::JsRuntime::CreateForJavaScript(env, CreateJsRuntimeDispatcher(env, jsiRuntime, dispatcher, isShuttingDown));
 
                 auto coreWindow = winrt::Windows::UI::Core::CoreWindow::GetForCurrentThread();
                 void* windowPtr;
@@ -29,19 +31,19 @@ namespace winrt::BabylonNative::implementation {
                 auto graphics = Babylon::Graphics::CreateGraphics(windowPtr, width, height);
                 graphics->AddToJavaScript(env);
 
-                //// Populate polyfills
-                //Babylon::Polyfills::Window::Initialize(env);
-                //Babylon::Polyfills::XMLHttpRequest::Initialize(env);
-                //Babylon::Polyfills::Console::Initialize(env, [](const char* message, auto)
-                //{
-                //    OutputDebugStringA(message);
-                //});
+                // Populate polyfills
+                Babylon::Polyfills::Window::Initialize(env);
+                Babylon::Polyfills::XMLHttpRequest::Initialize(env);
+                Babylon::Polyfills::Console::Initialize(env, [](const char* message, auto)
+                {
+                    OutputDebugStringA(message);
+                });
 
-                //// Populate plugins
-                //Babylon::Plugins::NativeEngine::Initialize(env, true);
-                //Babylon::Plugins::NativeXr::Initialize(env);
+                // Populate plugins
+                Babylon::Plugins::NativeEngine::Initialize(env, true);
+                Babylon::Plugins::NativeXr::Initialize(env);
 
-                //// TODO hook up NativeInput
+                // TODO hook up NativeInput
             });
         }
 
@@ -59,7 +61,6 @@ namespace winrt::BabylonNative::implementation {
 
         ~BabylonModule()
         {
-            
         }
 
     private:

@@ -25,6 +25,9 @@
 #define NODE_ADDON_API_DISABLE_DEPRECATED
 #endif
 
+// Note: all referenced libs need to be updated to NOT consume windows runtime, this requires code changes in bx.lib
+// Note: libs were updated to use std c++ lib 17, not sure if this is actually needed
+
 // Add "../../../../Modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/napi/napi-direct/include" to additional include directories
 #include "napi/env.h"
 
