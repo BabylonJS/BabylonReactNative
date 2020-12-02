@@ -93,6 +93,5 @@ export function useEngine(): Engine | undefined {
         };
     }, []);
 
-    console.log("ABOUT TO RETURN ENGINE INSTANCE");
     return engine;
 }
