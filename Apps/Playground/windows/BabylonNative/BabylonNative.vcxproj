@@ -114,6 +114,7 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\..\..\..\Modules\@babylonjs\react-native\submodules\BabylonNative\Dependencies\napi\napi-direct\include;$(ProjectDir)..\..\..\..\Modules\@babylonjs\react-native\submodules\BabylonNative\Core\JsRuntime\Include;$(ProjectDir)..\..\..\..\Modules\@babylonjs\react-native\submodules\BabylonNative\Core\Graphics\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EditAndContinue</DebugInformationFormat>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</BasicRuntimeChecks>
+      <RuntimeTypeInfo Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">vccorlibd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>

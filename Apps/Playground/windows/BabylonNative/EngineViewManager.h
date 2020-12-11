@@ -14,7 +14,8 @@ namespace winrt::BabylonNative::implementation {
         REACT_METHOD(SetJSThread, L"setJSThread");
         void SetJSThread() noexcept
         {
-            // native modules for react-native-windows should use the javascript thread by default on 0.64+
+            // Native Modules for react-native-windows should use the javascript thread by default on 0.64+
+            // To access the JSThread, use winrt::Microsoft::ReactNative::ExecuteJsi
         }
 
         ~EngineViewManager() {}

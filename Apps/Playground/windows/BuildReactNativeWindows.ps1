@@ -1,4 +1,4 @@
-# Push-Location "$PSScriptRoot\..\..\..\submodules\react-native-windows"
+Push-Location "$PSScriptRoot\..\..\..\submodules\react-native-windows"
 
 yarn install
 yarn build

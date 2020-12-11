@@ -39,6 +39,13 @@ App::App() noexcept
     InstanceSettings().UseDeveloperSupport(false);
 #endif
 
+    //InstanceSettings().UseDeveloperSupport(false);
+    //InstanceSettings().UseWebDebugger(false);
+    //InstanceSettings().UseDirectDebugger(true);
+    //InstanceSettings().DebuggerBreakOnNextLine(true);
+    //InstanceSettings().UseFastRefresh(false);
+    //InstanceSettings().EnableDeveloperMenu(false);
+
     RegisterAutolinkedNativeModulePackages(PackageProviders()); // Includes any autolinked modules
 
     PackageProviders().Append(make<ReactPackageProvider>()); // Includes all modules in this project
