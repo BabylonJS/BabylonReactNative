@@ -8,26 +8,15 @@
 import React, { useState, FunctionComponent, useEffect, useCallback } from 'react';
 import { SafeAreaView, StatusBar, Button, View, Text, ViewProps, Image, NativeModules } from 'react-native';
 
-//import { EngineView, useEngine, EngineViewCallbacks } from '@babylonjs/react-native';
-//import { Scene, Vector3, Mesh, ArcRotateCamera, Camera, PBRMetallicRoughnessMaterial, Color3, TargetCamera, WebXRSessionManager, Engine } from '@babylonjs/core';
+import { /*EngineView,*/ useEngine, /*EngineViewCallbacks*/ } from '@babylonjs/react-native';
+// import { Scene, Vector3, Mesh, ArcRotateCamera, Camera, PBRMetallicRoughnessMaterial, Color3, TargetCamera, WebXRSessionManager, Engine } from '@babylonjs/core';
 import Slider from '@react-native-community/slider';
-
-export const BabylonModule: {
-  initialize(): Promise<boolean>;
-  whenInitialized(): Promise<boolean>;
-} = NativeModules.BabylonModule;
-
-const EngineViewManager: {
-  setJSThread(): void;
-} = NativeModules.EngineViewManager;
-
-EngineViewManager.setJSThread();
 
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const defaultScale = 1;
   const enableSnapshots = false;
 
-  // const engine = useEngine();
+  const engine = useEngine();
   const [toggleView, setToggleView] = useState(false);
   // const [camera, setCamera] = useState<Camera>();
   // const [box, setBox] = useState<Mesh>();
@@ -39,6 +28,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
 
   // useEffect(() => {
   //   if (engine) {
+  //     console.log("Engine populated");
   //     const scene = new Scene(engine);
   //     setScene(scene);
   //     scene.createDefaultCamera(true);

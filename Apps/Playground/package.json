@@ -5,7 +5,7 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "windows": "react-native run-windows",
+    "windows": "react-native run-windows --arch x64",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
@@ -19,7 +19,7 @@
     "react": "17.0.1",
     "react-native": "0.0.0-19d4cc2d4",
     "react-native-permissions": "^2.1.4",
-    "react-native-windows": "0.0.0-testtest"
+    "react-native-windows": "1.1.5-test"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
