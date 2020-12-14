@@ -97,50 +97,50 @@ namespace winrt::BabylonNative::implementation {
         winrt::Windows::UI::Core::CoreWindow _coreWindow{ nullptr };
         winrt::Windows::Foundation::Numerics::float2 _windowSize;
         std::atomic<bool> _isShuttingDown{ false };
-        Babylon::JsRuntime* _jsRuntime;
+        Babylon::JsRuntime* _jsRuntime{ nullptr };
         std::unique_ptr<Babylon::Graphics> _graphics{ nullptr };
+        Babylon::Plugins::NativeInput* _nativeInput{ nullptr };
 
         std::atomic<bool> _initialized{ false };
         std::atomic<bool> _initializationSucceeded{ true };
         std::mutex _initializedPromiseLock;
         std::vector<winrt::Microsoft::ReactNative::ReactPromise<bool>> _initializedPromises{};
 
-        Babylon::JsRuntime::DispatchFunctionT CreateJsRuntimeDispatcher(
-            const Napi::Env& env,
-            const std::atomic<bool>& isShuttingDown)
+        Babylon::JsRuntime::DispatchFunctionT CreateJsRuntimeDispatcher()
         {
-            return [&](std::function<void(Napi::Env)> func)
+            return [weakThis{ this->weak_from_this() }](std::function<void(Napi::Env)> func)
             {
-                // Ideally we would just use CallInvoker::invokeAsync directly, but currently it does not seem to integrate well with the React Native logbox.
-                // To work around this, we wrap all functions in a try/catch, and when there is an exception, we do the following:
-                // 1. Call the JavaScript setImmediate function.
-                // 2. Have the setImmediate callback call back into native code (throwFunc).
-                // 3. Re-throw the exception from throwFunc.
-                // This works because:
-                // 1. setImmediate queues the callback, and that queue is drained immediately following the invocation of the function passed to CallInvoker::invokeAsync.
-                // 2. The immediates queue is drained as part of the class bridge, which knows how to display the logbox for unhandled exceptions.
-                // In the future, CallInvoker::invokeAsync likely will properly integrate with logbox, at which point we can remove the try/catch and just call func directly.
-                winrt::Microsoft::ReactNative::ExecuteJsi(_reactContext, [&, func{ std::move(func) }](facebook::jsi::Runtime& jsiRuntime) {
-                    try
-                    {
-                        // If JS engine shutdown is in progress, don't dispatch any new work.
-                        if (!isShuttingDown)
+                if (auto trueThis = weakThis.lock())
+                {
+                    // We need to avoid synchronous execution or things will start to break down
+                    // So we Post to the dispatcher instead of using ExcecuteJSI, which supports synchronous execution
+                    trueThis->_jsDispatcher.Post([weakThis, func{ std::move(func) }]() {
+                        if (auto trueThis = weakThis.lock())
                         {
-                            func(env);
-                        }
-                    }
-                    catch (...)
-                    {
-                        auto ex{std::current_exception()};
-                        auto setImmediate{jsiRuntime.global().getPropertyAsFunction(jsiRuntime, "setImmediate")};
-                        auto throwFunc{facebook::jsi::Function::createFromHostFunction(jsiRuntime, facebook::jsi::PropNameID::forAscii(jsiRuntime, "throwFunc"), 0,
-                            [ex](facebook::jsi::Runtime&, const facebook::jsi::Value&, const facebook::jsi::Value*, size_t) -> facebook::jsi::Value
+                            auto jsiRuntime = *JsiAbiRuntime::GetOrCreate(trueThis->_reactContext.Handle().JSRuntime().as<JsiRuntime>());
+
+                            try
                             {
-                               std::rethrow_exception(ex);
-                            })};
-                        setImmediate.call(jsiRuntime, {std::move(throwFunc)});
-                    }
-                });
+                                // If JS engine shutdown is in progress, don't dispatch any new work.
+                                if (!trueThis->_isShuttingDown)
+                                {
+                                    func(trueThis->_env);
+                                }
+                            }
+                            catch (...)
+                            {
+                                auto ex{ std::current_exception() };
+                                auto setImmediate{ jsiRuntime.global().getPropertyAsFunction(jsiRuntime, "setImmediate") };
+                                auto throwFunc{ facebook::jsi::Function::createFromHostFunction(jsiRuntime, facebook::jsi::PropNameID::forAscii(jsiRuntime, "throwFunc"), 0,
+                                    [ex](facebook::jsi::Runtime&, const facebook::jsi::Value&, const facebook::jsi::Value*, size_t) -> facebook::jsi::Value
+                                    {
+                                       std::rethrow_exception(ex);
+                                    }) };
+                                setImmediate.call(jsiRuntime, { std::move(throwFunc) });
+                            }
+                        }
+                    });
+                }
             };
         }
 
@@ -148,7 +148,7 @@ namespace winrt::BabylonNative::implementation {
         {
             _env = Napi::Attach<facebook::jsi::Runtime&>(jsiRuntime);
 
-            _jsRuntime = &Babylon::JsRuntime::CreateForJavaScript(_env, CreateJsRuntimeDispatcher(_env, _isShuttingDown));
+            _jsRuntime = &Babylon::JsRuntime::CreateForJavaScript(_env, CreateJsRuntimeDispatcher());
 
             void* windowPtr{ nullptr };
             copy_to_abi(_coreWindow, windowPtr);
@@ -169,7 +169,8 @@ namespace winrt::BabylonNative::implementation {
             Babylon::Plugins::NativeEngine::Initialize(_env, true);
             Babylon::Plugins::NativeXr::Initialize(_env);
 
-            // TODO hook up NativeInput
+            // TODO send _nativeInput input events
+            _nativeInput = &Babylon::Plugins::NativeInput::CreateForJavaScript(_env);
 
             _initializationSucceeded = true;
             _initialized = true;

@@ -8,9 +8,9 @@
 import React, { useState, FunctionComponent, useEffect, useCallback } from 'react';
 import { SafeAreaView, StatusBar, Button, View, Text, ViewProps, Image, NativeModules } from 'react-native';
 
-import { /*EngineView,*/ useEngine, /*EngineViewCallbacks*/ } from '@babylonjs/react-native';
-// import { Scene, Vector3, Mesh, ArcRotateCamera, Camera, PBRMetallicRoughnessMaterial, Color3, TargetCamera, WebXRSessionManager, Engine } from '@babylonjs/core';
-import Slider from '@react-native-community/slider';
+import { EngineView, useEngine, EngineViewCallbacks } from '@babylonjs/react-native';
+import { Scene, Vector3, Mesh, ArcRotateCamera, Camera, PBRMetallicRoughnessMaterial, Color3, TargetCamera, WebXRSessionManager, Engine } from '@babylonjs/core';
+// import Slider from '@react-native-community/slider';
 
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const defaultScale = 1;
@@ -18,43 +18,47 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
 
   const engine = useEngine();
   const [toggleView, setToggleView] = useState(false);
-  // const [camera, setCamera] = useState<Camera>();
-  // const [box, setBox] = useState<Mesh>();
-  // const [scene, setScene] = useState<Scene>();
+  const [camera, setCamera] = useState<Camera>();
+  const [box, setBox] = useState<Mesh>();
+  const [scene, setScene] = useState<Scene>();
   // const [xrSession, setXrSession] = useState<WebXRSessionManager>();
   const [scale, setScale] = useState<number>(defaultScale);
   const [snapshotData, setSnapshotData] = useState<string>();
   // const [engineViewCallbacks, setEngineViewCallbacks] = useState<EngineViewCallbacks>();
 
-  // useEffect(() => {
-  //   if (engine) {
-  //     console.log("Engine populated");
-  //     const scene = new Scene(engine);
-  //     setScene(scene);
-  //     scene.createDefaultCamera(true);
-  //     (scene.activeCamera as ArcRotateCamera).beta -= Math.PI / 8;
-  //     setCamera(scene.activeCamera!);
-  //     scene.createDefaultLight(true);
+  useEffect(() => {
+    if (engine) {
+      console.log("Engine populated");
+      const scene = new Scene(engine);
+      setScene(scene);
+      console.log("Scene created");
+      scene.createDefaultCamera(true);
+      (scene.activeCamera as ArcRotateCamera).beta -= Math.PI / 8;
+      setCamera(scene.activeCamera!);
+      console.log("Camera created");
+      scene.createDefaultLight(true);
+      console.log("Default content created");
 
-  //     const box = Mesh.CreateBox("box", 0.3, scene);
-  //     setBox(box);
-  //     const mat = new PBRMetallicRoughnessMaterial("mat", scene);
-  //     mat.metallic = 1;
-  //     mat.roughness = 0.5;
-  //     mat.baseColor = Color3.Red();
-  //     box.material = mat;
+      const box = Mesh.CreateBox("box", 0.3, scene);
+      setBox(box);
+      const mat = new PBRMetallicRoughnessMaterial("mat", scene);
+      mat.metallic = 1;
+      mat.roughness = 0.5;
+      mat.baseColor = Color3.Red();
+      box.material = mat;
+      console.log("Box created");
 
-  //     scene.beforeRender = function () {
-  //       box.rotate(Vector3.Up(), 0.005 * scene.getAnimationRatio());
-  //     };
-  //   }
-  // }, [engine]);
+      scene.beforeRender = function () {
+        box.rotate(Vector3.Up(), 0.005 * scene.getAnimationRatio());
+      };
+    }
+  }, [engine]);
 
-  // useEffect(() => {
-  //   if (box) {
-  //     box.scaling = new Vector3(scale, scale, scale);
-  //   }
-  // }, [box, scale]);
+  useEffect(() => {
+    if (box) {
+      box.scaling = new Vector3(scale, scale, scale);
+    }
+  }, [box, scale]);
 
   // const onToggleXr = useCallback(() => {
   //   (async () => {
@@ -90,17 +94,18 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
     <>
       <View style={props.style}>
         <Button title="Toggle EngineView" onPress={() => { setToggleView(!toggleView) }} />
-        {/* <Button title={ xrSession ? "Stop XR" : "Start XR"} onPress={onToggleXr} />
+        {/* <Button title={ xrSession ? "Stop XR" : "Start XR"} onPress={onToggleXr} /> */}
         { !toggleView &&
           <View style={{flex: 1}}>
-            { enableSnapshots && 
+            {/* { enableSnapshots && 
               <View style ={{flex: 1}}>
                 <Button title={"Take Snapshot"} onPress={onSnapshot}/>
                 <Image style={{flex: 1}} source={{uri: snapshotData }} />
               </View>
-            }
-            <EngineView style={props.style} camera={camera} onInitialized={onInitialized} />
-            <Slider style={{position: 'absolute', minHeight: 50, margin: 10, left: 0, right: 0, bottom: 0}} minimumValue={0.2} maximumValue={2} value={defaultScale} onValueChange={setScale} />
+            } */}
+            {/* <EngineView style={props.style} camera={camera} onInitialized={onInitialized} /> */}
+            <EngineView style={props.style} camera={camera} />
+            {/* <Slider style={{position: 'absolute', minHeight: 50, margin: 10, left: 0, right: 0, bottom: 0}} minimumValue={0.2} maximumValue={2} value={defaultScale} onValueChange={setScale} /> */}
           </View>
         }
         { toggleView &&
@@ -108,7 +113,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
             <Text style={{fontSize: 24}}>EngineView has been removed.</Text>
             <Text style={{fontSize: 12}}>Render loop stopped, but engine is still alive.</Text>
           </View>
-        } */}
+        }
       </View>
     </>
   );

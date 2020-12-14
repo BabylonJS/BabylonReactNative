@@ -17,7 +17,7 @@ using namespace winrt::Windows::UI::Xaml::Controls;
 namespace winrt::BabylonNative::implementation {
     typedef InkCanvas ControlType;
 
-    EngineView::EngineView() {}
+     EngineView::EngineView() {}
 
     // IViewManager
     hstring EngineView::Name() noexcept {
@@ -42,10 +42,10 @@ namespace winrt::BabylonNative::implementation {
     IMapView<hstring, ViewManagerPropertyType> EngineView::NativeProps() noexcept {
         auto nativeProps = winrt::single_threaded_map<hstring, ViewManagerPropertyType>();
 
-        // TODO
-        nativeProps.Insert(L"label", ViewManagerPropertyType::String);
-        nativeProps.Insert(L"color", ViewManagerPropertyType::Color);
-        nativeProps.Insert(L"backgroundColor", ViewManagerPropertyType::Color);
+        // TODO: unclear how to declare onSnapshotDataReturned
+        // TODO: unclear how to declare camera
+        // TODO: unclear how to declare onInitialized callback
+        nativeProps.Insert(L"displayFrameRate", ViewManagerPropertyType::Boolean);
 
         return nativeProps.GetView();
     }

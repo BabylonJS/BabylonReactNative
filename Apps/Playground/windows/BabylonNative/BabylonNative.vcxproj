@@ -122,7 +122,7 @@
       <IgnoreAllDefaultLibraries Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </IgnoreAllDefaultLibraries>
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\git\chrisfromwork\BabylonReactNative\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Dependencies\bgfx.cmake\Debug;D:\git\chrisfromwork\BabylonReactNative\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Dependencies\napi\napi-jsi\Debug;D:\git\chrisfromwork\BabylonReactNative\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\jsi\Debug;D:\git\chrisfromwork\BabylonReactNative\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Core\JsRuntime\Debug;D:\git\chrisfromwork\BabylonReactNative\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Core\Graphics\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\BabylonReactNative\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Dependencies\bgfx.cmake\Debug;D:\BabylonReactNative\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Dependencies\napi\napi-jsi\Debug;D:\BabylonReactNative\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\jsi\Debug;D:\BabylonReactNative\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Core\JsRuntime\Debug;D:\BabylonReactNative\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Core\Graphics\Debug;D:\BabylonReactNative\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Plugins\NativeInput\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkLibraryDependencies>
@@ -258,6 +258,9 @@
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Plugins\NativeEngine\NativeEngine.vcxproj">
       <Project>{2c18692b-80ea-335e-a473-15a19374ace0}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Plugins\NativeInput\NativeInput.vcxproj">
+      <Project>{47ff4ba6-6479-3470-bddc-d10f277726a4}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Modules\@babylonjs\react-native\submodules\BabylonNative\Build_uwp_x64\Plugins\NativeXr\NativeXr.vcxproj">
       <Project>{bfcc0b5c-a3f8-3aca-8aae-671355e0c5e9}</Project>

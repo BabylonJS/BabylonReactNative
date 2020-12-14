@@ -42,3 +42,4 @@
 #include "../../../../Modules/@babylonjs/react-native/submodules/BabylonNative/Polyfills/XMLHttpRequest/Include/Babylon/Polyfills/XMLHttpRequest.h"
 #include "../../../../Modules/@babylonjs/react-native/submodules/BabylonNative/Plugins/NativeEngine/Include/Babylon/Plugins/NativeEngine.h"
 #include "../../../../Modules/@babylonjs/react-native/submodules/BabylonNative/Plugins/NativeXr/Include/Babylon/Plugins/NativeXr.h"
+#include "../../../../Modules/@babylonjs/react-native/submodules/BabylonNative/Plugins/NativeInput/Include/Babylon/Plugins/NativeInput.h"
