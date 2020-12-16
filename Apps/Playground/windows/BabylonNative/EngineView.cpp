@@ -13,6 +13,7 @@ using namespace winrt::Windows::Foundation::Collections;
 using namespace winrt::Windows::UI::Xaml;
 using namespace winrt::Windows::UI::Xaml::Media;
 using namespace winrt::Windows::UI::Xaml::Controls;
+using namespace winrt::Windows::UI::Xaml::Input;
 
 namespace winrt::BabylonNative::implementation {
     std::atomic<bool> EngineView::s_initialized{ false };
@@ -33,8 +34,15 @@ namespace winrt::BabylonNative::implementation {
         const auto& view = SwapChainPanel();
         copy_to_abi(view, _swapChainPanel);
         view.SizeChanged({ this, &EngineView::OnSizeChanged });
-        //_swapChainPanelWidth = static_cast<size_t>(view.Width());
-        //_swapChainPanelHeight = static_cast<size_t>(view.Height());
+        view.PointerPressed({ this, &EngineView::OnPointerPressed });
+
+        CompositionTarget::Rendering([weakThis{ this->get_weak() }](auto const&, auto const&)
+        {
+            if (auto trueThis = weakThis.get())
+            {
+                trueThis->OnRendering();
+            }
+        });
 
         if (!s_initialized)
         {
@@ -66,6 +74,11 @@ namespace winrt::BabylonNative::implementation {
     // IViewManagerWithNativeProperties
     IMapView<hstring, ViewManagerPropertyType> EngineView::NativeProps() noexcept {
         auto nativeProps = winrt::single_threaded_map<hstring, ViewManagerPropertyType>();
+
+        // TODO remove
+        nativeProps.Insert(L"label", ViewManagerPropertyType::String);
+        nativeProps.Insert(L"color", ViewManagerPropertyType::Color);
+        nativeProps.Insert(L"backgroundColor", ViewManagerPropertyType::Color);
 
         // TODO: unclear how to declare onSnapshotDataReturned
         // TODO: unclear how to declare camera
@@ -149,17 +162,14 @@ namespace winrt::BabylonNative::implementation {
             _graphics->AddToJavaScript(_env);
             _graphics->UpdateWindow(_swapChainPanel);
             _graphics->UpdateWindowType(reinterpret_cast<void*>(2));
+            _rendering = true;
 
             // Populate polyfills
             Babylon::Polyfills::Window::Initialize(_env);
             Babylon::Polyfills::XMLHttpRequest::Initialize(_env);
-            Babylon::Polyfills::Console::Initialize(_env, [](const char* message, auto)
-            {
-                OutputDebugStringA(message);
-            });
+            // Note: we are using react-native-windows console polyfill that supports assert
 
             // Populate plugins
-            // Note: we need to prevent automatic rendering or we'll attempt to setup the SwapChainPanel on the js thread when it needs to occur on the UI thread
             Babylon::Plugins::NativeEngine::Initialize(_env, false);
             Babylon::Plugins::NativeXr::Initialize(_env);
 
@@ -181,16 +191,25 @@ namespace winrt::BabylonNative::implementation {
 
     void EngineView::OnSizeChanged(IInspectable const& /*sender*/, SizeChangedEventArgs const& args)
     {
-        _swapChainPanelWidth = args.NewSize().Width;
-        _swapChainPanelHeight = args.NewSize().Height;
-        if (s_initialized)
+        // TODO this may have a potential race condition
+        // TODO this size probably doesn't map 1:1 with pixels vs whatever unit xaml uses
+        const auto size = args.NewSize();
+        _swapChainPanelWidth = static_cast<size_t>(size.Width);
+        _swapChainPanelHeight = static_cast<size_t>(size.Height);
+        _graphics->UpdateSize(_swapChainPanelWidth, _swapChainPanelHeight);
+    }
+
+    void EngineView::OnPointerPressed(IInspectable const& /*sender*/, PointerRoutedEventArgs const& /*args*/)
+    {
+        OutputDebugStringW(L"Pointer pressed!\n");
+    }
+
+    void EngineView::OnRendering()
+    {
+        if (_rendering &&
+            _graphics != nullptr)
         {
-            _jsDispatcher.Post([weakThis{ this->get_weak() }]{
-                if (auto trueThis = weakThis.get())
-                {
-                    trueThis->_graphics->UpdateSize(trueThis->_swapChainPanelWidth, trueThis->_swapChainPanelHeight);
-                }
-                });
+            _graphics->RenderCurrentFrame();
         }
     }
 } // namespace winrt::BabylonNative::implementation

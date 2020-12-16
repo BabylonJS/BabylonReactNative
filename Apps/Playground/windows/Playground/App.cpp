@@ -39,12 +39,13 @@ App::App() noexcept
     InstanceSettings().UseDeveloperSupport(false);
 #endif
 
-    //InstanceSettings().UseDeveloperSupport(false);
-    //InstanceSettings().UseWebDebugger(false);
-    //InstanceSettings().UseDirectDebugger(true);
-    //InstanceSettings().DebuggerBreakOnNextLine(true);
-    //InstanceSettings().UseFastRefresh(false);
-    //InstanceSettings().EnableDeveloperMenu(false);
+    // TODO unclear whether this should always be enabled
+    InstanceSettings().UseDeveloperSupport(false);
+    InstanceSettings().UseWebDebugger(false);
+    InstanceSettings().UseDirectDebugger(true);
+    InstanceSettings().DebuggerBreakOnNextLine(true);
+    InstanceSettings().UseFastRefresh(false);
+    InstanceSettings().EnableDeveloperMenu(false);
 
     RegisterAutolinkedNativeModulePackages(PackageProviders()); // Includes any autolinked modules
 

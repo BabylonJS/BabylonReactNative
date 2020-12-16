@@ -61,6 +61,8 @@ namespace winrt::BabylonNative::implementation {
         Babylon::JsRuntime::DispatchFunctionT CreateJsRuntimeDispatcher();
         void SetupBabylonNative(facebook::jsi::Runtime& jsiRuntime);
         void OnSizeChanged(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::SizeChangedEventArgs const& args);
+        void OnPointerPressed(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::Input::PointerRoutedEventArgs const& args);
+        void OnRendering();
 
         winrt::Microsoft::ReactNative::IReactContext _reactContext{ nullptr };
         winrt::Microsoft::ReactNative::IReactDispatcher _jsDispatcher;
@@ -70,6 +72,7 @@ namespace winrt::BabylonNative::implementation {
         std::atomic<bool> _isShuttingDown{ false };
         Babylon::JsRuntime* _jsRuntime{ nullptr };
         std::unique_ptr<Babylon::Graphics> _graphics{ nullptr };
+        std::atomic<bool> _rendering{ false };
         Babylon::Plugins::NativeInput* _nativeInput{ nullptr };
         void* _swapChainPanel{ nullptr };
         size_t _swapChainPanelWidth{ 1 };
