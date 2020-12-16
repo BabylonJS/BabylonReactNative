@@ -67,9 +67,10 @@ export function useEngine(): Engine | undefined {
 
     useEffect(() => {
         let disposed = false;
-        let engine: Engine | undefined = undefined;
+        let engine: NativeEngine | undefined = undefined;
 
         (async () => {
+            console.log("Calling BabylonModule.initialize");
             if (await BabylonModule.initialize() && !disposed)
             {
                 engine = BabylonModule.createEngine();
@@ -81,7 +82,8 @@ export function useEngine(): Engine | undefined {
             disposed = true;
             // NOTE: Do not use setEngine with a callback to dispose the engine instance as that callback does not get called during component unmount when compiled in release.
             if (engine) {
-                DisposeEngine(engine);
+                //DisposeEngine(engine);
+                BabylonModule.disposeEngine(engine);
             }
             // Ideally we would always do a reset here as we don't want different behavior between debug and release. Unfortunately, fast refresh has some strange behavior that
             // makes it quite difficult to get this to work correctly (e.g. it re-runs previous useEffect instances, which means it can try to use Babylon Native in a de-initialized state).
