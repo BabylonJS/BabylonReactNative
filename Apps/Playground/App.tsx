@@ -49,6 +49,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
       console.log("Box created");
 
       scene.beforeRender = function () {
+        console.log("updating box rotation");
         box.rotate(Vector3.Up(), 0.005 * scene.getAnimationRatio());
       };
     }
@@ -56,6 +57,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
 
   useEffect(() => {
     if (box) {
+      console.log("updating box scale");
       box.scaling = new Vector3(scale, scale, scale);
     }
   }, [box, scale]);
