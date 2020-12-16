@@ -2,6 +2,11 @@ import { NativeModules } from 'react-native';
 import { NativeEngine } from '@babylonjs/core';
 import { DisposeEngine } from './EngineHelpers';
 
+declare const global: {
+    nativeCallSyncHook: any;
+};
+const isRemoteDebuggingEnabled = !global.nativeCallSyncHook;
+
 // This global object is part of Babylon Native.
 declare const _native: {
     whenGraphicsReady: () => Promise<void>;
@@ -32,11 +37,16 @@ export const BabylonModule = {
         //     await _native.whenGraphicsReady();
         // }
         // return initialized;
-        NativeBabylonModule.initialize2();
-        await BabylonNative.initializationPromise;
-        await _native.whenGraphicsReady();
-        resolveInitializationPromise(true);
-        return true; // TODO: remove, and prevent most of this code from running if we are in remote debugging mode (see EngineView.tsx for example)
+        if (isRemoteDebuggingEnabled) {
+            resolveInitializationPromise(false);
+        } else {
+            NativeBabylonModule.initialize2();
+            await BabylonNative.initializationPromise;
+            await _native.whenGraphicsReady();
+            resolveInitializationPromise(true);
+        }
+        //return true; // TODO: remove, and prevent most of this code from running if we are in remote debugging mode (see EngineView.tsx for example)
+        return await initializationPromise;
     },
 
     //whenInitialized: NativeBabylonModule.whenInitialized,

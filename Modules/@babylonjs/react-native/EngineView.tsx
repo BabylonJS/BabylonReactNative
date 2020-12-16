@@ -5,16 +5,10 @@ import { IsEngineDisposed } from './EngineHelpers';
 import { BabylonModule } from './BabylonModule';
 
 declare const global: any;
-const isRemoteDebuggingEnabled = !global['nativeCallSyncHook'];
 
 const EngineViewManager: {
     setJSThread(): void;
 } = NativeModules.EngineViewManager;
-
-// Not all platforms need this, but for those that do, this is intended to be a synchronous call to boostrap the ability to run native code on the JavaScript thread.
-if (EngineViewManager && EngineViewManager.setJSThread && !isRemoteDebuggingEnabled) {
-    EngineViewManager.setJSThread();
-}
 
 interface NativeEngineViewProps extends ViewProps {
     onSnapshotDataReturned: (event: SyntheticEvent) => void;
@@ -23,7 +17,7 @@ interface NativeEngineViewProps extends ViewProps {
 const NativeEngineView: {
     prototype: Component<NativeEngineViewProps>;
     new(props: Readonly<NativeEngineViewProps>): Component<NativeEngineViewProps>;
-} = requireNativeComponent('EngineView');
+} = global['EngineView'] || (global['EngineView'] = requireNativeComponent('EngineView'));
 
 export interface EngineViewProps extends ViewProps {
     camera?: Camera;
@@ -161,7 +155,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ fontSize: 24 }}>{message}</Text>
-                { isRemoteDebuggingEnabled && <Text style={{ fontSize: 12 }}>React Native remote debugging does not work with Babylon Native.</Text>}
+                <Text style={{ fontSize: 12 }}>React Native remote debugging does not work with Babylon Native.</Text>
             </View>
         );
     }
