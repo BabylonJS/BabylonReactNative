@@ -7,54 +7,38 @@ declare const global: {
 };
 const isRemoteDebuggingEnabled = !global.nativeCallSyncHook;
 
-// This global object is part of Babylon Native.
+// This global object is owned by Babylon Native.
 declare const _native: {
     whenGraphicsReady: () => Promise<void>;
     engineInstance: NativeEngine;
 };
 
+// This JSI-based global object is owned by Babylon React Native.
+// This will likely be converted to a TurboModule when they are fully supported.
 declare const BabylonNative: {
     readonly initializationPromise: Promise<void>;
-    //setEngineInstance: (engine: NativeEngine | null) => void;
     reset: () => void;
 };
 
+// This legacy React Native module is created by Babylon React Native, and is only used to bootstrap the JSI object creation.
+// This will likely be removed when the BabylonNative global object is eventually converted to a TurboModule.
 const NativeBabylonModule: {
-    initialize2(): void;
-    // initialize(): Promise<boolean>;
-    // whenInitialized(): Promise<boolean>;
-    // reset(): Promise<boolean>;
+    initialize(): void;
 } = NativeModules.BabylonModule;
 
-let resolveInitializationPromise: (result: boolean) => void;
-const initializationPromise = new Promise<boolean>(resolve => resolveInitializationPromise = resolve); // TODO: Promise<void>
-
 export const BabylonModule = {
-    initialize: async () => {
+    ensureInitialized: async () => {
         console.log("INITIALIZING");
-        // const initialized = await NativeBabylonModule.initialize();
-        // if (initialized) {
-        //     await _native.whenGraphicsReady();
-        // }
-        // return initialized;
         if (isRemoteDebuggingEnabled) {
-            resolveInitializationPromise(false);
+            return false;
         } else {
-            NativeBabylonModule.initialize2();
+            NativeBabylonModule.initialize();
             await BabylonNative.initializationPromise;
             await _native.whenGraphicsReady();
-            resolveInitializationPromise(true);
+            return true;
         }
-        //return true; // TODO: remove, and prevent most of this code from running if we are in remote debugging mode (see EngineView.tsx for example)
-        return await initializationPromise;
     },
 
-    //whenInitialized: NativeBabylonModule.whenInitialized,
-    whenInitialized: () => {
-        console.log("WHEN INITIALIZED");
-        //return BabylonNative.initializationPromise;
-        return initializationPromise;
-    },
     //reset: NativeBabylonModule.reset,
     reset: () => {
         console.log("RESET");
@@ -69,7 +53,9 @@ export const BabylonModule = {
     },
 
     disposeEngine: (engine: NativeEngine) => {
+        console.log("Beginning dispose");
         DisposeEngine(engine);
+        console.log("Finished dispose");
         //BabylonNative.setEngineInstance(null);
     },
 };

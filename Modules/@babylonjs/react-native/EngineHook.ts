@@ -71,7 +71,7 @@ export function useEngine(): Engine | undefined {
 
         (async () => {
             console.log("Calling BabylonModule.initialize");
-            if (await BabylonModule.initialize() && !disposed)
+            if (await BabylonModule.ensureInitialized() && !disposed)
             {
                 engine = BabylonModule.createEngine();
                 setEngine(engine);

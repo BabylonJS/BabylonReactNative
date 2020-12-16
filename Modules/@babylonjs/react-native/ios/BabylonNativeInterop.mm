@@ -6,11 +6,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import <functional>
 #import <memory>
-#import <vector>
-#import <unordered_map>
-#import <mutex>
 
 using namespace facebook;
 
@@ -25,9 +21,9 @@ namespace {
     }
 }
 
-@implementation BabylonNativeInterop2
+@implementation BabylonNativeInterop
 
-static NSMutableArray* activeTouches2;
+static NSMutableArray* activeTouches;
 
 + (void)initialize:(RCTBridge*)bridge {
     Babylon::Initialize(*GetJSIRuntime(bridge), bridge.jsCallInvoker);
@@ -66,27 +62,27 @@ static NSMutableArray* activeTouches2;
 
             switch (touch.phase) {
                 case UITouchPhaseBegan: {
-                    NSUInteger pointerId = [activeTouches2 indexOfObject:[NSNull null]];
+                    NSUInteger pointerId = [activeTouches indexOfObject:[NSNull null]];
                     if (pointerId == NSNotFound) {
-                        pointerId = [activeTouches2 count];
-                        [activeTouches2 addObject:touch];
+                        pointerId = [activeTouches count];
+                        [activeTouches addObject:touch];
                     } else {
-                        [activeTouches2 replaceObjectAtIndex:pointerId withObject:touch];
+                        [activeTouches replaceObjectAtIndex:pointerId withObject:touch];
                     }
                     Babylon::SetPointerButtonState(static_cast<uint32_t>(pointerId), 0, true, x, y);
                     break;
                 }
 
                 case UITouchPhaseMoved: {
-                    NSUInteger pointerId = [activeTouches2 indexOfObject:touch];
+                    NSUInteger pointerId = [activeTouches indexOfObject:touch];
                     Babylon::SetPointerPosition(static_cast<uint32_t>(pointerId), x, y);
                     break;
                 }
 
                 case UITouchPhaseEnded:
                 case UITouchPhaseCancelled: {
-                    NSUInteger pointerId = [activeTouches2 indexOfObject:touch];
-                    [activeTouches2 replaceObjectAtIndex:pointerId withObject:[NSNull null]];
+                    NSUInteger pointerId = [activeTouches indexOfObject:touch];
+                    [activeTouches replaceObjectAtIndex:pointerId withObject:[NSNull null]];
                     Babylon::SetPointerButtonState(static_cast<uint32_t>(pointerId), 0, false, x, y);
                     break;
                 }
@@ -96,150 +92,6 @@ static NSMutableArray* activeTouches2;
             }
         }
     }
-}
-
-@end
-
-@implementation BabylonNativeInterop
-
-static RCTBridge* currentBridge;
-static MTKView* currentView;
-static std::unique_ptr<Babylon::Native> currentNativeInstance;
-static std::unordered_map<void*, std::vector<RCTPromiseResolveBlock>> initializationPromises;
-static std::mutex mapMutex;
-static NSMutableArray* activeTouches;
-
-+ (void)setView:(RCTBridge*)bridge jsRunLoop:(NSRunLoop*)jsRunLoop mktView:(MTKView*)mtkView {
-    const int width = static_cast<int>(mtkView.bounds.size.width * UIScreen.mainScreen.scale);
-    const int height = static_cast<int>(mtkView.bounds.size.height * UIScreen.mainScreen.scale);
-    if (width != 0 && height != 0) {
-        // NOTE: jsRunLoop should only be null when remote debugging is enabled.
-        //       In this case, we can just use the main loop, because we are only
-        //       going to set an error state (which can happen on any thread).
-        if (!jsRunLoop) {
-            jsRunLoop = NSRunLoop.mainRunLoop;
-        }
-
-        [jsRunLoop performBlock:^{
-            if (bridge != currentBridge) {
-                [BabylonNativeInterop setCurrentNativeInstance:bridge mtkView:mtkView width:width height:height];
-            } else if (currentNativeInstance) {
-                if (mtkView != currentView) {
-                    [BabylonNativeInterop setCurrentView:mtkView];
-                    currentNativeInstance->Refresh((__bridge void*)currentView, width, height);
-                } else {
-                    // NOTE: This will cause Metal API Validation to fail if it is enabled when the debugger is attached, which stops app execution.
-                    // For now, be sure to disable Metal API Validation under Product->Scheme->Edit Scheme.
-                    currentNativeInstance->Resize(width, height);
-                }
-            }
-        }];
-    }
-}
-
-+ (void)reportTouchEvent:(NSSet<UITouch*>*)touches withEvent:(UIEvent*)event {
-    if (currentNativeInstance) {
-        for (UITouch* touch in touches) {
-            if (touch.view == currentView) {
-                const CGFloat scale = UIScreen.mainScreen.scale;
-                const CGPoint pointerPosition = [touch locationInView:currentView];
-                const uint32_t x = static_cast<uint32_t>(pointerPosition.x * scale);
-                const uint32_t y = static_cast<uint32_t>(pointerPosition.y * scale);
-
-                switch (touch.phase) {
-                    case UITouchPhaseBegan: {
-                        NSUInteger pointerId = [activeTouches indexOfObject:[NSNull null]];
-                        if (pointerId == NSNotFound) {
-                            pointerId = [activeTouches count];
-                            [activeTouches addObject:touch];
-                        } else {
-                            [activeTouches replaceObjectAtIndex:pointerId withObject:touch];
-                        }
-                        currentNativeInstance->SetPointerButtonState(static_cast<uint32_t>(pointerId), 0, true, x, y);
-                        break;
-                    }
-
-                    case UITouchPhaseMoved: {
-                        NSUInteger pointerId = [activeTouches indexOfObject:touch];
-                        currentNativeInstance->SetPointerPosition(static_cast<uint32_t>(pointerId), x, y);
-                        break;
-                    }
-
-                    case UITouchPhaseEnded:
-                    case UITouchPhaseCancelled: {
-                        NSUInteger pointerId = [activeTouches indexOfObject:touch];
-                        [activeTouches replaceObjectAtIndex:pointerId withObject:[NSNull null]];
-                        currentNativeInstance->SetPointerButtonState(static_cast<uint32_t>(pointerId), 0, false, x, y);
-                        break;
-                    }
-
-                    default:
-                        break;
-                }
-            }
-        }
-    }
-}
-
-+ (void)whenInitialized:(RCTBridge*)bridge resolve:(RCTPromiseResolveBlock)resolve {
-    const std::lock_guard<std::mutex> lock(mapMutex);
-    if (bridge == currentBridge) {
-        resolve([NSNumber numberWithUnsignedLong:reinterpret_cast<uintptr_t>(currentNativeInstance.get())]);
-    } else {
-        initializationPromises[(__bridge void*)bridge].push_back(resolve);
-    }
-}
-
-+ (void)reset {
-    if (currentNativeInstance) {
-        currentNativeInstance->Reset();
-    }
-}
-
-+ (void)setCurrentView:(MTKView*)mtkView {
-    currentView = mtkView;
-    activeTouches = [NSMutableArray new];
-}
-
-+ (void)setCurrentNativeInstance:(RCTBridge*)bridge mtkView:(MTKView*)mtkView width:(int)width height:(int)height {
-    [BabylonNativeInterop setCurrentView:mtkView];
-
-    {
-        const std::lock_guard<std::mutex> lock(mapMutex);
-
-        if (bridge != currentBridge) {
-            if (currentBridge == nil || currentBridge.parentBridge != bridge.parentBridge) {
-                [[NSNotificationCenter defaultCenter] addObserver:self
-                    selector:@selector(onBridgeWillInvalidate:)
-                    name:RCTBridgeWillInvalidateModulesNotification
-                    object:bridge.parentBridge];
-            }
-
-            currentBridge = bridge;
-        }
-
-        currentNativeInstance.reset();
-
-        jsi::Runtime* jsiRuntime = GetJSIRuntime(currentBridge);
-        if (jsiRuntime) {
-            currentNativeInstance = std::make_unique<Babylon::Native>(*jsiRuntime, currentBridge.jsCallInvoker, (__bridge void*)mtkView, width, height);
-        }
-    }
-
-    auto initializationPromisesIterator = initializationPromises.find((__bridge void*)currentBridge);
-    if (initializationPromisesIterator != initializationPromises.end()) {
-        for (RCTPromiseResolveBlock resolve : initializationPromisesIterator->second) {
-            resolve([NSNumber numberWithUnsignedLong:reinterpret_cast<uintptr_t>(currentNativeInstance.get())]);
-        }
-
-        initializationPromises.erase(initializationPromisesIterator);
-    }
-}
-
-// NOTE: This happens during dev mode reload, when the JS engine is being shutdown and restarted.
-+ (void)onBridgeWillInvalidate:(NSNotification*)notification
-{
-    currentNativeInstance.reset();
 }
 
 @end

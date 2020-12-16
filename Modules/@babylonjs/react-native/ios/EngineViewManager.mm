@@ -15,7 +15,7 @@
 
 @implementation EngineView {
     RCTBridge* bridge;
-    NSRunLoop* runLoop;
+    NSRunLoop* runLoop; // TODO: remove
 }
 
 - (instancetype)init:(RCTBridge*)_bridge runLoop:(NSRunLoop*)_runLoop {
@@ -32,28 +32,23 @@
 
 - (void)setBounds:(CGRect)bounds {
     [super setBounds:bounds];
-    //[BabylonNativeInterop setView:bridge jsRunLoop:runLoop mktView:self];
-    [BabylonNativeInterop2 updateView:self];
+    [BabylonNativeInterop updateView:self];
 }
 
 - (void)touchesBegan:(NSSet<UITouch*>*)touches withEvent:(UIEvent*)event {
-    //[BabylonNativeInterop reportTouchEvent:touches withEvent:event];
-    [BabylonNativeInterop2 reportTouchEvent:self touches:touches event:event];
+    [BabylonNativeInterop reportTouchEvent:self touches:touches event:event];
 }
 
 - (void)touchesMoved:(NSSet<UITouch*>*)touches withEvent:(UIEvent*)event {
-    //[BabylonNativeInterop reportTouchEvent:touches withEvent:event];
-    [BabylonNativeInterop2 reportTouchEvent:self touches:touches event:event];
+    [BabylonNativeInterop reportTouchEvent:self touches:touches event:event];
 }
 
 - (void)touchesEnded:(NSSet<UITouch*>*)touches withEvent:(UIEvent*)event {
-    //[BabylonNativeInterop reportTouchEvent:touches withEvent:event];
-    [BabylonNativeInterop2 reportTouchEvent:self touches:touches event:event];
+    [BabylonNativeInterop reportTouchEvent:self touches:touches event:event];
 }
 
 - (void)touchesCancelled:(NSSet<UITouch*>*)touches withEvent:(UIEvent*)event {
-    //[BabylonNativeInterop reportTouchEvent:touches withEvent:event];
-    [BabylonNativeInterop2 reportTouchEvent:self touches:touches event:event];
+    [BabylonNativeInterop reportTouchEvent:self touches:touches event:event];
 }
 
 - (void)takeSnapshot {

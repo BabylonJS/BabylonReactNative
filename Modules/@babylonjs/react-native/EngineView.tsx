@@ -38,7 +38,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
 
     useEffect(() => {
         (async () => {
-            if (!await BabylonModule.whenInitialized()) {
+            if (!await BabylonModule.ensureInitialized()) {
                 setFailedInitialization(true);
             }
         })();
