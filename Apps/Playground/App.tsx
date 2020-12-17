@@ -9,7 +9,7 @@ import React, { useState, FunctionComponent, useEffect, useCallback } from 'reac
 import { SafeAreaView, StatusBar, Button, View, Text, ViewProps, Image, NativeModules } from 'react-native';
 
 import { EngineView, useEngine, EngineViewCallbacks } from '@babylonjs/react-native';
-import { Scene, Vector3, Mesh, ArcRotateCamera, Camera, PBRMetallicRoughnessMaterial, Color3, TargetCamera, WebXRSessionManager, Engine } from '@babylonjs/core';
+import { Scene, Vector3, Mesh, ArcRotateCamera, Camera, PBRMetallicRoughnessMaterial, Color3, TargetCamera, WebXRSessionManager, Engine, Color4 } from '@babylonjs/core';
 // import Slider from '@react-native-community/slider';
 
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
@@ -21,7 +21,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const [camera, setCamera] = useState<Camera>();
   const [box, setBox] = useState<Mesh>();
   const [scene, setScene] = useState<Scene>();
-  // const [xrSession, setXrSession] = useState<WebXRSessionManager>();
+  const [xrSession, setXrSession] = useState<WebXRSessionManager>();
   const [scale, setScale] = useState<number>(defaultScale);
   const [snapshotData, setSnapshotData] = useState<string>();
   // const [engineViewCallbacks, setEngineViewCallbacks] = useState<EngineViewCallbacks>();
@@ -62,25 +62,30 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
     }
   }, [box, scale]);
 
-  // const onToggleXr = useCallback(() => {
-  //   (async () => {
-  //     if (xrSession) {
-  //       await xrSession.exitXRAsync();
-  //       setXrSession(undefined);
-  //     } else {
-  //       if (box !== undefined && scene !== undefined) {
-  //         const xr = await scene.createDefaultXRExperienceAsync({ disableDefaultUI: true, disableTeleportation: true })
-  //         const session = await xr.baseExperience.enterXRAsync("immersive-ar", "unbounded", xr.renderTarget);
-  //         setXrSession(session);
-  //         // TODO: Figure out why getFrontPosition stopped working
-  //         //box.position = (scene.activeCamera as TargetCamera).getFrontPosition(2);
-  //         const cameraRay = scene.activeCamera!.getForwardRay(1);
-  //         box.position = cameraRay.origin.add(cameraRay.direction.scale(cameraRay.length));
-  //         box.rotate(Vector3.Up(), 3.14159);
-  //       }
-  //     }
-  //   })();
-  // }, [box, scene, xrSession]);
+  const onToggleXr = useCallback(() => {
+    (async () => {
+      if (xrSession) {
+        await xrSession.exitXRAsync();
+        setXrSession(undefined);
+      } else {
+        if (box !== undefined && scene !== undefined) {
+          const xr = await scene.createDefaultXRExperienceAsync({ disableDefaultUI: true, disableTeleportation: true })
+          const session = await xr.baseExperience.enterXRAsync("immersive-ar", "unbounded", xr.renderTarget);
+          setXrSession(session);
+
+          // TODO: Figure out why getFrontPosition stopped working
+          //box.position = (scene.activeCamera as TargetCamera).getFrontPosition(2);
+          const cameraRay = scene.activeCamera!.getForwardRay(1);
+          box.position = cameraRay.origin.add(cameraRay.direction.scale(cameraRay.length));
+          box.rotate(Vector3.Up(), 3.14159);
+
+          // needed for hmds
+          scene.autoClear = true;
+          scene.clearColor = new Color4(0, 0, 0, 0);
+        }
+      }
+    })();
+  }, [box, scene, xrSession]);
 
   // const onInitialized = useCallback(async(engineViewCallbacks: EngineViewCallbacks) => {
   //   setEngineViewCallbacks(engineViewCallbacks);
@@ -96,7 +101,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
     <>
       <View style={props.style}>
         <Button title="Toggle EngineView" onPress={() => { setToggleView(!toggleView) }} />
-        {/* <Button title={ xrSession ? "Stop XR" : "Start XR"} onPress={onToggleXr} /> */}
+        <Button title={ xrSession ? "Stop XR" : "Start XR"} onPress={onToggleXr} />
         { !toggleView &&
           <View style={{flex: 1}}>
             {/* { enableSnapshots && 

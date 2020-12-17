@@ -16,6 +16,7 @@ export const BabylonModule = {
     initialize: async () => {
         const initialized = await NativeBabylonModule.initialize();
         if (initialized) {
+            console.log("Awaiting graphics initialization promise");
             await _native.graphicsInitializationPromise;
         }
         return initialized;
@@ -24,6 +25,7 @@ export const BabylonModule = {
     whenInitialized: NativeBabylonModule.whenInitialized,
 
     createEngine: () => {
+        console.log("Creating NativeEngine");
         const engine = new NativeEngine();
         _native.engineInstance = engine;
         return engine;

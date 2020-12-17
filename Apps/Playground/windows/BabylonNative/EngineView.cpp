@@ -196,7 +196,10 @@ namespace winrt::BabylonNative::implementation {
         const auto size = args.NewSize();
         _swapChainPanelWidth = static_cast<size_t>(size.Width);
         _swapChainPanelHeight = static_cast<size_t>(size.Height);
-        _graphics->UpdateSize(_swapChainPanelWidth, _swapChainPanelHeight);
+        if (_graphics)
+        {
+            _graphics->UpdateSize(_swapChainPanelWidth, _swapChainPanelHeight);
+        }
     }
 
     void EngineView::OnPointerPressed(IInspectable const& /*sender*/, PointerRoutedEventArgs const& /*args*/)
