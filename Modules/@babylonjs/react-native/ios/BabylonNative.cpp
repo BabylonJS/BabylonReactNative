@@ -52,10 +52,10 @@ namespace Babylon
                     return {};
                 })
             );
-            
+
             // Initialize Babylon Native core components
             JsRuntime::CreateForJavaScript(m_env, CreateJsRuntimeDispatcher(m_env, jsiRuntime, m_jsCallInvoker, isShuttingDown));
-         
+
             // Initialize Babylon Native plugins
             Plugins::NativeXr::Initialize(m_env);
             m_nativeInput = &Babylon::Plugins::NativeInput::CreateForJavaScript(m_env);
@@ -67,23 +67,24 @@ namespace Babylon
             // React Native's implementation, but rather adds a second one scoped to Babylon and used by WebRequest.ts.
             Polyfills::XMLHttpRequest::Initialize(m_env);
         }
-        
+
         ~ReactNativeModule()
         {
             isShuttingDown = true;
             *m_isRunning = false;
             Napi::Detach(m_env);
         }
-        
+
         // NOTE: This only happens when the JS engine is shutting down (other than when the app exits, this only
         //       happens during a dev mode reload). In this case, EngineHook.ts won't call NativeEngine.dispose,
         //       so we need to manually do it here to properly clean up these resources.
         void Deinitialize()
         {
-            auto native = JsRuntime::NativeObject::GetFromJavaScript(m_env);
-            auto engine = native.Get("engineInstance").As<Napi::Object>();
-            auto dispose = engine.Get("dispose").As<Napi::Function>();
-            dispose.Call(engine, {});
+            if (m_disposeEngine)
+            {
+                m_disposeEngine();
+                m_disposeEngine = {};
+            }
         }
         
         void UpdateView(void* windowPtr, size_t width, size_t height)
@@ -144,28 +145,25 @@ namespace Babylon
                     return {};
                 });
             }
-//            else if (prop.utf8(runtime) == "setEngineInstance")
-//            {
-//                return jsi::Function::createFromHostFunction(runtime, prop, 0, [this](jsi::Runtime& rt, const jsi::Value&, const jsi::Value* args, size_t count) -> jsi::Value
-//                {
-//                    if (count > 0 && args[0].isObject())
-//                    {
-//
-//                    }
-//                    if (count == 0 || !args[0].isObject())
-//                    {
-//                        m_disposeEngine = {};
-//                    }
-//                    else
-//                    {
-//                        m_disposeEngine = [&rt, engineInstance{ std::make_shared<jsi::Value>(rt, args[0]) }]()
-//                        {
-//                            engineInstance->getObject(rt).getProperty(rt, "dispose").asObject(rt).getFunction(rt).call(rt);
-//                        };
-//                    }
-//                    return {};
-//                });
-//            }
+            else if (prop.utf8(runtime) == "setEngineInstance")
+            {
+                return jsi::Function::createFromHostFunction(runtime, prop, 0, [this](jsi::Runtime& rt, const jsi::Value&, const jsi::Value* args, size_t count) -> jsi::Value
+                {
+                    if (count == 0 || !args[0].isObject())
+                    {
+                        m_disposeEngine = {};
+                    }
+                    else
+                    {
+                        m_disposeEngine = [&rt, engineInstanceValue{ std::make_shared<jsi::Value>(rt, args[0]) }]()
+                        {
+                            auto engineInstance = engineInstanceValue->getObject(rt);
+                            engineInstance.getPropertyAsFunction(rt, "dispose").callWithThis(rt, engineInstance);
+                        };
+                    }
+                    return {};
+                });
+            }
             
             return jsi::Value::undefined();
         }
@@ -180,8 +178,8 @@ namespace Babylon
         std::shared_ptr<bool> m_isRunning{};
         std::unique_ptr<Graphics> m_graphics{};
         Plugins::NativeInput* m_nativeInput{};
-        
-//        std::function<void()> m_disposeEngine{};
+
+        std::function<void()> m_disposeEngine{};
     };
 
     namespace

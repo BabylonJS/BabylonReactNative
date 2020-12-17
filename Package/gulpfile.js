@@ -124,7 +124,6 @@ Assembled/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata/Work
 Assembled/ios/BabylonModule.mm
 Assembled/ios/BabylonNative.h
 Assembled/README.md
-Assembled/EngineHelpers.ts
 Assembled/package.json
 Assembled/android
 Assembled/android/build.gradle
