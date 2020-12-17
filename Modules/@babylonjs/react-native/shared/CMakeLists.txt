@@ -1,2 +1,5 @@
-add_library(BabylonReactNativeShared INTERFACE)
-target_include_directories(BabylonReactNativeShared INTERFACE ".")
+set(SHARED_INCLUDES
+    "${CMAKE_CURRENT_LIST_DIR}")
+
+set(SHARED_SOURCES
+    "${CMAKE_CURRENT_LIST_DIR}/DispatchFunction.h")
