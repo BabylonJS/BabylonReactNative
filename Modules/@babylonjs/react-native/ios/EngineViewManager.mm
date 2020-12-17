@@ -15,13 +15,11 @@
 
 @implementation EngineView {
     RCTBridge* bridge;
-    NSRunLoop* runLoop; // TODO: remove
 }
 
-- (instancetype)init:(RCTBridge*)_bridge runLoop:(NSRunLoop*)_runLoop {
+- (instancetype)init:(RCTBridge*)_bridge {
     if (self = [super initWithFrame:CGRectZero device:MTLCreateSystemDefaultDevice()]) {
         bridge = _bridge;
-        runLoop = _runLoop;
 
         super.translatesAutoresizingMaskIntoConstraints = false;
         super.colorPixelFormat = MTLPixelFormatBGRA8Unorm_sRGB;
@@ -79,9 +77,7 @@
 @interface EngineViewManager : RCTViewManager
 @end
 
-@implementation EngineViewManager {
-    NSRunLoop* runLoop;
-}
+@implementation EngineViewManager
 
 RCT_EXPORT_MODULE(EngineViewManager)
 
@@ -98,13 +94,8 @@ RCT_EXPORT_METHOD(takeSnapshot:(nonnull NSNumber*) reactTag) {
     }];
 }
 
-RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(setJSThread) {
-    runLoop = [NSRunLoop currentRunLoop];
-    return nil;
-}
-
 - (UIView*)view {
-    return [[EngineView alloc] init:self.bridge runLoop:runLoop];
+    return [[EngineView alloc] init:self.bridge];
 }
 
 @end

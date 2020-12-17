@@ -24,11 +24,6 @@ namespace Babylon
 {
     using namespace facebook;
 
-    namespace
-    {
-        bool isShuttingDown{false};
-    }
-
     class ReactNativeModule : public jsi::HostObject
     {
     public:
@@ -37,8 +32,6 @@ namespace Babylon
             , m_jsCallInvoker{ jsCallInvoker }
             , m_isRunning{ std::make_shared<bool>(true) }
         {
-            isShuttingDown = false;
-
             // Initialize a JS promise that will be returned by whenInitialized, and completed when NativeEngine is initialized.
             m_initPromise = jsiRuntime.global().getPropertyAsFunction(jsiRuntime, "Promise").callAsConstructor
             (
@@ -54,7 +47,7 @@ namespace Babylon
             );
 
             // Initialize Babylon Native core components
-            JsRuntime::CreateForJavaScript(m_env, CreateJsRuntimeDispatcher(m_env, jsiRuntime, m_jsCallInvoker, isShuttingDown));
+            JsRuntime::CreateForJavaScript(m_env, CreateJsRuntimeDispatcher(m_env, jsiRuntime, m_jsCallInvoker, m_isRunning));
 
             // Initialize Babylon Native plugins
             Plugins::NativeXr::Initialize(m_env);
@@ -70,7 +63,6 @@ namespace Babylon
 
         ~ReactNativeModule()
         {
-            isShuttingDown = true;
             *m_isRunning = false;
             Napi::Detach(m_env);
         }
