@@ -69,7 +69,6 @@ export function useEngine(): Engine | undefined {
         let engine: NativeEngine | undefined = undefined;
 
         (async () => {
-            console.log("Calling BabylonModule.initialize");
             if (await ensureInitialized() && !disposed)
             {
                 engine = createEngine();
@@ -81,7 +80,6 @@ export function useEngine(): Engine | undefined {
             disposed = true;
             // NOTE: Do not use setEngine with a callback to dispose the engine instance as that callback does not get called during component unmount when compiled in release.
             if (engine) {
-                //DisposeEngine(engine);
                 disposeEngine(engine);
             }
             // Ideally we would always do a reset here as we don't want different behavior between debug and release. Unfortunately, fast refresh has some strange behavior that
