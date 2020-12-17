@@ -28,9 +28,7 @@ set(BABYLON_REACT_NATIVE_SHARED_DIR "${CMAKE_CURRENT_LIST_DIR}/../shared")
 add_subdirectory(${BABYLON_REACT_NATIVE_SHARED_DIR} ${CMAKE_CURRENT_BINARY_DIR}/shared)
 
 add_library(BabylonNative
-    ${SHARED_SOURCES}
-    ${CMAKE_CURRENT_LIST_DIR}/BabylonNative.h
-    ${CMAKE_CURRENT_LIST_DIR}/BabylonNative.cpp)
+    ${SHARED_SOURCES})
 
 target_compile_definitions(BabylonNative PRIVATE UNICODE)
 target_compile_definitions(BabylonNative PRIVATE _UNICODE)

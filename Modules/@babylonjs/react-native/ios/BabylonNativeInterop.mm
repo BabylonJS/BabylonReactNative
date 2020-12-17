@@ -1,5 +1,5 @@
 #import "BabylonNativeInterop.h"
-#import "BabylonNative.h"
+#import "../shared/BabylonNative.h"
 
 #import <React/RCTBridge+Private.h>
 #import <jsi/jsi.h>

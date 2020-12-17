@@ -48,6 +48,11 @@ const copyCommonFiles = () => {
     .pipe(gulp.dest('Assembled'));
 };
 
+const copySharedFiles = () => {
+  return  gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/shared/BabylonNative.h')
+    .pipe(gulp.dest('Assembled/shared'));
+};
+
 const copyIOSFiles = () => {
   return  gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/ios/*.h')
     .pipe(gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/ios/*.mm'))
@@ -164,7 +169,7 @@ const createPackage = async () => {
   exec('npm pack', 'Assembled');
 };
 
-const copyFiles = gulp.parallel(copyCommonFiles, copyIOSFiles, copyAndroidFiles);
+const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyIOSFiles, copyAndroidFiles);
 
 const build = gulp.series(buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validate);
 const rebuild = gulp.series(clean, build);
