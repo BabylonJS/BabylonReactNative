@@ -2,10 +2,15 @@
 
 #import <React/RCTViewManager.h>
 #import <React/RCTUIManager.h>
+#import <ReactCommon/CallInvoker.h>
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <MetalKit/MetalKit.h>
+
+@interface RCTBridge (RCTTurboModule)
+- (std::shared_ptr<facebook::react::CallInvoker>)jsCallInvoker;
+@end
 
 @interface EngineView : MTKView
 
@@ -30,7 +35,9 @@
 
 - (void)setBounds:(CGRect)bounds {
     [super setBounds:bounds];
-    [BabylonNativeInterop updateView:self];
+    bridge.jsCallInvoker->invokeAsync([self]() {
+        [BabylonNativeInterop updateView:self];
+    });
 }
 
 - (void)touchesBegan:(NSSet<UITouch*>*)touches withEvent:(UIEvent*)event {

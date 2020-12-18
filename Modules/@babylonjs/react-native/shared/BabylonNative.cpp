@@ -71,21 +71,22 @@ namespace Babylon
 
         void UpdateView(void* windowPtr, size_t width, size_t height)
         {
-            m_jsCallInvoker->invokeAsync([this, windowPtr, width, height]() {
-                if (!m_graphics)
+            if (!m_graphics)
+            {
+                m_graphics = Graphics::CreateGraphics(windowPtr, width, height);
+                m_jsCallInvoker->invokeAsync([this, windowPtr, width, height]()
                 {
-                    m_graphics = Graphics::CreateGraphics(windowPtr, width, height);
                     m_graphics->AddToJavaScript(m_env);
                     Plugins::NativeEngine::Initialize(m_env, true);
                     m_resolveInitPromise();
-                }
-                else
-                {
-                    m_graphics->UpdateWindow(windowPtr);
-                    m_graphics->UpdateSize(width, height);
-                    m_graphics->EnableRendering();
-                }
-            });
+                });
+            }
+            else
+            {
+                m_graphics->UpdateWindow(windowPtr);
+                m_graphics->UpdateSize(width, height);
+                m_graphics->EnableRendering();
+            }
         }
 
         void ResetView()

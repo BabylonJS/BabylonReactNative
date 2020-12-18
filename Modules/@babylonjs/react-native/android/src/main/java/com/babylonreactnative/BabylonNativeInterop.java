@@ -28,47 +28,55 @@ public final class BabylonNativeInterop {
         public static native void setPointerPosition(int pointerId, int x, int y);
     }
 
-    private static ReactContext currentContext;
-
-    private final static LifecycleEventListener lifeCycleEventListener = new LifecycleEventListener() {
-        @Override
-        public void onHostResume() {
-            BabylonNative.setCurrentActivity(BabylonNativeInterop.currentContext.getCurrentActivity());
-            BabylonNative.resume();
-        }
-
-        @Override
-        public void onHostPause() {
-            BabylonNative.pause();
-        }
-
-        @Override
-        public void onHostDestroy() {
-            BabylonNative.deinitialize();
-        }
-    };
-
-    private final static ActivityEventListener activityEventListener = new ActivityEventListener() {
-        @Override
-        public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-            // Nothing to do here
-        }
-
-        @Override
-        public void onNewIntent(Intent intent) {
-            BabylonNative.setCurrentActivity(BabylonNativeInterop.currentContext.getCurrentActivity());
-        }
-    };
+    private static LifecycleEventListener lifeCycleEventListener;
+    private static ActivityEventListener activityEventListener;
 
     public static void initialize(ReactContext reactContext) {
-        BabylonNativeInterop.currentContext = reactContext;
+        long jsiRuntimeRef = reactContext.getJavaScriptContextHolder().get();
+        CallInvokerHolder jsCallInvokerHolder = reactContext.getCatalystInstance().getJSCallInvokerHolder();
+        BabylonNative.initialize(reactContext, jsiRuntimeRef, jsCallInvokerHolder);
 
-        long jsiRuntimeRef = BabylonNativeInterop.currentContext.getJavaScriptContextHolder().get();
-        CallInvokerHolder jsCallInvokerHolder = BabylonNativeInterop.currentContext.getCatalystInstance().getJSCallInvokerHolder();
-        BabylonNative.initialize(BabylonNativeInterop.currentContext, jsiRuntimeRef, jsCallInvokerHolder);
+        if (BabylonNativeInterop.lifeCycleEventListener != null) {
+            reactContext.removeLifecycleEventListener(lifeCycleEventListener);
+        }
 
-        BabylonNativeInterop.currentContext.removeLifecycleEventListener(lifeCycleEventListener);
-        BabylonNativeInterop.currentContext.addLifecycleEventListener(lifeCycleEventListener);
+        BabylonNativeInterop.lifeCycleEventListener = new LifecycleEventListener() {
+            @Override
+            public void onHostResume() {
+                BabylonNative.setCurrentActivity(reactContext.getCurrentActivity());
+                BabylonNative.resume();
+            }
+
+            @Override
+            public void onHostPause() {
+                BabylonNative.pause();
+            }
+
+            @Override
+            public void onHostDestroy() {
+                BabylonNative.deinitialize();
+            }
+        };
+
+        reactContext.addLifecycleEventListener(lifeCycleEventListener);
+
+        if (BabylonNativeInterop.activityEventListener != null) {
+            reactContext.removeActivityEventListener(BabylonNativeInterop.activityEventListener);
+        }
+
+        BabylonNativeInterop.activityEventListener = new ActivityEventListener() {
+            @Override
+            public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+                // Nothing to do here
+            }
+
+            @Override
+            public void onNewIntent(Intent intent) {
+                BabylonNative.setCurrentActivity(reactContext.getCurrentActivity());
+            }
+        };
+
+        reactContext.addActivityEventListener(BabylonNativeInterop.activityEventListener);
     }
 
     public static void deinitialize() {
