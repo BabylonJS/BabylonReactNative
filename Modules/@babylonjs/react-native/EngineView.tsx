@@ -29,7 +29,7 @@ export interface EngineViewCallbacks {
 }
 
 export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineViewProps) => {
-    const [failedInitialization, setFailedInitialization] = useState(false);
+    const [initialized, setInitialized] = useState<boolean>();
     const [appState, setAppState] = useState(AppState.currentState);
     const [fps, setFps] = useState<number>();
     const engineViewRef = useRef<Component<NativeEngineViewProps>>(null);
@@ -37,9 +37,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
 
     useEffect(() => {
         (async () => {
-            if (!await ensureInitialized()) {
-                setFailedInitialization(true);
-            }
+            setInitialized(await ensureInitialized());
         })();
     }, []);
 
@@ -138,11 +136,11 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
         }
     }, []);
 
-    if (!failedInitialization) {
+    if (initialized !== false) {
         return (
             <View style={[props.style, { overflow: "hidden" }]}>
-                <NativeEngineView ref={engineViewRef} style={{ flex: 1 }} onSnapshotDataReturned={snapshotDataReturnedHandler} />
-                { fps && <Text style={{ color: 'yellow', position: 'absolute', margin: 10, right: 0, top: 0 }}>FPS: {Math.round(fps)}</Text>}
+                { initialized && <NativeEngineView ref={engineViewRef} style={{ flex: 1 }} onSnapshotDataReturned={snapshotDataReturnedHandler} /> }
+                { fps && <Text style={{ color: 'yellow', position: 'absolute', margin: 10, right: 0, top: 0 }}>FPS: {Math.round(fps)}</Text> }
             </View>
         );
     } else {

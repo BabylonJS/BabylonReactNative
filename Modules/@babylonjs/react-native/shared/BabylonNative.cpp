@@ -71,28 +71,34 @@ namespace Babylon
 
         void UpdateView(void* windowPtr, size_t width, size_t height)
         {
-            if (!m_graphics)
+            // TODO: We shouldn't have to dispatch to the JS thread most of this, but not doing so results in a crash.
+            //       I don't understand the issue yet, but for now just retain the pre-refactor logic. We'll need to
+            //       resolve this to enable manual non-JS thread rendering. Note this only repros in release builds
+            //       where we actually call ResetView.
+            m_jsCallInvoker->invokeAsync([this, windowPtr, width, height]()
             {
-                m_graphics = Graphics::CreateGraphics(windowPtr, width, height);
-                m_jsCallInvoker->invokeAsync([this, windowPtr, width, height]()
+                if (!m_graphics)
                 {
+                    m_graphics = Graphics::CreateGraphics(windowPtr, width, height);
                     m_graphics->AddToJavaScript(m_env);
                     Plugins::NativeEngine::Initialize(m_env, true);
                     m_resolveInitPromise();
-                });
-            }
-            else
-            {
-                m_graphics->UpdateWindow(windowPtr);
-                m_graphics->UpdateSize(width, height);
-                m_graphics->EnableRendering();
-            }
+                }
+                else
+                {
+                    m_graphics->UpdateWindow(windowPtr);
+                    m_graphics->UpdateSize(width, height);
+                    m_graphics->EnableRendering();
+                }
+            });
         }
 
         void ResetView()
         {
-            // TODO: There is a race condition between EngineView.tsx stopping the render loop and EngineHook.ts resetting.
-            //       If we DisableRendering synchronously, one more frame will still be rendered which calls EnableRendering.
+            // TODO: We shouldn't have to dispatch to the JS thread for this since we are already on the JS thread,
+            //       but there is an issue in NativeEngine where it will Dispatch a call to RenderCurrentFrame, then
+            //       get disposed, then try to actually render the frame. This results in immediately re-enabling
+            //       graphics after disabling it here. For now, retain the pre-refactor logic (queueing on the JS thread).
             m_jsCallInvoker->invokeAsync([this]()
             {
                 if (m_graphics)
@@ -101,7 +107,7 @@ namespace Babylon
                 }
             });
         }
-        
+
         void SetPointerButtonState(uint32_t pointerId, uint32_t buttonId, bool isDown, uint32_t x, uint32_t y)
         {
             if (isDown)

@@ -71,7 +71,7 @@ export function useEngine(): Engine | undefined {
         (async () => {
             if (await ensureInitialized() && !disposed)
             {
-                engine = createEngine();
+                engine = await createEngine();
                 setEngine(engine);
             }
         })();

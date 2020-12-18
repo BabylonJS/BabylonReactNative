@@ -35,13 +35,6 @@ export async function ensureInitialized(): Promise<boolean> {
     } else {
         // This does the first stage of Babylon Native initialization, including creating the BabylonNative JSI object.
         await BabylonModule.initialize();
-
-        // This waits Graphics/NativeEngine to be created (which in turn makes the whenGraphicsReady available).
-        await BabylonNative.initializationPromise;
-
-        // This waits for the Graphics system to be up and running.
-        await _native.whenGraphicsReady();
-
         return true;
     }
 }
@@ -50,7 +43,13 @@ export function reset(): void {
     BabylonNative.reset();
 }
 
-export function createEngine(): NativeEngine {
+export async function createEngine(): Promise<NativeEngine> {
+    // This waits Graphics/NativeEngine to be created (which in turn makes the whenGraphicsReady available).
+    await BabylonNative.initializationPromise;
+
+    // This waits for the Graphics system to be up and running.
+    await _native.whenGraphicsReady();
+
     const engine = new NativeEngine();
     BabylonNative.setEngineInstance(engine);
     return engine;

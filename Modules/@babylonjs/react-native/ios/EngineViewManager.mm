@@ -35,9 +35,7 @@
 
 - (void)setBounds:(CGRect)bounds {
     [super setBounds:bounds];
-    bridge.jsCallInvoker->invokeAsync([self]() {
-        [BabylonNativeInterop updateView:self];
-    });
+    [BabylonNativeInterop updateView:self];
 }
 
 - (void)touchesBegan:(NSSet<UITouch*>*)touches withEvent:(UIEvent*)event {
