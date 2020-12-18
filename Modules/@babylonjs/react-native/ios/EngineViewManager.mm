@@ -8,10 +8,6 @@
 #import <UIKit/UIKit.h>
 #import <MetalKit/MetalKit.h>
 
-@interface RCTBridge (RCTTurboModule)
-- (std::shared_ptr<facebook::react::CallInvoker>)jsCallInvoker;
-@end
-
 @interface EngineView : MTKView
 
 @property (nonatomic, copy) RCTDirectEventBlock onSnapshotDataReturned;
