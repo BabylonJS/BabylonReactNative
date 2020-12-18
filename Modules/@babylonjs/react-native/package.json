@@ -40,7 +40,8 @@
     "@types/react-native-permissions": "^2.0.0",
     "@types/react-test-renderer": "^16.9.2",
     "typescript": "^3.8.3",
-    "react-native": "^0.63.1",
-    "react-native-windows": "latest"
+    "react-native": "0.0.0-19d4cc2d4",
+    "react-native-windows": "canary",
+    "react-native-windows-init": "latest"
   }
 }

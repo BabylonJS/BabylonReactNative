@@ -173,7 +173,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BabylonNative\BabylonNative.vcxproj">
+    <ProjectReference Include="..\..\..\..\Modules\@babylonjs\react-native\windows\BabylonNative\BabylonNative.vcxproj">
       <Project>{6b0fe51d-9d02-4e06-a631-85ef0830a311}</Project>
     </ProjectReference>
   </ItemGroup>
