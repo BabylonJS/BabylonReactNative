@@ -89,6 +89,8 @@ const validate = async () => {
   const expected =
 `Assembled
 Assembled/EngineHook.ts
+Assembled/shared
+Assembled/shared/BabylonNative.h
 Assembled/EngineView.tsx
 Assembled/ios
 Assembled/ios/BabylonNativeInterop.mm
@@ -127,7 +129,6 @@ Assembled/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace
 Assembled/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata
 Assembled/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
 Assembled/ios/BabylonModule.mm
-Assembled/ios/BabylonNative.h
 Assembled/README.md
 Assembled/package.json
 Assembled/android
