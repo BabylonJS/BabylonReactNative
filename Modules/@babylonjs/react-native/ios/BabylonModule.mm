@@ -18,9 +18,11 @@ RCT_EXPORT_MODULE();
 
 @synthesize bridge = _bridge;
 
-RCT_EXPORT_BLOCKING_SYNCHRONOUS_METHOD(initialize) {
-    [BabylonNativeInterop initialize:self.bridge];
-    return nil;
+RCT_EXPORT_METHOD(initialize:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    self.bridge.jsCallInvoker->invokeAsync([bridge{ self.bridge }, resolve]() {
+        [BabylonNativeInterop initialize:bridge];
+        resolve([NSNull null]);
+    });
 }
 
 @end

@@ -8,16 +8,6 @@
 #include <Babylon/Polyfills/Window.h>
 #include <Babylon/Polyfills/XMLHttpRequest.h>
 
-#include <arcana/threading/task_schedulers.h>
-
-#include <jsi/jsi.h>
-
-#include <CoreFoundation/CoreFoundation.h>
-
-#include <optional>
-#include <sstream>
-#include <unistd.h>
-
 #include <DispatchFunction.h>
 
 namespace Babylon
@@ -29,7 +19,7 @@ namespace Babylon
     public:
         ReactNativeModule(jsi::Runtime& jsiRuntime, std::shared_ptr<react::CallInvoker> jsCallInvoker)
             : m_env{ Napi::Attach<facebook::jsi::Runtime&>(jsiRuntime) }
-            , m_jsCallInvoker{ jsCallInvoker }
+            , m_jsCallInvoker{ std::move(jsCallInvoker) }
             , m_isRunning{ std::make_shared<bool>(true) }
         {
             // Initialize a JS promise that will be returned by whenInitialized, and completed when NativeEngine is initialized.
@@ -61,7 +51,7 @@ namespace Babylon
             Polyfills::XMLHttpRequest::Initialize(m_env);
         }
 
-        ~ReactNativeModule()
+        ~ReactNativeModule() override
         {
             *m_isRunning = false;
             Napi::Detach(m_env);
@@ -78,7 +68,7 @@ namespace Babylon
                 m_disposeEngine = {};
             }
         }
-        
+
         void UpdateView(void* windowPtr, size_t width, size_t height)
         {
             m_jsCallInvoker->invokeAsync([this, windowPtr, width, height]() {
