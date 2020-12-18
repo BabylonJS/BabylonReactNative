@@ -91,10 +91,15 @@ namespace Babylon
 
         void ResetView()
         {
-            if (m_graphics)
+            // TODO: There is a race condition between EngineView.tsx stopping the render loop and EngineHook.ts resetting.
+            //       If we DisableRendering synchronously, one more frame will still be rendered which calls EnableRendering.
+            m_jsCallInvoker->invokeAsync([this]()
             {
-                m_graphics->DisableRendering();
-            }
+                if (m_graphics)
+                {
+                    m_graphics->DisableRendering();
+                }
+            });
         }
         
         void SetPointerButtonState(uint32_t pointerId, uint32_t buttonId, bool isDown, uint32_t x, uint32_t y)
