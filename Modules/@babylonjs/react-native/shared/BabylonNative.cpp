@@ -206,6 +206,10 @@ namespace Babylon
         {
             nativeModule->UpdateView(windowPtr, width, height);
         }
+        else
+        {
+            throw std::runtime_error { "UpdateView must not be called before Initialize." };
+        }
     }
 
     void SetPointerButtonState(uint32_t pointerId, uint32_t buttonId, bool isDown, uint32_t x, uint32_t y)
