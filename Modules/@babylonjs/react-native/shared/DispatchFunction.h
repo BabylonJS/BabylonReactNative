@@ -12,7 +12,7 @@ namespace Babylon
     // Creates a JsRuntime::DispatchFunctionT that integrates with the React Native execution environment.
     inline JsRuntime::DispatchFunctionT CreateJsRuntimeDispatcher(Napi::Env env, jsi::Runtime& jsiRuntime, std::shared_ptr<react::CallInvoker> callInvoker, const std::shared_ptr<bool> isRunning)
     {
-        return [env, &jsiRuntime, callInvoker, isRunning{ std::move(isRunning) }](std::function<void(Napi::Env)> func)
+        return [env, &jsiRuntime, callInvoker{ std::move(callInvoker) }, isRunning{ std::move(isRunning) }](std::function<void(Napi::Env)> func)
         {
             // Ideally we would just use CallInvoker::invokeAsync directly, but currently it does not seem to integrate well with the React Native logbox.
             // To work around this, we wrap all functions in a try/catch, and when there is an exception, we do the following:
