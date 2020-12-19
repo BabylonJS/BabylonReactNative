@@ -5,10 +5,6 @@ import { ensureInitialized, isEngineDisposed } from './BabylonModule';
 
 declare const global: any;
 
-const EngineViewManager: {
-    setJSThread(): void;
-} = NativeModules.EngineViewManager;
-
 interface NativeEngineViewProps extends ViewProps {
     onSnapshotDataReturned: (event: SyntheticEvent) => void;
 }
