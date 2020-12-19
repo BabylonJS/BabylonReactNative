@@ -96,10 +96,9 @@ public final class BabylonNativeInterop {
         if (isPointerDown || isPointerUp) {
             int pointerIndex = motionEvent.getActionIndex();
             int pointerId = motionEvent.getPointerId(pointerIndex);
-            int buttonId = motionEvent.getActionButton();
             int x = (int)motionEvent.getX(pointerIndex);
             int y = (int)motionEvent.getY(pointerIndex);
-            BabylonNative.setPointerButtonState(pointerId, buttonId, isPointerDown, x, y);
+            BabylonNative.setPointerButtonState(pointerId, 0, isPointerDown, x, y);
         } else if (isPointerMove) {
             for (int pointerIndex = 0; pointerIndex < motionEvent.getPointerCount(); pointerIndex++) {
                 int pointerId = motionEvent.getPointerId(pointerIndex);
