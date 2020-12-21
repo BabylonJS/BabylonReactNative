@@ -1,7 +1,7 @@
 import React, { Component, FunctionComponent, SyntheticEvent, useCallback, useEffect, useState, useRef } from 'react';
-import { requireNativeComponent, NativeModules, ViewProps, AppState, AppStateStatus, View, Text, findNodeHandle, UIManager } from 'react-native';
+import { requireNativeComponent, ViewProps, AppState, AppStateStatus, View, Text, findNodeHandle, UIManager } from 'react-native';
 import { Camera } from '@babylonjs/core';
-import { ensureInitialized, isEngineDisposed } from './BabylonModule';
+import { ensureInitialized, ReactNativeEngine } from './BabylonModule';
 
 declare const global: any;
 
@@ -51,9 +51,9 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
 
     useEffect(() => {
         if (props.camera && appState === "active") {
-            const engine = props.camera.getScene().getEngine();
+            const engine = props.camera.getScene().getEngine() as ReactNativeEngine;
 
-            if (!isEngineDisposed(engine)) {
+            if (!engine.isDisposed) {
                 engine.runRenderLoop(() => {
                     for (let scene of engine.scenes) {
                         scene.render();
@@ -61,7 +61,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
                 });
 
                 return () => {
-                    if (!isEngineDisposed(engine)) {
+                    if (!engine.isDisposed) {
                         engine.stopRenderLoop();
                     }
                 };
@@ -73,9 +73,9 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
 
     useEffect(() => {
         if (props.camera && (props.displayFrameRate ?? __DEV__)) {
-            const engine = props.camera.getScene().getEngine();
+            const engine = props.camera.getScene().getEngine() as ReactNativeEngine;
 
-            if (!isEngineDisposed(engine)) {
+            if (!engine.isDisposed) {
                 setFps(engine.getFps());
                 const timerHandle = setInterval(() => {
                     setFps(engine.getFps());

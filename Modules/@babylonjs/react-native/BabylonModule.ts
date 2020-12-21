@@ -1,7 +1,5 @@
 import { NativeModules } from 'react-native';
-import { Engine, NativeEngine } from '@babylonjs/core';
-
-const disposedPropertyName = "BabylonReactNative_IsDisposed";
+import { NativeEngine } from '@babylonjs/core';
 
 declare const global: {
     nativeCallSyncHook: any;
@@ -27,6 +25,46 @@ const BabylonModule: {
     initialize(): Promise<void>;
 } = NativeModules.BabylonModule;
 
+export class ReactNativeEngine extends NativeEngine {
+    private _isDisposed = false;
+
+    private constructor() {
+        super();
+        BabylonNative.setEngineInstance(this);
+    }
+
+    public static async createAsync(): Promise<ReactNativeEngine> {
+        // This waits Graphics/NativeEngine to be created (which in turn makes the whenGraphicsReady available).
+        await BabylonNative.initializationPromise;
+
+        // This waits for the Graphics system to be up and running.
+        await _native.whenGraphicsReady();
+
+        return new ReactNativeEngine();
+    }
+
+    public get isDisposed() {
+        return this._isDisposed;
+    }
+
+    public dispose(): void {
+        if (!this.isDisposed) {
+            super.dispose();
+
+            // Ideally we would always do a reset here as we don't want different behavior between debug and release. Unfortunately, fast refresh has some strange behavior that
+            // makes it quite difficult to get this to work correctly (e.g. it re-runs previous useEffect instances, which means it can try to use Babylon Native in a de-initialized state).
+            // TODO: https://github.com/BabylonJS/BabylonReactNative/issues/125
+            if (!__DEV__) {
+                BabylonNative.reset();
+            }
+
+            this._isDisposed = true;
+        }
+
+        BabylonNative.setEngineInstance(null);
+    }
+}
+
 export async function ensureInitialized(): Promise<boolean> {
     if (isRemoteDebuggingEnabled) {
         // When remote debugging is enabled, JavaScript runs on the debugging host machine, not on the device where the app is running.
@@ -37,36 +75,4 @@ export async function ensureInitialized(): Promise<boolean> {
         await BabylonModule.initialize();
         return true;
     }
-}
-
-export async function createEngine(): Promise<NativeEngine> {
-    // This waits Graphics/NativeEngine to be created (which in turn makes the whenGraphicsReady available).
-    await BabylonNative.initializationPromise;
-
-    // This waits for the Graphics system to be up and running.
-    await _native.whenGraphicsReady();
-
-    const engine = new NativeEngine();
-    BabylonNative.setEngineInstance(engine);
-    return engine;
-}
-
-export function isEngineDisposed(engine: Engine): boolean {
-    return (engine as any)[disposedPropertyName];
-}
-
-export function disposeEngine(engine: NativeEngine): void {
-    if (engine && !isEngineDisposed(engine)) {
-        engine.dispose();
-        (engine as any)[disposedPropertyName] = true;
-
-        // Ideally we would always do a reset here as we don't want different behavior between debug and release. Unfortunately, fast refresh has some strange behavior that
-        // makes it quite difficult to get this to work correctly (e.g. it re-runs previous useEffect instances, which means it can try to use Babylon Native in a de-initialized state).
-        // TODO: https://github.com/BabylonJS/BabylonReactNative/issues/125
-        if (!__DEV__) {
-            BabylonNative.reset();
-        }
-    }
-
-    BabylonNative.setEngineInstance(null);
 }

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import { PERMISSIONS, check, request } from 'react-native-permissions';
-import { Engine, NativeEngine, WebXRSessionManager } from '@babylonjs/core';
-import { ensureInitialized, createEngine, disposeEngine } from './BabylonModule';
+import { Engine, WebXRSessionManager } from '@babylonjs/core';
+import { ensureInitialized, ReactNativeEngine } from './BabylonModule';
 import * as base64 from 'base-64';
 
 // These are errors that are normally thrown by WebXR's requestSession, so we should throw the same errors under similar circumstances so app code can be written the same for browser or native.
@@ -66,22 +66,19 @@ export function useEngine(): Engine | undefined {
 
     useEffect(() => {
         let disposed = false;
-        let engine: NativeEngine | undefined = undefined;
+        let engine: ReactNativeEngine | undefined = undefined;
 
         (async () => {
             if (await ensureInitialized() && !disposed)
             {
-                engine = await createEngine();
-                setEngine(engine);
+                setEngine(await ReactNativeEngine.createAsync());
             }
         })();
 
         return () => {
             disposed = true;
             // NOTE: Do not use setEngine with a callback to dispose the engine instance as that callback does not get called during component unmount when compiled in release.
-            if (engine) {
-                disposeEngine(engine);
-            }
+            engine?.dispose();
             setEngine(undefined);
         };
     }, []);
