@@ -1,7 +1,8 @@
 import React, { Component, FunctionComponent, SyntheticEvent, useCallback, useEffect, useState, useRef } from 'react';
 import { requireNativeComponent, ViewProps, AppState, AppStateStatus, View, Text, findNodeHandle, UIManager } from 'react-native';
 import { Camera } from '@babylonjs/core';
-import { ensureInitialized, ReactNativeEngine } from './BabylonModule';
+import { ensureInitialized } from './BabylonModule';
+import { ReactNativeEngine } from './ReactNativeEngine';
 
 declare const global: any;
 
