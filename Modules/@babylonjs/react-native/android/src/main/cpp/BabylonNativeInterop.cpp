@@ -22,7 +22,7 @@ using namespace facebook;
 
 extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_initialize(JNIEnv* env, jclass obj, jobject context, jlong jsiRuntimeRef, jobject jsCallInvokerHolder)
 {
-    static bool initializedJVM = false;
+    static bool initializedJVM{ false };
     if (!initializedJVM)
     {
         JavaVM* javaVM{};
@@ -36,10 +36,17 @@ extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInter
         initializedJVM = true;
     }
 
-    auto jsiRuntime = reinterpret_cast<jsi::Runtime*>(jsiRuntimeRef);
-    auto jsCallInvoker = jni::alias_ref<react::CallInvokerHolder::javaobject>{ reinterpret_cast<react::CallInvokerHolder::javaobject>(jsCallInvokerHolder) }->cthis()->getCallInvoker();
+    auto jsiRuntime{ reinterpret_cast<jsi::Runtime*>(jsiRuntimeRef) };
+    auto jsCallInvoker{ jni::alias_ref<react::CallInvokerHolder::javaobject>{ reinterpret_cast<react::CallInvokerHolder::javaobject>(jsCallInvokerHolder) }->cthis()->getCallInvoker() };
+    auto jsDispatcher{ [jsCallInvoker{ std::move(jsCallInvoker) }](std::function<void()> func)
+    {
+        jsCallInvoker->invokeAsync([func{ std::move(func) }]
+        {
+            func();
+        });
+    } };
 
-    Babylon::Initialize(*jsiRuntime, jsCallInvoker);
+    Babylon::Initialize(*jsiRuntime, std::move(jsDispatcher));
 }
 
 extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_deinitialize(JNIEnv* env, jclass obj)
@@ -64,9 +71,9 @@ extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInter
 
 extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_updateView(JNIEnv* env, jclass obj, jobject surface)
 {
-    ANativeWindow* windowPtr = ANativeWindow_fromSurface(env, surface);
-    auto width = static_cast<size_t>(ANativeWindow_getWidth(windowPtr));
-    auto height = static_cast<size_t>(ANativeWindow_getHeight(windowPtr));
+    ANativeWindow* windowPtr{ ANativeWindow_fromSurface(env, surface) };
+    auto width{ static_cast<size_t>(ANativeWindow_getWidth(windowPtr)) };
+    auto height{ static_cast<size_t>(ANativeWindow_getHeight(windowPtr)) };
     Babylon::UpdateView(windowPtr, width, height);
 }
 

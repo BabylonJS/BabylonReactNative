@@ -17,9 +17,9 @@ namespace Babylon
     class ReactNativeModule : public jsi::HostObject
     {
     public:
-        ReactNativeModule(jsi::Runtime& jsiRuntime, std::shared_ptr<react::CallInvoker> jsCallInvoker)
+        ReactNativeModule(jsi::Runtime& jsiRuntime, Dispatcher jsDispatcher)
             : m_env{ Napi::Attach<facebook::jsi::Runtime&>(jsiRuntime) }
-            , m_jsCallInvoker{ std::move(jsCallInvoker) }
+            , m_jsDispatcher{ std::move(jsDispatcher) }
             , m_isRunning{ std::make_shared<bool>(true) }
         {
             // Initialize a JS promise that will be returned by whenInitialized, and completed when NativeEngine is initialized.
@@ -37,12 +37,12 @@ namespace Babylon
             );
 
             // Initialize Babylon Native core components
-            JsRuntime::CreateForJavaScript(m_env, CreateJsRuntimeDispatcher(m_env, jsiRuntime, m_jsCallInvoker, m_isRunning));
+            JsRuntime::CreateForJavaScript(m_env, CreateJsRuntimeDispatcher(m_env, jsiRuntime, m_jsDispatcher, m_isRunning));
 
             // Initialize Babylon Native plugins
             Plugins::NativeXr::Initialize(m_env);
             m_nativeInput = &Babylon::Plugins::NativeInput::CreateForJavaScript(m_env);
-            
+
             // Initialize Babylon Native polyfills
             Polyfills::Window::Initialize(m_env);
 
@@ -75,7 +75,7 @@ namespace Babylon
             //       I don't understand the issue yet, but for now just retain the pre-refactor logic. We'll need to
             //       resolve this to enable manual non-JS thread rendering. Note this only repros in release builds
             //       where we actually call ResetView.
-            m_jsCallInvoker->invokeAsync([this, windowPtr, width, height]()
+            m_jsDispatcher([this, windowPtr, width, height]()
             {
                 if (!m_graphics)
                 {
@@ -99,7 +99,7 @@ namespace Babylon
             //       but there is an issue in NativeEngine where it will Dispatch a call to RenderCurrentFrame, then
             //       get disposed, then try to actually render the frame. This results in immediately re-enabling
             //       graphics after disabling it here. For now, retain the pre-refactor logic (queueing on the JS thread).
-            m_jsCallInvoker->invokeAsync([this]()
+            m_jsDispatcher([this]()
             {
                 if (m_graphics)
                 {
@@ -153,7 +153,7 @@ namespace Babylon
                     {
                         m_disposeEngine = [&rt, engineInstanceValue{ std::make_shared<jsi::Value>(rt, args[0]) }]()
                         {
-                            auto engineInstance = engineInstanceValue->getObject(rt);
+                            auto engineInstance{ engineInstanceValue->getObject(rt) };
                             engineInstance.getPropertyAsFunction(rt, "dispose").callWithThis(rt, engineInstance);
                         };
                     }
@@ -169,7 +169,7 @@ namespace Babylon
         std::function<void()> m_resolveInitPromise{};
 
         Napi::Env m_env;
-        std::shared_ptr<facebook::react::CallInvoker> m_jsCallInvoker{};
+        Dispatcher m_jsDispatcher{};
 
         std::shared_ptr<bool> m_isRunning{};
         std::unique_ptr<Graphics> m_graphics{};
@@ -184,11 +184,11 @@ namespace Babylon
         std::weak_ptr<ReactNativeModule> g_nativeModule{};
     }
 
-    void Initialize(facebook::jsi::Runtime& jsiRuntime, std::shared_ptr<facebook::react::CallInvoker> jsCallInvoker)
+    void Initialize(facebook::jsi::Runtime& jsiRuntime, Dispatcher jsDispatcher)
     {
         if (!jsiRuntime.global().hasProperty(jsiRuntime, JS_INSTANCE_NAME))
         {
-            auto nativeModule{ std::make_shared<ReactNativeModule>(jsiRuntime, jsCallInvoker) };
+            auto nativeModule{ std::make_shared<ReactNativeModule>(jsiRuntime, jsDispatcher) };
             jsiRuntime.global().setProperty(jsiRuntime, JS_INSTANCE_NAME, jsi::Object::createFromHostObject(jsiRuntime, nativeModule));
             g_nativeModule = nativeModule;
         }

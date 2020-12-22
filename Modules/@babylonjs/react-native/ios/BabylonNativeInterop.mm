@@ -3,6 +3,7 @@
 
 #import <React/RCTBridge+Private.h>
 #import <jsi/jsi.h>
+#include <ReactCommon/CallInvoker.h>
 
 #import <Foundation/Foundation.h>
 
@@ -26,7 +27,16 @@ namespace {
 static NSMutableArray* activeTouches;
 
 + (void)initialize:(RCTBridge*)bridge {
-    Babylon::Initialize(*GetJSIRuntime(bridge), bridge.jsCallInvoker);
+    auto jsCallInvoker{ bridge.jsCallInvoker };
+    auto jsDispatcher{ [jsCallInvoker{ std::move(jsCallInvoker) }](std::function<void()> func)
+    {
+        jsCallInvoker->invokeAsync([func{ std::move(func) }]
+        {
+            func();
+        });
+    } };
+
+    Babylon::Initialize(*GetJSIRuntime(bridge), std::move(jsDispatcher));
 
     [[NSNotificationCenter defaultCenter] removeObserver:self
         name:RCTBridgeWillInvalidateModulesNotification
