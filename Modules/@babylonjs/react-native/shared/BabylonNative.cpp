@@ -158,10 +158,10 @@ namespace Babylon
                     return {};
                 });
             }
-            
-            return jsi::Value::undefined();
+
+            return {};
         }
-        
+
     private:
         jsi::Value m_initPromise{};
         std::function<void()> m_resolveInitPromise{};
@@ -184,7 +184,7 @@ namespace Babylon
 
     void Initialize(facebook::jsi::Runtime& jsiRuntime, std::shared_ptr<facebook::react::CallInvoker> jsCallInvoker)
     {
-        if (jsiRuntime.global().getProperty(jsiRuntime, JS_INSTANCE_NAME).isUndefined())
+        if (!jsiRuntime.global().hasProperty(jsiRuntime, JS_INSTANCE_NAME))
         {
             auto nativeModule{ std::make_shared<ReactNativeModule>(jsiRuntime, jsCallInvoker) };
             jsiRuntime.global().setProperty(jsiRuntime, JS_INSTANCE_NAME, jsi::Object::createFromHostObject(jsiRuntime, nativeModule));
@@ -194,7 +194,7 @@ namespace Babylon
 
     void Deinitialize()
     {
-        if (auto nativeModule = g_nativeModule.lock())
+        if (auto nativeModule{ g_nativeModule.lock() })
         {
             nativeModule->Deinitialize();
         }
@@ -202,19 +202,19 @@ namespace Babylon
 
     void UpdateView(void* windowPtr, size_t width, size_t height)
     {
-        if (auto nativeModule = g_nativeModule.lock())
+        if (auto nativeModule{ g_nativeModule.lock() })
         {
             nativeModule->UpdateView(windowPtr, width, height);
         }
         else
         {
-            throw std::runtime_error { "UpdateView must not be called before Initialize." };
+            throw std::runtime_error{ "UpdateView must not be called before Initialize." };
         }
     }
 
     void SetPointerButtonState(uint32_t pointerId, uint32_t buttonId, bool isDown, uint32_t x, uint32_t y)
     {
-        if (auto nativeModule = g_nativeModule.lock())
+        if (auto nativeModule{ g_nativeModule.lock() })
         {
             nativeModule->SetPointerButtonState(pointerId, buttonId, isDown, x, y);
         }
@@ -222,7 +222,7 @@ namespace Babylon
 
     void SetPointerPosition(uint32_t pointerId, uint32_t x, uint32_t y)
     {
-        if (auto nativeModule = g_nativeModule.lock())
+        if (auto nativeModule{ g_nativeModule.lock() })
         {
             nativeModule->SetPointerPosition(pointerId, x, y);
         }

@@ -25,7 +25,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInter
     static bool initializedJVM = false;
     if (!initializedJVM)
     {
-        JavaVM *javaVM{};
+        JavaVM* javaVM{};
         if (env->GetJavaVM(&javaVM) != JNI_OK)
         {
             throw std::runtime_error("Failed to get Java VM");
@@ -37,7 +37,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInter
     }
 
     auto jsiRuntime = reinterpret_cast<jsi::Runtime*>(jsiRuntimeRef);
-    auto jsCallInvoker = jni::alias_ref<react::CallInvokerHolder::javaobject> {reinterpret_cast<react::CallInvokerHolder::javaobject>(jsCallInvokerHolder)}->cthis()->getCallInvoker();
+    auto jsCallInvoker = jni::alias_ref<react::CallInvokerHolder::javaobject>{ reinterpret_cast<react::CallInvokerHolder::javaobject>(jsCallInvokerHolder) }->cthis()->getCallInvoker();
 
     Babylon::Initialize(*jsiRuntime, jsCallInvoker);
 }
