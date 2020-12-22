@@ -158,6 +158,7 @@ Assembled/android/src/main/jniLibs/arm64-v8a/libBabylonNative.so
 Assembled/react-native-babylon.podspec
 Assembled/index.ts
 Assembled/BabylonModule.ts
+Assembled/ReactNativeEngine.ts
 `;
 
   const result = shelljs.exec('find Assembled', {silent: true});

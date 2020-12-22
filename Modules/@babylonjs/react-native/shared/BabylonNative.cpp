@@ -127,11 +127,13 @@ namespace Babylon
 
         jsi::Value get(jsi::Runtime& runtime, const jsi::PropNameID& prop) override
         {
-            if (prop.utf8(runtime) == "initializationPromise")
+            const auto propName{ prop.utf8(runtime) };
+
+            if (propName == "initializationPromise")
             {
                 return { runtime, m_initPromise };
             }
-            else if (prop.utf8(runtime) == "reset")
+            else if (propName == "reset")
             {
                 return jsi::Function::createFromHostFunction(runtime, prop, 0, [this](jsi::Runtime& rt, const jsi::Value&, const jsi::Value*, size_t) -> jsi::Value
                 {
@@ -139,7 +141,7 @@ namespace Babylon
                     return {};
                 });
             }
-            else if (prop.utf8(runtime) == "setEngineInstance")
+            else if (propName == "setEngineInstance")
             {
                 return jsi::Function::createFromHostFunction(runtime, prop, 0, [this](jsi::Runtime& rt, const jsi::Value&, const jsi::Value* args, size_t count) -> jsi::Value
                 {
