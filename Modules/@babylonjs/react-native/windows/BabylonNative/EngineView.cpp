@@ -158,10 +158,11 @@ namespace winrt::BabylonNative::implementation {
 
             _jsRuntime = &Babylon::JsRuntime::CreateForJavaScript(_env, CreateJsRuntimeDispatcher());
 
-            _graphics = Babylon::Graphics::CreateGraphics(_swapChainPanel, _swapChainPanelWidth, _swapChainPanelHeight);
+            // Use  windowTypePtr == 2 for xaml swap chain panels
+            void* windowTypePtr = reinterpret_cast<void*>(2);
+            _graphics = Babylon::Graphics::CreateGraphics(_swapChainPanel, windowTypePtr, _swapChainPanelWidth, _swapChainPanelHeight);
             _graphics->AddToJavaScript(_env);
-            _graphics->UpdateWindow(_swapChainPanel);
-            _graphics->UpdateWindowType(reinterpret_cast<void*>(2));
+            _graphics->UpdateWindow(_swapChainPanel, windowTypePtr);
             _rendering = true;
 
             // Populate polyfills
