@@ -7,6 +7,7 @@
 
 #include "winrt/BabylonNative.h"
 
+#define _SCRIPT_DEBUGGING 1
 
 using namespace winrt::Playground;
 using namespace winrt::Playground::implementation;
@@ -24,6 +25,7 @@ using namespace Windows::ApplicationModel;
 App::App() noexcept
 {
 #if BUNDLE
+    // Note: add <UseBundle>true</UseBundle> property to application's ReactNativeWindowsProps PropertyGroup to force BUNDLE to true
     JavaScriptBundleFile(L"index.windows");
     InstanceSettings().UseWebDebugger(false);
     InstanceSettings().UseFastRefresh(false);
@@ -39,13 +41,13 @@ App::App() noexcept
     InstanceSettings().UseDeveloperSupport(false);
 #endif
 
-    // TODO unclear whether this should always be enabled
-    InstanceSettings().UseDeveloperSupport(false);
+#if _SCRIPT_DEBUGGING
+    InstanceSettings().UseDeveloperSupport(true);
     InstanceSettings().UseWebDebugger(false);
     InstanceSettings().UseDirectDebugger(true);
     InstanceSettings().DebuggerBreakOnNextLine(true);
     InstanceSettings().UseFastRefresh(false);
-    InstanceSettings().EnableDeveloperMenu(false);
+#endif
 
     RegisterAutolinkedNativeModulePackages(PackageProviders()); // Includes any autolinked modules
 

@@ -12,6 +12,7 @@ import { EngineView, useEngine, EngineViewCallbacks } from '@babylonjs/react-nat
 import { Scene, Vector3, Mesh, ArcRotateCamera, Camera, PBRMetallicRoughnessMaterial, Color3, TargetCamera, WebXRSessionManager, Engine, Color4 } from '@babylonjs/core';
 // import Slider from '@react-native-community/slider';
 
+console.log("Setting up EngineScreen");
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const defaultScale = 1;
   const enableSnapshots = false;
@@ -97,6 +98,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   //   }
   // }, [engineViewCallbacks]);
 
+  console.log("Returning EngineScreen");
   return (
     <>
       <View style={props.style}>
@@ -126,6 +128,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   );
 };
 
+console.log("Declaring app");
 const App = () => {
   const [toggleScreen, setToggleScreen] = useState(false);
 
