@@ -70,10 +70,12 @@ class DOMException {
 declare const global: any;
 global.atob = base64.decode;
 
+console.log("Declaring useEngine");
 export function useEngine(): Engine | undefined {
     const [engine, setEngine] = useState<Engine>();
 
     useEffect(() => {
+        console.log("using effect for useEngine");
         let disposed = false;
         let engine: Engine | undefined = undefined;
 
