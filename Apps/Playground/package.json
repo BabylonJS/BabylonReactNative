@@ -42,7 +42,7 @@
     "prettier": "^2.0.4",
     "react-test-renderer": "^17.0.1",
     "typescript": "^3.8.3",
-    "just-scripts": "^0.44.7",
+    "just-scripts": "^0.44.7"
   },
   "jest": {
     "preset": "react-native",
