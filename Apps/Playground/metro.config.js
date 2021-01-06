@@ -6,12 +6,7 @@
  */
 const path = require('path');
 const fs = require('fs');
-//const blacklist = require('metro-config/src/defaults/blacklist');
 const exclusionList = require('metro-config/src/defaults/exclusionList');
-const babylonJSReactNativePath = fs.realpathSync(
-  path.dirname(require.resolve('@babylonjs/react-native/package.json')),
-);
-console.log("@babylonjs/react-native folder path: " + babylonJSReactNativePath);
 
 // NOTE: The Metro bundler does not support symlinks (see https://github.com/facebook/metro/issues/1), which NPM uses for local packages.
 //       To work around this, we explicity tell the metro bundler where to find local/linked packages.
@@ -51,8 +46,6 @@ function getModuleMappings() {
 }
 
 const moduleMappings = getModuleMappings();
-console.log("Mapping the following sym linked packages:");
-console.log(moduleMappings);
 
 module.exports = {
   transformer: {
@@ -75,13 +68,11 @@ module.exports = {
         get: (target, name) => name in target ? target[name] : path.join(__dirname, `node_modules/${name}`),
       },
     ),
-    // extraNodeModules: { '@babylonjs/react-native': babylonJSReactNativePath },
     
     projectRoot: path.resolve(__dirname),
 
     // Also additionally watch all the mapped local directories for changes to support live updates.
     watchFolders: Object.values(moduleMappings),
-    // watchFolders: [ babylonJSReactNativePath ],
 
     blockList: exclusionList([
       // Avoid error EBUSY: resource busy or locked, open 'D:\a\1\s\packages\playground\msbuild.ProjectImports.zip' in pipeline
