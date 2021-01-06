@@ -6,107 +6,116 @@
  */
 
 import React, { useState, FunctionComponent, useEffect, useCallback } from 'react';
-import { SafeAreaView, StatusBar, Button, View, Text, ViewProps, Image, NativeModules } from 'react-native';
+import { SafeAreaView, StatusBar, Button, View, Text, ViewProps, Image } from 'react-native';
 
 import { EngineView, useEngine, EngineViewCallbacks } from '@babylonjs/react-native';
-import { Scene, Vector3, Mesh, ArcRotateCamera, Camera, PBRMetallicRoughnessMaterial, Color3, TargetCamera, WebXRSessionManager, Engine, Color4 } from '@babylonjs/core';
-// import Slider from '@react-native-community/slider';
+import { Scene, Vector3, ArcRotateCamera, Camera, WebXRSessionManager, SceneLoader, TransformNode, DeviceSourceManager, DeviceType, DeviceSource, PointerInput, WebXRTrackingState } from '@babylonjs/core';
+import '@babylonjs/loaders';
+import Slider from '@react-native-community/slider';
 
-console.log("Setting up EngineScreen");
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const defaultScale = 1;
   const enableSnapshots = false;
 
-  console.log("Calling EngineScreen useEngine");
   const engine = useEngine();
-
-  console.log("Calling EngineScreen useState instances");
   const [toggleView, setToggleView] = useState(false);
   const [camera, setCamera] = useState<Camera>();
-  const [box, setBox] = useState<Mesh>();
+  const [rootNode, setRootNode] = useState<TransformNode>();
   const [scene, setScene] = useState<Scene>();
   const [xrSession, setXrSession] = useState<WebXRSessionManager>();
   const [scale, setScale] = useState<number>(defaultScale);
   const [snapshotData, setSnapshotData] = useState<string>();
-  // const [engineViewCallbacks, setEngineViewCallbacks] = useState<EngineViewCallbacks>();
+  const [engineViewCallbacks, setEngineViewCallbacks] = useState<EngineViewCallbacks>();
+  const [trackingState, setTrackingState] = useState<WebXRTrackingState>();
 
-  console.log("Declaring EngineScreen useEffect instances");
   useEffect(() => {
-    console.log("useEffect called to setup scene");
     if (engine) {
-      console.log("Engine populated");
       const scene = new Scene(engine);
       setScene(scene);
-      console.log("Scene created");
       scene.createDefaultCamera(true);
       (scene.activeCamera as ArcRotateCamera).beta -= Math.PI / 8;
       setCamera(scene.activeCamera!);
-      console.log("Camera created");
       scene.createDefaultLight(true);
-      console.log("Default content created");
+      const rootNode = new TransformNode("Root Container", scene);
+      setRootNode(rootNode);
 
-      const box = Mesh.CreateBox("box", 0.3, scene);
-      setBox(box);
-      const mat = new PBRMetallicRoughnessMaterial("mat", scene);
-      mat.metallic = 1;
-      mat.roughness = 0.5;
-      mat.baseColor = Color3.Red();
-      box.material = mat;
-      console.log("Box created");
+      const deviceSourceManager = new DeviceSourceManager(engine);
+      deviceSourceManager.onDeviceConnectedObservable.add(device => {
+        if (device.deviceType === DeviceType.Touch) {
+          const touch: DeviceSource<DeviceType.Touch> = deviceSourceManager.getDeviceSource(device.deviceType, device.deviceSlot)!;
+          touch.onInputChangedObservable.add(touchEvent => {
+            if (touchEvent.inputIndex === PointerInput.Horizontal) {
+              if (touchEvent.currentState && touchEvent.previousState) {
+                rootNode.rotate(Vector3.Down(), (touchEvent.currentState - touchEvent.previousState) * 0.005);
+              }
+            }
+          })
+        }
+      })
+
+      const transformContainer = new TransformNode("Transform Container", scene);
+      transformContainer.parent = rootNode;
+      transformContainer.scaling.scaleInPlace(0.2);
+      transformContainer.position.y -= .2;
 
       scene.beforeRender = function () {
-        console.log("updating box rotation");
-        box.rotate(Vector3.Up(), 0.005 * scene.getAnimationRatio());
+        transformContainer.rotate(Vector3.Up(), 0.005 * scene.getAnimationRatio());
       };
+
+      SceneLoader.ImportMeshAsync("", "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF-Binary/BoxAnimated.glb").then(result => {
+        const mesh = result.meshes[0];
+        mesh.parent = transformContainer;
+      });
     }
   }, [engine]);
 
-  console.log("Declaring EngineScreen box scale change");
   useEffect(() => {
-    if (box) {
-      console.log("updating box scale");
-      box.scaling = new Vector3(scale, scale, scale);
+    if (rootNode) {
+      rootNode.scaling = new Vector3(scale, scale, scale);
     }
-  }, [box, scale]);
+  }, [rootNode, scale]);
 
-  console.log("Declaring onToggleXr")
+  const trackingStateToString = (trackingState: WebXRTrackingState | undefined) : string => {
+    return trackingState === undefined ? "" : WebXRTrackingState[trackingState];
+  };
+
   const onToggleXr = useCallback(() => {
-    console.log("Calling onToggleXr");
     (async () => {
       if (xrSession) {
         await xrSession.exitXRAsync();
         setXrSession(undefined);
+        setTrackingState(undefined);
       } else {
-        if (box !== undefined && scene !== undefined) {
+        if (rootNode !== undefined && scene !== undefined) {
           const xr = await scene.createDefaultXRExperienceAsync({ disableDefaultUI: true, disableTeleportation: true })
           const session = await xr.baseExperience.enterXRAsync("immersive-ar", "unbounded", xr.renderTarget);
           setXrSession(session);
 
+          setTrackingState(xr.baseExperience.camera.trackingState);
+          xr.baseExperience.camera.onTrackingStateChanged.add((newTrackingState) => {
+            setTrackingState(newTrackingState);
+          });
+
           // TODO: Figure out why getFrontPosition stopped working
           //box.position = (scene.activeCamera as TargetCamera).getFrontPosition(2);
           const cameraRay = scene.activeCamera!.getForwardRay(1);
-          box.position = cameraRay.origin.add(cameraRay.direction.scale(cameraRay.length));
-          box.rotate(Vector3.Up(), 3.14159);
-
-          // needed for hmds
-          scene.autoClear = true;
-          scene.clearColor = new Color4(0, 0, 0, 0);
+          rootNode.position = cameraRay.origin.add(cameraRay.direction.scale(cameraRay.length));
+          rootNode.rotate(Vector3.Up(), 3.14159);
         }
       }
     })();
-  }, [box, scene, xrSession]);
+  }, [rootNode, scene, xrSession]);
 
-  // const onInitialized = useCallback(async(engineViewCallbacks: EngineViewCallbacks) => {
-  //   setEngineViewCallbacks(engineViewCallbacks);
-  // }, [engine]);
+  const onInitialized = useCallback(async(engineViewCallbacks: EngineViewCallbacks) => {
+    setEngineViewCallbacks(engineViewCallbacks);
+  }, [engine]);
 
-  // const onSnapshot = useCallback(async () => {
-  //   if (engineViewCallbacks) {
-  //     setSnapshotData("data:image/jpeg;base64," + await engineViewCallbacks.takeSnapshot());
-  //   }
-  // }, [engineViewCallbacks]);
+  const onSnapshot = useCallback(async () => {
+    if (engineViewCallbacks) {
+      setSnapshotData("data:image/jpeg;base64," + await engineViewCallbacks.takeSnapshot());
+    }
+  }, [engineViewCallbacks]);
 
-  console.log("Returning EngineScreen");
   return (
     <>
       <View style={props.style}>
@@ -114,15 +123,15 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
         <Button title={ xrSession ? "Stop XR" : "Start XR"} onPress={onToggleXr} />
         { !toggleView &&
           <View style={{flex: 1}}>
-            {/* { enableSnapshots && 
+            { enableSnapshots && 
               <View style ={{flex: 1}}>
                 <Button title={"Take Snapshot"} onPress={onSnapshot}/>
                 <Image style={{flex: 1}} source={{uri: snapshotData }} />
               </View>
-            } */}
-            {/* <EngineView style={props.style} camera={camera} onInitialized={onInitialized} /> */}
-            <EngineView style={props.style} camera={camera} />
+            }
+            <EngineView style={props.style} camera={camera} onInitialized={onInitialized} />
             {/* <Slider style={{position: 'absolute', minHeight: 50, margin: 10, left: 0, right: 0, bottom: 0}} minimumValue={0.2} maximumValue={2} value={defaultScale} onValueChange={setScale} /> */}
+            <Text style={{fontSize: 12, color: 'yellow',  position: 'absolute', margin: 10}}>{trackingStateToString(trackingState)}</Text>
           </View>
         }
         { toggleView &&
@@ -136,12 +145,9 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   );
 };
 
-console.log("Declaring app");
 const App = () => {
-  console.log("Declaring app setToggleScreen");
   const [toggleScreen, setToggleScreen] = useState(false);
 
-  console.log("Returning app");
   return (
     <>
       <StatusBar barStyle="dark-content" />
