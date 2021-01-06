@@ -27,7 +27,7 @@ class DOMException {
 {
     const originalInitializeSessionAsync: (...args: any[]) => Promise<any> = WebXRSessionManager.prototype.initializeSessionAsync;
     WebXRSessionManager.prototype.initializeSessionAsync = async function (...args: any[]): Promise<any> {
-        console.log("initializing");
+        console.log("WebXRSessionManager.initializeSessionAsync called");
         // try {
         //     const cameraPermission = Platform.select({
         //         android: PERMISSIONS.ANDROID.CAMERA,
@@ -67,39 +67,51 @@ class DOMException {
 
 // Babylon Native includes a native atob polyfill, but it relies JSI to deal with the strings, and JSI has a bug where it assumes strings are null terminated, and a base 64 string can contain one of these.
 // So for now, provide a JavaScript based atob polyfill.
+console.log("Declaring global");
 declare const global: any;
 global.atob = base64.decode;
+console.log("global:" + global);
 
 console.log("Declaring useEngine");
 export function useEngine(): Engine | undefined {
-    const [engine, setEngine] = useState<Engine>();
-
-    useEffect(() => {
-        console.log("using effect for useEngine");
-        let disposed = false;
-        let engine: Engine | undefined = undefined;
-
-        (async () => {
-            if (await BabylonModule.initialize() && !disposed)
-            {
-                console.log("BabylonModule completed initialization");
-                console.log("Creating engine");
-                engine = BabylonModule.createEngine();
-                console.log("Setting engine");
-                setEngine(engine);
-                console.log("Engine set");
-            }
-        })();
-
-        return () => {
-            disposed = true;
-            // NOTE: Do not use setEngine with a callback to dispose the engine instance as that callback does not get called during component unmount when compiled in release.
-            if (engine) {
-                DisposeEngine(engine);
-            }
-            setEngine(undefined);
-        };
-    }, []);
-
-    return engine;
+    try {
+        console.log("Calling useEngine");
+        const [engine, setEngine] = useState<Engine>();
+    
+        useEffect(() => {
+            console.log("using effect for useEngine");
+            let disposed = false;
+            let engine: Engine | undefined = undefined;
+    
+            (async () => {
+                if (await BabylonModule.initialize() && !disposed)
+                {
+                    console.log("BabylonModule completed initialization");
+                    console.log("Creating engine");
+                    engine = BabylonModule.createEngine();
+                    console.log("Setting engine");
+                    setEngine(engine);
+                    console.log("Engine set");
+                }
+            })();
+    
+            return () => {
+                console.log("Calling useEngine returned function");
+                disposed = true;
+                // NOTE: Do not use setEngine with a callback to dispose the engine instance as that callback does not get called during component unmount when compiled in release.
+                if (engine) {
+                    DisposeEngine(engine);
+                }
+                setEngine(undefined);
+            };
+        }, []);
+    
+        console.log("Returning engine from useEngine");
+        return engine;
+    } catch (error)
+    {
+        console.log(error.stack);
+        throw error;
+    }
 }
+console.log("useEngine:" + useEngine);

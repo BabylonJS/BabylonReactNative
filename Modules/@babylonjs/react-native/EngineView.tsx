@@ -12,6 +12,7 @@ console.log("Declaring EngineViewManager");
 const EngineViewManager: {
     setJSThread(): void;
 } = NativeModules.EngineViewManager;
+console.log("EngineViewManager:" + EngineViewManager);
 
 // Not all platforms need this, but for those that do, this is intended to be a synchronous call to boostrap the ability to run native code on the JavaScript thread.
 if (EngineViewManager && EngineViewManager.setJSThread && !isRemoteDebuggingEnabled) {
@@ -29,6 +30,7 @@ const NativeEngineView: {
     prototype: Component<NativeEngineViewProps>;
     new(props: Readonly<NativeEngineViewProps>): Component<NativeEngineViewProps>;
 } = requireNativeComponent('EngineView');
+console.log("NativeEngineView:" + NativeEngineView);
 
 console.log("Declaring EngineViewProps");
 export interface EngineViewProps extends ViewProps {
@@ -47,6 +49,8 @@ export interface EngineViewCallbacks {
 
 console.log("Declaring EngineView");
 export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineViewProps) => {
+    try {
+    console.log("Creating EngineView");
     const [failedInitialization, setFailedInitialization] = useState(false);
     // const [appState, setAppState] = useState(AppState.currentState);
     const [fps, setFps] = useState<number>();
@@ -54,6 +58,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
     const snapshotPromise = useRef<{ promise: Promise<string>, resolve: (data: string) => void }>();
 
     useEffect(() => {
+        console.log("Calling EngineView useEffect to set initialization");
         (async () => {
             if (!await BabylonModule.whenInitialized()) {
                 setFailedInitialization(true);
@@ -74,6 +79,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
     // }, []);
 
     useEffect(() => {
+        console.log("Calling EngineView useEffect to run render loop");
         if (props.camera /*&& appState === "active"*/) {
             const engine = props.camera.getScene().getEngine();
 
@@ -96,6 +102,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
     }, [props.camera/*, appState*/]);
 
     useEffect(() => {
+        console.log("Calling EngineView useEffect to display frame rate");
         if (props.camera && (props.displayFrameRate ?? __DEV__)) {
             const engine = props.camera.getScene().getEngine();
 
@@ -179,4 +186,9 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
             </View>
         );
     }
+} catch (error) {
+        console.log(error.stack);
+        throw error;
+    }
 }
+console.log("EngineView:" + EngineView);

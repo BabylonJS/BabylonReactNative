@@ -13,8 +13,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(BABYLON_NATIVE_DIR "${CMAKE_CURRENT_LIST_DIR}/../submodules/BabylonNative")
 
 # Configure Babylon Native to use JSI
+# Note: We should avoid installing node_modules in the Module\@babylonjs\react-native folder.
+# Installing react-native dependencies for both the Playground app and the @babylonjs\react-native package will generate a bad bundle/runtime errors.
+set(PLAYGROUND_NODE_MODULES_DIR "${CMAKE_CURRENT_LIST_DIR}/../../../../Apps/Playground/node_modules")
 set(NAPI_JAVASCRIPT_ENGINE "JSI" CACHE STRING "The JavaScript engine to power N-API")
-set(REACTNATIVE_DIR_CMAKE "${CMAKE_CURRENT_LIST_DIR}/../node_modules/react-native")
+set(REACTNATIVE_DIR_CMAKE "${PLAYGROUND_NODE_MODULES_DIR}/react-native")
 add_subdirectory("${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi/jsi" ${CMAKE_CURRENT_BINARY_DIR}/jsi)
 target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi)
 
