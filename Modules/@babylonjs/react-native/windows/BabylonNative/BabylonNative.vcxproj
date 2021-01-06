@@ -173,108 +173,108 @@
       <DeploymentContent>false</DeploymentContent>
     </Text>
   </ItemGroup>
-  <ItemGroup Condition="'$(Platform)' == 'ARM64'">
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Core\Graphics\Graphics.vcxproj">
-      <Project>{6d62bec9-7230-3cd4-9151-b7809fed1833}</Project>
+    <ItemGroup Condition="'$(Platform)' == 'x86'">
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Core\Graphics\Graphics.vcxproj">
+      <Project>{05668d75-fe92-3235-984b-da86d2fc7c56}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Core\JsRuntime\JsRuntime.vcxproj">
-      <Project>{00ae530e-3c8d-3ce6-bebe-ea5b0f982ca8}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Core\JsRuntime\JsRuntime.vcxproj">
+      <Project>{873c9f38-86e7-3435-8685-d43d891ec12a}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\arcana.cpp\arcana.vcxproj">
-      <Project>{d70ef64a-7ba4-377c-b1d5-97c65b5809dc}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\arcana.cpp\arcana.vcxproj">
+      <Project>{f28971bd-9ba3-342c-aa88-e2918fe30835}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\astc-codec.vcxproj">
-      <Project>{9dbd7699-2679-3371-bbad-069ecbdad60a}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\bgfx.cmake\astc-codec.vcxproj">
+      <Project>{dc8f2ea1-35b2-30a1-818b-39b27d0dbce3}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\astc.vcxproj">
-      <Project>{ed9ccac2-7e89-33b3-8166-880ce4a61275}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\bgfx.cmake\astc.vcxproj">
+      <Project>{5738d9f5-a556-370e-96dc-32530677c56e}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\bgfx.vcxproj">
-      <Project>{eb88c809-ed52-3b2f-831b-9a13e1789b9f}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\bgfx.cmake\bgfx.vcxproj">
+      <Project>{06743b7c-d521-3adf-9a1e-2d96b16413e9}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\bimg.vcxproj">
-      <Project>{71a1bb5d-3e1b-3cf2-9043-9183bfbee904}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\bgfx.cmake\bimg.vcxproj">
+      <Project>{bf7560a4-d6b8-3215-8f92-b095a0c7a116}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\bx.vcxproj">
-      <Project>{9c781609-1caf-3a48-92d3-e7a54a28cc64}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\bgfx.cmake\bx.vcxproj">
+      <Project>{5be4366b-e003-3838-b5d6-d049fcc0e28b}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\edtaa3.vcxproj">
-      <Project>{091e1f59-5012-39af-9e44-bc4b14977f5f}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\bgfx.cmake\edtaa3.vcxproj">
+      <Project>{735a251c-1311-34c7-9e0b-ccfbe9afbe87}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\etc1.vcxproj">
-      <Project>{d04fcf79-f754-3ea1-901c-ad0177ca9ca8}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\bgfx.cmake\etc1.vcxproj">
+      <Project>{20c56164-1180-36b7-97d4-eb63edb15d7f}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\etc2.vcxproj">
-      <Project>{ce0b1287-f435-3fbe-8087-4b7a52175f90}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\bgfx.cmake\etc2.vcxproj">
+      <Project>{0e02cb85-a4d8-3d6f-a418-bf83a48846a8}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\iqa.vcxproj">
-      <Project>{62d2530d-cfdf-353a-b311-16b5c5530514}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\bgfx.cmake\iqa.vcxproj">
+      <Project>{98f10d41-56d7-3992-aa94-f997a5bfc740}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\nvtt.vcxproj">
-      <Project>{cede82ee-f4ce-35ce-9150-b4e7f5afa775}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\bgfx.cmake\nvtt.vcxproj">
+      <Project>{3e2986cb-b980-3213-9625-ae8ea3085e79}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\pvrtc.vcxproj">
-      <Project>{ec3cc249-d971-3d4d-88c1-3452bf3a6132}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\bgfx.cmake\pvrtc.vcxproj">
+      <Project>{40280a7f-b23f-3004-985c-6266fc4f3363}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\squish.vcxproj">
-      <Project>{6e2edf8e-cead-37ea-838f-d768464ae2a0}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\bgfx.cmake\squish.vcxproj">
+      <Project>{7c8eefb2-1e46-3eb4-8d81-98e5afe27ec8}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\glslang\glslang\GenericCodeGen.vcxproj">
-      <Project>{9570b802-8187-31b7-9d78-f7ec51bd48c9}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\glslang\glslang\GenericCodeGen.vcxproj">
+      <Project>{4c902b6d-1c49-37b3-bfff-5f4f72b06e86}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\glslang\glslang\glslang.vcxproj">
-      <Project>{e6e44be6-0695-3a4e-ace5-6f295335d0e2}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\glslang\glslang\glslang.vcxproj">
+      <Project>{967881bd-b186-37db-ae00-d6976bfb13e7}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\glslang\glslang\MachineIndependent.vcxproj">
-      <Project>{ff5bca91-5184-3945-a359-6ad4b82ff715}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\glslang\glslang\MachineIndependent.vcxproj">
+      <Project>{208ebfce-be18-3fba-b509-4df36c002f9d}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\glslang\glslang\OSDependent\Windows\OSDependent.vcxproj">
-      <Project>{ec9e20cf-67cb-3e64-94c8-fce150593fb1}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\glslang\glslang\OSDependent\Windows\OSDependent.vcxproj">
+      <Project>{8ca521b5-f28a-3c25-84f7-d2afde3f4ab5}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\glslang\OGLCompilersDLL\OGLCompiler.vcxproj">
-      <Project>{3776b2d8-5fcc-3215-b226-51de55a3a273}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\glslang\OGLCompilersDLL\OGLCompiler.vcxproj">
+      <Project>{b24d0522-c340-3dca-84f0-3555e49cccef}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\glslang\SPIRV\SPIRV.vcxproj">
-      <Project>{e9965b38-3a61-3a8a-bdba-96991b87c5f1}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\glslang\SPIRV\SPIRV.vcxproj">
+      <Project>{961f5cba-1146-3e47-9065-0322fbf5824d}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\napi\napi-jsi\napi.vcxproj">
-      <Project>{35978c2c-2797-3df0-b3cf-6d6146b6b205}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\napi\napi-jsi\napi.vcxproj">
+      <Project>{c551b197-dcd6-3438-909f-2a002dd5e081}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\SPIRV-Cross\spirv-cross-core.vcxproj">
-      <Project>{fafce544-12c1-37ab-95a0-936317c1cdeb}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\SPIRV-Cross\spirv-cross-core.vcxproj">
+      <Project>{bf78b04b-50e0-319f-8dc5-8a0581b484bd}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\SPIRV-Cross\spirv-cross-glsl.vcxproj">
-      <Project>{a24a462c-3f39-37c4-9721-384353822f50}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\SPIRV-Cross\spirv-cross-glsl.vcxproj">
+      <Project>{93280544-a612-3a4c-8172-9b6b8cd34a5c}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\SPIRV-Cross\spirv-cross-hlsl.vcxproj">
-      <Project>{39a6b057-9d52-348f-8bb4-52b5a1dc57ce}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\SPIRV-Cross\spirv-cross-hlsl.vcxproj">
+      <Project>{4eb899bb-53cb-3da2-8d86-aa9b69f107eb}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\UrlLib\UrlLib.vcxproj">
-      <Project>{10b964a2-d663-3ecd-a5c2-e3373b664bec}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\UrlLib\UrlLib.vcxproj">
+      <Project>{5b097ca3-ca34-3dec-85a6-2da92e90e2bb}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\xr\Dependencies\OpenXR-SDK\src\loader\openxr_loader.vcxproj">
-      <Project>{61b1c2b5-22dd-39c1-82c9-a02b27f9e4c9}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\xr\Dependencies\OpenXR-SDK\src\loader\openxr_loader.vcxproj">
+      <Project>{e81c0887-dddd-331e-94ef-e5296ca437ac}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\xr\xr.vcxproj">
-      <Project>{af16edcc-3803-3ffe-8112-32c565ea1f88}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\xr\xr.vcxproj">
+      <Project>{120ee1ae-9d09-3602-b6f7-6cf63c072f6c}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\jsi\jsi.vcxproj">
-      <Project>{0897d738-8022-3a3d-95b8-2b4ff7f8365e}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\jsi\jsi.vcxproj">
+      <Project>{bddbd49e-873f-33e4-a99d-9d8e77b16433}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Plugins\NativeEngine\NativeEngine.vcxproj">
-      <Project>{d582c0e4-9a19-3024-8039-2f8ee50bc8de}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Plugins\NativeEngine\NativeEngine.vcxproj">
+      <Project>{2c18692b-80ea-335e-a473-15a19374ace0}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Plugins\NativeInput\NativeInput.vcxproj">
-      <Project>{27a99ce3-bd70-3e01-af64-59507c9f8f01}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Plugins\NativeInput\NativeInput.vcxproj">
+      <Project>{47ff4ba6-6479-3470-bddc-d10f277726a4}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Plugins\NativeXr\NativeXr.vcxproj">
-      <Project>{5c3c2461-1df1-304b-b202-04cae73b7837}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Plugins\NativeXr\NativeXr.vcxproj">
+      <Project>{bfcc0b5c-a3f8-3aca-8aae-671355e0c5e9}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Polyfills\Window\Window.vcxproj">
-      <Project>{7bd8f749-4bbd-3196-8c58-9460273815f1}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Polyfills\Window\Window.vcxproj">
+      <Project>{e5663af9-8fa5-330c-a31e-5a4de0b2881c}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Polyfills\XMLHttpRequest\XMLHttpRequest.vcxproj">
-      <Project>{67d46ecf-6d6a-3717-ba4d-ad57cede8395}</Project>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Polyfills\XMLHttpRequest\XMLHttpRequest.vcxproj">
+      <Project>{eb63da09-4fbd-3a65-ab6d-0a73e1d977b7}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)' == 'x64'">
@@ -379,6 +379,214 @@
     </ProjectReference>
     <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x64\Polyfills\XMLHttpRequest\XMLHttpRequest.vcxproj">
       <Project>{eb63da09-4fbd-3a65-ab6d-0a73e1d977b7}</Project>
+    </ProjectReference>
+  </ItemGroup>
+    <ItemGroup Condition="'$(Platform)' == 'ARM'">
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Core\Graphics\Graphics.vcxproj">
+      <Project>{6d62bec9-7230-3cd4-9151-b7809fed1833}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Core\JsRuntime\JsRuntime.vcxproj">
+      <Project>{00ae530e-3c8d-3ce6-bebe-ea5b0f982ca8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\arcana.cpp\arcana.vcxproj">
+      <Project>{d70ef64a-7ba4-377c-b1d5-97c65b5809dc}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\bgfx.cmake\astc-codec.vcxproj">
+      <Project>{9dbd7699-2679-3371-bbad-069ecbdad60a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\bgfx.cmake\astc.vcxproj">
+      <Project>{ed9ccac2-7e89-33b3-8166-880ce4a61275}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\bgfx.cmake\bgfx.vcxproj">
+      <Project>{eb88c809-ed52-3b2f-831b-9a13e1789b9f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\bgfx.cmake\bimg.vcxproj">
+      <Project>{71a1bb5d-3e1b-3cf2-9043-9183bfbee904}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\bgfx.cmake\bx.vcxproj">
+      <Project>{9c781609-1caf-3a48-92d3-e7a54a28cc64}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\bgfx.cmake\edtaa3.vcxproj">
+      <Project>{091e1f59-5012-39af-9e44-bc4b14977f5f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\bgfx.cmake\etc1.vcxproj">
+      <Project>{d04fcf79-f754-3ea1-901c-ad0177ca9ca8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\bgfx.cmake\etc2.vcxproj">
+      <Project>{ce0b1287-f435-3fbe-8087-4b7a52175f90}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\bgfx.cmake\iqa.vcxproj">
+      <Project>{62d2530d-cfdf-353a-b311-16b5c5530514}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\bgfx.cmake\nvtt.vcxproj">
+      <Project>{cede82ee-f4ce-35ce-9150-b4e7f5afa775}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\bgfx.cmake\pvrtc.vcxproj">
+      <Project>{ec3cc249-d971-3d4d-88c1-3452bf3a6132}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\bgfx.cmake\squish.vcxproj">
+      <Project>{6e2edf8e-cead-37ea-838f-d768464ae2a0}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\glslang\glslang\GenericCodeGen.vcxproj">
+      <Project>{9570b802-8187-31b7-9d78-f7ec51bd48c9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\glslang\glslang\glslang.vcxproj">
+      <Project>{e6e44be6-0695-3a4e-ace5-6f295335d0e2}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\glslang\glslang\MachineIndependent.vcxproj">
+      <Project>{ff5bca91-5184-3945-a359-6ad4b82ff715}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\glslang\glslang\OSDependent\Windows\OSDependent.vcxproj">
+      <Project>{ec9e20cf-67cb-3e64-94c8-fce150593fb1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\glslang\OGLCompilersDLL\OGLCompiler.vcxproj">
+      <Project>{3776b2d8-5fcc-3215-b226-51de55a3a273}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\glslang\SPIRV\SPIRV.vcxproj">
+      <Project>{e9965b38-3a61-3a8a-bdba-96991b87c5f1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\napi\napi-jsi\napi.vcxproj">
+      <Project>{35978c2c-2797-3df0-b3cf-6d6146b6b205}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\SPIRV-Cross\spirv-cross-core.vcxproj">
+      <Project>{fafce544-12c1-37ab-95a0-936317c1cdeb}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\SPIRV-Cross\spirv-cross-glsl.vcxproj">
+      <Project>{a24a462c-3f39-37c4-9721-384353822f50}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\SPIRV-Cross\spirv-cross-hlsl.vcxproj">
+      <Project>{39a6b057-9d52-348f-8bb4-52b5a1dc57ce}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\UrlLib\UrlLib.vcxproj">
+      <Project>{10b964a2-d663-3ecd-a5c2-e3373b664bec}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\xr\Dependencies\OpenXR-SDK\src\loader\openxr_loader.vcxproj">
+      <Project>{61b1c2b5-22dd-39c1-82c9-a02b27f9e4c9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\xr\xr.vcxproj">
+      <Project>{af16edcc-3803-3ffe-8112-32c565ea1f88}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\jsi\jsi.vcxproj">
+      <Project>{0897d738-8022-3a3d-95b8-2b4ff7f8365e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Plugins\NativeEngine\NativeEngine.vcxproj">
+      <Project>{d582c0e4-9a19-3024-8039-2f8ee50bc8de}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Plugins\NativeInput\NativeInput.vcxproj">
+      <Project>{27a99ce3-bd70-3e01-af64-59507c9f8f01}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Plugins\NativeXr\NativeXr.vcxproj">
+      <Project>{5c3c2461-1df1-304b-b202-04cae73b7837}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Polyfills\Window\Window.vcxproj">
+      <Project>{7bd8f749-4bbd-3196-8c58-9460273815f1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Polyfills\XMLHttpRequest\XMLHttpRequest.vcxproj">
+      <Project>{67d46ecf-6d6a-3717-ba4d-ad57cede8395}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(Platform)' == 'ARM64'">
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Core\Graphics\Graphics.vcxproj">
+      <Project>{6d62bec9-7230-3cd4-9151-b7809fed1833}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Core\JsRuntime\JsRuntime.vcxproj">
+      <Project>{00ae530e-3c8d-3ce6-bebe-ea5b0f982ca8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\arcana.cpp\arcana.vcxproj">
+      <Project>{d70ef64a-7ba4-377c-b1d5-97c65b5809dc}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\astc-codec.vcxproj">
+      <Project>{9dbd7699-2679-3371-bbad-069ecbdad60a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\astc.vcxproj">
+      <Project>{ed9ccac2-7e89-33b3-8166-880ce4a61275}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\bgfx.vcxproj">
+      <Project>{eb88c809-ed52-3b2f-831b-9a13e1789b9f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\bimg.vcxproj">
+      <Project>{71a1bb5d-3e1b-3cf2-9043-9183bfbee904}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\bx.vcxproj">
+      <Project>{9c781609-1caf-3a48-92d3-e7a54a28cc64}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\edtaa3.vcxproj">
+      <Project>{091e1f59-5012-39af-9e44-bc4b14977f5f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\etc1.vcxproj">
+      <Project>{d04fcf79-f754-3ea1-901c-ad0177ca9ca8}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\etc2.vcxproj">
+      <Project>{ce0b1287-f435-3fbe-8087-4b7a52175f90}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\iqa.vcxproj">
+      <Project>{62d2530d-cfdf-353a-b311-16b5c5530514}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\nvtt.vcxproj">
+      <Project>{cede82ee-f4ce-35ce-9150-b4e7f5afa775}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\pvrtc.vcxproj">
+      <Project>{ec3cc249-d971-3d4d-88c1-3452bf3a6132}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\squish.vcxproj">
+      <Project>{6e2edf8e-cead-37ea-838f-d768464ae2a0}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\glslang\glslang\GenericCodeGen.vcxproj">
+      <Project>{9570b802-8187-31b7-9d78-f7ec51bd48c9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\glslang\glslang\glslang.vcxproj">
+      <Project>{e6e44be6-0695-3a4e-ace5-6f295335d0e2}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\glslang\glslang\MachineIndependent.vcxproj">
+      <Project>{ff5bca91-5184-3945-a359-6ad4b82ff715}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\glslang\glslang\OSDependent\Windows\OSDependent.vcxproj">
+      <Project>{ec9e20cf-67cb-3e64-94c8-fce150593fb1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\glslang\OGLCompilersDLL\OGLCompiler.vcxproj">
+      <Project>{3776b2d8-5fcc-3215-b226-51de55a3a273}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\glslang\SPIRV\SPIRV.vcxproj">
+      <Project>{e9965b38-3a61-3a8a-bdba-96991b87c5f1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\napi\napi-jsi\napi.vcxproj">
+      <Project>{35978c2c-2797-3df0-b3cf-6d6146b6b205}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\SPIRV-Cross\spirv-cross-core.vcxproj">
+      <Project>{fafce544-12c1-37ab-95a0-936317c1cdeb}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\SPIRV-Cross\spirv-cross-glsl.vcxproj">
+      <Project>{a24a462c-3f39-37c4-9721-384353822f50}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\SPIRV-Cross\spirv-cross-hlsl.vcxproj">
+      <Project>{39a6b057-9d52-348f-8bb4-52b5a1dc57ce}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\UrlLib\UrlLib.vcxproj">
+      <Project>{10b964a2-d663-3ecd-a5c2-e3373b664bec}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\xr\Dependencies\OpenXR-SDK\src\loader\openxr_loader.vcxproj">
+      <Project>{61b1c2b5-22dd-39c1-82c9-a02b27f9e4c9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\xr\xr.vcxproj">
+      <Project>{af16edcc-3803-3ffe-8112-32c565ea1f88}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\jsi\jsi.vcxproj">
+      <Project>{0897d738-8022-3a3d-95b8-2b4ff7f8365e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Plugins\NativeEngine\NativeEngine.vcxproj">
+      <Project>{d582c0e4-9a19-3024-8039-2f8ee50bc8de}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Plugins\NativeInput\NativeInput.vcxproj">
+      <Project>{27a99ce3-bd70-3e01-af64-59507c9f8f01}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Plugins\NativeXr\NativeXr.vcxproj">
+      <Project>{5c3c2461-1df1-304b-b202-04cae73b7837}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Polyfills\Window\Window.vcxproj">
+      <Project>{7bd8f749-4bbd-3196-8c58-9460273815f1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Polyfills\XMLHttpRequest\XMLHttpRequest.vcxproj">
+      <Project>{67d46ecf-6d6a-3717-ba4d-ad57cede8395}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
