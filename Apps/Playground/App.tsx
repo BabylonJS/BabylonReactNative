@@ -17,7 +17,10 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const defaultScale = 1;
   const enableSnapshots = false;
 
+  console.log("Calling EngineScreen useEngine");
   const engine = useEngine();
+
+  console.log("Calling EngineScreen useState instances");
   const [toggleView, setToggleView] = useState(false);
   const [camera, setCamera] = useState<Camera>();
   const [box, setBox] = useState<Mesh>();
@@ -27,7 +30,9 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const [snapshotData, setSnapshotData] = useState<string>();
   // const [engineViewCallbacks, setEngineViewCallbacks] = useState<EngineViewCallbacks>();
 
+  console.log("Declaring EngineScreen useEffect instances");
   useEffect(() => {
+    console.log("useEffect called to setup scene");
     if (engine) {
       console.log("Engine populated");
       const scene = new Scene(engine);
@@ -56,6 +61,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
     }
   }, [engine]);
 
+  console.log("Declaring EngineScreen box scale change");
   useEffect(() => {
     if (box) {
       console.log("updating box scale");
@@ -63,7 +69,9 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
     }
   }, [box, scale]);
 
+  console.log("Declaring onToggleXr")
   const onToggleXr = useCallback(() => {
+    console.log("Calling onToggleXr");
     (async () => {
       if (xrSession) {
         await xrSession.exitXRAsync();
@@ -130,8 +138,10 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
 
 console.log("Declaring app");
 const App = () => {
+  console.log("Declaring app setToggleScreen");
   const [toggleScreen, setToggleScreen] = useState(false);
 
+  console.log("Returning app");
   return (
     <>
       <StatusBar barStyle="dark-content" />

@@ -65,3 +65,7 @@ buck-out/
 # Yarn
 .yarn*
 .yarn/
+
+# UWP
+deploy.binlog
+msbuild.binlog
