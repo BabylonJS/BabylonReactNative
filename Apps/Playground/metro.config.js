@@ -46,6 +46,8 @@ function getModuleMappings() {
 }
 
 const moduleMappings = getModuleMappings();
+console.log("Mapping the following sym linked packages:");
+console.log(moduleMappings);
 
 module.exports = {
   transformer: {
@@ -68,6 +70,7 @@ module.exports = {
         get: (target, name) => name in target ? target[name] : path.join(__dirname, `node_modules/${name}`),
       },
     ),
+  },
     
     projectRoot: path.resolve(__dirname),
 
