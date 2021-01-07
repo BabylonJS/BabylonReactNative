@@ -11,10 +11,10 @@ struct ReactPackageProvider : ReactPackageProviderT<ReactPackageProvider> {
   void CreatePackage(IReactPackageBuilder const &packageBuilder) noexcept;
 };
 
-} // namespace winrt::SampleLibraryCpp::implementation
+} // namespace winrt::BabylonNative::implementation
 
 namespace winrt::BabylonNative::factory_implementation {
 
 struct ReactPackageProvider : ReactPackageProviderT<ReactPackageProvider, implementation::ReactPackageProvider> {};
 
-} // namespace winrt::SampleLibraryCpp::factory_implementation
+} // namespace winrt::BabylonNative::factory_implementation
