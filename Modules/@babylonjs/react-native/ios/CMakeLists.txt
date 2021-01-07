@@ -35,8 +35,6 @@ target_compile_definitions(BabylonNative PRIVATE _UNICODE)
 
 target_include_directories(BabylonNative PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
-# NativeXr may be correctly consuming xr dependency?
-# meaning right now these libraries don't get hooked up correctly to be compiled by BabylonNative project
 target_link_libraries(BabylonNative
     z
     arcana
