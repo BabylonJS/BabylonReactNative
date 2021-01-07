@@ -62,10 +62,6 @@ buck-out/
 # CocoaPods
 /ios/Pods/
 
-# Yarn
-.yarn*
-.yarn/
-
 # UWP
 build.binlog
 deploy.binlog

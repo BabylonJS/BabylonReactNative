@@ -70,21 +70,20 @@ module.exports = {
         get: (target, name) => name in target ? target[name] : path.join(__dirname, `node_modules/${name}`),
       },
     ),
-  },
     
-    projectRoot: path.resolve(__dirname),
-
-    // Also additionally watch all the mapped local directories for changes to support live updates.
-    watchFolders: Object.values(moduleMappings),
-
     blockList: exclusionList([
       // Avoid error EBUSY: resource busy or locked, open 'D:\a\1\s\packages\playground\msbuild.ProjectImports.zip' in pipeline
       /.*\.ProjectImports\.zip/,
-
+  
       // This stops "react-native run-windows" from causing the metro server to crash if its already running
       new RegExp(
         `${path.resolve(__dirname, 'windows').replace(/[/\\]/g, '/')}.*`,
       ),
     ]),
-  }
+  },
+
+  projectRoot: path.resolve(__dirname),
+
+  // Also additionally watch all the mapped local directories for changes to support live updates.
+  watchFolders: Object.values(moduleMappings),
 };
