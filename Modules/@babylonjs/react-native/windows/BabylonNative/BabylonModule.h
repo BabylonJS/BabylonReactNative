@@ -15,6 +15,9 @@ namespace winrt::BabylonNative::implementation {
         REACT_METHOD(WhenInitialized, L"whenInitialized");
         void WhenInitialized(const winrt::Microsoft::ReactNative::ReactPromise<bool>& result) noexcept;
 
+        REACT_METHOD(Reset, L"reset");
+        void Reset(const winrt::Microsoft::ReactNative::ReactPromise<bool>& result) noexcept;
+
         BabylonModule();
         ~BabylonModule();
     };

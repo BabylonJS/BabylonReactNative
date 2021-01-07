@@ -26,6 +26,13 @@ void BabylonModule::WhenInitialized(const winrt::Microsoft::ReactNative::ReactPr
     EngineView::CompleteOnInitialization(result);
 }
 
+REACT_METHOD(Reset, L"reset");
+void BabylonModule::Reset(const winrt::Microsoft::ReactNative::ReactPromise<bool>& result) noexcept
+{
+    // TODO: correctly populate reset
+    result.Resolve(false);
+}
+
 BabylonModule::BabylonModule()
 {
 }
