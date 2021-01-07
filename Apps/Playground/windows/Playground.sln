@@ -39,7 +39,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.ReactNative.Manag
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.ReactNative.Managed.CodeGen", "..\node_modules\react-native-windows\Microsoft.ReactNative.Managed.CodeGen\Microsoft.ReactNative.Managed.CodeGen.csproj", "{ADED4FBE-887D-4271-AF24-F0823BCE7961}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BabylonNative", "..\node_modules\@babylonjs\react-native\windows\BabylonNative\BabylonNative.vcxproj", "{6B0FE51D-9D02-4E06-A631-85EF0830A311}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BabylonNative", "..\..\..\Modules\@babylonjs\react-native\windows\BabylonNative\BabylonNative.vcxproj", "{6B0FE51D-9D02-4E06-A631-85EF0830A311}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
