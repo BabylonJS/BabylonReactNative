@@ -6,12 +6,11 @@
  */
 
 import React, { useState, FunctionComponent, useEffect, useCallback } from 'react';
-import { SafeAreaView, StatusBar, Button, View, Text, ViewProps, Image } from 'react-native';
+import { SafeAreaView, StatusBar, Button, View, Text, ViewProps, Image, Slider } from 'react-native';
 
 import { EngineView, useEngine, EngineViewCallbacks } from '@babylonjs/react-native';
 import { Scene, Vector3, ArcRotateCamera, Camera, WebXRSessionManager, SceneLoader, TransformNode, DeviceSourceManager, DeviceType, DeviceSource, PointerInput, WebXRTrackingState } from '@babylonjs/core';
 import '@babylonjs/loaders';
-import Slider from '@react-native-community/slider';
 
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const defaultScale = 1;
@@ -71,6 +70,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
 
   useEffect(() => {
     if (rootNode) {
+      console.log("Updating scale:" + scale);
       rootNode.scaling = new Vector3(scale, scale, scale);
     }
   }, [rootNode, scale]);
@@ -130,7 +130,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
               </View>
             }
             <EngineView style={props.style} camera={camera} onInitialized={onInitialized} />
-            {/* <Slider style={{position: 'absolute', minHeight: 50, margin: 10, left: 0, right: 0, bottom: 0}} minimumValue={0.2} maximumValue={2} value={defaultScale} onValueChange={setScale} /> */}
+            <Slider style={{position: 'absolute', minHeight: 50, margin: 10, left: 0, right: 0, bottom: 0}} minimumValue={0.2} maximumValue={2} value={defaultScale} onValueChange={setScale} />
             <Text style={{fontSize: 12, color: 'yellow',  position: 'absolute', margin: 10}}>{trackingStateToString(trackingState)}</Text>
           </View>
         }

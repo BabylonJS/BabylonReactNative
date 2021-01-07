@@ -176,7 +176,7 @@
       <DeploymentContent>false</DeploymentContent>
     </Text>
   </ItemGroup>
-    <ItemGroup Condition="'$(Platform)' == 'x86'">
+  <ItemGroup Condition="'$(Platform)' == 'x86'">
     <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Core\Graphics\Graphics.vcxproj">
       <Project>{05668d75-fe92-3235-984b-da86d2fc7c56}</Project>
     </ProjectReference>
@@ -384,7 +384,7 @@
       <Project>{eb63da09-4fbd-3a65-ab6d-0a73e1d977b7}</Project>
     </ProjectReference>
   </ItemGroup>
-    <ItemGroup Condition="'$(Platform)' == 'ARM'">
+  <ItemGroup Condition="'$(Platform)' == 'ARM'">
     <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Core\Graphics\Graphics.vcxproj">
       <Project>{6d62bec9-7230-3cd4-9151-b7809fed1833}</Project>
     </ProjectReference>

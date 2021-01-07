@@ -2,6 +2,7 @@
 #include "NativeModules.h"
 #include "winrt/Microsoft.ReactNative.h"
 #include "JSI/jsi.h"
+#include <unordered_set>
 
 namespace winrt::BabylonNative::implementation {
 
@@ -36,37 +37,28 @@ namespace winrt::BabylonNative::implementation {
         winrt::Microsoft::ReactNative::ConstantProviderDelegate ExportedCustomBubblingEventTypeConstants() noexcept;
         winrt::Microsoft::ReactNative::ConstantProviderDelegate ExportedCustomDirectEventTypeConstants() noexcept;
 
-        static void CompleteOnInitialization(const winrt::Microsoft::ReactNative::ReactPromise<bool>& result)
-        {
-            // TODO we should have these promsises queued per react context
-            if (s_initialized)
-            {
-                result.Resolve(s_initializationSucceeded);
-                return;
-            }
-
-            {
-                std::lock_guard<std::mutex> lock(s_initializedPromiseLock);
-                if (s_initialized)
-                {
-                    result.Resolve(s_initializationSucceeded);
-                    return;
-                }
-
-                s_initializedPromises.push_back(result);
-            }
-        }
+        static void CompleteOnInitialization(const winrt::Microsoft::ReactNative::ReactPromise<bool>& result);
+        static void Reset(const winrt::Microsoft::ReactNative::ReactPromise<bool>& result);
 
     private:
         Babylon::JsRuntime::DispatchFunctionT CreateJsRuntimeDispatcher();
         void SetupBabylonNative(facebook::jsi::Runtime& jsiRuntime);
+        void CleanupBabylonNative(facebook::jsi::Runtime& jsiRuntime);
         void OnSizeChanged(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::SizeChangedEventArgs const& args);
         void OnPointerPressed(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::Input::PointerRoutedEventArgs const& args);
+        void OnPointerMoved(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::Input::PointerRoutedEventArgs const& args);
+        void OnPointerReleased(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::Input::PointerRoutedEventArgs const& args);
         void OnRendering();
 
         winrt::Microsoft::ReactNative::IReactContext _reactContext{ nullptr };
         winrt::Microsoft::ReactNative::IReactDispatcher _jsDispatcher;
         winrt::Microsoft::ReactNative::IReactDispatcher _uiDispatcher;
+
+        winrt::Windows::UI::Xaml::Controls::SwapChainPanel _swapChainPanel{ nullptr };
+        void* _swapChainPanelPtr{ nullptr };
+        size_t _swapChainPanelWidth{ 1 };
+        size_t _swapChainPanelHeight{ 1 };
+        std::unordered_set<uint32_t> _pressedPointers{};
 
         Napi::Env _env{ nullptr };
         std::atomic<bool> _isShuttingDown{ false };
@@ -74,12 +66,8 @@ namespace winrt::BabylonNative::implementation {
         std::unique_ptr<Babylon::Graphics> _graphics{ nullptr };
         std::atomic<bool> _rendering{ false };
         Babylon::Plugins::NativeInput* _nativeInput{ nullptr };
-        void* _swapChainPanel{ nullptr };
-        size_t _swapChainPanelWidth{ 1 };
-        size_t _swapChainPanelHeight{ 1 };
 
         static std::atomic<bool> s_initialized;
-        static std::atomic<bool> s_initializationSucceeded;
         static std::mutex s_initializedPromiseLock;
         static std::vector<winrt::Microsoft::ReactNative::ReactPromise<bool>> s_initializedPromises;
     };

@@ -17,11 +17,10 @@ using namespace winrt::Windows::UI::Xaml::Input;
 
 namespace winrt::BabylonNative::implementation {
     std::atomic<bool> EngineView::s_initialized{ false };
-    std::atomic<bool> EngineView::s_initializationSucceeded{ true };
     std::mutex EngineView::s_initializedPromiseLock{};
     std::vector<ReactPromise<bool>> EngineView::s_initializedPromises{};
 
-     EngineView::EngineView() {}
+    EngineView::EngineView() {}
 
     // IViewManager
     hstring EngineView::Name() noexcept {
@@ -29,12 +28,14 @@ namespace winrt::BabylonNative::implementation {
     }
 
     FrameworkElement EngineView::CreateView() noexcept {
-        assert(!s_initialized);
+        // TODO: this will get called repeatedly when toggling the engine view
 
-        const auto& view = SwapChainPanel();
-        copy_to_abi(view, _swapChainPanel);
-        view.SizeChanged({ this, &EngineView::OnSizeChanged });
-        view.PointerPressed({ this, &EngineView::OnPointerPressed });
+        _swapChainPanel = SwapChainPanel();
+        copy_to_abi(_swapChainPanel, _swapChainPanelPtr);
+        _swapChainPanel.SizeChanged({ this, &EngineView::OnSizeChanged });
+        _swapChainPanel.PointerPressed({ this, &EngineView::OnPointerPressed });
+        _swapChainPanel.PointerMoved({ this, &EngineView::OnPointerMoved });
+        _swapChainPanel.PointerReleased({ this, &EngineView::OnPointerReleased });
 
         CompositionTarget::Rendering([weakThis{ this->get_weak() }](auto const&, auto const&)
         {
@@ -44,20 +45,19 @@ namespace winrt::BabylonNative::implementation {
             }
         });
 
-        if (!s_initialized)
-        {
-            // TODO add more robust state logic
-            // TODO use shared_ptr/weak_ptr to this module compared to handing around references
-            // modules are kept around by react native, this module can be killed
-            winrt::Microsoft::ReactNative::ExecuteJsi(_reactContext, [weakThis{ this->get_weak() }](facebook::jsi::Runtime& jsiRuntime) {
-                if (auto trueThis = weakThis.get())
+        winrt::Microsoft::ReactNative::ExecuteJsi(_reactContext, [weakThis{ this->get_weak() }](facebook::jsi::Runtime& jsiRuntime) {
+            if (auto trueThis = weakThis.get())
+            {
+                if (trueThis->s_initialized)
                 {
-                    trueThis->SetupBabylonNative(jsiRuntime);
+                    trueThis->CleanupBabylonNative(jsiRuntime);
                 }
-            });
-        }
 
-        return view;
+                trueThis->SetupBabylonNative(jsiRuntime);
+            }
+        });
+
+        return _swapChainPanel;
     }
 
     // IViewManagerWithReactContext
@@ -158,11 +158,11 @@ namespace winrt::BabylonNative::implementation {
 
             _jsRuntime = &Babylon::JsRuntime::CreateForJavaScript(_env, CreateJsRuntimeDispatcher());
 
-            // Use  windowTypePtr == 2 for xaml swap chain panels
+            // Use windowTypePtr == 2 for xaml swap chain panels
             void* windowTypePtr = reinterpret_cast<void*>(2);
-            _graphics = Babylon::Graphics::CreateGraphics(_swapChainPanel, windowTypePtr, _swapChainPanelWidth, _swapChainPanelHeight);
+            _graphics = Babylon::Graphics::CreateGraphics(_swapChainPanelPtr, windowTypePtr, _swapChainPanelWidth, _swapChainPanelHeight);
             _graphics->AddToJavaScript(_env);
-            _graphics->UpdateWindow(_swapChainPanel, windowTypePtr);
+            _graphics->UpdateWindow(_swapChainPanelPtr, windowTypePtr);
             _rendering = true;
 
             // Populate polyfills
@@ -173,27 +173,28 @@ namespace winrt::BabylonNative::implementation {
             // Populate plugins
             Babylon::Plugins::NativeEngine::Initialize(_env, false);
             Babylon::Plugins::NativeXr::Initialize(_env);
-
-            // TODO send _nativeInput input events
             _nativeInput = &Babylon::Plugins::NativeInput::CreateForJavaScript(_env);
 
             s_initialized = true;
-            s_initializationSucceeded = true;
             {
                 std::lock_guard<std::mutex> lock(s_initializedPromiseLock);
                 for (const auto& promise : s_initializedPromises)
                 {
-                    promise.Resolve(s_initializationSucceeded);
+                    promise.Resolve(true);
                 }
                 s_initializedPromises.clear();
             }
         }
     }
 
+    void EngineView::CleanupBabylonNative(facebook::jsi::Runtime& /*jsiRuntime*/)
+    {
+        // TODO: clean up everything
+        s_initialized = false;
+    }
+
     void EngineView::OnSizeChanged(IInspectable const& /*sender*/, SizeChangedEventArgs const& args)
     {
-        // TODO this may have a potential race condition
-        // TODO this size probably doesn't map 1:1 with pixels vs whatever unit xaml uses
         const auto size = args.NewSize();
         _swapChainPanelWidth = static_cast<size_t>(size.Width);
         _swapChainPanelHeight = static_cast<size_t>(size.Height);
@@ -203,9 +204,45 @@ namespace winrt::BabylonNative::implementation {
         }
     }
 
-    void EngineView::OnPointerPressed(IInspectable const& /*sender*/, PointerRoutedEventArgs const& /*args*/)
+    void EngineView::OnPointerPressed(IInspectable const& /*sender*/, PointerRoutedEventArgs const& args)
     {
-        OutputDebugStringW(L"Pointer pressed!\n");
+        if (_nativeInput &&
+            _swapChainPanel)
+        {
+            const auto pointerPoint = args.GetCurrentPoint(_swapChainPanel);
+            const auto x = pointerPoint.Position().X < 0 ? 0 : static_cast<uint32_t>(pointerPoint.Position().X);
+            const auto y = pointerPoint.Position().Y < 0 ? 0 : static_cast<uint32_t>(pointerPoint.Position().Y);
+            _nativeInput->PointerDown(pointerPoint.PointerId(), 0 /*TODO: Implement buttonId as needed*/, x, y);
+            _pressedPointers.insert(pointerPoint.PointerId());
+        }
+    }
+
+    void EngineView::OnPointerMoved(IInspectable const& /*sender*/, PointerRoutedEventArgs const& args)
+    {
+        if (_nativeInput &&
+            _swapChainPanel)
+        {
+            const auto pointerPoint = args.GetCurrentPoint(_swapChainPanel);
+            if (_pressedPointers.count(pointerPoint.PointerId()) > 0)
+            {
+                const auto x = pointerPoint.Position().X < 0 ? 0 : static_cast<uint32_t>(pointerPoint.Position().X);
+                const auto y = pointerPoint.Position().Y < 0 ? 0 : static_cast<uint32_t>(pointerPoint.Position().Y);
+                _nativeInput->PointerMove(pointerPoint.PointerId(), x, y);
+            }
+        }
+    }
+
+    void EngineView::OnPointerReleased(IInspectable const& /*sender*/, PointerRoutedEventArgs const& args)
+    {
+        if (_nativeInput &&
+            _swapChainPanel)
+        {
+            const auto pointerPoint = args.GetCurrentPoint(_swapChainPanel);
+            const auto x = pointerPoint.Position().X < 0 ? 0 : static_cast<uint32_t>(pointerPoint.Position().X);
+            const auto y = pointerPoint.Position().Y < 0 ? 0 : static_cast<uint32_t>(pointerPoint.Position().Y);
+            _nativeInput->PointerUp(pointerPoint.PointerId(), 0 /*TODO: Implement buttonId as needed*/, x, y);
+            _pressedPointers.erase(pointerPoint.PointerId());
+        }
     }
 
     void EngineView::OnRendering()
@@ -215,5 +252,29 @@ namespace winrt::BabylonNative::implementation {
         {
             _graphics->RenderCurrentFrame();
         }
+    }
+
+    void EngineView::CompleteOnInitialization(const ReactPromise<bool>& result)
+    {
+        if (s_initialized)
+        {
+            result.Resolve(true);
+            return;
+        }
+
+        std::lock_guard<std::mutex> lock(s_initializedPromiseLock);
+        if (s_initialized)
+        {
+            result.Resolve(true);
+            return;
+        }
+
+        s_initializedPromises.push_back(result);
+    }
+
+    void EngineView::Reset(const ReactPromise<bool>& result)
+    {
+        // TODO
+        result.Resolve(false);
     }
 } // namespace winrt::BabylonNative::implementation

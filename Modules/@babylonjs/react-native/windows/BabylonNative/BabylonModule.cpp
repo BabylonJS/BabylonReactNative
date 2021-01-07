@@ -10,7 +10,7 @@
 using namespace winrt::BabylonNative::implementation;
 
 REACT_INIT(Initialize);
-void BabylonModule::Initialize(winrt::Microsoft::ReactNative::ReactContext const& /*reactContext*/) noexcept
+void BabylonModule::Initialize(const winrt::Microsoft::ReactNative::ReactContext& /*reactContext*/) noexcept
 {
 }
 
@@ -29,8 +29,7 @@ void BabylonModule::WhenInitialized(const winrt::Microsoft::ReactNative::ReactPr
 REACT_METHOD(Reset, L"reset");
 void BabylonModule::Reset(const winrt::Microsoft::ReactNative::ReactPromise<bool>& result) noexcept
 {
-    // TODO: correctly populate reset
-    result.Resolve(false);
+    EngineView::Reset(result);
 }
 
 BabylonModule::BabylonModule()

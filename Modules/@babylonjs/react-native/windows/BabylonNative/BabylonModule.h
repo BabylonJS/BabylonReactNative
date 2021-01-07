@@ -7,7 +7,7 @@ namespace winrt::BabylonNative::implementation {
     struct BabylonModule
     {
         REACT_INIT(Initialize);
-        void Initialize(winrt::Microsoft::ReactNative::ReactContext const& reactContext) noexcept;
+        void Initialize(const winrt::Microsoft::ReactNative::ReactContext& reactContext) noexcept;
 
         REACT_METHOD(CustomInitialize, L"initialize");
         void CustomInitialize(const winrt::Microsoft::ReactNative::ReactPromise<bool>& result) noexcept;
@@ -20,5 +20,8 @@ namespace winrt::BabylonNative::implementation {
 
         BabylonModule();
         ~BabylonModule();
+
+    private:
+        winrt::Microsoft::ReactNative::IReactContext _reactContext;
     };
 } // namespace winrt::BabylonNative::implementation
