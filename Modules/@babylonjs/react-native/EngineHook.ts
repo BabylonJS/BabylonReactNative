@@ -27,35 +27,40 @@ class DOMException {
 {
     const originalInitializeSessionAsync: (...args: any[]) => Promise<any> = WebXRSessionManager.prototype.initializeSessionAsync;
     WebXRSessionManager.prototype.initializeSessionAsync = async function (...args: any[]): Promise<any> {
-        // const cameraPermission = Platform.select({
-        //     android: PERMISSIONS.ANDROID.CAMERA,
-        //     ios: PERMISSIONS.IOS.CAMERA,
-        // });
+        if (Platform.OS === "windows")
+        {
+            // Launching into immersive mode on Windows HMDs doesn't require a runtime permission check.
+            // Spatial Perception and Webcam capabilities should be declared in the project's Package.appxmanifest.
+            return originalInitializeSessionAsync.apply(this, args);
+        }
 
-        // // Only Android and iOS are supported.
-        // if (cameraPermission === undefined) {
-        //     throw new DOMException(DOMError.NotSupportedError);
-        // }
+        const cameraPermission = Platform.select({
+            android: PERMISSIONS.ANDROID.CAMERA,
+            ios: PERMISSIONS.IOS.CAMERA
+        });
 
-        // // If the permission has not been granted yet, but also not been blocked, then request permission.
-        // let permissionStatus = await check(cameraPermission);
-        // if (permissionStatus == "denied")
-        // {
-        //     permissionStatus = await request(cameraPermission);
-        // }
+        // Only Android, iOS and Windows are supported.
+        if (cameraPermission === undefined) {
+            throw new DOMException(DOMError.NotSupportedError);
+        }
 
-        // // If the permission has still not been granted, then throw an appropriate exception, otherwise continue with the actual XR session initialization.
-        // switch(permissionStatus) {
-        //     case "unavailable":
-        //         throw new DOMException(DOMError.NotSupportedError);
-        //     case "denied":
-        //     case "blocked":
-        //         throw new DOMException(DOMError.SecurityError);
-        //     case "granted":
-        //         return originalInitializeSessionAsync.apply(this, args);
-        // }
+        // If the permission has not been granted yet, but also not been blocked, then request permission.
+        let permissionStatus = await check(cameraPermission);
+        if (permissionStatus == "denied")
+        {
+            permissionStatus = await request(cameraPermission);
+        }
 
-        return originalInitializeSessionAsync.apply(this, args);
+        // If the permission has still not been granted, then throw an appropriate exception, otherwise continue with the actual XR session initialization.
+        switch(permissionStatus) {
+            case "unavailable":
+                throw new DOMException(DOMError.NotSupportedError);
+            case "denied":
+            case "blocked":
+                throw new DOMException(DOMError.SecurityError);
+            case "granted":
+                return originalInitializeSessionAsync.apply(this, args);
+        }
     }
 }
 

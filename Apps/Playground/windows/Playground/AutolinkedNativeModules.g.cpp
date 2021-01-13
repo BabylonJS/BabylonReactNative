@@ -6,6 +6,9 @@
 // Includes from @babylonjs/react-native
 #include <winrt/BabylonNative.h>
 
+// Includes from react-native-permissions
+#include <winrt/RNPermissions.h>
+
 namespace winrt::Microsoft::ReactNative
 {
 
@@ -13,6 +16,8 @@ void RegisterAutolinkedNativeModulePackages(winrt::Windows::Foundation::Collecti
 { 
     // IReactPackageProviders from @babylonjs/react-native
     packageProviders.Append(winrt::BabylonNative::ReactPackageProvider());
+    // IReactPackageProviders from react-native-permissions
+    packageProviders.Append(winrt::RNPermissions::ReactPackageProvider());
 }
 
 }

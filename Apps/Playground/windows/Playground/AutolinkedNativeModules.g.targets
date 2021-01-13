@@ -6,5 +6,9 @@
     <ProjectReference Include="$(ProjectDir)..\..\..\..\Modules\@babylonjs\react-native\windows\BabylonNative\BabylonNative.vcxproj">
       <Project>{6b0fe51d-9d02-4e06-a631-85ef0830a311}</Project>
     </ProjectReference>
+    <!-- Projects from react-native-permissions -->
+    <ProjectReference Include="$(ProjectDir)..\..\node_modules\react-native-permissions\windows\RNPermissions\RNPermissions.vcxproj">
+      <Project>{99677b9d-a27b-4239-930e-c36c8d339c54}</Project>
+    </ProjectReference>
   </ItemGroup>
 </Project>

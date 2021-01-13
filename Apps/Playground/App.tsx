@@ -6,10 +6,10 @@
  */
 
 import React, { useState, FunctionComponent, useEffect, useCallback } from 'react';
-import { SafeAreaView, StatusBar, Button, View, Text, ViewProps, Image } from 'react-native';
+import { SafeAreaView, StatusBar, Button, View, Text, ViewProps, Image, Platform } from 'react-native';
 
 import { EngineView, useEngine, EngineViewCallbacks } from '@babylonjs/react-native';
-import { Scene, Vector3, ArcRotateCamera, Camera, WebXRSessionManager, SceneLoader, TransformNode, DeviceSourceManager, DeviceType, DeviceSource, PointerInput, WebXRTrackingState } from '@babylonjs/core';
+import { Scene, Vector3, ArcRotateCamera, Camera, WebXRSessionManager, SceneLoader, TransformNode, DeviceSourceManager, DeviceType, DeviceSource, PointerInput, WebXRTrackingState, Color4 } from '@babylonjs/core';
 import '@babylonjs/loaders';
 import Slider from '@react-native-community/slider';
 
@@ -91,6 +91,12 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
           const session = await xr.baseExperience.enterXRAsync("immersive-ar", "unbounded", xr.renderTarget);
           setXrSession(session);
 
+          if (Platform.OS == "windows") {
+            // HMDs require different rendering behaviors than default xr rendering for mobile devices
+            scene.clearColor = new Color4(0, 0, 0, 1); // Black
+            scene.autoClear = true;
+          }
+
           setTrackingState(xr.baseExperience.camera.trackingState);
           xr.baseExperience.camera.onTrackingStateChanged.add((newTrackingState) => {
             setTrackingState(newTrackingState);
@@ -130,7 +136,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
               </View>
             }
             <EngineView style={props.style} camera={camera} onInitialized={onInitialized} />
-            {/* <Slider style={{position: 'absolute', minHeight: 50, margin: 10, left: 0, right: 0, bottom: 0}} minimumValue={0.2} maximumValue={2} value={defaultScale} onValueChange={setScale} /> */}
+            <Slider style={{position: 'absolute', minHeight: 50, margin: 10, left: 0, right: 0, bottom: 0}} minimumValue={0.2} maximumValue={2} value={defaultScale} onValueChange={setScale} />
             <Text style={{fontSize: 12, color: 'yellow',  position: 'absolute', margin: 10}}>{trackingStateToString(trackingState)}</Text>
           </View>
         }

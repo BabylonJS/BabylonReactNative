@@ -5,7 +5,7 @@
 #include "AutolinkedNativeModules.g.h"
 #include "ReactPackageProvider.h"
 
-#include "winrt/BabylonNative.h"
+#include "winrt/SliderWindows.h"
 
 #define _SCRIPT_DEBUGGING 1
 
@@ -52,7 +52,9 @@ App::App() noexcept
     RegisterAutolinkedNativeModulePackages(PackageProviders()); // Includes any autolinked modules
 
     PackageProviders().Append(make<ReactPackageProvider>()); // Includes all modules in this project
-    PackageProviders().Append(winrt::BabylonNative::ReactPackageProvider());
+
+    // TODO: we should use autolinking once possible
+    PackageProviders().Append(winrt::SliderWindows::ReactPackageProvider());
 
     InitializeComponent();
 }
