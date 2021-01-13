@@ -7,7 +7,7 @@
 #include <winrt/Windows.Foundation.Numerics.h>
 #include <winrt/Windows.UI.Xaml.Controls.h>
 
-using namespace winrt::ReactNativeBabylon::implementation;
+using namespace winrt::BabylonReactNative::implementation;
 
 REACT_INIT(Initialize);
 void BabylonModule::Initialize(const winrt::Microsoft::ReactNative::ReactContext& /*reactContext*/) noexcept

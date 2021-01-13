@@ -2,7 +2,7 @@
 
 #include "NativeModules.h"
 
-namespace winrt::ReactNativeBabylon::implementation {
+namespace winrt::BabylonReactNative::implementation {
     REACT_MODULE(BabylonModule, L"BabylonModule");
     struct BabylonModule
     {
@@ -24,4 +24,4 @@ namespace winrt::ReactNativeBabylon::implementation {
     private:
         winrt::Microsoft::ReactNative::IReactContext _reactContext;
     };
-} // namespace winrt::ReactNativeBabylon::implementation
+} // namespace winrt::BabylonReactNative::implementation

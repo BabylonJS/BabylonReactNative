@@ -2,7 +2,7 @@
 #include "winrt/Microsoft.ReactNative.h"
 #include "NativeModules.h"
 
-namespace winrt::ReactNativeBabylon::implementation {
+namespace winrt::BabylonReactNative::implementation {
     REACT_MODULE(EngineViewManager, L"EngineViewManager");
     struct EngineViewManager
     {
@@ -21,4 +21,4 @@ namespace winrt::ReactNativeBabylon::implementation {
         ~EngineViewManager() {}
     };
 
-} // namespace winrt::ReactNativeBabylon::implementation
+} // namespace winrt::BabylonReactNative::implementation

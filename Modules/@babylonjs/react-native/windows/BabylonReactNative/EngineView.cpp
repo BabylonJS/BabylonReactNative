@@ -15,7 +15,7 @@ using namespace winrt::Windows::UI::Xaml::Media;
 using namespace winrt::Windows::UI::Xaml::Controls;
 using namespace winrt::Windows::UI::Xaml::Input;
 
-namespace winrt::ReactNativeBabylon::implementation {
+namespace winrt::BabylonReactNative::implementation {
     std::atomic<bool> EngineView::s_initialized{ false };
     std::mutex EngineView::s_initializedPromiseLock{};
     std::vector<ReactPromise<bool>> EngineView::s_initializedPromises{};
@@ -277,4 +277,4 @@ namespace winrt::ReactNativeBabylon::implementation {
         // TODO
         result.Resolve(false);
     }
-} // namespace winrt::ReactNativeBabylon::implementation
+} // namespace winrt::BabylonReactNative::implementation

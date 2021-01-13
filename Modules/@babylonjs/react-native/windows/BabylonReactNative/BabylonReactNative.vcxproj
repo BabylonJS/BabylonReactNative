@@ -7,9 +7,9 @@
     <CppWinRTRootNamespaceAutoMerge>true</CppWinRTRootNamespaceAutoMerge>
     <CppWinRTGenerateWindowsMetadata>true</CppWinRTGenerateWindowsMetadata>
     <MinimalCoreWin>true</MinimalCoreWin>
-    <ProjectGuid>{263F5F72-C79D-4891-AD2B-3C02133DCD9E}</ProjectGuid>
-    <ProjectName>ReactNativeBabylon</ProjectName>
-    <RootNamespace>ReactNativeBabylon</RootNamespace>
+    <ProjectGuid>{240FBB7A-EC3B-43E4-B4D8-16C7C092D192}</ProjectGuid>
+    <ProjectName>BabylonReactNative</ProjectName>
+    <RootNamespace>BabylonReactNative</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <AppContainerApplication>true</AppContainerApplication>
@@ -109,7 +109,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateWindowsMetadata>true</GenerateWindowsMetadata>
-      <ModuleDefinitionFile>ReactNativeBabylon.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>BabylonReactNative.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
@@ -167,9 +167,7 @@
     <Midl Include="ReactPackageProvider.idl" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReactNativeBabylon.def" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="BabylonReactNative.def" />
     <None Include="packages.config" />
     <None Include="PropertySheet.props" />
     <Text Include="readme.txt">

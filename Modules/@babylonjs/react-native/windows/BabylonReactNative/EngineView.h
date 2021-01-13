@@ -4,7 +4,7 @@
 #include "JSI/jsi.h"
 #include <unordered_set>
 
-namespace winrt::ReactNativeBabylon::implementation {
+namespace winrt::BabylonReactNative::implementation {
 
     struct EngineView
         : winrt::implements<
@@ -72,5 +72,5 @@ namespace winrt::ReactNativeBabylon::implementation {
         static std::vector<winrt::Microsoft::ReactNative::ReactPromise<bool>> s_initializedPromises;
     };
 
-} // namespace winrt::ReactNativeBabylon::implementation
+} // namespace winrt::BabylonReactNative::implementation
 

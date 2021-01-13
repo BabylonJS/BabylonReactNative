@@ -28,7 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="ReactNativeBabylon.def" />
+    <None Include="BabylonReactNative.def" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PropertySheet.props" />
