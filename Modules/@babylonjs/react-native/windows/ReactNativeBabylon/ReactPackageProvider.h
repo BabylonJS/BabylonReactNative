@@ -3,7 +3,7 @@
 
 using namespace winrt::Microsoft::ReactNative;
 
-namespace winrt::BabylonNative::implementation {
+namespace winrt::ReactNativeBabylon::implementation {
 
 struct ReactPackageProvider : ReactPackageProviderT<ReactPackageProvider> {
   ReactPackageProvider() = default;
@@ -11,10 +11,10 @@ struct ReactPackageProvider : ReactPackageProviderT<ReactPackageProvider> {
   void CreatePackage(IReactPackageBuilder const &packageBuilder) noexcept;
 };
 
-} // namespace winrt::BabylonNative::implementation
+} // namespace winrt::ReactNativeBabylon::implementation
 
-namespace winrt::BabylonNative::factory_implementation {
+namespace winrt::ReactNativeBabylon::factory_implementation {
 
 struct ReactPackageProvider : ReactPackageProviderT<ReactPackageProvider, implementation::ReactPackageProvider> {};
 
-} // namespace winrt::BabylonNative::factory_implementation
+} // namespace winrt::ReactNativeBabylon::factory_implementation

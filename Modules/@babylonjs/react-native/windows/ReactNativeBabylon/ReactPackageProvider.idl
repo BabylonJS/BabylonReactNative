@@ -1,4 +1,4 @@
-namespace BabylonNative
+namespace ReactNativeBabylon
 {
     [webhosthidden]
     [default_interface]
@@ -6,4 +6,4 @@ namespace BabylonNative
         : Microsoft.ReactNative.IReactPackageProvider {
       ReactPackageProvider();
     };
-} // namespace BabylonNative
+} // namespace ReactNativeBabylon

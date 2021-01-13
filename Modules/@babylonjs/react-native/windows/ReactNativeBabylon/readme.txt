@@ -1,5 +1,5 @@
 ========================================================================
-    C++/WinRT BabylonNative Project Overview
+    C++/WinRT ReactNativeBabylon Project Overview
 ========================================================================
 
 This project demonstrates how to get started authoring Windows Runtime 

@@ -27,8 +27,8 @@
     <Midl Include="ReactPackageProvider.idl" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="BabylonNative.def" />
     <None Include="packages.config" />
+    <None Include="ReactNativeBabylon.def" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PropertySheet.props" />

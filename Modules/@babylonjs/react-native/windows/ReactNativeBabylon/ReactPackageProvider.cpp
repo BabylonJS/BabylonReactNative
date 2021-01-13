@@ -11,7 +11,7 @@
 
 using namespace winrt::Microsoft::ReactNative;
 
-namespace winrt::BabylonNative::implementation {
+namespace winrt::ReactNativeBabylon::implementation {
 
 void ReactPackageProvider::CreatePackage(IReactPackageBuilder const &packageBuilder) noexcept
 {
@@ -23,4 +23,4 @@ void ReactPackageProvider::CreatePackage(IReactPackageBuilder const &packageBuil
   packageBuilder.AddViewManager(L"EngineView", []() { return winrt::make<EngineView>(); });
 }
 
-} // namespace winrt::BabylonNative::implementation
+} // namespace winrt::ReactNativeBabylon::implementation
