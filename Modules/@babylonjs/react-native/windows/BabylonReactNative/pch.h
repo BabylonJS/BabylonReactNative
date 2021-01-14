@@ -28,22 +28,4 @@
 #define NODE_ADDON_API_DISABLE_DEPRECATED
 #endif
 
-// Note: all referenced libs need to be updated to NOT consume windows runtime, this requires code changes in bx.lib
-// Note: libs were updated to use std c++ lib 17, not sure if this is actually needed
-
-// Add "../../../../Modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/napi/napi-direct/include" to additional include directories
-#include "napi/env.h"
-
-// Add "../../../../Modules/@babylonjs/react-native/submodules/BabylonNative/Core/JsRuntime/Include" to additional include directories
-#include "Babylon/JsRuntime.h"
-
-// Add "../../../../Modules/@babylonjs/react-native/submodules/BabylonNative/Core/Graphics/Include" to additional include directories
-#include "Babylon/Graphics.h"
-
-#include "../../submodules/BabylonNative/Polyfills/Window/Include/Babylon/Polyfills/Window.h"
-#include "../../submodules/BabylonNative/Polyfills/XMLHttpRequest/Include/Babylon/Polyfills/XMLHttpRequest.h"
-#include "../../submodules/BabylonNative/Plugins/NativeEngine/Include/Babylon/Plugins/NativeEngine.h"
-#include "../../submodules/BabylonNative/Plugins/NativeXr/Include/Babylon/Plugins/NativeXr.h"
-#include "../../submodules/BabylonNative/Plugins/NativeInput/Include/Babylon/Plugins/NativeInput.h"
-
 #include "../../shared/BabylonNative.h"
