@@ -25,12 +25,17 @@ namespace winrt::BabylonReactNative::implementation {
         _swapChainPanel = SwapChainPanel();
         _swapChainPanelPtr = nullptr;
         copy_to_abi(_swapChainPanel, _swapChainPanelPtr);
-        _swapChainPanel.SizeChanged({ this, &EngineViewManager::OnSizeChanged });
-        _swapChainPanel.PointerPressed({ this, &EngineViewManager::OnPointerPressed });
-        _swapChainPanel.PointerMoved({ this, &EngineViewManager::OnPointerMoved });
-        _swapChainPanel.PointerReleased({ this, &EngineViewManager::OnPointerReleased });
+        _revokerData.SizeChangedRevoker = _swapChainPanel.SizeChanged(winrt::auto_revoke, { this, &EngineViewManager::OnSizeChanged });
+        _revokerData.PointerPressedRevoker = _swapChainPanel.PointerPressed(winrt::auto_revoke, { this, &EngineViewManager::OnPointerPressed });
+        _revokerData.PointerMovedRevoker = _swapChainPanel.PointerMoved(winrt::auto_revoke, { this, &EngineViewManager::OnPointerMoved });
+        _revokerData.PointerReleasedRevoker = _swapChainPanel.PointerReleased(winrt::auto_revoke, { this, &EngineViewManager::OnPointerReleased });
 
-        CompositionTarget::Rendering([weakThis{ this->get_weak() }](auto const&, auto const&)
+        if (_revokerData.RenderingToken)
+        {
+            CompositionTarget::Rendering(_revokerData.RenderingToken);
+        }
+
+        _revokerData.RenderingToken = CompositionTarget::Rendering([weakThis{ this->get_weak() }](auto const&, auto const&)
         {
             if (auto trueThis = weakThis.get())
             {

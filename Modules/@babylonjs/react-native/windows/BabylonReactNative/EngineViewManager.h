@@ -57,6 +57,16 @@ namespace winrt::BabylonReactNative::implementation {
         void* _swapChainPanelPtr{ nullptr };
         size_t _swapChainPanelWidth{ 1 };
         size_t _swapChainPanelHeight{ 1 };
+
+        struct RevokerData
+        {
+            winrt::Windows::UI::Xaml::FrameworkElement::SizeChanged_revoker SizeChangedRevoker{};
+            winrt::Windows::UI::Xaml::FrameworkElement::PointerPressed_revoker PointerPressedRevoker{};
+            winrt::Windows::UI::Xaml::FrameworkElement::PointerMoved_revoker PointerMovedRevoker{};
+            winrt::Windows::UI::Xaml::FrameworkElement::PointerReleased_revoker PointerReleasedRevoker{};
+            winrt::event_token RenderingToken;
+        };
+        RevokerData _revokerData{};
     };
 
 } // namespace winrt::BabylonReactNative::implementation
