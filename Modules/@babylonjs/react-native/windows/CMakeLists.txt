@@ -2,7 +2,9 @@
 cmake_minimum_required(VERSION 3.15.3)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-project(BabylonNative)
+project(ReactNativeBabylon)
+include(${CMAKE_CURRENT_LIST_DIR}/../shared/CMakeLists.txt)
+
 set(BABYLON_NATIVE_PLATFORM "UWP")
 set(CMAKE_SYSTEM_NAME "WindowsStore")
 set(CMAKE_SYSTEM_VERSION "10.0")
@@ -25,6 +27,19 @@ add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../submodules/BabylonNative/Dependen
 add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../submodules/BabylonNative/Core" ${CMAKE_CURRENT_BINARY_DIR}/Core EXCLUDE_FROM_ALL)
 add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../submodules/BabylonNative/Plugins" ${CMAKE_CURRENT_BINARY_DIR}/Plugins EXCLUDE_FROM_ALL)
 add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../submodules/BabylonNative/Polyfills" ${CMAKE_CURRENT_BINARY_DIR}/Polyfills EXCLUDE_FROM_ALL)
+
+add_library(BabylonNative SHARED ${SHARED_SOURCES})
+target_include_directories(BabylonNative PRIVATE ${SHARED_INCLUDES})
+target_link_libraries(BabylonNative
+    arcana
+    Graphics
+    jsi
+    JsRuntime
+    NativeEngine
+    NativeInput
+    NativeXr
+    Window
+    XMLHttpRequest)
 
 if(DEFINED EXTENSIONS_DIRS)
     foreach(extensionDir IN LISTS EXTENSIONS_DIRS)
