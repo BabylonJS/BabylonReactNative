@@ -7,7 +7,6 @@
 #include "NativeModules.h"
 #include "BabylonModule.h"
 #include "EngineViewManager.h"
-#include "EngineView.h"
 
 using namespace winrt::Microsoft::ReactNative;
 
@@ -19,8 +18,7 @@ void ReactPackageProvider::CreatePackage(IReactPackageBuilder const &packageBuil
 
   // Different module providers exist, we could look into codegen to make sure that javascript interfaces map 1:1 with constructed modules at compile time
   packageBuilder.AddModule(L"BabylonModule", MakeModuleProvider<BabylonModule>());
-  packageBuilder.AddModule(L"EngineViewManager", MakeModuleProvider<EngineViewManager>());
-  packageBuilder.AddViewManager(L"EngineView", []() { return winrt::make<EngineView>(); });
+  packageBuilder.AddViewManager(L"EngineViewManager", []() { return winrt::make<EngineViewManager>(); });
 }
 
 } // namespace winrt::BabylonReactNative::implementation

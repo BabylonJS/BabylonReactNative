@@ -45,3 +45,5 @@
 #include "../../submodules/BabylonNative/Plugins/NativeEngine/Include/Babylon/Plugins/NativeEngine.h"
 #include "../../submodules/BabylonNative/Plugins/NativeXr/Include/Babylon/Plugins/NativeXr.h"
 #include "../../submodules/BabylonNative/Plugins/NativeInput/Include/Babylon/Plugins/NativeInput.h"
+
+#include "../../shared/BabylonNative.h"

@@ -121,10 +121,10 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <AdditionalDependencies>WindowsApp.lib;%(AdditionalDependencies);</AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\submodules\BabylonNative\Build_uwp_x64\Dependencies\bgfx.cmake\Debug;..\..\submodules\BabylonNative\Build_uwp_x64\Dependencies\napi\napi-jsi\Debug;..\..\submodules\BabylonNative\Build_uwp_x64\jsi\Debug;..\..\submodules\BabylonNative\Build_uwp_x64\Core\JsRuntime\Debug;..\..\submodules\BabylonNative\Build_uwp_x64\Core\Graphics\Debug;..\..\submodules\BabylonNative\Build_uwp_x64\Plugins\NativeInput\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\bgfx.cmake\Debug;..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\napi\napi-jsi\Debug;..\..\submodules\BabylonNative\Build_uwp_arm\jsi\Debug;..\..\submodules\BabylonNative\Build_uwp_arm\Core\JsRuntime\Debug;..\..\submodules\BabylonNative\Build_uwp_arm\Core\Graphics\Debug;..\..\submodules\BabylonNative\Build_uwp_arm\Plugins\NativeInput\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\Debug;..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\napi\napi-jsi\Debug;..\..\submodules\BabylonNative\Build_uwp_arm64\jsi\Debug;..\..\submodules\BabylonNative\Build_uwp_arm64\Core\JsRuntime\Debug;..\..\submodules\BabylonNative\Build_uwp_arm64\Core\Graphics\Debug;..\..\submodules\BabylonNative\Build_uwp_arm64\Plugins\NativeInput\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\bgfx.cmake\Debug;..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\napi\napi-jsi\Debug;..\..\submodules\BabylonNative\Build_uwp_x86\jsi\Debug;..\..\submodules\BabylonNative\Build_uwp_x86\Core\JsRuntime\Debug;..\..\submodules\BabylonNative\Build_uwp_x86\Core\Graphics\Debug;..\..\submodules\BabylonNative\Build_uwp_x86\Plugins\NativeInput\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\submodules\BabylonNative\Build_uwp_x64\Dependencies\bgfx.cmake\Debug;..\..\submodules\BabylonNative\Build_uwp_x64\Dependencies\napi\napi-jsi\Debug;..\..\submodules\BabylonNative\Build_uwp_x64\jsi\Debug;..\..\submodules\BabylonNative\Build_uwp_x64\Core\JsRuntime\Debug;..\..\submodules\BabylonNative\Build_uwp_x64\Core\Graphics\Debug;..\..\submodules\BabylonNative\Build_uwp_x64\Plugins\NativeInput\Debug;..\..\submodules\BabylonNative\Build_uwp_x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\bgfx.cmake\Debug;..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\napi\napi-jsi\Debug;..\..\submodules\BabylonNative\Build_uwp_arm\jsi\Debug;..\..\submodules\BabylonNative\Build_uwp_arm\Core\JsRuntime\Debug;..\..\submodules\BabylonNative\Build_uwp_arm\Core\Graphics\Debug;..\..\submodules\BabylonNative\Build_uwp_arm\Plugins\NativeInput\Debug;..\..\submodules\BabylonNative\Build_uwp_arm\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\Debug;..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\napi\napi-jsi\Debug;..\..\submodules\BabylonNative\Build_uwp_arm64\jsi\Debug;..\..\submodules\BabylonNative\Build_uwp_arm64\Core\JsRuntime\Debug;..\..\submodules\BabylonNative\Build_uwp_arm64\Core\Graphics\Debug;..\..\submodules\BabylonNative\Build_uwp_arm64\Plugins\NativeInput\Debug;..\..\submodules\BabylonNative\Build_uwp_arm64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\bgfx.cmake\Debug;..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\napi\napi-jsi\Debug;..\..\submodules\BabylonNative\Build_uwp_x86\jsi\Debug;..\..\submodules\BabylonNative\Build_uwp_x86\Core\JsRuntime\Debug;..\..\submodules\BabylonNative\Build_uwp_x86\Core\Graphics\Debug;..\..\submodules\BabylonNative\Build_uwp_x86\Plugins\NativeInput\Debug;..\..\submodules\BabylonNative\Build_uwp_x86\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <ProjectReference>
       <LinkLibraryDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkLibraryDependencies>
@@ -141,22 +141,21 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <AdditionalDependencies>WindowsApp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
-      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\submodules\BabylonNative\Build_uwp_x64\Dependencies\bgfx.cmake\Release;..\..\submodules\BabylonNative\Build_uwp_x64\Dependencies\napi\napi-jsi\Release;..\..\submodules\BabylonNative\Build_uwp_x64\jsi\Release;..\..\submodules\BabylonNative\Build_uwp_x64\Core\JsRuntime\Release;..\..\submodules\BabylonNative\Build_uwp_x64\Core\Graphics\Release;..\..\submodules\BabylonNative\Build_uwp_x64\Plugins\NativeInput\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\bgfx.cmake\Release;..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\napi\napi-jsi\Release;..\..\submodules\BabylonNative\Build_uwp_arm\jsi\Release;..\..\submodules\BabylonNative\Build_uwp_arm\Core\JsRuntime\Release;..\..\submodules\BabylonNative\Build_uwp_arm\Core\Graphics\Release;..\..\submodules\BabylonNative\Build_uwp_arm\Plugins\NativeInput\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\Release;..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\napi\napi-jsi\Release;..\..\submodules\BabylonNative\Build_uwp_arm64\jsi\Release;..\..\submodules\BabylonNative\Build_uwp_arm64\Core\JsRuntime\Release;..\..\submodules\BabylonNative\Build_uwp_arm64\Core\Graphics\Release;..\..\submodules\BabylonNative\Build_uwp_arm64\Plugins\NativeInput\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\bgfx.cmake\Release;..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\napi\napi-jsi\Release;..\..\submodules\BabylonNative\Build_uwp_x86\jsi\Release;..\..\submodules\BabylonNative\Build_uwp_x86\Core\JsRuntime\Release;..\..\submodules\BabylonNative\Build_uwp_x86\Core\Graphics\Release;..\..\submodules\BabylonNative\Build_uwp_x86\Plugins\NativeInput\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\submodules\BabylonNative\Build_uwp_x64\Dependencies\bgfx.cmake\Release;..\..\submodules\BabylonNative\Build_uwp_x64\Dependencies\napi\napi-jsi\Release;..\..\submodules\BabylonNative\Build_uwp_x64\jsi\Release;..\..\submodules\BabylonNative\Build_uwp_x64\Core\JsRuntime\Release;..\..\submodules\BabylonNative\Build_uwp_x64\Core\Graphics\Release;..\..\submodules\BabylonNative\Build_uwp_x64\Plugins\NativeInput\Release;..\..\submodules\BabylonNative\Build_uwp_x64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\bgfx.cmake\Release;..\..\submodules\BabylonNative\Build_uwp_arm\Dependencies\napi\napi-jsi\Release;..\..\submodules\BabylonNative\Build_uwp_arm\jsi\Release;..\..\submodules\BabylonNative\Build_uwp_arm\Core\JsRuntime\Release;..\..\submodules\BabylonNative\Build_uwp_arm\Core\Graphics\Release;..\..\submodules\BabylonNative\Build_uwp_arm\Plugins\NativeInput\Release;..\..\submodules\BabylonNative\Build_uwp_arm\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\bgfx.cmake\Release;..\..\submodules\BabylonNative\Build_uwp_arm64\Dependencies\napi\napi-jsi\Release;..\..\submodules\BabylonNative\Build_uwp_arm64\jsi\Release;..\..\submodules\BabylonNative\Build_uwp_arm64\Core\JsRuntime\Release;..\..\submodules\BabylonNative\Build_uwp_arm64\Core\Graphics\Release;..\..\submodules\BabylonNative\Build_uwp_arm64\Plugins\NativeInput\Release;..\..\submodules\BabylonNative\Build_uwp_arm64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\bgfx.cmake\Release;..\..\submodules\BabylonNative\Build_uwp_x86\Dependencies\napi\napi-jsi\Release;..\..\submodules\BabylonNative\Build_uwp_x86\jsi\Release;..\..\submodules\BabylonNative\Build_uwp_x86\Core\JsRuntime\Release;..\..\submodules\BabylonNative\Build_uwp_x86\Core\Graphics\Release;..\..\submodules\BabylonNative\Build_uwp_x86\Plugins\NativeInput\Release;..\..\submodules\BabylonNative\Build_uwp_x86\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BabylonModule.h" />
-    <ClInclude Include="EngineView.h" />
     <ClInclude Include="EngineViewManager.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ReactPackageProvider.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BabylonModule.cpp" />
-    <ClCompile Include="EngineView.cpp" />
+    <ClCompile Include="EngineViewManager.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -277,6 +276,9 @@
     <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\Polyfills\XMLHttpRequest\XMLHttpRequest.vcxproj">
       <Project>{eb63da09-4fbd-3a65-ab6d-0a73e1d977b7}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x86\BabylonNative.vcxproj">
+      <Project>{9cee79e8-6b8c-3ccc-a6a9-a4a6c7c34615}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)' == 'x64'">
     <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x64\Core\Graphics\Graphics.vcxproj">
@@ -380,6 +382,9 @@
     </ProjectReference>
     <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x64\Polyfills\XMLHttpRequest\XMLHttpRequest.vcxproj">
       <Project>{eb63da09-4fbd-3a65-ab6d-0a73e1d977b7}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_x64\BabylonNative.vcxproj">
+      <Project>{f1c7e7ee-72d8-3bb9-8595-34c7f0e7ca2c}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)' == 'ARM'">
@@ -485,6 +490,9 @@
     <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\Polyfills\XMLHttpRequest\XMLHttpRequest.vcxproj">
       <Project>{67d46ecf-6d6a-3717-ba4d-ad57cede8395}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm\BabylonNative.vcxproj">
+      <Project>{eda13487-0139-3915-9f06-2d89d9bb31fb}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)' == 'ARM64'">
     <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Core\Graphics\Graphics.vcxproj">
@@ -588,6 +596,9 @@
     </ProjectReference>
     <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\Polyfills\XMLHttpRequest\XMLHttpRequest.vcxproj">
       <Project>{67d46ecf-6d6a-3717-ba4d-ad57cede8395}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\submodules\BabylonNative\Build_uwp_arm64\BabylonNative.vcxproj">
+      <Project>{98410bcc-0b0e-3ed5-8757-d5b88c45277f}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

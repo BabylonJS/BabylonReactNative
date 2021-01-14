@@ -7,7 +7,7 @@
 
 #include "winrt/SliderWindows.h"
 
-#define _SCRIPT_DEBUGGING 1
+#define _SCRIPT_DEBUGGING 0
 
 using namespace winrt::Playground;
 using namespace winrt::Playground::implementation;

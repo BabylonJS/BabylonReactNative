@@ -1,3 +1,6 @@
 {
-    "react-native-tools.projectRoot": "./Apps/Playground"
+    "react-native-tools.projectRoot": "./Apps/Playground",
+    "files.associations": {
+        "*.ipp": "cpp"
+    }
 }

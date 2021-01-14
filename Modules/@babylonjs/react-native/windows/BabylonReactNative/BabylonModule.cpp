@@ -1,35 +1,34 @@
 #include "pch.h"
 #include "BabylonModule.h"
-#include "EngineView.h"
-
-#include <winrt/Windows.UI.Core.h>
-#include <winrt/Windows.Graphics.Display.h>
-#include <winrt/Windows.Foundation.Numerics.h>
-#include <winrt/Windows.UI.Xaml.Controls.h>
+#include "JSI/JsiApi.h"
 
 using namespace winrt::BabylonReactNative::implementation;
 
 REACT_INIT(Initialize);
-void BabylonModule::Initialize(const winrt::Microsoft::ReactNative::ReactContext& /*reactContext*/) noexcept
+void BabylonModule::Initialize(const winrt::Microsoft::ReactNative::ReactContext& reactContext) noexcept
 {
+    _reactContext = reactContext;
 }
 
 REACT_METHOD(CustomInitialize, L"initialize");
 void BabylonModule::CustomInitialize(const winrt::Microsoft::ReactNative::ReactPromise<bool>& result) noexcept
 {
-    EngineView::CompleteOnInitialization(result);
-}
+    winrt::Microsoft::ReactNative::ExecuteJsi(_reactContext, [weakThis{ this->weak_from_this() }](facebook::jsi::Runtime& jsiRuntime) {
+        if (auto trueThis = weakThis.lock()) {
+            auto jsDispatcher = [weakThis{ trueThis->weak_from_this() }](std::function<void()> func)
+            {
+                if (auto trueThis = weakThis.lock())
+                {
+                    trueThis->_reactContext.JSDispatcher().Post([weakThis, func{ std::move(func) }]() {
+                        func();
+                    });
+                }
+            };
+            Babylon::Initialize(jsiRuntime, jsDispatcher, false);
+        }
+    });
 
-REACT_METHOD(WhenInitialized, L"whenInitialized");
-void BabylonModule::WhenInitialized(const winrt::Microsoft::ReactNative::ReactPromise<bool>& result) noexcept
-{
-    EngineView::CompleteOnInitialization(result);
-}
-
-REACT_METHOD(Reset, L"reset");
-void BabylonModule::Reset(const winrt::Microsoft::ReactNative::ReactPromise<bool>& result) noexcept
-{
-    EngineView::Reset(result);
+    result.Resolve(true);
 }
 
 BabylonModule::BabylonModule()

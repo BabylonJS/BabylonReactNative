@@ -28,7 +28,7 @@ add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../submodules/BabylonNative/Core" ${
 add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../submodules/BabylonNative/Plugins" ${CMAKE_CURRENT_BINARY_DIR}/Plugins EXCLUDE_FROM_ALL)
 add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../submodules/BabylonNative/Polyfills" ${CMAKE_CURRENT_BINARY_DIR}/Polyfills EXCLUDE_FROM_ALL)
 
-add_library(BabylonNative SHARED ${SHARED_SOURCES})
+add_library(BabylonNative ${SHARED_SOURCES})
 target_include_directories(BabylonNative PRIVATE ${SHARED_INCLUDES})
 target_link_libraries(BabylonNative
     arcana
