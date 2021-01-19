@@ -35,7 +35,7 @@ class DOMException {
 
         const cameraPermission = Platform.select({
             android: PERMISSIONS.ANDROID.CAMERA,
-            ios: PERMISSIONS.IOS.CAMERA
+            ios: PERMISSIONS.IOS.CAMERA,
         });
 
         // Only Android, iOS and Windows are supported.
