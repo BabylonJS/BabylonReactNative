@@ -82,24 +82,6 @@ namespace winrt::BabylonReactNative::implementation {
         };
     }
 
-    // IViewManagerWithCommands
-    IVectorView<hstring> EngineViewManager::Commands() noexcept {
-        auto commands = winrt::single_threaded_vector<hstring>();
-        commands.Append(L"takeSnapshot");
-        return commands.GetView();
-    }
-
-    void EngineViewManager::DispatchCommand(
-        FrameworkElement const& view,
-        winrt::hstring const& commandId,
-        IJSValueReader const& /*commandArgsReader*/) noexcept {
-        if (auto swapChainPanel = view.try_as<SwapChainPanel>()) {
-            if (commandId == L"takeSnapshot") {
-                // TODO: Implement takeSnapshot
-            }
-        }
-    }
-
     void EngineViewManager::OnSizeChanged(IInspectable const& /*sender*/, SizeChangedEventArgs const& args)
     {
         const auto size = args.NewSize();
@@ -117,8 +99,8 @@ namespace winrt::BabylonReactNative::implementation {
         const auto pointerId = args.Pointer().PointerId();
         const auto buttonId = 0; // Update as needed
         const auto point = args.GetCurrentPoint(_swapChainPanel);
-        const uint32_t x = point.Position().X < 0 ? 0 : point.Position().X;
-        const uint32_t y = point.Position().Y < 0 ? 0 : point.Position().Y;
+        const uint32_t x = point.Position().X < 0 ? 0 : static_cast<uint32_t>(point.Position().X);
+        const uint32_t y = point.Position().Y < 0 ? 0 : static_cast<uint32_t>(point.Position().Y);
         Babylon::SetPointerButtonState(pointerId, buttonId, true, x, y);
     }
 
@@ -126,8 +108,8 @@ namespace winrt::BabylonReactNative::implementation {
     {
         const auto pointerId = args.Pointer().PointerId();
         const auto point = args.GetCurrentPoint(_swapChainPanel);
-        const uint32_t x = point.Position().X < 0 ? 0 : point.Position().X;
-        const uint32_t y = point.Position().Y < 0 ? 0 : point.Position().Y;
+        const uint32_t x = point.Position().X < 0 ? 0 : static_cast<uint32_t>(point.Position().X);
+        const uint32_t y = point.Position().Y < 0 ? 0 : static_cast<uint32_t>(point.Position().Y);
         Babylon::SetPointerPosition(pointerId, x, y);
     }
 
@@ -136,8 +118,8 @@ namespace winrt::BabylonReactNative::implementation {
         const auto pointerId = args.Pointer().PointerId();
         const auto buttonId = 0; // Update as needed
         const auto point = args.GetCurrentPoint(_swapChainPanel);
-        const uint32_t x = point.Position().X < 0 ? 0 : point.Position().X;
-        const uint32_t y = point.Position().Y < 0 ? 0 : point.Position().Y;
+        const uint32_t x = point.Position().X < 0 ? 0 : static_cast<uint32_t>(point.Position().X);
+        const uint32_t y = point.Position().Y < 0 ? 0 : static_cast<uint32_t>(point.Position().Y);
         Babylon::SetPointerButtonState(pointerId, buttonId, false, x, y);
     }
 

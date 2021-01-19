@@ -12,9 +12,6 @@ namespace winrt::BabylonReactNative::implementation {
         REACT_METHOD(CustomInitialize, L"initialize");
         void CustomInitialize(const winrt::Microsoft::ReactNative::ReactPromise<bool>& result) noexcept;
 
-        BabylonModule();
-        ~BabylonModule();
-
     private:
          winrt::Microsoft::ReactNative::ReactContext _reactContext;
     };

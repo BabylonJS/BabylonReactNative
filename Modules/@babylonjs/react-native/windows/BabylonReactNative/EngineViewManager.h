@@ -12,8 +12,7 @@ namespace winrt::BabylonReactNative::implementation {
         winrt::Microsoft::ReactNative::IViewManager,
         winrt::Microsoft::ReactNative::IViewManagerWithReactContext,
         winrt::Microsoft::ReactNative::IViewManagerWithNativeProperties,
-        winrt::Microsoft::ReactNative::IViewManagerWithExportedEventTypeConstants,
-        winrt::Microsoft::ReactNative::IViewManagerWithCommands>
+        winrt::Microsoft::ReactNative::IViewManagerWithExportedEventTypeConstants>
         , std::enable_shared_from_this<EngineViewManager> {
     public:
         EngineViewManager();
@@ -37,13 +36,6 @@ namespace winrt::BabylonReactNative::implementation {
         // IViewManagerWithExportedEventTypeConstants
         winrt::Microsoft::ReactNative::ConstantProviderDelegate ExportedCustomBubblingEventTypeConstants() noexcept;
         winrt::Microsoft::ReactNative::ConstantProviderDelegate ExportedCustomDirectEventTypeConstants() noexcept;
-
-        // IViewManagerWithCommands
-        winrt::Windows::Foundation::Collections::IVectorView<winrt::hstring> Commands() noexcept;
-        void DispatchCommand(
-            winrt::Windows::UI::Xaml::FrameworkElement const &view,
-            winrt::hstring const &commandId,
-            winrt::Microsoft::ReactNative::IJSValueReader const &commandArgsReader) noexcept;
 
     private:
         void OnSizeChanged(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::SizeChangedEventArgs const& args);

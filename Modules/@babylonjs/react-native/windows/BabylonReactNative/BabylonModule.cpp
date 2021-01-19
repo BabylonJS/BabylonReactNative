@@ -30,11 +30,3 @@ void BabylonModule::CustomInitialize(const winrt::Microsoft::ReactNative::ReactP
 
     result.Resolve(true);
 }
-
-BabylonModule::BabylonModule()
-{
-}
-
-BabylonModule::~BabylonModule()
-{
-}

@@ -29,7 +29,7 @@ class DOMException {
         if (Platform.OS === "windows")
         {
             // Launching into immersive mode on Windows HMDs doesn't require a runtime permission check.
-            // Spatial Perception and Webcam capabilities should be declared in the project's Package.appxmanifest.
+            // The Spatial Perception capability should be enabled in the project's Package.appxmanifest.
             return originalInitializeSessionAsync.apply(this, args);
         }
 
