@@ -12,13 +12,12 @@ namespace winrt::BabylonReactNative::implementation {
         winrt::Microsoft::ReactNative::IViewManager,
         winrt::Microsoft::ReactNative::IViewManagerWithReactContext,
         winrt::Microsoft::ReactNative::IViewManagerWithNativeProperties,
-        winrt::Microsoft::ReactNative::IViewManagerWithExportedEventTypeConstants>
-        , std::enable_shared_from_this<EngineViewManager> {
+        winrt::Microsoft::ReactNative::IViewManagerWithExportedEventTypeConstants> {
     public:
         EngineViewManager();
 
         // IViewManager
-        winrt::hstring Name() noexcept;
+        winrt::hstring Name() const noexcept;
         winrt::Windows::UI::Xaml::FrameworkElement CreateView() noexcept;
 
         // IViewManagerWithReactContext
@@ -46,7 +45,6 @@ namespace winrt::BabylonReactNative::implementation {
 
         winrt::Microsoft::ReactNative::IReactContext _reactContext{ nullptr };
         winrt::Windows::UI::Xaml::Controls::SwapChainPanel _swapChainPanel{ nullptr };
-        void* _swapChainPanelPtr{ nullptr };
         size_t _swapChainPanelWidth{ 1 };
         size_t _swapChainPanelHeight{ 1 };
 
@@ -56,7 +54,7 @@ namespace winrt::BabylonReactNative::implementation {
             winrt::Windows::UI::Xaml::FrameworkElement::PointerPressed_revoker PointerPressedRevoker{};
             winrt::Windows::UI::Xaml::FrameworkElement::PointerMoved_revoker PointerMovedRevoker{};
             winrt::Windows::UI::Xaml::FrameworkElement::PointerReleased_revoker PointerReleasedRevoker{};
-            winrt::event_token RenderingToken;
+            winrt::Windows::UI::Xaml::Media::CompositionTarget::Rendering_revoker RenderingRevoker{};
         };
         RevokerData _revokerData{};
     };

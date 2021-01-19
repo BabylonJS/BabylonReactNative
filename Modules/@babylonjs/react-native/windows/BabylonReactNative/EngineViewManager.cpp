@@ -17,25 +17,18 @@ namespace winrt::BabylonReactNative::implementation {
     EngineViewManager::EngineViewManager() {}
 
     // IViewManager
-    hstring EngineViewManager::Name() noexcept {
+    hstring EngineViewManager::Name() const noexcept {
         return L"EngineView";
     }
 
     FrameworkElement EngineViewManager::CreateView() noexcept {
         _swapChainPanel = SwapChainPanel();
-        _swapChainPanelPtr = nullptr;
-        copy_to_abi(_swapChainPanel, _swapChainPanelPtr);
         _revokerData.SizeChangedRevoker = _swapChainPanel.SizeChanged(winrt::auto_revoke, { this, &EngineViewManager::OnSizeChanged });
         _revokerData.PointerPressedRevoker = _swapChainPanel.PointerPressed(winrt::auto_revoke, { this, &EngineViewManager::OnPointerPressed });
         _revokerData.PointerMovedRevoker = _swapChainPanel.PointerMoved(winrt::auto_revoke, { this, &EngineViewManager::OnPointerMoved });
         _revokerData.PointerReleasedRevoker = _swapChainPanel.PointerReleased(winrt::auto_revoke, { this, &EngineViewManager::OnPointerReleased });
 
-        if (_revokerData.RenderingToken)
-        {
-            CompositionTarget::Rendering(_revokerData.RenderingToken);
-        }
-
-        _revokerData.RenderingToken = CompositionTarget::Rendering([weakThis{ this->get_weak() }](auto const&, auto const&)
+        _revokerData.RenderingRevoker = CompositionTarget::Rendering(winrt::auto_revoke, [weakThis{ this->get_weak() }](auto const&, auto const&)
         {
             if (auto trueThis = weakThis.get())
             {
@@ -91,7 +84,7 @@ namespace winrt::BabylonReactNative::implementation {
         // Use windowTypePtr == 2 for xaml swap chain panels
         auto windowTypePtr = reinterpret_cast<void*>(2);
 
-        Babylon::UpdateView(_swapChainPanelPtr, _swapChainPanelWidth, _swapChainPanelHeight, windowTypePtr);
+        Babylon::UpdateView(get_abi(_swapChainPanel), _swapChainPanelWidth, _swapChainPanelHeight, windowTypePtr);
     }
 
     void EngineViewManager::OnPointerPressed(IInspectable const& /*sender*/, PointerRoutedEventArgs const& args)
@@ -99,8 +92,9 @@ namespace winrt::BabylonReactNative::implementation {
         const auto pointerId = args.Pointer().PointerId();
         const auto buttonId = 0; // Update as needed
         const auto point = args.GetCurrentPoint(_swapChainPanel);
-        const uint32_t x = point.Position().X < 0 ? 0 : static_cast<uint32_t>(point.Position().X);
-        const uint32_t y = point.Position().Y < 0 ? 0 : static_cast<uint32_t>(point.Position().Y);
+        const auto position = point.Position();
+        const uint32_t x = position.X < 0 ? 0 : static_cast<uint32_t>(position.X);
+        const uint32_t y = position.Y < 0 ? 0 : static_cast<uint32_t>(position.Y);
         Babylon::SetPointerButtonState(pointerId, buttonId, true, x, y);
     }
 
@@ -108,8 +102,9 @@ namespace winrt::BabylonReactNative::implementation {
     {
         const auto pointerId = args.Pointer().PointerId();
         const auto point = args.GetCurrentPoint(_swapChainPanel);
-        const uint32_t x = point.Position().X < 0 ? 0 : static_cast<uint32_t>(point.Position().X);
-        const uint32_t y = point.Position().Y < 0 ? 0 : static_cast<uint32_t>(point.Position().Y);
+        const auto position = point.Position();
+        const uint32_t x = position.X < 0 ? 0 : static_cast<uint32_t>(position.X);
+        const uint32_t y = position.Y < 0 ? 0 : static_cast<uint32_t>(position.Y);
         Babylon::SetPointerPosition(pointerId, x, y);
     }
 
@@ -118,8 +113,9 @@ namespace winrt::BabylonReactNative::implementation {
         const auto pointerId = args.Pointer().PointerId();
         const auto buttonId = 0; // Update as needed
         const auto point = args.GetCurrentPoint(_swapChainPanel);
-        const uint32_t x = point.Position().X < 0 ? 0 : static_cast<uint32_t>(point.Position().X);
-        const uint32_t y = point.Position().Y < 0 ? 0 : static_cast<uint32_t>(point.Position().Y);
+        const auto position = point.Position();
+        const uint32_t x = position.X < 0 ? 0 : static_cast<uint32_t>(position.X);
+        const uint32_t y = position.Y < 0 ? 0 : static_cast<uint32_t>(position.Y);
         Babylon::SetPointerButtonState(pointerId, buttonId, false, x, y);
     }
 
