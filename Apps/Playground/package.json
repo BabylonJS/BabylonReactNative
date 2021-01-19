@@ -27,8 +27,6 @@
     "@babel/runtime": "^7.8.4",
     "@react-native-community/cli": "^4.13.0",
     "@react-native-community/eslint-config": "^1.1.0",
-    "@rnw-scripts/eslint-config": "0.1.6",
-    "@rnw-scripts/ts-config": "0.1.0",
     "@types/jest": "^25.2.3",
     "@types/react": "^16.9.0",
     "@types/react-native": "^0.63.18",
@@ -41,9 +39,7 @@
     "metro-react-native-babel-preset": "^0.59.0",
     "prettier": "^2.0.4",
     "react-test-renderer": "^17.0.1",
-    "typescript": "^3.8.3",
-    "just-scripts": "^0.44.7",
-    "metro-config": "^0.64.0"
+    "typescript": "^3.8.3"
   },
   "jest": {
     "preset": "react-native",
