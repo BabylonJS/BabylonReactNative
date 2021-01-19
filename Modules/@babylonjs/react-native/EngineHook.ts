@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import { PERMISSIONS, check, request } from 'react-native-permissions';
-import { Engine, WebXRSessionManager } from '@babylonjs/core';
+import { Engine, WebXRSessionManager, WebXRExperienceHelper, Color4 } from '@babylonjs/core';
 import { ReactNativeEngine } from './ReactNativeEngine';
 import * as base64 from 'base-64';
 
@@ -60,6 +60,17 @@ class DOMException {
             case "granted":
                 return originalInitializeSessionAsync.apply(this, args);
         }
+    }
+}
+
+if (Platform.OS == "windows") {
+    const originalEnterXRAsync: (...args: any[]) => Promise<any> = WebXRExperienceHelper.prototype.enterXRAsync;
+    WebXRExperienceHelper.prototype.enterXRAsync = async function (...args: any[]): Promise<any> {
+        // TODO: https://github.com/BabylonJS/BabylonNative/issues/577
+        // Windows HMDs require different rendering behaviors than default xr rendering for mobile devices
+        await originalEnterXRAsync.apply(this, args);
+        this.scene.clearColor = new Color4(0, 0, 0, 1); // Black
+        this.scene.autoClear = true;
     }
 }
 

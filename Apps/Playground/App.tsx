@@ -91,12 +91,6 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
           const session = await xr.baseExperience.enterXRAsync("immersive-ar", "unbounded", xr.renderTarget);
           setXrSession(session);
 
-          if (Platform.OS == "windows") {
-            // HMDs require different rendering behaviors than default xr rendering for mobile devices
-            scene.clearColor = new Color4(0, 0, 0, 1); // Black
-            scene.autoClear = true;
-          }
-
           setTrackingState(xr.baseExperience.camera.trackingState);
           xr.baseExperience.camera.onTrackingStateChanged.add((newTrackingState) => {
             setTrackingState(newTrackingState);
