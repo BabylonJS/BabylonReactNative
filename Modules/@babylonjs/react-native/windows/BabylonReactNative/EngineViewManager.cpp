@@ -9,9 +9,6 @@ using namespace winrt::Windows::Foundation;
 using namespace winrt::Windows::Foundation::Collections;
 
 using namespace winrt::Windows::UI::Xaml;
-using namespace winrt::Windows::UI::Xaml::Media;
-using namespace winrt::Windows::UI::Xaml::Controls;
-using namespace winrt::Windows::UI::Xaml::Input;
 
 namespace winrt::BabylonReactNative::implementation {
     EngineViewManager::EngineViewManager() {}
@@ -22,21 +19,8 @@ namespace winrt::BabylonReactNative::implementation {
     }
 
     FrameworkElement EngineViewManager::CreateView() noexcept {
-        _swapChainPanel = SwapChainPanel();
-        _revokerData.SizeChangedRevoker = _swapChainPanel.SizeChanged(winrt::auto_revoke, { this, &EngineViewManager::OnSizeChanged });
-        _revokerData.PointerPressedRevoker = _swapChainPanel.PointerPressed(winrt::auto_revoke, { this, &EngineViewManager::OnPointerPressed });
-        _revokerData.PointerMovedRevoker = _swapChainPanel.PointerMoved(winrt::auto_revoke, { this, &EngineViewManager::OnPointerMoved });
-        _revokerData.PointerReleasedRevoker = _swapChainPanel.PointerReleased(winrt::auto_revoke, { this, &EngineViewManager::OnPointerReleased });
-
-        _revokerData.RenderingRevoker = CompositionTarget::Rendering(winrt::auto_revoke, [weakThis{ this->get_weak() }](auto const&, auto const&)
-        {
-            if (auto trueThis = weakThis.get())
-            {
-                trueThis->OnRendering();
-            }
-        });
-
-        return _swapChainPanel;
+        _engineView = make<EngineView>();
+        return _engineView;
     }
 
     // IViewManagerWithReactContext
@@ -73,54 +57,5 @@ namespace winrt::BabylonReactNative::implementation {
         return [](winrt::Microsoft::ReactNative::IJSValueWriter const& constantWriter) {
             WriteCustomDirectEventTypeConstant(constantWriter, "onSnapshotDataReturned");
         };
-    }
-
-    void EngineViewManager::OnSizeChanged(IInspectable const& /*sender*/, SizeChangedEventArgs const& args)
-    {
-        const auto size = args.NewSize();
-        _swapChainPanelWidth = static_cast<size_t>(size.Width);
-        _swapChainPanelHeight = static_cast<size_t>(size.Height);
-
-        // Use windowTypePtr == 2 for xaml swap chain panels
-        auto windowTypePtr = reinterpret_cast<void*>(2);
-
-        Babylon::UpdateView(get_abi(_swapChainPanel), _swapChainPanelWidth, _swapChainPanelHeight, windowTypePtr);
-    }
-
-    void EngineViewManager::OnPointerPressed(IInspectable const& /*sender*/, PointerRoutedEventArgs const& args)
-    {
-        const auto pointerId = args.Pointer().PointerId();
-        const auto buttonId = 0; // Update as needed
-        const auto point = args.GetCurrentPoint(_swapChainPanel);
-        const auto position = point.Position();
-        const uint32_t x = position.X < 0 ? 0 : static_cast<uint32_t>(position.X);
-        const uint32_t y = position.Y < 0 ? 0 : static_cast<uint32_t>(position.Y);
-        Babylon::SetPointerButtonState(pointerId, buttonId, true, x, y);
-    }
-
-    void EngineViewManager::OnPointerMoved(IInspectable const& /*sender*/, PointerRoutedEventArgs const& args)
-    {
-        const auto pointerId = args.Pointer().PointerId();
-        const auto point = args.GetCurrentPoint(_swapChainPanel);
-        const auto position = point.Position();
-        const uint32_t x = position.X < 0 ? 0 : static_cast<uint32_t>(position.X);
-        const uint32_t y = position.Y < 0 ? 0 : static_cast<uint32_t>(position.Y);
-        Babylon::SetPointerPosition(pointerId, x, y);
-    }
-
-    void EngineViewManager::OnPointerReleased(IInspectable const& /*sender*/, PointerRoutedEventArgs const& args)
-    {
-        const auto pointerId = args.Pointer().PointerId();
-        const auto buttonId = 0; // Update as needed
-        const auto point = args.GetCurrentPoint(_swapChainPanel);
-        const auto position = point.Position();
-        const uint32_t x = position.X < 0 ? 0 : static_cast<uint32_t>(position.X);
-        const uint32_t y = position.Y < 0 ? 0 : static_cast<uint32_t>(position.Y);
-        Babylon::SetPointerButtonState(pointerId, buttonId, false, x, y);
-    }
-
-    void EngineViewManager::OnRendering()
-    {
-        Babylon::RenderView();
     }
 } // namespace winrt::BabylonReactNative::implementation

@@ -15,15 +15,18 @@
     <ClCompile Include="ReactPackageProvider.cpp" />
     <ClCompile Include="BabylonModule.cpp" />
     <ClCompile Include="EngineViewManager.cpp" />
+    <ClCompile Include="EngineView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="ReactPackageProvider.h" />
     <ClInclude Include="BabylonModule.h" />
     <ClInclude Include="EngineViewManager.h" />
+    <ClInclude Include="EngineView.h" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="ReactPackageProvider.idl" />
+    <Midl Include="EngineView.idl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

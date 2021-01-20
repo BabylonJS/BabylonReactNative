@@ -149,12 +149,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BabylonModule.h" />
+    <ClInclude Include="EngineView.h" />
     <ClInclude Include="EngineViewManager.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="ReactPackageProvider.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BabylonModule.cpp" />
+    <ClCompile Include="EngineView.cpp" />
     <ClCompile Include="EngineViewManager.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
@@ -163,6 +165,7 @@
     <ClCompile Include="ReactPackageProvider.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Midl Include="EngineView.idl" />
     <Midl Include="ReactPackageProvider.idl" />
   </ItemGroup>
   <ItemGroup>
