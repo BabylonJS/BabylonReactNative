@@ -69,7 +69,7 @@ if (Platform.OS == "windows") {
         // TODO: https://github.com/BabylonJS/BabylonNative/issues/577
         // Windows HMDs require different rendering behaviors than default xr rendering for mobile devices
         await originalEnterXRAsync.apply(this, args);
-        this.scene.clearColor = new Color4(0, 0, 0, 1); // Black
+        this.scene.clearColor = Color3.Black().toColor4();
         this.scene.autoClear = true;
     }
 }
