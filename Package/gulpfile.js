@@ -265,18 +265,14 @@ const createPackage = async () => {
   exec('npm pack', 'Assembled');
 };
 
-const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyIOSFiles, copyAndroidFiles, copyUWPFiles);
+const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyIOSFiles, copyAndroidFiles);
 
-const build = gulp.series(buildIOS, buildAndroid, buildUWP, createIOSUniversalLibs, copyFiles, validate);
+const build = gulp.series(buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validate);
 const rebuild = gulp.series(clean, build);
 const pack = gulp.series(rebuild, createPackage);
 
-const packUWP = gulp.series(clean, buildUWP, copyCommonFiles, copySharedFiles, copyUWPFiles, createPackage);
-const packUWPNoBuild = gulp.series(clean, copyCommonFiles, copySharedFiles, copyUWPFiles, createPackage);
-
 exports.buildIOS = buildIOS;
 exports.buildAndroid = buildAndroid;
-exports.buildUWP = buildUWP;
 exports.createIOSUniversalLibs = createIOSUniversalLibs;
 exports.copyFiles = copyFiles;
 
@@ -285,6 +281,10 @@ exports.build = build;
 exports.rebuild = rebuild;
 exports.pack = pack;
 
+const packUWP = gulp.series(clean, buildUWP, copyCommonFiles, copySharedFiles, copyUWPFiles, createPackage);
+const packUWPNoBuild = gulp.series(clean, copyCommonFiles, copySharedFiles, copyUWPFiles, createPackage);
+
+exports.buildUWP = buildUWP;
 exports.copyUWPFiles = copyUWPFiles;
 exports.packUWP = packUWP;
 exports.packUWPNoBuild = packUWPNoBuild;
