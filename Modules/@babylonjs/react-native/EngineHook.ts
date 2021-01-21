@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import { PERMISSIONS, check, request } from 'react-native-permissions';
-import { Engine, WebXRSessionManager, WebXRExperienceHelper, Color4 } from '@babylonjs/core';
+import { Engine, WebXRSessionManager, WebXRExperienceHelper, Color3 } from '@babylonjs/core';
 import { ReactNativeEngine } from './ReactNativeEngine';
 import * as base64 from 'base-64';
 

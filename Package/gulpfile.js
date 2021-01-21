@@ -183,15 +183,16 @@ const createPackage = async () => {
 
 const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyIOSFiles, copyAndroidFiles);
 
-const build = gulp.series(buildIOS, buildAndroid, buildUWP, createIOSUniversalLibs, copyFiles, validate);
+const build = gulp.series(buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validate);
 const rebuild = gulp.series(clean, build);
 const pack = gulp.series(rebuild, createPackage);
 
 exports.buildIOS = buildIOS;
 exports.buildAndroid = buildAndroid;
-exports.buildUWP = buildUWP;
 exports.createIOSUniversalLibs = createIOSUniversalLibs;
 exports.copyFiles = copyFiles;
+
+exports.buildUWP = buildUWP;
 
 exports.clean = clean;
 exports.build = build;
