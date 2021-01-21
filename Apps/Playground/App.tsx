@@ -6,7 +6,7 @@
  */
 
 import React, { useState, FunctionComponent, useEffect, useCallback } from 'react';
-import { SafeAreaView, StatusBar, Button, View, Text, ViewProps, Image, Platform } from 'react-native';
+import { SafeAreaView, StatusBar, Button, View, Text, ViewProps, Image } from 'react-native';
 
 import { EngineView, useEngine, EngineViewCallbacks } from '@babylonjs/react-native';
 import { Scene, Vector3, ArcRotateCamera, Camera, WebXRSessionManager, SceneLoader, TransformNode, DeviceSourceManager, DeviceType, DeviceSource, PointerInput, WebXRTrackingState } from '@babylonjs/core';
