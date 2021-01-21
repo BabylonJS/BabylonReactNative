@@ -276,6 +276,8 @@ exports.buildAndroid = buildAndroid;
 exports.createIOSUniversalLibs = createIOSUniversalLibs;
 exports.copyFiles = copyFiles;
 
+exports.buildUWP = buildUWP;
+
 exports.clean = clean;
 exports.build = build;
 exports.rebuild = rebuild;

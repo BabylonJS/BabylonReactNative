@@ -9,7 +9,7 @@ import React, { useState, FunctionComponent, useEffect, useCallback } from 'reac
 import { SafeAreaView, StatusBar, Button, View, Text, ViewProps, Image, Platform } from 'react-native';
 
 import { EngineView, useEngine, EngineViewCallbacks } from '@babylonjs/react-native';
-import { Scene, Vector3, ArcRotateCamera, Camera, WebXRSessionManager, SceneLoader, TransformNode, DeviceSourceManager, DeviceType, DeviceSource, PointerInput, WebXRTrackingState, Color4 } from '@babylonjs/core';
+import { Scene, Vector3, ArcRotateCamera, Camera, WebXRSessionManager, SceneLoader, TransformNode, DeviceSourceManager, DeviceType, DeviceSource, PointerInput, WebXRTrackingState } from '@babylonjs/core';
 import '@babylonjs/loaders';
 import Slider from '@react-native-community/slider';
 

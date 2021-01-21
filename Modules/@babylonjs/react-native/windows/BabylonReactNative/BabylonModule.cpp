@@ -13,7 +13,7 @@ void BabylonModule::Initialize(const winrt::Microsoft::ReactNative::ReactContext
 REACT_METHOD(CustomInitialize, L"initialize");
 void BabylonModule::CustomInitialize(const winrt::Microsoft::ReactNative::ReactPromise<bool>& result) noexcept
 {
-    winrt::Microsoft::ReactNative::ExecuteJsi(_reactContext, [weakThis{ this->weak_from_this() }](facebook::jsi::Runtime& jsiRuntime) {
+    winrt::Microsoft::ReactNative::ExecuteJsi(_reactContext, [result, weakThis{ this->weak_from_this() }](facebook::jsi::Runtime& jsiRuntime) {
         if (auto trueThis = weakThis.lock()) {
             auto jsDispatcher = [weakThis{ trueThis->weak_from_this() }](std::function<void()> func)
             {
@@ -25,8 +25,7 @@ void BabylonModule::CustomInitialize(const winrt::Microsoft::ReactNative::ReactP
                 }
             };
             Babylon::Initialize(jsiRuntime, jsDispatcher, false);
+            result.Resolve(true);
         }
     });
-
-    result.Resolve(true);
 }
