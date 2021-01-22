@@ -165,7 +165,7 @@ const copyVCXProjUWPFiles = () => {
     .pipe(gulp.dest('Assembled/windows/BabylonReactNative'));
 }
 
-const copyUWPFiles = gulp.series(
+const copyUWPFiles = gulp.parallel(
   createUWPDirectories,
   copyx86DebugUWPFiles,
   copyx86ReleaseUWPFiles,
