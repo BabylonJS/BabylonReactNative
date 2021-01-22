@@ -50,6 +50,10 @@ jobs:
           submodules: 'true'
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.0.2
+      - name: Add nuget to PATH
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: '5.x'
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
