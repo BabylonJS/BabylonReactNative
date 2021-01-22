@@ -1,6 +1,3 @@
 {
-    "react-native-tools.projectRoot": "./Apps/Playground",
-    "vscode-nmake-tools.workspaceBuildDirectories": [
-        "d:\\BabylonReactNative"
-    ]
+    "react-native-tools.projectRoot": "./Apps/Playground"
 }
