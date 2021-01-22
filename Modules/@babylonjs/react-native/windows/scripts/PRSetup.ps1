@@ -10,7 +10,7 @@ git submodule update --init --recursive "Dependencies\base-n"
 git submodule update --init --recursive "Dependencies\bgfx.cmake"
 git submodule update --init --recursive "Dependencies\glslang"
 git submodule update --init --recursive "Dependencies\xr\Dependencies\OpenXR-SDK"
-git submodule update --init --recursive "Dependencies\xr\Dependencies\OpenXR-SDK"
+git submodule update --init --recursive "Dependencies\xr\Dependencies\OpenXR-MixedReality"
 Pop-Location
 
 Restore-CMakeProject -Platform "x64"
