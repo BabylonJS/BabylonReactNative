@@ -51,11 +51,15 @@ const buildUWPProject = async () => {
 
 const buildUWP = gulp.series(makeUWPProject, buildUWPProject);
 
-const buildUWPProjectPR = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\BuildPR.bat');
+const makeUWPProjectPR = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\PRSetup.bat');
 }
 
-const buildUWPPR = gulp.series(makeUWPProject, buildUWPProjectPR);
+const buildUWPProjectPR = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\PRBuild.bat');
+}
+
+const buildUWPPR = gulp.series(makeUWPProjectPR, buildUWPProjectPR);
 
 const copyCommonFiles = () => {
   return  gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/package.json')
