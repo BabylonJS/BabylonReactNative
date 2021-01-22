@@ -40,3 +40,20 @@ jobs:
       - name: Gulp (iOS)
         run: npx gulp buildIOS
         working-directory: ./Package
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+        with:
+          submodules: 'recursive'
+      - name: NPM Install (Playground)
+        run: npm install
+        working-directory: ./Apps/Playground
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Gulp (Windows)
+        run: npx gulp buildUWPPR
+        working-directory: ./Package
