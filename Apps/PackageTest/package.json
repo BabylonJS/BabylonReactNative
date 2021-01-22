@@ -5,6 +5,8 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "windows": "react-native run-windows --arch x64",
+    "windows-verbose": "react-native run-windows --arch x64 --logging",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
@@ -30,6 +32,7 @@
     "babel-jest": "^25.1.0",
     "eslint": "^6.5.1",
     "jest": "^25.1.0",
+    "metro-config": "^0.64.0",
     "metro-react-native-babel-preset": "^0.59.0",
     "prettier": "^2.0.4",
     "react-test-renderer": "^17.0.1",
