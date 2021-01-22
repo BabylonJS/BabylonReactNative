@@ -51,6 +51,12 @@ const buildUWPProject = async () => {
 
 const buildUWP = gulp.series(makeUWPProject, buildUWPProject);
 
+const buildUWPProjectPR = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\BuildPR.bat');
+}
+
+const buildUWPPR = gulp.series(makeUWPProject, buildUWPProjectPR);
+
 const copyCommonFiles = () => {
   return  gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/package.json')
     .pipe(gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/README.md'))
@@ -287,6 +293,7 @@ const packUWP = gulp.series(clean, buildUWP, copyCommonFiles, copySharedFiles, c
 const packUWPNoBuild = gulp.series(clean, copyCommonFiles, copySharedFiles, copyUWPFiles, createPackage);
 
 exports.buildUWP = buildUWP;
+exports.buildUWPPR = buildUWPPR;
 exports.copyUWPFiles = copyUWPFiles;
 exports.packUWP = packUWP;
 exports.packUWPNoBuild = packUWPNoBuild;
