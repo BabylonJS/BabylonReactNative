@@ -62,7 +62,14 @@ function Compile-Solution {
         $Configuration
     )
 
-    $MSBuild = Get-MSBuildPath
+    $MSBuildExistsInPath = $null -ne (Get-Command "msbuild" -ErrorAction SilentlyContinue)
+    if ($MSBuildExistsInPath) {
+        $MSBuild = "msbuild.exe"
+    }
+    else {
+        $MSBuild = Get-MSBuildPath
+    }
+
     & "$MSBuild" /p:Configuration="$Configuration" /p:Platform="$Platform" $Solution
     if ($? -Eq $False) {
         Write-Error "$Platform $Configuration Build failed."

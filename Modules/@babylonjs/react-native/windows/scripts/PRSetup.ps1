@@ -1,7 +1,8 @@
 Import-Module $PSScriptRoot\Utils.psm1
 
+# windows build agents don't support the path lengths required for initializing arcore dependencies,
+# so we manually initialize the submodules we need here.
 git submodule update --init "$PSScriptRoot\..\..\submodules\BabylonNative"
-
 Push-Location "$PSScriptRoot\..\..\submodules\BabylonNative"
 git submodule update --init --recursive "Dependencies\SPIRV-Cross"
 git submodule update --init --recursive "Dependencies\arcana.cpp"
