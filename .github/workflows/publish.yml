@@ -69,7 +69,7 @@ jobs:
           name: 'Assembled'
           path: Package/Assembled
       - name: Display structure of downloaded Assembled folder
-          run: ls -R
+        run: ls -R
       - name: Setup Node.js
         uses: actions/setup-node@v2.1.2
         with:
