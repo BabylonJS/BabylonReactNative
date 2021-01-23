@@ -293,11 +293,14 @@ exports.build = build;
 exports.rebuild = rebuild;
 exports.pack = pack;
 
-const packUWP = gulp.series(clean, buildUWP, copyCommonFiles, copySharedFiles, copyUWPFiles, createPackage);
-const packUWPNoBuild = gulp.series(clean, copyCommonFiles, copySharedFiles, copyUWPFiles, createPackage);
+const copyPackageFilesUWP = gulp.series(copyCommonFiles, copySharedFiles, copyUWPFiles);
+const buildUWPPublish = gulp.series(buildUWP, copyPackageFilesUWP);
+const packUWP = gulp.series(clean, buildUWP, copyPackageFilesUWP, createPackage);
+const packUWPNoBuild = gulp.series(clean, copyPackageFilesUWP, createPackage);
 
 exports.buildUWP = buildUWP;
 exports.buildUWPPR = buildUWPPR;
+exports.buildUWPPublish = buildUWPPublish;
 exports.copyUWPFiles = copyUWPFiles;
 exports.packUWP = packUWP;
 exports.packUWPNoBuild = packUWPNoBuild;
