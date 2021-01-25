@@ -2,17 +2,38 @@
 #include "EngineView.h"
 #include "EngineView.g.cpp"
 
+using namespace winrt::Windows::Foundation;
+using namespace winrt::Windows::System::Threading;
+using namespace winrt::Windows::UI::Core;
 using namespace winrt::Windows::UI::Xaml;
 using namespace winrt::Windows::UI::Xaml::Input;
 using namespace winrt::Windows::UI::Xaml::Media;
 using namespace winrt::Windows::UI::Xaml::Controls;
 
 namespace winrt::BabylonReactNative::implementation {
-    EngineView::EngineView() {
+	EngineView::EngineView() {
+
         _revokerData.SizeChangedRevoker = SizeChanged(winrt::auto_revoke, { this, &EngineView::OnSizeChanged });
-        _revokerData.PointerPressedRevoker = PointerPressed(winrt::auto_revoke, { this, &EngineView::OnPointerPressed });
-        _revokerData.PointerMovedRevoker = PointerMoved(winrt::auto_revoke, { this, &EngineView::OnPointerMoved });
-        _revokerData.PointerReleasedRevoker = PointerReleased(winrt::auto_revoke, { this, &EngineView::OnPointerReleased });
+
+        WorkItemHandler workItemHandler([weakThis{ this->get_weak() }](IAsyncAction const& /* action */)
+        {
+            if (auto trueThis = weakThis.get())
+            {
+                auto deviceTypes = static_cast<CoreInputDeviceTypes>(
+                    static_cast<uint32_t>(Windows::UI::Core::CoreInputDeviceTypes::Mouse) |
+                    static_cast<uint32_t>(Windows::UI::Core::CoreInputDeviceTypes::Touch) |
+                    static_cast<uint32_t>(Windows::UI::Core::CoreInputDeviceTypes::Pen));
+                auto coreInput = trueThis->CreateCoreIndependentInputSource(deviceTypes);
+
+                trueThis->_revokerData.PointerPressedRevoker = coreInput.PointerPressed(winrt::auto_revoke, { trueThis.get(), &EngineView::OnPointerPressed });
+                trueThis->_revokerData.PointerMovedRevoker = coreInput.PointerMoved(winrt::auto_revoke, { trueThis.get(), &EngineView::OnPointerMoved });
+                trueThis->_revokerData.PointerReleasedRevoker = coreInput.PointerReleased(winrt::auto_revoke, { trueThis.get(), &EngineView::OnPointerReleased });
+
+                coreInput.Dispatcher().ProcessEvents(Windows::UI::Core::CoreProcessEventsOption::ProcessUntilQuit);
+            }
+        });
+
+        _inputLoopWorker = ThreadPool::RunAsync(workItemHandler, WorkItemPriority::High, WorkItemOptions::TimeSliced);
 
         _revokerData.RenderingRevoker = CompositionTarget::Rendering(winrt::auto_revoke, [weakThis{ this->get_weak() }](auto const&, auto const&)
         {
@@ -35,32 +56,40 @@ namespace winrt::BabylonReactNative::implementation {
         Babylon::UpdateView(windowPtr, _width, _height, windowTypePtr);
     }
 
-    void EngineView::OnPointerPressed(IInspectable const& /*sender*/, PointerRoutedEventArgs const& args)
+    void EngineView::OnPointerPressed(IInspectable const& /*sender*/, PointerEventArgs const& args)
     {
-        const auto pointerId = args.Pointer().PointerId();
+        const auto point = args.CurrentPoint();
+        const auto pointerId = point.PointerId();
+        _pressedPointers.insert(pointerId);
+
         const auto buttonId = 0; // Update as needed
-        const auto point = args.GetCurrentPoint(*this);
         const auto position = point.Position();
         const uint32_t x = position.X < 0 ? 0 : static_cast<uint32_t>(position.X);
         const uint32_t y = position.Y < 0 ? 0 : static_cast<uint32_t>(position.Y);
         Babylon::SetPointerButtonState(pointerId, buttonId, true, x, y);
     }
 
-    void EngineView::OnPointerMoved(IInspectable const& /*sender*/, PointerRoutedEventArgs const& args)
+    void EngineView::OnPointerMoved(IInspectable const& /*sender*/, PointerEventArgs const& args)
     {
-        const auto pointerId = args.Pointer().PointerId();
-        const auto point = args.GetCurrentPoint(*this);
-        const auto position = point.Position();
-        const uint32_t x = position.X < 0 ? 0 : static_cast<uint32_t>(position.X);
-        const uint32_t y = position.Y < 0 ? 0 : static_cast<uint32_t>(position.Y);
-        Babylon::SetPointerPosition(pointerId, x, y);
+        const auto point = args.CurrentPoint();
+        const auto pointerId = point.PointerId();
+
+        if (_pressedPointers.count(pointerId) > 0)
+        {
+            const auto position = point.Position();
+            const uint32_t x = position.X < 0 ? 0 : static_cast<uint32_t>(position.X);
+            const uint32_t y = position.Y < 0 ? 0 : static_cast<uint32_t>(position.Y);
+            Babylon::SetPointerPosition(pointerId, x, y);
+        }
     }
 
-    void EngineView::OnPointerReleased(IInspectable const& /*sender*/, PointerRoutedEventArgs const& args)
+    void EngineView::OnPointerReleased(IInspectable const& /*sender*/, PointerEventArgs const& args)
     {
-        const auto pointerId = args.Pointer().PointerId();
+        const auto point = args.CurrentPoint();
+        const auto pointerId = point.PointerId();
+        _pressedPointers.erase(pointerId);
+
         const auto buttonId = 0; // Update as needed
-        const auto point = args.GetCurrentPoint(*this);
         const auto position = point.Position();
         const uint32_t x = position.X < 0 ? 0 : static_cast<uint32_t>(position.X);
         const uint32_t y = position.Y < 0 ? 0 : static_cast<uint32_t>(position.Y);
