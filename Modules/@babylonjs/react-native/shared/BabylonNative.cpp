@@ -12,6 +12,7 @@
 
 namespace Babylon
 {
+    using namespace Babylon::Plugins;
     using namespace facebook;
 
     namespace
@@ -136,21 +137,23 @@ namespace Babylon
             });
         }
 
-        void SetPointerButtonState(uint32_t pointerId, uint32_t buttonId, bool isDown, uint32_t x, uint32_t y)
+        void SetPointerButtonState(uint32_t pointerId, uint32_t buttonId, bool isDown, uint32_t x, uint32_t y, bool isMouse)
         {
+            const auto deviceType = isMouse ? NativeInput::DeviceType::Mouse : NativeInput::DeviceType::Touch;
             if (isDown)
             {
-                m_nativeInput->PointerDown(pointerId, buttonId, x, y);
+                m_nativeInput->PointerDown(pointerId, buttonId, x, y, deviceType);
             }
             else
             {
-                m_nativeInput->PointerUp(pointerId, buttonId, x, y);
+                m_nativeInput->PointerUp(pointerId, buttonId, x, y, deviceType);
             }
         }
 
-        void SetPointerPosition(uint32_t pointerId, uint32_t x, uint32_t y)
+        void SetPointerPosition(uint32_t pointerId, uint32_t x, uint32_t y, bool isMouse)
         {
-            m_nativeInput->PointerMove(pointerId, x, y);
+            const auto deviceType = isMouse ? NativeInput::DeviceType::Mouse : NativeInput::DeviceType::Touch;
+            m_nativeInput->PointerMove(pointerId, x, y, deviceType);
         }
 
         jsi::Value get(jsi::Runtime& runtime, const jsi::PropNameID& prop) override
@@ -255,19 +258,19 @@ namespace Babylon
         }
     }
 
-    void SetPointerButtonState(uint32_t pointerId, uint32_t buttonId, bool isDown, uint32_t x, uint32_t y)
+    void SetPointerButtonState(uint32_t pointerId, uint32_t buttonId, bool isDown, uint32_t x, uint32_t y, bool isMouse)
     {
         if (auto nativeModule{ g_nativeModule.lock() })
         {
-            nativeModule->SetPointerButtonState(pointerId, buttonId, isDown, x, y);
+            nativeModule->SetPointerButtonState(pointerId, buttonId, isDown, x, y, isMouse);
         }
     }
 
-    void SetPointerPosition(uint32_t pointerId, uint32_t x, uint32_t y)
+    void SetPointerPosition(uint32_t pointerId, uint32_t x, uint32_t y, bool isMouse)
     {
         if (auto nativeModule{ g_nativeModule.lock() })
         {
-            nativeModule->SetPointerPosition(pointerId, x, y);
+            nativeModule->SetPointerPosition(pointerId, x, y, isMouse);
         }
     }
 }

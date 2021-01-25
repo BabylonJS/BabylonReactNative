@@ -2,6 +2,7 @@
 #include "EngineView.h"
 #include "EngineView.g.cpp"
 
+using namespace winrt::Windows::Devices::Input;
 using namespace winrt::Windows::Foundation;
 using namespace winrt::Windows::System::Threading;
 using namespace winrt::Windows::UI::Core;
@@ -11,7 +12,7 @@ using namespace winrt::Windows::UI::Xaml::Media;
 using namespace winrt::Windows::UI::Xaml::Controls;
 
 namespace winrt::BabylonReactNative::implementation {
-	EngineView::EngineView() {
+    EngineView::EngineView() {
 
         _revokerData.SizeChangedRevoker = SizeChanged(winrt::auto_revoke, { this, &EngineView::OnSizeChanged });
 
@@ -64,9 +65,10 @@ namespace winrt::BabylonReactNative::implementation {
 
         const auto buttonId = 0; // Update as needed
         const auto position = point.Position();
+        const bool isMouse = point.PointerDevice().PointerDeviceType() == PointerDeviceType::Mouse;
         const uint32_t x = position.X < 0 ? 0 : static_cast<uint32_t>(position.X);
         const uint32_t y = position.Y < 0 ? 0 : static_cast<uint32_t>(position.Y);
-        Babylon::SetPointerButtonState(pointerId, buttonId, true, x, y);
+        Babylon::SetPointerButtonState(pointerId, buttonId, true, x, y, isMouse);
     }
 
     void EngineView::OnPointerMoved(IInspectable const& /*sender*/, PointerEventArgs const& args)
@@ -77,9 +79,10 @@ namespace winrt::BabylonReactNative::implementation {
         if (_pressedPointers.count(pointerId) > 0)
         {
             const auto position = point.Position();
+            const bool isMouse = point.PointerDevice().PointerDeviceType() == PointerDeviceType::Mouse;
             const uint32_t x = position.X < 0 ? 0 : static_cast<uint32_t>(position.X);
             const uint32_t y = position.Y < 0 ? 0 : static_cast<uint32_t>(position.Y);
-            Babylon::SetPointerPosition(pointerId, x, y);
+            Babylon::SetPointerPosition(pointerId, x, y, isMouse);
         }
     }
 
@@ -91,9 +94,10 @@ namespace winrt::BabylonReactNative::implementation {
 
         const auto buttonId = 0; // Update as needed
         const auto position = point.Position();
+        const bool isMouse = point.PointerDevice().PointerDeviceType() == PointerDeviceType::Mouse;
         const uint32_t x = position.X < 0 ? 0 : static_cast<uint32_t>(position.X);
         const uint32_t y = position.Y < 0 ? 0 : static_cast<uint32_t>(position.Y);
-        Babylon::SetPointerButtonState(pointerId, buttonId, false, x, y);
+        Babylon::SetPointerButtonState(pointerId, buttonId, false, x, y, isMouse);
     }
 
     void EngineView::OnRendering()
