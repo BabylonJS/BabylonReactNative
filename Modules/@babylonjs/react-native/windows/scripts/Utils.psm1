@@ -69,7 +69,7 @@ function Compile-Solution {
     )
 
     $MSBuild = Get-MSBuildPath
-    & "$MSBuild" /p:Configuration="$Configuration" /p:Platform="$Platform" /m:32 $Solution
+    & "$MSBuild" /p:Configuration="$Configuration" /p:Platform="$Platform" /m $Solution
     if ($? -Eq $False) {
         Write-Error "$Platform $Configuration Build failed."
         exit 1
