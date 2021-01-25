@@ -42,7 +42,17 @@ const buildAndroid = async () => {
 };
 
 const makeUWPProject = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\Setup.bat');
+  // windows build agents don't support the path lengths required for initializing arcore dependencies,
+  // so we manually initialize the submodules we need here.
+  exec('git -c submodule."Dependencies/xr/Dependencies/arcore-android-sdk".update=none submodule update --init --recursive "./../Modules/@babylonjs/react-native/submodules/BabylonNative');
+  shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64');
+  exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI ./../../../windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64');
+  shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x86');
+  exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI -A Win32 ./../../../windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x86');
+  shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm');
+  exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI -A arm ./../../../windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm');
+  shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm64');
+  exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI -A arm64 ./../../../windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm64');
 }
 
 const buildUWPProject = async () => {
@@ -52,7 +62,11 @@ const buildUWPProject = async () => {
 const buildUWP = gulp.series(makeUWPProject, buildUWPProject);
 
 const makeUWPProjectPR = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\PRSetup.bat');
+  // windows build agents don't support the path lengths required for initializing arcore dependencies,
+  // so we manually initialize the submodules we need here.
+  exec('git -c submodule."Dependencies/xr/Dependencies/arcore-android-sdk".update=none submodule update --init --recursive "./../Modules/@babylonjs/react-native/submodules/BabylonNative');
+  shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64');
+  exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI ./../../../windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64');
 }
 
 const buildUWPProjectPR = async () => {
@@ -298,6 +312,10 @@ const buildUWPPublish = gulp.series(buildUWP, copyPackageFilesUWP);
 const packUWP = gulp.series(clean, buildUWP, copyPackageFilesUWP, createPackage);
 const packUWPNoBuild = gulp.series(clean, copyPackageFilesUWP, createPackage);
 
+exports.makeUWPProject = makeUWPProject;
+exports.buildUWPProject = buildUWPProject;
+exports.makeUWPProjectPR = makeUWPProjectPR;
+exports.buildUWPProjectPR = buildUWPProjectPR;
 exports.buildUWP = buildUWP;
 exports.buildUWPPR = buildUWPPR;
 exports.buildUWPPublish = buildUWPPublish;
