@@ -35,3 +35,26 @@ jobs:
         working-directory: ./Package/Assembled
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+        with:
+          submodules: 'true'
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.2
+      - name: Add nuget to PATH
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: '5.x'
+      - name: NPM Install (Playground)
+        run: npm install
+        working-directory: ./Apps/Playground
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Gulp (Windows)
+        run: npx gulp buildUWPPR
+        working-directory: ./Package

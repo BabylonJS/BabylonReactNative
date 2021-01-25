@@ -13,7 +13,4 @@ git submodule update --init --recursive "Dependencies\xr\Dependencies\OpenXR-SDK
 git submodule update --init --recursive "Dependencies\xr\Dependencies\OpenXR-MixedReality"
 Pop-Location
 
-Restore-CMakeProject -Platform "x86"
 Restore-CMakeProject -Platform "x64"
-Restore-CMakeProject -Platform "arm"
-Restore-CMakeProject -Platform "arm64"
