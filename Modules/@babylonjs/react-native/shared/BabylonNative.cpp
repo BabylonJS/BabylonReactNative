@@ -139,21 +139,19 @@ namespace Babylon
 
         void SetPointerButtonState(uint32_t pointerId, uint32_t buttonId, bool isDown, uint32_t x, uint32_t y, bool isMouse)
         {
-            const auto deviceType = isMouse ? NativeInput::DeviceType::Mouse : NativeInput::DeviceType::Touch;
             if (isDown)
             {
-                m_nativeInput->PointerDown(pointerId, buttonId, x, y, deviceType);
+                m_nativeInput->PointerDown(pointerId, buttonId, x, y, isMouse);
             }
             else
             {
-                m_nativeInput->PointerUp(pointerId, buttonId, x, y, deviceType);
+                m_nativeInput->PointerUp(pointerId, buttonId, x, y, isMouse);
             }
         }
 
         void SetPointerPosition(uint32_t pointerId, uint32_t x, uint32_t y, bool isMouse)
         {
-            const auto deviceType = isMouse ? NativeInput::DeviceType::Mouse : NativeInput::DeviceType::Touch;
-            m_nativeInput->PointerMove(pointerId, x, y, deviceType);
+            m_nativeInput->PointerMove(pointerId, x, y, isMouse);
         }
 
         jsi::Value get(jsi::Runtime& runtime, const jsi::PropNameID& prop) override
