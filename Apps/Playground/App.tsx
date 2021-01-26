@@ -50,6 +50,15 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
               }
             }
           })
+        } else if (device.deviceType === DeviceType.Mouse) {
+          const mouse: DeviceSource<DeviceType.Mouse> = deviceSourceManager.getDeviceSource(device.deviceType, device.deviceSlot)!;
+          mouse.onInputChangedObservable.add(mouseEvent => {
+            if (mouseEvent.inputIndex === PointerInput.Horizontal) {
+              if (mouseEvent.currentState && mouseEvent.previousState) {
+                rootNode.rotate(Vector3.Down(), (mouseEvent.currentState - mouseEvent.previousState) * 0.005);
+              }
+            }
+          });
         }
       })
 
