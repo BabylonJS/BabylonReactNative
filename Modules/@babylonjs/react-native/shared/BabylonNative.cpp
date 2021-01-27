@@ -17,7 +17,7 @@ namespace Babylon
 
     namespace
     {
-        Dispatcher g_inlineDispatcher{[](const std::function<void()>& func) { func(); }};
+        Dispatcher g_inlineDispatcher{ [](const std::function<void()>& func) { func(); } };
     }
 
     class ReactNativeModule : public jsi::HostObject
@@ -34,13 +34,13 @@ namespace Babylon
             (
                 jsiRuntime,
                 jsi::Function::createFromHostFunction(jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "executor"), 0, [this](jsi::Runtime& rt, const jsi::Value&, const jsi::Value* args, size_t) -> jsi::Value
+            {
+                m_resolveInitPromise = [&rt, resolve{ std::make_shared<jsi::Value>(rt, args[0]) }]()
                 {
-                    m_resolveInitPromise = [&rt, resolve{ std::make_shared<jsi::Value>(rt, args[0]) }]()
-                    {
-                        resolve->asObject(rt).asFunction(rt).call(rt);
-                    };
-                    return {};
-                })
+                    resolve->asObject(rt).asFunction(rt).call(rt);
+                };
+                return {};
+            })
             );
 
             // Initialize Babylon Native core components
@@ -137,21 +137,38 @@ namespace Babylon
             });
         }
 
-        void SetPointerButtonState(uint32_t pointerId, uint32_t buttonId, bool isDown, uint32_t x, uint32_t y, bool isMouse)
+        void SetMouseButtonState(uint32_t buttonId, bool isDown, uint32_t x, uint32_t y)
         {
             if (isDown)
             {
-                m_nativeInput->PointerDown(pointerId, buttonId, x, y, isMouse);
+                m_nativeInput->MouseDown(buttonId, x, y);
             }
             else
             {
-                m_nativeInput->PointerUp(pointerId, buttonId, x, y, isMouse);
+                m_nativeInput->MouseUp(buttonId, x, y);
             }
         }
 
-        void SetPointerPosition(uint32_t pointerId, uint32_t x, uint32_t y, bool isMouse)
+        void SetMousePosition(uint32_t x, uint32_t y)
         {
-            m_nativeInput->PointerMove(pointerId, x, y, isMouse);
+            m_nativeInput->MouseMove(x, y);
+        }
+
+        void SetTouchButtonState(uint32_t pointerId, uint32_t buttonId, bool isDown, uint32_t x, uint32_t y)
+        {
+            if (isDown)
+            {
+                m_nativeInput->TouchDown(pointerId, buttonId, x, y);
+            }
+            else
+            {
+                m_nativeInput->TouchUp(pointerId, buttonId, x, y);
+            }
+        }
+
+        void SetTouchPosition(uint32_t pointerId, uint32_t x, uint32_t y)
+        {
+            m_nativeInput->TouchMove(pointerId, x, y);
         }
 
         jsi::Value get(jsi::Runtime& runtime, const jsi::PropNameID& prop) override
@@ -256,19 +273,35 @@ namespace Babylon
         }
     }
 
-    void SetPointerButtonState(uint32_t pointerId, uint32_t buttonId, bool isDown, uint32_t x, uint32_t y, bool isMouse)
+    void SetMouseButtonState(uint32_t buttonId, bool isDown, uint32_t x, uint32_t y)
     {
         if (auto nativeModule{ g_nativeModule.lock() })
         {
-            nativeModule->SetPointerButtonState(pointerId, buttonId, isDown, x, y, isMouse);
+            nativeModule->SetMouseButtonState(buttonId, isDown, x, y);
         }
     }
 
-    void SetPointerPosition(uint32_t pointerId, uint32_t x, uint32_t y, bool isMouse)
+    void SetMousePosition(uint32_t x, uint32_t y)
     {
         if (auto nativeModule{ g_nativeModule.lock() })
         {
-            nativeModule->SetPointerPosition(pointerId, x, y, isMouse);
+            nativeModule->SetMousePosition(x, y);
+        }
+    }
+
+    void SetTouchButtonState(uint32_t pointerId, uint32_t buttonId, bool isDown, uint32_t x, uint32_t y)
+    {
+        if (auto nativeModule{ g_nativeModule.lock() })
+        {
+            nativeModule->SetTouchButtonState(pointerId, buttonId, isDown, x, y);
+        }
+    }
+
+    void SetTouchPosition(uint32_t pointerId, uint32_t x, uint32_t y)
+    {
+        if (auto nativeModule{ g_nativeModule.lock() })
+        {
+            nativeModule->SetTouchPosition(pointerId, x, y);
         }
     }
 }

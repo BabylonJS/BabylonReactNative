@@ -10,6 +10,8 @@ namespace Babylon
     void Deinitialize();
     void UpdateView(void* windowPtr, size_t width, size_t height, void* windowTypePtr = nullptr);
     void RenderView();
-    void SetPointerButtonState(uint32_t pointerId, uint32_t buttonId, bool isDown, uint32_t x, uint32_t y, bool isMouse = false);
-    void SetPointerPosition(uint32_t pointerId, uint32_t x, uint32_t y, bool isMouse = false);
+    void SetMouseButtonState(uint32_t buttonId, bool isDown, uint32_t x, uint32_t y);
+    void SetMousePosition(uint32_t x, uint32_t y);
+    void SetTouchButtonState(uint32_t pointerId, uint32_t buttonId, bool isDown, uint32_t x, uint32_t y);
+    void SetTouchPosition(uint32_t pointerId, uint32_t x, uint32_t y);
 }
