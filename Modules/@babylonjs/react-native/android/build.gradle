@@ -77,15 +77,17 @@ android {
         packagingOptions {
             // .so files referenced by cmake should be autolinked with Android gradle plugin 4.0.0+
             // We exclude these libs here to support Android gradle plugin 4.0.0+ builds
-            exclude 'lib/x86/libfbjni.so'
             exclude 'lib/armeabi-v7a/libfbjni.so'
-            exclude 'lib/x86/libarcore_sdk_c.so'
-            exclude 'lib/armeabi-v7a/libarcore_sdk_c.so'
             exclude 'lib/arm64-v8a/libfbjni.so'
-            exclude 'lib/arm64-v8a/libturbomodulejsijni.so'
-            exclude 'lib/armeabi-v7a/libturbomodulejsijni.so'
-            exclude 'lib/x86/libturbomodulejsijni.so'
+            exclude 'lib/x86/libfbjni.so'
+
+            exclude 'lib/armeabi-v7a/libarcore_sdk_c.so'
             exclude 'lib/arm64-v8a/libarcore_sdk_c.so'
+            exclude 'lib/x86/libarcore_sdk_c.so'
+
+            exclude 'lib/armeabi-v7a/libturbomodulejsijni.so'
+            exclude 'lib/arm64-v8a/libturbomodulejsijni.so'
+            exclude 'lib/x86/libturbomodulejsijni.so'
         }
 
     }
