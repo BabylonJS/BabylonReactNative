@@ -38,7 +38,7 @@ const buildIphoneSimulator = async () => {
 const buildIOS = gulp.series(makeXCodeProj, buildIphoneOS, buildIphoneSimulator);
 
 const buildAndroid = async () => {
-  exec('./gradlew babylonjs_react-native:assembleRelease', '../Apps/Playground/android');
+  exec('gradlew babylonjs_react-native:assembleRelease', '../Apps/Playground/android');
 };
 
 const makeUWPProject = async () => {
@@ -306,6 +306,10 @@ exports.clean = clean;
 exports.build = build;
 exports.rebuild = rebuild;
 exports.pack = pack;
+
+const packAndroid = gulp.series(clean, buildAndroid, copyFiles, createPackage);
+exports.buildAndroid = buildAndroid;
+exports.packAndroid = packAndroid;
 
 const copyPackageFilesUWP = gulp.series(copyCommonFiles, copySharedFiles, copyUWPFiles);
 const buildUWPPublish = gulp.series(buildUWP, copyPackageFilesUWP);

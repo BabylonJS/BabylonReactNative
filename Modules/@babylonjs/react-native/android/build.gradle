@@ -75,6 +75,7 @@ android {
             abiFilters "arm64-v8a", "armeabi-v7a", "x86"
         }
         packagingOptions {
+            // TODO if def based on gradle version where we only do this for 4.0.0+?
             // .so files referenced by cmake should be autolinked
             exclude 'lib/x86/libfbjni.so'
             exclude 'lib/armeabi-v7a/libfbjni.so'
