@@ -17,6 +17,7 @@ target 'Playground' do
 
   target 'PlaygroundTests' do
     inherit! :complete
+    # Pods for testing
   end
 
   # Enables Flipper.
