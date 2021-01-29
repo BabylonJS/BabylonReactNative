@@ -33,7 +33,6 @@ buildscript {
             jcenter()
         }
         dependencies {
-// TODO move to 4.1.0?
             classpath 'com.android.tools.build:gradle:3.4.1'
         }
     }
