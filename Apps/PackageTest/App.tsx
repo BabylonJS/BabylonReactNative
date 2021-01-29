@@ -43,7 +43,7 @@ const App = () => {
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: "white"}}>
         <EngineView style={{flex: 1}} camera={camera} />
       </SafeAreaView>
     </>
