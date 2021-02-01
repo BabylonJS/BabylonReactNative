@@ -4,7 +4,7 @@ on:
     types: [published]
 
 jobs:
-  build:
+  build-android-ios:
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
@@ -22,6 +22,54 @@ jobs:
       - name: Gulp
         run: npx gulp
         working-directory: ./Package
+      - name: Upload Assembled Folder
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'Assembled'
+          path: Package/Assembled
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+        with:
+          submodules: 'true'
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.0.2
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: '5.x'
+      - name: NPM Install (Playground)
+        run: npm install
+        working-directory: ./Apps/Playground
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Gulp (Windows)
+        run: npx gulp buildUWPPublish
+        working-directory: ./Package
+      - name: Upload Assembled Folder
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'Assembled'
+          path: Package/Assembled
+  package:
+    needs: [build-android-ios, build-windows]
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Download Assembled Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled'
+          path: Package/Assembled
+      - name: Display structure of downloaded Assembled folder
+        run: ls -R
       - name: Setup Node.js
         uses: actions/setup-node@v2.1.2
         with:

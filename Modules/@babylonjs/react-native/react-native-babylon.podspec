@@ -14,7 +14,6 @@ Pod::Spec.new do |s|
   s.source       = { :git => package["repository"]["url"], :tag => s.version }
 
   s.source_files = "ios/**/*.{h,m,mm}"
-  s.exclude_files = "ios/BabylonNative.h"
   s.requires_arc = true
 
   s.libraries = 'astc-codec',
@@ -33,7 +32,6 @@ Pod::Spec.new do |s|
                 'napi',
                 'NativeEngine',
                 'NativeInput',
-                'NativeWindow',
                 'NativeXR',
                 'SPIRV',
                 'spirv-cross-core',

@@ -4,6 +4,7 @@ const readdirAsync = util.promisify(fs.readdir);
 const log = require('fancy-log');
 const gulp = require('gulp');
 const shelljs = require('shelljs');
+const rename = require('gulp-rename');
 
 function exec(command, workingDirectory = '.', logCommand = true) {
   if (logCommand) {
@@ -40,12 +41,51 @@ const buildAndroid = async () => {
   exec('./gradlew babylonjs_react-native:assembleRelease', '../Apps/Playground/android');
 };
 
+const makeUWPProject = async () => {
+  // windows build agents don't support the path lengths required for initializing arcore dependencies,
+  // so we manually initialize the submodules we need here.
+  exec('git -c submodule."Dependencies/xr/Dependencies/arcore-android-sdk".update=none submodule update --init --recursive "./../Modules/@babylonjs/react-native/submodules/BabylonNative');
+  shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64');
+  exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI ./../../../windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64');
+  shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x86');
+  exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI -A Win32 ./../../../windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x86');
+  shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm');
+  exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI -A arm ./../../../windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm');
+  shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm64');
+  exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI -A arm64 ./../../../windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm64');
+}
+
+const buildUWPProject = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\Build.bat');
+}
+
+const buildUWP = gulp.series(makeUWPProject, buildUWPProject);
+
+const makeUWPProjectPR = async () => {
+  // windows build agents don't support the path lengths required for initializing arcore dependencies,
+  // so we manually initialize the submodules we need here.
+  exec('git -c submodule."Dependencies/xr/Dependencies/arcore-android-sdk".update=none submodule update --init --recursive "./../Modules/@babylonjs/react-native/submodules/BabylonNative');
+  shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64');
+  exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI ./../../../windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64');
+}
+
+const buildUWPProjectPR = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\PRBuild.bat');
+}
+
+const buildUWPPR = gulp.series(makeUWPProjectPR, buildUWPProjectPR);
+
 const copyCommonFiles = () => {
   return  gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/package.json')
     .pipe(gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/README.md'))
     .pipe(gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/*.ts*'))
     .pipe(gulp.src('react-native-babylon.podspec'))
     .pipe(gulp.dest('Assembled'));
+};
+
+const copySharedFiles = () => {
+  return gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/shared/BabylonNative.h')
+    .pipe(gulp.dest('Assembled/shared'));
 };
 
 const copyIOSFiles = () => {
@@ -64,19 +104,110 @@ const createIOSUniversalLibs = async () => {
 
 const copyAndroidFiles = async () => {
   await new Promise(resolve => {
-          gulp.src('Android/build.gradle')
-    .pipe(gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/android/src**/main/AndroidManifest.xml'))
-    .pipe(gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/android/src**/main/java/**/*'))
-    .pipe(gulp.dest('Assembled/android'))
-    .on('end', resolve);
+    gulp.src('Android/build.gradle')
+      .pipe(gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/android/src**/main/AndroidManifest.xml'))
+      .pipe(gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/android/src**/main/java/**/*'))
+      .pipe(gulp.dest('Assembled/android'))
+      .on('end', resolve);
   });
 
   await new Promise(resolve => {
-          gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/android/build/intermediates/library_and_local_jars_jni/release/**/*')
+          gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/android/build/intermediates/library_and_local_jars_jni/release/jni/**/*')
+    .pipe(gulp.dest('Assembled/android/src/main/jniLibs/'))
+    .on('end', resolve);
+  });
+
+  // This is no longer found in the directory above because it is explicitly excluded because Playground has been updated to RN 0.64 which includes
+  // the real implementation of libturbomodulejsijni.so, but we still need to support RN 0.63 consumers, so grab this one explicitly to include it in the package.
+  await new Promise(resolve => {
+          gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/android/build/intermediates/cmake/release/obj/**/libturbomodulejsijni.so')
     .pipe(gulp.dest('Assembled/android/src/main/jniLibs/'))
     .on('end', resolve);
   });
 };
+
+const createUWPDirectories = async () => {
+  shelljs.mkdir('-p', 'Assembled/windows');
+  shelljs.mkdir('-p', 'Assembled/windows/libs');
+  shelljs.mkdir('-p', 'Assembled/windows/libs/arm');
+  shelljs.mkdir('-p', 'Assembled/windows/libs/arm/Debug');
+  shelljs.mkdir('-p', 'Assembled/windows/libs/arm/Release');
+  shelljs.mkdir('-p', 'Assembled/windows/libs/arm64');
+  shelljs.mkdir('-p', 'Assembled/windows/libs/arm64/Debug');
+  shelljs.mkdir('-p', 'Assembled/windows/libs/arm64/Release');
+  shelljs.mkdir('-p', 'Assembled/windows/libs/x86');
+  shelljs.mkdir('-p', 'Assembled/windows/libs/x86/Debug');
+  shelljs.mkdir('-p', 'Assembled/windows/libs/x86/Release');
+  shelljs.mkdir('-p', 'Assembled/windows/libs/x64');
+  shelljs.mkdir('-p', 'Assembled/windows/libs/x64/Debug');
+  shelljs.mkdir('-p', 'Assembled/windows/libs/x64/Release');
+  shelljs.mkdir('-p', 'Assembled/windows/BabylonReactNative');
+}
+
+const copyx86DebugUWPFiles = () => {
+  return gulp.src('../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x86/**/Debug/**/*.{lib,pri}')
+    .pipe(rename({ dirname: '' }))
+    .pipe(gulp.dest('Assembled/windows/libs/x86/Debug'));
+}
+
+const copyx86ReleaseUWPFiles = () => {
+  return gulp.src('../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x86/**/Release/**/*.{lib,pri}')
+    .pipe(rename({ dirname: '' }))
+    .pipe(gulp.dest('Assembled/windows/libs/x86/Release'));
+}
+
+const copyx64DebugUWPFiles = () => {
+  return gulp.src('../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64/**/Debug/**/*.{lib,pri}')
+    .pipe(rename({ dirname: '' }))
+    .pipe(gulp.dest('Assembled/windows/libs/x64/Debug'));
+}
+
+const copyx64ReleaseUWPFiles = () => {
+  return gulp.src('../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64/**/Release/**/*.{lib,pri}')
+    .pipe(rename({ dirname: '' }))
+    .pipe(gulp.dest('Assembled/windows/libs/x64/Release'));
+}
+
+const copyARMDebugUWPFiles = () => {
+  return gulp.src('../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm/**/Debug/**/*.{lib,pri}')
+    .pipe(rename({ dirname: '' }))
+    .pipe(gulp.dest('Assembled/windows/libs/arm/Debug'));
+}
+
+const copyARMReleaseUWPFiles = () => {
+  return gulp.src('../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm/**/Release/**/*.{lib,pri}')
+    .pipe(rename({ dirname: '' }))
+    .pipe(gulp.dest('Assembled/windows/libs/arm/Release'));
+}
+
+const copyARM64DebugUWPFiles = () => {
+  return gulp.src('../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm64/**/Debug/**/*.{lib,pri}')
+    .pipe(rename({ dirname: '' }))
+    .pipe(gulp.dest('Assembled/windows/libs/arm64/Debug'));
+}
+
+const copyARM64ReleaseUWPFiles = () => {
+  return gulp.src('../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm64/**/Release/**/*.{lib,pri}')
+    .pipe(rename({ dirname: '' }))
+    .pipe(gulp.dest('Assembled/windows/libs/arm64/Release'));
+}
+
+const copyVCXProjUWPFiles = () => {
+  return gulp.src('../Modules/@babylonjs/react-native/windows/BabylonReactNative/*.*')
+    .pipe(gulp.dest('Assembled/windows/BabylonReactNative'));
+}
+
+const copyUWPFiles = gulp.parallel(
+  createUWPDirectories,
+  copyx86DebugUWPFiles,
+  copyx86ReleaseUWPFiles,
+  copyx64DebugUWPFiles,
+  copyx64ReleaseUWPFiles,
+  copyARMDebugUWPFiles,
+  copyARMReleaseUWPFiles,
+  copyARM64DebugUWPFiles,
+  copyARM64ReleaseUWPFiles,
+  copyVCXProjUWPFiles);
 
 const validate = async () => {
   // When the package contents are updated *and validated*, update the expected below by running 'find Assembled | pbcopy' and pasting it over the expected string.
@@ -84,6 +215,8 @@ const validate = async () => {
   const expected =
 `Assembled
 Assembled/EngineHook.ts
+Assembled/shared
+Assembled/shared/BabylonNative.h
 Assembled/EngineView.tsx
 Assembled/ios
 Assembled/ios/BabylonNativeInterop.mm
@@ -94,7 +227,6 @@ Assembled/ios/libs/libWindow.a
 Assembled/ios/libs/libbimg.a
 Assembled/ios/libs/libOGLCompiler.a
 Assembled/ios/libs/libastc.a
-Assembled/ios/libs/libNativeWindow.a
 Assembled/ios/libs/libNativeEngine.a
 Assembled/ios/libs/libNativeXr.a
 Assembled/ios/libs/libspirv-cross-glsl.a
@@ -123,9 +255,7 @@ Assembled/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace
 Assembled/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata
 Assembled/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings
 Assembled/ios/BabylonModule.mm
-Assembled/ios/BabylonNative.h
 Assembled/README.md
-Assembled/EngineHelpers.ts
 Assembled/package.json
 Assembled/android
 Assembled/android/build.gradle
@@ -134,24 +264,28 @@ Assembled/android/src/main
 Assembled/android/src/main/AndroidManifest.xml
 Assembled/android/src/main/java
 Assembled/android/src/main/java/com
-Assembled/android/src/main/java/com/reactlibrary
-Assembled/android/src/main/java/com/reactlibrary/BabylonNativeInterop.java
-Assembled/android/src/main/java/com/reactlibrary/SnapshotDataReturnedEvent.java
-Assembled/android/src/main/java/com/reactlibrary/BabylonModule.java
-Assembled/android/src/main/java/com/reactlibrary/BabylonPackage.java
-Assembled/android/src/main/java/com/reactlibrary/EngineViewManager.java
-Assembled/android/src/main/java/com/reactlibrary/EngineView.java
+Assembled/android/src/main/java/com/babylonreactnative
+Assembled/android/src/main/java/com/babylonreactnative/BabylonNativeInterop.java
+Assembled/android/src/main/java/com/babylonreactnative/SnapshotDataReturnedEvent.java
+Assembled/android/src/main/java/com/babylonreactnative/BabylonModule.java
+Assembled/android/src/main/java/com/babylonreactnative/BabylonPackage.java
+Assembled/android/src/main/java/com/babylonreactnative/EngineViewManager.java
+Assembled/android/src/main/java/com/babylonreactnative/EngineView.java
 Assembled/android/src/main/jniLibs
 Assembled/android/src/main/jniLibs/armeabi-v7a
+Assembled/android/src/main/jniLibs/armeabi-v7a/libturbomodulejsijni.so
 Assembled/android/src/main/jniLibs/armeabi-v7a/libBabylonNative.so
 Assembled/android/src/main/jniLibs/x86
+Assembled/android/src/main/jniLibs/x86/libturbomodulejsijni.so
 Assembled/android/src/main/jniLibs/x86/libBabylonNative.so
 Assembled/android/src/main/jniLibs/arm64-v8a
+Assembled/android/src/main/jniLibs/arm64-v8a/libturbomodulejsijni.so
 Assembled/android/src/main/jniLibs/arm64-v8a/libBabylonNative.so
 Assembled/react-native-babylon.podspec
 Assembled/index.ts
 Assembled/VersionValidation.ts
 Assembled/BabylonModule.ts
+Assembled/ReactNativeEngine.ts
 `;
 
   const result = shelljs.exec('find Assembled', {silent: true});
@@ -164,7 +298,7 @@ const createPackage = async () => {
   exec('npm pack', 'Assembled');
 };
 
-const copyFiles = gulp.parallel(copyCommonFiles, copyIOSFiles, copyAndroidFiles);
+const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyIOSFiles, copyAndroidFiles);
 
 const build = gulp.series(buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validate);
 const rebuild = gulp.series(clean, build);
@@ -175,9 +309,31 @@ exports.buildAndroid = buildAndroid;
 exports.createIOSUniversalLibs = createIOSUniversalLibs;
 exports.copyFiles = copyFiles;
 
+exports.buildUWP = buildUWP;
+
 exports.clean = clean;
 exports.build = build;
 exports.rebuild = rebuild;
 exports.pack = pack;
+
+const packAndroid = gulp.series(clean, buildAndroid, copyFiles, createPackage);
+exports.buildAndroid = buildAndroid;
+exports.packAndroid = packAndroid;
+
+const copyPackageFilesUWP = gulp.series(copyCommonFiles, copySharedFiles, copyUWPFiles);
+const buildUWPPublish = gulp.series(buildUWP, copyPackageFilesUWP);
+const packUWP = gulp.series(clean, buildUWP, copyPackageFilesUWP, createPackage);
+const packUWPNoBuild = gulp.series(clean, copyPackageFilesUWP, createPackage);
+
+exports.makeUWPProject = makeUWPProject;
+exports.buildUWPProject = buildUWPProject;
+exports.makeUWPProjectPR = makeUWPProjectPR;
+exports.buildUWPProjectPR = buildUWPProjectPR;
+exports.buildUWP = buildUWP;
+exports.buildUWPPR = buildUWPPR;
+exports.buildUWPPublish = buildUWPPublish;
+exports.copyUWPFiles = copyUWPFiles;
+exports.packUWP = packUWP;
+exports.packUWPNoBuild = packUWPNoBuild;
 
 exports.default = build;

@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.13.2)
-
 project(ReactNativeBabylon)
+include(${CMAKE_CURRENT_LIST_DIR}/../shared/CMakeLists.txt)
+
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
@@ -15,18 +16,24 @@ file(COPY ${REACTNATIVE_DIR}/ReactCommon/jsi/jsi DESTINATION ${CMAKE_CURRENT_BIN
 add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/jsi/jsi ${CMAKE_CURRENT_BINARY_DIR}/jsi)
 target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR}/ReactCommon/jsi)
 
+add_library(reactnative INTERFACE)
+target_include_directories(reactnative INTERFACE ${REACTNATIVE_DIR}/ReactCommon/callinvoker)
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/")
 
 set(BABYLON_NATIVE_DIR "${CMAKE_CURRENT_LIST_DIR}/../submodules/BabylonNative")
 add_subdirectory(${BABYLON_NATIVE_DIR} ${BABYLON_NATIVE_DIR}/build/ios/)
 
+set(BABYLON_REACT_NATIVE_SHARED_DIR "${CMAKE_CURRENT_LIST_DIR}/../shared")
+add_subdirectory(${BABYLON_REACT_NATIVE_SHARED_DIR} ${CMAKE_CURRENT_BINARY_DIR}/shared)
+
 add_library(BabylonNative
-    ${CMAKE_CURRENT_LIST_DIR}/BabylonNative.h
-    ${CMAKE_CURRENT_LIST_DIR}/BabylonNative.cpp)
+    ${SHARED_SOURCES})
 
 target_compile_definitions(BabylonNative PRIVATE UNICODE)
 target_compile_definitions(BabylonNative PRIVATE _UNICODE)
 
+target_include_directories(BabylonNative PRIVATE ${SHARED_INCLUDES})
 target_include_directories(BabylonNative PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
 target_link_libraries(BabylonNative
@@ -34,8 +41,8 @@ target_link_libraries(BabylonNative
     arcana
     Graphics
     jsi
+    reactnative
     JsRuntime
-    NativeWindow
     NativeEngine
     NativeInput
     NativeXr

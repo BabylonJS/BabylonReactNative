@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import { PERMISSIONS, check, request } from 'react-native-permissions';
-import { Engine, NativeEngine, WebXRSessionManager } from '@babylonjs/core';
-import { BabylonModule } from './BabylonModule';
-import { DisposeEngine } from './EngineHelpers';
+import { Engine, WebXRSessionManager, WebXRExperienceHelper, Color3 } from '@babylonjs/core';
+import { ReactNativeEngine } from './ReactNativeEngine';
 import './VersionValidation';
 import * as base64 from 'base-64';
 
@@ -28,12 +27,19 @@ class DOMException {
 {
     const originalInitializeSessionAsync: (...args: any[]) => Promise<any> = WebXRSessionManager.prototype.initializeSessionAsync;
     WebXRSessionManager.prototype.initializeSessionAsync = async function (...args: any[]): Promise<any> {
+        if (Platform.OS === "windows")
+        {
+            // Launching into immersive mode on Windows HMDs doesn't require a runtime permission check.
+            // The Spatial Perception capability should be enabled in the project's Package.appxmanifest.
+            return originalInitializeSessionAsync.apply(this, args);
+        }
+
         const cameraPermission = Platform.select({
             android: PERMISSIONS.ANDROID.CAMERA,
             ios: PERMISSIONS.IOS.CAMERA,
         });
 
-        // Only Android and iOS are supported.
+        // Only Android, iOS and Windows are supported.
         if (cameraPermission === undefined) {
             throw new DOMException(DOMError.NotSupportedError);
         }
@@ -58,6 +64,17 @@ class DOMException {
     }
 }
 
+if (Platform.OS == "windows") {
+    const originalEnterXRAsync: (...args: any[]) => Promise<any> = WebXRExperienceHelper.prototype.enterXRAsync;
+    WebXRExperienceHelper.prototype.enterXRAsync = async function (...args: any[]): Promise<any> {
+        // TODO: https://github.com/BabylonJS/BabylonNative/issues/577
+        // Windows HMDs require different rendering behaviors than default xr rendering for mobile devices
+        await originalEnterXRAsync.apply(this, args);
+        this.scene.clearColor = Color3.Black().toColor4();
+        this.scene.autoClear = true;
+    }
+}
+
 // Babylon Native includes a native atob polyfill, but it relies JSI to deal with the strings, and JSI has a bug where it assumes strings are null terminated, and a base 64 string can contain one of these.
 // So for now, provide a JavaScript based atob polyfill.
 declare const global: any;
@@ -67,31 +84,18 @@ export function useEngine(): Engine | undefined {
     const [engine, setEngine] = useState<Engine>();
 
     useEffect(() => {
-        let disposed = false;
+        const abortController = new AbortController();
+        let engine: ReactNativeEngine | undefined = undefined;
 
         (async () => {
-            if (await BabylonModule.initialize() && !disposed)
-            {
-                setEngine(new NativeEngine());
-            }
+            setEngine(engine = await ReactNativeEngine.tryCreateAsync(abortController.signal) ?? undefined);
         })();
 
-        // NOTE: This is a workaround for https://github.com/BabylonJS/BabylonReactNative/issues/60
-        function heartbeat() {
-            if (!disposed) {
-                setTimeout(heartbeat, 10);
-            }
-        }
-        heartbeat();
-
         return () => {
-            disposed = true;
-            setEngine(engine => {
-                if (engine) {
-                    DisposeEngine(engine);
-                }
-                return undefined;
-            });
+            abortController.abort();
+            // NOTE: Do not use setEngine with a callback to dispose the engine instance as that callback does not get called during component unmount when compiled in release.
+            engine?.dispose();
+            setEngine(undefined);
         };
     }, []);
 

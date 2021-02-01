@@ -1,20 +1,10 @@
 import React, { Component, FunctionComponent, SyntheticEvent, useCallback, useEffect, useState, useRef } from 'react';
-import { requireNativeComponent, NativeModules, ViewProps, AppState, AppStateStatus, View, Text, findNodeHandle, UIManager } from 'react-native';
+import { requireNativeComponent, ViewProps, AppState, AppStateStatus, View, Text, findNodeHandle, UIManager } from 'react-native';
 import { Camera } from '@babylonjs/core';
-import { IsEngineDisposed } from './EngineHelpers';
-import { BabylonModule } from './BabylonModule';
+import { ensureInitialized } from './BabylonModule';
+import { ReactNativeEngine } from './ReactNativeEngine';
 
 declare const global: any;
-const isRemoteDebuggingEnabled = !global['nativeCallSyncHook'];
-
-const EngineViewManager: {
-    setJSThread(): void;
-} = NativeModules.EngineViewManager;
-
-// Not all platforms need this, but for those that do, this is intended to be a synchronous call to boostrap the ability to run native code on the JavaScript thread.
-if (EngineViewManager && EngineViewManager.setJSThread && !isRemoteDebuggingEnabled) {
-    EngineViewManager.setJSThread();
-}
 
 interface NativeEngineViewProps extends ViewProps {
     onSnapshotDataReturned: (event: SyntheticEvent) => void;
@@ -23,7 +13,7 @@ interface NativeEngineViewProps extends ViewProps {
 const NativeEngineView: {
     prototype: Component<NativeEngineViewProps>;
     new(props: Readonly<NativeEngineViewProps>): Component<NativeEngineViewProps>;
-} = requireNativeComponent('EngineView');
+} = global['EngineView'] || (global['EngineView'] = requireNativeComponent('EngineView'));
 
 export interface EngineViewProps extends ViewProps {
     camera?: Camera;
@@ -36,17 +26,15 @@ export interface EngineViewCallbacks {
 }
 
 export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineViewProps) => {
-    const [failedInitialization, setFailedInitialization] = useState(false);
+    const [initialized, setInitialized] = useState<boolean>();
     const [appState, setAppState] = useState(AppState.currentState);
     const [fps, setFps] = useState<number>();
     const engineViewRef = useRef<Component<NativeEngineViewProps>>(null);
-    const snapshotPromise = useRef<{promise: Promise<string>, resolve: (data: string) => void}>();
+    const snapshotPromise = useRef<{ promise: Promise<string>, resolve: (data: string) => void }>();
 
     useEffect(() => {
         (async () => {
-            if (!await BabylonModule.whenInitialized()) {
-                setFailedInitialization(true);
-            }
+            setInitialized(await ensureInitialized());
         })();
     }, []);
 
@@ -64,9 +52,9 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
 
     useEffect(() => {
         if (props.camera && appState === "active") {
-            const engine = props.camera.getScene().getEngine();
+            const engine = props.camera.getScene().getEngine() as ReactNativeEngine;
 
-            if (!IsEngineDisposed(engine)) {
+            if (!engine.isDisposed) {
                 engine.runRenderLoop(() => {
                     for (let scene of engine.scenes) {
                         scene.render();
@@ -74,19 +62,21 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
                 });
 
                 return () => {
-                    if (!IsEngineDisposed(engine)) {
+                    if (!engine.isDisposed) {
                         engine.stopRenderLoop();
                     }
                 };
             }
         }
+
+        return undefined;
     }, [props.camera, appState]);
 
     useEffect(() => {
         if (props.camera && (props.displayFrameRate ?? __DEV__)) {
-            const engine = props.camera.getScene().getEngine();
+            const engine = props.camera.getScene().getEngine() as ReactNativeEngine;
 
-            if (!IsEngineDisposed(engine)) {
+            if (!engine.isDisposed) {
                 setFps(engine.getFps());
                 const timerHandle = setInterval(() => {
                     setFps(engine.getFps());
@@ -99,6 +89,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
         }
 
         setFps(undefined);
+        return undefined;
     }, [props.camera, props.displayFrameRate]);
 
     // Call onInitialized if provided, and include the callback for takeSnapshot.
@@ -134,18 +125,19 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
 
     // Handle snapshot data returned.
     const snapshotDataReturnedHandler = useCallback((event: SyntheticEvent) => {
-        const { data } = event.nativeEvent;
+        // The nativeEvent is a DOMEvent which doesn't have a typescript definition. Cast it to an Event object with a data property.
+        const { data } = event.nativeEvent as Event & { data: string };
         if (snapshotPromise.current) {
             snapshotPromise.current.resolve(data);
             snapshotPromise.current = undefined;
         }
     }, []);
 
-    if (!failedInitialization) {
+    if (initialized !== false) {
         return (
-            <View style={[props.style, {overflow: "hidden"}]}>
-                <NativeEngineView ref={engineViewRef} style={{flex: 1}} onSnapshotDataReturned={snapshotDataReturnedHandler} />
-                { fps && <Text style={{color: 'yellow', position: 'absolute', margin: 10, right: 0, top: 0}}>FPS: {Math.round(fps)}</Text> }
+            <View style={[props.style, { overflow: "hidden" }]}>
+                { initialized && <NativeEngineView ref={engineViewRef} style={{ flex: 1 }} onSnapshotDataReturned={snapshotDataReturnedHandler} /> }
+                { fps && <Text style={{ color: 'yellow', position: 'absolute', margin: 10, right: 0, top: 0 }}>FPS: {Math.round(fps)}</Text> }
             </View>
         );
     } else {
@@ -155,9 +147,9 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
         }
 
         return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{fontSize: 24}}>{message}</Text>
-                { isRemoteDebuggingEnabled && <Text style={{fontSize: 12}}>React Native remote debugging does not work with Babylon Native.</Text> }
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ fontSize: 24 }}>{message}</Text>
+                <Text style={{ fontSize: 12 }}>React Native remote debugging does not work with Babylon Native.</Text>
             </View>
         );
     }
