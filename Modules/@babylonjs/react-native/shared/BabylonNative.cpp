@@ -20,6 +20,10 @@ namespace Babylon
         Dispatcher g_inlineDispatcher{ [](const std::function<void()>& func) { func(); } };
     }
 
+    const uint32_t LEFT_MOUSE_BUTTON_ID{ NativeInput::LEFT_MOUSE_BUTTON_ID };
+    const uint32_t MIDDLE_MOUSE_BUTTON_ID{ NativeInput::MIDDLE_MOUSE_BUTTON_ID };
+    const uint32_t RIGHT_MOUSE_BUTTON_ID{ NativeInput::RIGHT_MOUSE_BUTTON_ID };
+
     class ReactNativeModule : public jsi::HostObject
     {
     public:
@@ -34,13 +38,13 @@ namespace Babylon
             (
                 jsiRuntime,
                 jsi::Function::createFromHostFunction(jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "executor"), 0, [this](jsi::Runtime& rt, const jsi::Value&, const jsi::Value* args, size_t) -> jsi::Value
-            {
-                m_resolveInitPromise = [&rt, resolve{ std::make_shared<jsi::Value>(rt, args[0]) }]()
                 {
-                    resolve->asObject(rt).asFunction(rt).call(rt);
-                };
-                return {};
-            })
+                    m_resolveInitPromise = [&rt, resolve{ std::make_shared<jsi::Value>(rt, args[0]) }]()
+                    {
+                        resolve->asObject(rt).asFunction(rt).call(rt);
+                    };
+                    return {};
+                })
             );
 
             // Initialize Babylon Native core components
@@ -154,15 +158,15 @@ namespace Babylon
             m_nativeInput->MouseMove(x, y);
         }
 
-        void SetTouchButtonState(uint32_t pointerId, uint32_t buttonId, bool isDown, uint32_t x, uint32_t y)
+        void SetTouchButtonState(uint32_t pointerId, bool isDown, uint32_t x, uint32_t y)
         {
             if (isDown)
             {
-                m_nativeInput->TouchDown(pointerId, buttonId, x, y);
+                m_nativeInput->TouchDown(pointerId, x, y);
             }
             else
             {
-                m_nativeInput->TouchUp(pointerId, buttonId, x, y);
+                m_nativeInput->TouchUp(pointerId, x, y);
             }
         }
 
@@ -289,11 +293,11 @@ namespace Babylon
         }
     }
 
-    void SetTouchButtonState(uint32_t pointerId, uint32_t buttonId, bool isDown, uint32_t x, uint32_t y)
+    void SetTouchButtonState(uint32_t pointerId, bool isDown, uint32_t x, uint32_t y)
     {
         if (auto nativeModule{ g_nativeModule.lock() })
         {
-            nativeModule->SetTouchButtonState(pointerId, buttonId, isDown, x, y);
+            nativeModule->SetTouchButtonState(pointerId, isDown, x, y);
         }
     }
 

@@ -13,13 +13,6 @@ using namespace winrt::Windows::UI::Xaml::Media;
 using namespace winrt::Windows::UI::Xaml::Controls;
 
 namespace winrt::BabylonReactNative::implementation {
-    namespace {
-        constexpr uint32_t LEFT_MOUSE_BUTTON_ID = 0;
-        constexpr uint32_t MIDDLE_MOUSE_BUTTON_ID = 1;
-        constexpr uint32_t RIGHT_MOUSE_BUTTON_ID = 2;
-        constexpr uint32_t TOUCH_BUTTON_ID = 0;
-    }
-
     EngineView::EngineView() {
 
         _revokerData.SizeChangedRevoker = SizeChanged(winrt::auto_revoke, { this, &EngineView::OnSizeChanged });
@@ -78,26 +71,26 @@ namespace winrt::BabylonReactNative::implementation {
         {
             if (properties.IsLeftButtonPressed())
             {
-                _pressedMouseButtons.insert(LEFT_MOUSE_BUTTON_ID);
-                Babylon::SetMouseButtonState(LEFT_MOUSE_BUTTON_ID, true, x, y);
+                _pressedMouseButtons.insert(Babylon::LEFT_MOUSE_BUTTON_ID);
+                Babylon::SetMouseButtonState(Babylon::LEFT_MOUSE_BUTTON_ID, true, x, y);
             }
 
             if (properties.IsMiddleButtonPressed())
             {
-                _pressedMouseButtons.insert(MIDDLE_MOUSE_BUTTON_ID);
-                Babylon::SetMouseButtonState(MIDDLE_MOUSE_BUTTON_ID, true, x, y);
+                _pressedMouseButtons.insert(Babylon::MIDDLE_MOUSE_BUTTON_ID);
+                Babylon::SetMouseButtonState(Babylon::MIDDLE_MOUSE_BUTTON_ID, true, x, y);
             }
 
             if (properties.IsRightButtonPressed())
             {
-                _pressedMouseButtons.insert(RIGHT_MOUSE_BUTTON_ID);
-                Babylon::SetMouseButtonState(RIGHT_MOUSE_BUTTON_ID, true, x, y);
+                _pressedMouseButtons.insert(Babylon::RIGHT_MOUSE_BUTTON_ID);
+                Babylon::SetMouseButtonState(Babylon::RIGHT_MOUSE_BUTTON_ID, true, x, y);
             }
         }
         else
         {
             const auto pointerId = point.PointerId();
-            Babylon::SetTouchButtonState(pointerId, TOUCH_BUTTON_ID, true, x, y);
+            Babylon::SetTouchButtonState(pointerId, true, x, y);
         }
     }
 
@@ -132,30 +125,30 @@ namespace winrt::BabylonReactNative::implementation {
         if (point.PointerDevice().PointerDeviceType() == PointerDeviceType::Mouse)
         {
             if (!properties.IsLeftButtonPressed() &&
-                _pressedMouseButtons.find(LEFT_MOUSE_BUTTON_ID) != _pressedMouseButtons.end())
+                _pressedMouseButtons.find(Babylon::LEFT_MOUSE_BUTTON_ID) != _pressedMouseButtons.end())
             {
-                _pressedMouseButtons.erase(LEFT_MOUSE_BUTTON_ID);
-                Babylon::SetMouseButtonState(LEFT_MOUSE_BUTTON_ID, false, x, y);
+                _pressedMouseButtons.erase(Babylon::LEFT_MOUSE_BUTTON_ID);
+                Babylon::SetMouseButtonState(Babylon::LEFT_MOUSE_BUTTON_ID, false, x, y);
             }
 
             if (!properties.IsMiddleButtonPressed() &&
-                _pressedMouseButtons.find(MIDDLE_MOUSE_BUTTON_ID) != _pressedMouseButtons.end())
+                _pressedMouseButtons.find(Babylon::MIDDLE_MOUSE_BUTTON_ID) != _pressedMouseButtons.end())
             {
-                _pressedMouseButtons.erase(MIDDLE_MOUSE_BUTTON_ID);
-                Babylon::SetMouseButtonState(MIDDLE_MOUSE_BUTTON_ID, false, x, y);
+                _pressedMouseButtons.erase(Babylon::MIDDLE_MOUSE_BUTTON_ID);
+                Babylon::SetMouseButtonState(Babylon::MIDDLE_MOUSE_BUTTON_ID, false, x, y);
             }
 
             if (!properties.IsRightButtonPressed() &&
-                _pressedMouseButtons.find(RIGHT_MOUSE_BUTTON_ID) != _pressedMouseButtons.end())
+                _pressedMouseButtons.find(Babylon::RIGHT_MOUSE_BUTTON_ID) != _pressedMouseButtons.end())
             {
-                _pressedMouseButtons.erase(RIGHT_MOUSE_BUTTON_ID);
-                Babylon::SetMouseButtonState(RIGHT_MOUSE_BUTTON_ID, false, x, y);
+                _pressedMouseButtons.erase(Babylon::RIGHT_MOUSE_BUTTON_ID);
+                Babylon::SetMouseButtonState(Babylon::RIGHT_MOUSE_BUTTON_ID, false, x, y);
             }
         }
         else
         {
             const auto pointerId = point.PointerId();
-            Babylon::SetTouchButtonState(pointerId, TOUCH_BUTTON_ID, false, x, y);
+            Babylon::SetTouchButtonState(pointerId, false, x, y);
         }
     }
 
