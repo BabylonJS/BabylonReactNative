@@ -93,7 +93,7 @@ static NSMutableArray* activeTouches;
                 case UITouchPhaseCancelled: {
                     NSUInteger pointerId = [activeTouches indexOfObject:touch];
                     [activeTouches replaceObjectAtIndex:pointerId withObject:[NSNull null]];
-                    Babylon::SetTouchButtonState(static_cast<uint32_t>(pointerId), 0, false, x, y);
+                    Babylon::SetTouchButtonState(static_cast<uint32_t>(pointerId), false, x, y);
                     break;
                 }
 
