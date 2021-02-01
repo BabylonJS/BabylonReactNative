@@ -79,7 +79,7 @@ static NSMutableArray* activeTouches;
                     } else {
                         [activeTouches replaceObjectAtIndex:pointerId withObject:touch];
                     }
-                    Babylon::SetTouchButtonState(static_cast<uint32_t>(pointerId), 0, true, x, y);
+                    Babylon::SetTouchButtonState(static_cast<uint32_t>(pointerId), true, x, y);
                     break;
                 }
 
