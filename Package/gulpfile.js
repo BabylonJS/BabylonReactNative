@@ -42,7 +42,17 @@ const buildAndroid = async () => {
 };
 
 const makeUWPProject = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\Setup.bat');
+  // windows build agents don't support the path lengths required for initializing arcore dependencies,
+  // so we manually initialize the submodules we need here.
+  exec('git -c submodule."Dependencies/xr/Dependencies/arcore-android-sdk".update=none submodule update --init --recursive "./../Modules/@babylonjs/react-native/submodules/BabylonNative');
+  shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64');
+  exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI ./../../../windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64');
+  shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x86');
+  exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI -A Win32 ./../../../windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x86');
+  shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm');
+  exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI -A arm ./../../../windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm');
+  shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm64');
+  exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI -A arm64 ./../../../windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm64');
 }
 
 const buildUWPProject = async () => {
@@ -50,6 +60,20 @@ const buildUWPProject = async () => {
 }
 
 const buildUWP = gulp.series(makeUWPProject, buildUWPProject);
+
+const makeUWPProjectPR = async () => {
+  // windows build agents don't support the path lengths required for initializing arcore dependencies,
+  // so we manually initialize the submodules we need here.
+  exec('git -c submodule."Dependencies/xr/Dependencies/arcore-android-sdk".update=none submodule update --init --recursive "./../Modules/@babylonjs/react-native/submodules/BabylonNative');
+  shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64');
+  exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI ./../../../windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64');
+}
+
+const buildUWPProjectPR = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\PRBuild.bat');
+}
+
+const buildUWPPR = gulp.series(makeUWPProjectPR, buildUWPProjectPR);
 
 const copyCommonFiles = () => {
   return  gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/package.json')
@@ -88,7 +112,15 @@ const copyAndroidFiles = async () => {
   });
 
   await new Promise(resolve => {
-          gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/android/build/intermediates/library_and_local_jars_jni/release/**/*')
+          gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/android/build/intermediates/library_and_local_jars_jni/release/jni/**/*')
+    .pipe(gulp.dest('Assembled/android/src/main/jniLibs/'))
+    .on('end', resolve);
+  });
+
+  // This is no longer found in the directory above because it is explicitly excluded because Playground has been updated to RN 0.64 which includes
+  // the real implementation of libturbomodulejsijni.so, but we still need to support RN 0.63 consumers, so grab this one explicitly to include it in the package.
+  await new Promise(resolve => {
+          gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/android/build/intermediates/cmake/release/obj/**/libturbomodulejsijni.so')
     .pipe(gulp.dest('Assembled/android/src/main/jniLibs/'))
     .on('end', resolve);
   });
@@ -251,6 +283,7 @@ Assembled/android/src/main/jniLibs/arm64-v8a/libturbomodulejsijni.so
 Assembled/android/src/main/jniLibs/arm64-v8a/libBabylonNative.so
 Assembled/react-native-babylon.podspec
 Assembled/index.ts
+Assembled/VersionValidation.ts
 Assembled/BabylonModule.ts
 Assembled/ReactNativeEngine.ts
 `;
@@ -283,10 +316,22 @@ exports.build = build;
 exports.rebuild = rebuild;
 exports.pack = pack;
 
-const packUWP = gulp.series(clean, buildUWP, copyCommonFiles, copySharedFiles, copyUWPFiles, createPackage);
-const packUWPNoBuild = gulp.series(clean, copyCommonFiles, copySharedFiles, copyUWPFiles, createPackage);
+const packAndroid = gulp.series(clean, buildAndroid, copyFiles, createPackage);
+exports.buildAndroid = buildAndroid;
+exports.packAndroid = packAndroid;
 
+const copyPackageFilesUWP = gulp.series(copyCommonFiles, copySharedFiles, copyUWPFiles);
+const buildUWPPublish = gulp.series(buildUWP, copyPackageFilesUWP);
+const packUWP = gulp.series(clean, buildUWP, copyPackageFilesUWP, createPackage);
+const packUWPNoBuild = gulp.series(clean, copyPackageFilesUWP, createPackage);
+
+exports.makeUWPProject = makeUWPProject;
+exports.buildUWPProject = buildUWPProject;
+exports.makeUWPProjectPR = makeUWPProjectPR;
+exports.buildUWPProjectPR = buildUWPProjectPR;
 exports.buildUWP = buildUWP;
+exports.buildUWPPR = buildUWPPR;
+exports.buildUWPPublish = buildUWPPublish;
 exports.copyUWPFiles = copyUWPFiles;
 exports.packUWP = packUWP;
 exports.packUWPNoBuild = packUWPNoBuild;
