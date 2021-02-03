@@ -13,9 +13,15 @@ import { Scene, Vector3, ArcRotateCamera, Camera, WebXRSessionManager, SceneLoad
 import '@babylonjs/loaders';
 import Slider from '@react-native-community/slider';
 
+declare class NativeCapture {
+  public constructor();
+  public addOnCaptureCallback(onCaptureCallback: (ext: any) => void): void;
+  public dispose(): void;
+};
+
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const defaultScale = 1;
-  const enableSnapshots = false;
+  const enableSnapshots = true;
 
   const engine = useEngine();
   const [toggleView, setToggleView] = useState(false);
@@ -27,6 +33,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const [snapshotData, setSnapshotData] = useState<string>();
   const [engineViewCallbacks, setEngineViewCallbacks] = useState<EngineViewCallbacks>();
   const [trackingState, setTrackingState] = useState<WebXRTrackingState>();
+  const [nativeCapture, setNativeCapture] = useState<NativeCapture>();
 
   useEffect(() => {
     if (engine) {
@@ -49,9 +56,9 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
                 rootNode.rotate(Vector3.Down(), (touchEvent.currentState - touchEvent.previousState) * 0.005);
               }
             }
-          })
+          });
         }
-      })
+      });
 
       const transformContainer = new TransformNode("Transform Container", scene);
       transformContainer.parent = rootNode;
@@ -110,6 +117,15 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
     setEngineViewCallbacks(engineViewCallbacks);
   }, [engine]);
 
+  const toggleCapture = useCallback(async () => {
+    if (nativeCapture) {
+      nativeCapture.dispose();
+      setNativeCapture(undefined);
+    } else {
+      setNativeCapture(new NativeCapture());
+    }
+  }, [nativeCapture]);
+
   const onSnapshot = useCallback(async () => {
     if (engineViewCallbacks) {
       setSnapshotData("data:image/jpeg;base64," + await engineViewCallbacks.takeSnapshot());
@@ -125,11 +141,11 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
           <View style={{flex: 1}}>
             { enableSnapshots && 
               <View style ={{flex: 1}}>
-                <Button title={"Take Snapshot"} onPress={onSnapshot}/>
+                <Button title={"Take Snapshot"} onPress={toggleCapture}/>
                 <Image style={{flex: 1}} source={{uri: snapshotData }} />
               </View>
             }
-            <EngineView style={props.style} camera={camera} onInitialized={onInitialized} />
+            <EngineView style={props.style} camera={camera} onInitialized={onInitialized} displayFrameRate={true} />
             <Slider style={{position: 'absolute', minHeight: 50, margin: 10, left: 0, right: 0, bottom: 0}} minimumValue={0.2} maximumValue={2} step={0.01} value={defaultScale} onValueChange={setScale} />
             <Text style={{fontSize: 12, color: 'yellow',  position: 'absolute', margin: 10}}>{trackingStateToString(trackingState)}</Text>
           </View>
