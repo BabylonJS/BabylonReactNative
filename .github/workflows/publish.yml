@@ -61,11 +61,6 @@ jobs:
       - name: Gulp (Windows)
         run: npx gulp buildUWPPublish
         working-directory: ./Package
-      - name: Upload Assembled Folder
-        uses: actions/upload-artifact@v2
-        with:
-          name: 'Assembled'
-          path: Package/Assembled
       - name: Setup Node.js
         uses: actions/setup-node@v2.1.2
         with:
