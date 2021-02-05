@@ -23,10 +23,6 @@
   "license": "MIT",
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
-  "dependencies": {
-    "base-64": "^0.1.0",
-    "semver": "^7.3.2"
-  },
   "peerDependencies": {
     "@babylonjs/core": "^5.0.0-alpha.9",
     "react": "^16.13.1",
