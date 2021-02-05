@@ -71,6 +71,6 @@ jobs:
         run: |
           npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
           npm publish --access public
-        working-directory: ./Package/Assembled
+        working-directory: ./Package/Assembled-Windows
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
