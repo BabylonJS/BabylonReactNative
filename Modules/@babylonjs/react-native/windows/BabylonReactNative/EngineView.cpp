@@ -35,6 +35,7 @@ namespace winrt::BabylonReactNative::implementation {
             }
         });
 
+        // TODO: move to std::thread compared to consuming ThreadPool resources once engine lifecycle bugs are addressed and EngineView's destructor can be successfully invoked.
         _inputLoopWorker = ThreadPool::RunAsync(workItemHandler, WorkItemPriority::High, WorkItemOptions::TimeSliced);
 
         _revokerData.RenderingRevoker = CompositionTarget::Rendering(winrt::auto_revoke, [weakThis{ this->get_weak() }](auto const&, auto const&)
