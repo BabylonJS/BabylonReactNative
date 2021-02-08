@@ -25,7 +25,8 @@
   "readmeFilename": "README.md",
   "peerDependencies": {
     "@babylonjs/core": "^5.0.0-alpha.9",
-    "react": "^16.13.1",
+    "@babylonjs/react-native":"version",
+    "react": "^17.0.1",
     "react-native": "0.64.0-rc.2",
     "react-native-permissions": "^3.0.0",
     "react-native-windows": "0.64.0-preview.5"
