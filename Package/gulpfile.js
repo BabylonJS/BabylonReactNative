@@ -78,11 +78,7 @@ const buildUWPProjectPR = async () => {
   exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\PRBuild.bat');
 }
 
-const bundleUWPProjectPR = async () => {
-  exec('npx --no-install react-native bundle --platform windows --entry-file index.js --bundle-output .\\windows\\Playground\\Bundle\\index.windows.bundle --assets-dest .\\windows\\Playground\\Bundle --dev true --reset-cache --sourcemap-output .\\windows\\x64\\Debug\\Playground\\sourcemaps\\react\\index.windows.bundle.map', './../Apps/Playground');
-}
-
-const buildUWPPR = gulp.series(makeUWPProjectPR, buildUWPProjectPR, bundleUWPProjectPR);
+const buildUWPPR = gulp.series(makeUWPProjectPR, buildUWPProjectPR);
 
 const copyCommonFiles = () => {
   return  gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/package.json')
@@ -353,7 +349,6 @@ exports.makeUWPProject = makeUWPProject;
 exports.buildUWPProject = buildUWPProject;
 exports.makeUWPProjectPR = makeUWPProjectPR;
 exports.buildUWPProjectPR = buildUWPProjectPR;
-exports.bundleUWPProjectPR = bundleUWPProjectPR;
 exports.buildUWP = buildUWP;
 exports.buildUWPPR = buildUWPPR;
 exports.buildUWPPublish = buildUWPPublish;
