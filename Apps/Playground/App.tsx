@@ -9,9 +9,13 @@ import React, { useState, FunctionComponent, useEffect, useCallback } from 'reac
 import { SafeAreaView, StatusBar, Button, View, Text, ViewProps, Image } from 'react-native';
 
 import { EngineView, useEngine, EngineViewCallbacks } from '@babylonjs/react-native';
-import { Scene, Vector3, ArcRotateCamera, Camera, WebXRSessionManager, SceneLoader, TransformNode, DeviceSourceManager, DeviceType, DeviceSource, PointerInput, WebXRTrackingState, Nullable } from '@babylonjs/core';
+import { Scene, Vector3, ArcRotateCamera, Camera, WebXRSessionManager, SceneLoader, TransformNode, DeviceSourceManager, DeviceType, DeviceSource, PointerInput, WebXRTrackingState, Nullable, Color3, Color4 } from '@babylonjs/core';
 import '@babylonjs/loaders';
 import Slider from '@react-native-community/slider';
+import { DocumentDirectoryPath, TemporaryDirectoryPath } from 'react-native-fs';
+
+console.log(`DocumentDirectoryPath: ${DocumentDirectoryPath}`);
+console.log(`TemporaryDirectoryPath: ${TemporaryDirectoryPath}`);
 
 declare class NativeCapture {
   public constructor();
@@ -21,7 +25,7 @@ declare class NativeCapture {
 
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const defaultScale = 1;
-  const enableSnapshots = true;
+  const enableSnapshots = false;
 
   const engine = useEngine();
   const [toggleView, setToggleView] = useState(false);
@@ -132,7 +136,9 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
       nativeCapture.dispose();
       setNativeCapture(undefined);
     } else {
-      setNativeCapture(new NativeCapture());
+      const nativeCapture = new NativeCapture();
+      nativeCapture.addCallback(DocumentDirectoryPath);
+      setNativeCapture(nativeCapture);
     }
   }, [nativeCapture]);
 
@@ -147,11 +153,12 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
       <View style={props.style}>
         <Button title="Toggle EngineView" onPress={() => { setToggleView(!toggleView) }} />
         <Button title={ xrSession ? "Stop XR" : "Start XR"} onPress={onToggleXr} />
+        <Button title={ nativeCapture ? "Stop Capture" : "Start Capture" } onPress={toggleCapture} />
         { !toggleView &&
           <View style={{flex: 1}}>
             { enableSnapshots && 
               <View style ={{flex: 1}}>
-                <Button title={"Take Snapshot"} onPress={toggleCapture}/>
+                <Button title={"Take Snapshot"} onPress={onSnapshot}/>
                 <Image style={{flex: 1}} source={{uri: snapshotData }} />
               </View>
             }
