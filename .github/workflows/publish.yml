@@ -27,6 +27,7 @@ jobs:
         with:
           name: 'Assembled'
           path: Package/Assembled
+
   build-windows:
     runs-on: windows-latest
     steps:
@@ -46,14 +47,18 @@ jobs:
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
+      - name: Git (Windows)
+        run: npx gulp initializeSubmodulesWindowsAgent
+        working-directory: ./Package
       - name: Gulp (Windows)
         run: npx gulp buildUWPPublish
         working-directory: ./Package
-      - name: Upload Assembled Folder
+      - name: Upload Assembled-Windows Folder
         uses: actions/upload-artifact@v2
         with:
-          name: 'Assembled'
-          path: Package/Assembled
+          name: 'Assembled-Windows'
+          path: Package/Assembled-Windows
+
   package:
     needs: [build-android-ios, build-windows]
     runs-on: macos-latest
@@ -68,7 +73,12 @@ jobs:
         with:
           name: 'Assembled'
           path: Package/Assembled
-      - name: Display structure of downloaded Assembled folder
+      - name: Download Assembled-Windows Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-Windows'
+          path: Package/Assembled-Windows
+      - name: Display structure of downloaded Assembled and Assembled-Windows folders
         run: ls -R
       - name: Setup Node.js
         uses: actions/setup-node@v2.1.2
@@ -76,10 +86,17 @@ jobs:
           node-version: '12.x'
           registry-url: 'https://registry.npmjs.org'
           scope: '@babylonjs'
-      - name: Version & Publish Package
+      - name: Version & Publish Package @babylonjs/react-native
         run: |
           npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
           npm publish --access public
         working-directory: ./Package/Assembled
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Version & Publish Package @babylonjs/react-native-windows
+        run: |
+          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
+          npm publish --access public
+        working-directory: ./Package/Assembled-Windows
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
