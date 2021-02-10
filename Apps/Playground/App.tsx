@@ -17,10 +17,25 @@ import { DocumentDirectoryPath, TemporaryDirectoryPath } from 'react-native-fs';
 console.log(`DocumentDirectoryPath: ${DocumentDirectoryPath}`);
 console.log(`TemporaryDirectoryPath: ${TemporaryDirectoryPath}`);
 
+type Capture = {
+  width: number;
+  height: number;
+  pitch: number;
+  format: "BGRA8" | undefined;
+  yFlip: boolean;
+  data: ArrayBuffer;
+};
+
+type CaptureCallback = (capture: Capture) => void;
+
 declare class NativeCapture {
   public constructor();
-  public addOnCaptureCallback(onCaptureCallback: (ext: any) => void): void;
+  public addCallback(onCaptureCallback: CaptureCallback): void;
   public dispose(): void;
+};
+
+declare const BabylonNative: {
+  saveCapture: (capture: Capture, path: string) => void;
 };
 
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
@@ -41,6 +56,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
 
   useEffect(() => {
     if (engine) {
+      engine.setHardwareScalingLevel(1);
       const scene = new Scene(engine);
       setScene(scene);
       scene.createDefaultCamera(true);
@@ -137,7 +153,12 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
       setNativeCapture(undefined);
     } else {
       const nativeCapture = new NativeCapture();
-      nativeCapture.addCallback(DocumentDirectoryPath);
+      nativeCapture.addCallback(capture => {
+        // console.log(`capture.width: ${capture.width}`);
+        // console.log(`capture.height: ${capture.height}`);
+        // console.log(`capture.data.length: ${capture.data.byteLength}`);
+        BabylonNative.saveCapture(capture, `${DocumentDirectoryPath}/temp2.bmp`);
+      });
       setNativeCapture(nativeCapture);
     }
   }, [nativeCapture]);

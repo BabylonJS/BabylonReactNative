@@ -11,6 +11,8 @@
 
 #include <DispatchFunction.h>
 
+#include "Bitmap.hpp"
+
 namespace Babylon
 {
     using namespace Babylon::Plugins;
@@ -210,6 +212,36 @@ namespace Babylon
                             engineInstance.getPropertyAsFunction(rt, "dispose").callWithThis(rt, engineInstance);
                         };
                     }
+                    return {};
+                });
+            }
+            else if (propName == "saveCapture")
+            {
+                return jsi::Function::createFromHostFunction(runtime, prop, 0, [this](jsi::Runtime& rt, const jsi::Value&, const jsi::Value* args, size_t count) -> jsi::Value
+                {
+                    auto capture{ args[0].asObject(rt) };
+                    auto path{ args[1].asString(rt).utf8(rt) };
+                    auto width{ static_cast<uint32_t>(capture.getProperty(rt, "width").asNumber()) };
+                    auto height{ static_cast<uint32_t>(capture.getProperty(rt, "height").asNumber()) };
+                    auto data{ capture.getProperty(rt, "data").asObject(rt).getArrayBuffer(rt).data(rt) };
+
+                    {
+                        bitmap_image bmp{width, height};
+                        bmp.clear();
+                        for (uint32_t y = 0; y < height; y++)
+                        {
+                            for (uint32_t x = 0; x < width; x++)
+                            {
+                                auto index = y * width * 4 + x * 4;
+                                bmp.set_pixel(x, y, data[index + 2], data[index + 1], data[index]);
+                            }
+                        }
+                        // View this on the dev machine by doing the following in Android Studio:
+                        // 1. Select: View -> Tool Windows -> Device File Explorer
+                        // 2. Double click: data -> data -> com.playground -> files -> temp.bmp
+                        bmp.save_image(path.c_str());
+                    }
+
                     return {};
                 });
             }
