@@ -8,18 +8,10 @@
 import React, { useState, FunctionComponent, useEffect, useCallback } from 'react';
 import { SafeAreaView, StatusBar, Button, View, Text, ViewProps, Image } from 'react-native';
 
-import { EngineView, useEngine, EngineViewCallbacks, CaptureSession } from '@babylonjs/react-native';
+import { EngineView, useEngine, EngineViewCallbacks } from '@babylonjs/react-native';
 import { Scene, Vector3, ArcRotateCamera, Camera, WebXRSessionManager, SceneLoader, TransformNode, DeviceSourceManager, DeviceType, DeviceSource, PointerInput, WebXRTrackingState, Nullable } from '@babylonjs/core';
 import '@babylonjs/loaders';
 import Slider from '@react-native-community/slider';
-import { DocumentDirectoryPath, TemporaryDirectoryPath } from 'react-native-fs';
-
-console.log(`DocumentDirectoryPath: ${DocumentDirectoryPath}`);
-console.log(`TemporaryDirectoryPath: ${TemporaryDirectoryPath}`);
-
-declare const BabylonNative: {
-  saveCapture: (width: number, height: number, yFlip: boolean, data: ArrayBuffer, path: string) => void;
-};
 
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const defaultScale = 1;
@@ -35,11 +27,9 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const [snapshotData, setSnapshotData] = useState<string>();
   const [engineViewCallbacks, setEngineViewCallbacks] = useState<EngineViewCallbacks>();
   const [trackingState, setTrackingState] = useState<WebXRTrackingState>();
-  const [nativeCapture, setNativeCapture] = useState<CaptureSession>();
 
   useEffect(() => {
     if (engine) {
-      engine.setHardwareScalingLevel(1);
       const scene = new Scene(engine);
       setScene(scene);
       scene.createDefaultCamera(true);
@@ -130,18 +120,6 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
     setEngineViewCallbacks(engineViewCallbacks);
   }, [engine]);
 
-  const toggleCapture = useCallback(async () => {
-    if (nativeCapture) {
-      nativeCapture.dispose();
-      setNativeCapture(undefined);
-    } else {
-      const nativeCapture = new CaptureSession(capturedFrame => {
-        BabylonNative.saveCapture(capturedFrame.width, capturedFrame.height, capturedFrame.yFlip, capturedFrame.data, `${DocumentDirectoryPath}/temp2.bmp`);
-      });
-      setNativeCapture(nativeCapture);
-    }
-  }, [nativeCapture]);
-
   const onSnapshot = useCallback(async () => {
     if (engineViewCallbacks) {
       setSnapshotData("data:image/jpeg;base64," + await engineViewCallbacks.takeSnapshot());
@@ -153,7 +131,6 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
       <View style={props.style}>
         <Button title="Toggle EngineView" onPress={() => { setToggleView(!toggleView) }} />
         <Button title={ xrSession ? "Stop XR" : "Start XR"} onPress={onToggleXr} />
-        <Button title={ nativeCapture ? "Stop Capture" : "Start Capture" } onPress={toggleCapture} />
         { !toggleView &&
           <View style={{flex: 1}}>
             { enableSnapshots && 
@@ -162,7 +139,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
                 <Image style={{flex: 1}} source={{uri: snapshotData }} />
               </View>
             }
-            <EngineView style={props.style} camera={camera} onInitialized={onInitialized} displayFrameRate={true} />
+            <EngineView style={props.style} camera={camera} onInitialized={onInitialized} />
             <Slider style={{position: 'absolute', minHeight: 50, margin: 10, left: 0, right: 0, bottom: 0}} minimumValue={0.2} maximumValue={2} step={0.01} value={defaultScale} onValueChange={setScale} />
             <Text style={{fontSize: 12, color: 'yellow',  position: 'absolute', margin: 10}}>{trackingStateToString(trackingState)}</Text>
           </View>
