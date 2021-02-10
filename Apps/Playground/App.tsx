@@ -8,8 +8,8 @@
 import React, { useState, FunctionComponent, useEffect, useCallback } from 'react';
 import { SafeAreaView, StatusBar, Button, View, Text, ViewProps, Image } from 'react-native';
 
-import { EngineView, useEngine, EngineViewCallbacks, CapturedFrame, CaptureSession } from '@babylonjs/react-native';
-import { Scene, Vector3, ArcRotateCamera, Camera, WebXRSessionManager, SceneLoader, TransformNode, DeviceSourceManager, DeviceType, DeviceSource, PointerInput, WebXRTrackingState, Nullable, Color3, Color4 } from '@babylonjs/core';
+import { EngineView, useEngine, EngineViewCallbacks, CaptureSession } from '@babylonjs/react-native';
+import { Scene, Vector3, ArcRotateCamera, Camera, WebXRSessionManager, SceneLoader, TransformNode, DeviceSourceManager, DeviceType, DeviceSource, PointerInput, WebXRTrackingState, Nullable } from '@babylonjs/core';
 import '@babylonjs/loaders';
 import Slider from '@react-native-community/slider';
 import { DocumentDirectoryPath, TemporaryDirectoryPath } from 'react-native-fs';
