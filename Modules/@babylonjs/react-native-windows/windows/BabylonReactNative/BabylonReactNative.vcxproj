@@ -289,6 +289,9 @@
     <ProjectReference Include="$(BabylonReactNativeDir)\submodules\BabylonNative\Build_uwp_x64\jsi\jsi.vcxproj">
       <Project>{bddbd49e-873f-33e4-a99d-9d8e77b16433}</Project>
     </ProjectReference>
+    <ProjectReference Include="$(BabylonReactNativeDir)\submodules\BabylonNative\Build_uwp_x64\Plugins\NativeCapture\NativeCapture.vcxproj">
+      <Project>{20eb2920-32bc-4aa6-9ba0-969a25d6bdb9}</Project>
+    </ProjectReference>
     <ProjectReference Include="$(BabylonReactNativeDir)\submodules\BabylonNative\Build_uwp_x64\Plugins\NativeEngine\NativeEngine.vcxproj">
       <Project>{2c18692b-80ea-335e-a473-15a19374ace0}</Project>
     </ProjectReference>
@@ -396,6 +399,9 @@
     </ProjectReference>
     <ProjectReference Include="$(BabylonReactNativeDir)\submodules\BabylonNative\Build_uwp_arm64\jsi\jsi.vcxproj">
       <Project>{0897d738-8022-3a3d-95b8-2b4ff7f8365e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="$(BabylonReactNativeDir)\submodules\BabylonNative\Build_uwp_arm64\Plugins\NativeCapture\NativeCapture.vcxproj">
+      <Project>{47771cab-ac3b-4673-b77e-af13a702993a}</Project>
     </ProjectReference>
     <ProjectReference Include="$(BabylonReactNativeDir)\submodules\BabylonNative\Build_uwp_arm64\Plugins\NativeEngine\NativeEngine.vcxproj">
       <Project>{d582c0e4-9a19-3024-8039-2f8ee50bc8de}</Project>
@@ -505,6 +511,9 @@
     <ProjectReference Include="$(BabylonReactNativeDir)\submodules\BabylonNative\Build_uwp_x86\jsi\jsi.vcxproj">
       <Project>{1b2a5e60-84f3-34c9-9318-5cf2ac668433}</Project>
     </ProjectReference>
+    <ProjectReference Include="$(BabylonReactNativeDir)\submodules\BabylonNative\Build_uwp_x86\Plugins\NativeCapture\NativeCapture.vcxproj">
+      <Project>{12221f10-00b8-45b6-8b56-c9b42bb54c6f}</Project>
+    </ProjectReference>
     <ProjectReference Include="$(BabylonReactNativeDir)\submodules\BabylonNative\Build_uwp_x86\Plugins\NativeEngine\NativeEngine.vcxproj">
       <Project>{b9a708f6-9986-3270-b7b4-a3674ffa0053}</Project>
     </ProjectReference>
@@ -612,6 +621,9 @@
     </ProjectReference>
     <ProjectReference Include="$(BabylonReactNativeDir)\submodules\BabylonNative\Build_uwp_arm\jsi\jsi.vcxproj">
       <Project>{93d05ba2-59b9-3592-ab31-c441fb3d7989}</Project>
+    </ProjectReference>
+    <ProjectReference Include="$(BabylonReactNativeDir)\submodules\BabylonNative\Build_uwp_arm\Plugins\NativeCapture\NativeCapture.vcxproj">
+      <Project>{21595e71-26ec-4dd4-85e3-59208622c21d}</Project>
     </ProjectReference>
     <ProjectReference Include="$(BabylonReactNativeDir)\submodules\BabylonNative\Build_uwp_arm\Plugins\NativeEngine\NativeEngine.vcxproj">
       <Project>{4c5576a1-09a2-3815-8402-1fdc77ecdaf4}</Project>
