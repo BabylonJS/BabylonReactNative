@@ -53,7 +53,8 @@ namespace Babylon
 
             // Initialize Babylon Native plugins
             Plugins::NativeXr::Initialize(m_env);
-            m_nativeInput = &Babylon::Plugins::NativeInput::CreateForJavaScript(m_env);
+            Plugins::NativeCapture::Initialize(m_env);
+            m_nativeInput = &Plugins::NativeInput::CreateForJavaScript(m_env);
 
             // Initialize Babylon Native polyfills
             Polyfills::Window::Initialize(m_env);
@@ -61,8 +62,6 @@ namespace Babylon
             // NOTE: React Native's XMLHttpRequest is slow and allocates a lot of memory. This does not override
             // React Native's implementation, but rather adds a second one scoped to Babylon and used by WebRequest.ts.
             Polyfills::XMLHttpRequest::Initialize(m_env);
-
-            Plugins::NativeCapture::Initialize(m_env);
         }
 
         ~ReactNativeModule() override
