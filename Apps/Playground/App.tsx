@@ -8,7 +8,7 @@
 import React, { useState, FunctionComponent, useEffect, useCallback } from 'react';
 import { SafeAreaView, StatusBar, Button, View, Text, ViewProps, Image } from 'react-native';
 
-import { EngineView, useEngine, EngineViewCallbacks } from '@babylonjs/react-native';
+import { EngineView, useEngine, EngineViewCallbacks, CapturedFrame, CaptureSession } from '@babylonjs/react-native';
 import { Scene, Vector3, ArcRotateCamera, Camera, WebXRSessionManager, SceneLoader, TransformNode, DeviceSourceManager, DeviceType, DeviceSource, PointerInput, WebXRTrackingState, Nullable, Color3, Color4 } from '@babylonjs/core';
 import '@babylonjs/loaders';
 import Slider from '@react-native-community/slider';
@@ -17,25 +17,8 @@ import { DocumentDirectoryPath, TemporaryDirectoryPath } from 'react-native-fs';
 console.log(`DocumentDirectoryPath: ${DocumentDirectoryPath}`);
 console.log(`TemporaryDirectoryPath: ${TemporaryDirectoryPath}`);
 
-type Capture = {
-  width: number;
-  height: number;
-  pitch: number;
-  format: "BGRA8" | undefined;
-  yFlip: boolean;
-  data: ArrayBuffer;
-};
-
-type CaptureCallback = (capture: Capture) => void;
-
-declare class NativeCapture {
-  public constructor();
-  public addCallback(onCaptureCallback: CaptureCallback): void;
-  public dispose(): void;
-};
-
 declare const BabylonNative: {
-  saveCapture: (capture: Capture, path: string) => void;
+  saveCapture: (capture: CapturedFrame, path: string) => void;
 };
 
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
@@ -52,7 +35,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const [snapshotData, setSnapshotData] = useState<string>();
   const [engineViewCallbacks, setEngineViewCallbacks] = useState<EngineViewCallbacks>();
   const [trackingState, setTrackingState] = useState<WebXRTrackingState>();
-  const [nativeCapture, setNativeCapture] = useState<NativeCapture>();
+  const [nativeCapture, setNativeCapture] = useState<CaptureSession>();
 
   useEffect(() => {
     if (engine) {
@@ -152,12 +135,8 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
       nativeCapture.dispose();
       setNativeCapture(undefined);
     } else {
-      const nativeCapture = new NativeCapture();
-      nativeCapture.addCallback(capture => {
-        // console.log(`capture.width: ${capture.width}`);
-        // console.log(`capture.height: ${capture.height}`);
-        // console.log(`capture.data.length: ${capture.data.byteLength}`);
-        BabylonNative.saveCapture(capture, `${DocumentDirectoryPath}/temp2.bmp`);
+      const nativeCapture = new CaptureSession(capturedFrame => {
+        BabylonNative.saveCapture(capturedFrame, `${DocumentDirectoryPath}/temp2.bmp`);
       });
       setNativeCapture(nativeCapture);
     }
