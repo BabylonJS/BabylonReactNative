@@ -1,5 +1,3 @@
-console.warn(`CaptureSession is experimental and likely to change significantly.`);
-
 export type CapturedFrame = {
   width: number;
   height: number;
@@ -21,6 +19,7 @@ export class CaptureSession {
     private readonly nativeCapture: NativeCapture;
 
     public constructor(onCaptureCallback: CaptureCallback) {
+        console.warn(`CaptureSession is experimental and likely to change significantly.`);
         this.nativeCapture = new NativeCapture();
         this.nativeCapture.addCallback(onCaptureCallback);
     }
