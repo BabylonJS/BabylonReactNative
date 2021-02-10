@@ -18,7 +18,7 @@ console.log(`DocumentDirectoryPath: ${DocumentDirectoryPath}`);
 console.log(`TemporaryDirectoryPath: ${TemporaryDirectoryPath}`);
 
 declare const BabylonNative: {
-  saveCapture: (capture: CapturedFrame, path: string) => void;
+  saveCapture: (width: number, height: number, yFlip: boolean, data: ArrayBuffer, path: string) => void;
 };
 
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
@@ -136,7 +136,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
       setNativeCapture(undefined);
     } else {
       const nativeCapture = new CaptureSession(capturedFrame => {
-        BabylonNative.saveCapture(capturedFrame, `${DocumentDirectoryPath}/temp2.bmp`);
+        BabylonNative.saveCapture(capturedFrame.width, capturedFrame.height, capturedFrame.yFlip, capturedFrame.data, `${DocumentDirectoryPath}/temp2.bmp`);
       });
       setNativeCapture(nativeCapture);
     }

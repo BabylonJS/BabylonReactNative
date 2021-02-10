@@ -1,3 +1,4 @@
+console.warn(`CaptureSession is experimental and likely to change significantly.`);
 
 export type CapturedFrame = {
   width: number;

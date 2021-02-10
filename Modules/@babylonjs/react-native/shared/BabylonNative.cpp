@@ -219,11 +219,11 @@ namespace Babylon
             {
                 return jsi::Function::createFromHostFunction(runtime, prop, 0, [this](jsi::Runtime& rt, const jsi::Value&, const jsi::Value* args, size_t count) -> jsi::Value
                 {
-                    auto capturedFrame{ args[0].asObject(rt) };
-                    auto path{ args[1].asString(rt).utf8(rt) };
-                    auto width{ static_cast<uint32_t>(capturedFrame.getProperty(rt, "width").asNumber()) };
-                    auto height{ static_cast<uint32_t>(capturedFrame.getProperty(rt, "height").asNumber()) };
-                    auto data{capturedFrame.getProperty(rt, "data").asObject(rt).getArrayBuffer(rt).data(rt) };
+                    auto width{ static_cast<uint32_t>(args[0].asNumber()) };
+                    auto height{ static_cast<uint32_t>(args[1].asNumber()) };
+                    auto yFlip{ static_cast<uint32_t>(args[2].getBool()) };
+                    auto data{ args[3].asObject(rt).getArrayBuffer(rt).data(rt) };
+                    auto path{ args[4].asString(rt).utf8(rt) };
 
                     {
                         bitmap_image bmp{width, height};
