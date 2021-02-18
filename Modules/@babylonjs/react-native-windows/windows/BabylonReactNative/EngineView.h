@@ -24,6 +24,8 @@ namespace winrt::BabylonReactNative::implementation {
 
         winrt::Windows::Foundation::IAsyncAction _inputLoopWorker{};
         std::unordered_set<uint32_t> _pressedMouseButtons{};
+        winrt::Windows::UI::Core::CoreIndependentInputSource _inputSource{ nullptr };
+        std::unordered_set<uint32_t> _pressedPointers{};
 
         struct RevokerData
         {
