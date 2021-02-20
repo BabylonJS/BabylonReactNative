@@ -19,6 +19,13 @@ namespace winrt::BabylonReactNative::implementation {
     }
 
     FrameworkElement EngineViewManager::CreateView() noexcept {
+        if (_engineView)
+        {
+            EngineView* view = get_self<EngineView>(_engineView);
+            view->Reset();
+            return _engineView; // Recycle View
+        }
+
         _engineView = make<EngineView>();
         return _engineView;
     }

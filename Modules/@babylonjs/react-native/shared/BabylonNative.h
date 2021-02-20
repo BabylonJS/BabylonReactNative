@@ -8,8 +8,10 @@ namespace Babylon
 
     void Initialize(facebook::jsi::Runtime& jsiRuntime, Dispatcher jsDispatcher, bool autoRender = true);
     void Deinitialize();
-    void UpdateView(void* windowPtr, size_t width, size_t height, void* windowTypePtr = nullptr);
+    void UpdateView(void* windowPtr, size_t width, size_t height, void* windowTypePtr = nullptr, void* contextPtr = nullptr, void* backBufferPtr = nullptr);
     void RenderView();
+	void EnableView();
+	void DisableView();
     void SetMouseButtonState(uint32_t buttonId, bool isDown, uint32_t x, uint32_t y);
     void SetMousePosition(uint32_t x, uint32_t y);
     void SetTouchButtonState(uint32_t pointerId, bool isDown, uint32_t x, uint32_t y);

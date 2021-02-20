@@ -111,7 +111,6 @@ namespace Babylon
                 {
                     m_graphics->UpdateWindow(windowPtr, windowTypePtr);
                     m_graphics->UpdateSize(width, height);
-                    m_graphics->EnableRendering();
                 }
             });
         }
@@ -123,7 +122,8 @@ namespace Babylon
                 throw std::runtime_error{ "RenderView can only be called when automatic rendering is disabled." };
             }
 
-            m_graphics->RenderCurrentFrame();
+            if(m_graphics)
+				m_graphics->RenderCurrentFrame();
         }
 
         void ResetView()
@@ -143,6 +143,22 @@ namespace Babylon
             });
         }
 
+        void EnableView()
+        {
+            if (m_graphics)
+            {
+                m_graphics->EnableRendering();
+            }
+        }
+		
+		void DisableView()
+        {            
+			if (m_graphics)
+			{
+				m_graphics->DisableRendering();
+			}
+        }
+		
         void SetMouseButtonState(uint32_t buttonId, bool isDown, uint32_t x, uint32_t y)
         {
             if (isDown)
@@ -279,6 +295,30 @@ namespace Babylon
         }
     }
 
+	void EnableView()
+	{
+		if (auto nativeModule{ g_nativeModule.lock() })
+		{
+			nativeModule->EnableView();
+		}
+		else
+		{
+			throw std::runtime_error{ "EnableView must not be called before Initialize." };
+		}
+	}
+
+	void DisableView()
+	{
+		if (auto nativeModule{ g_nativeModule.lock() })
+		{
+			nativeModule->DisableView();
+		}
+		else
+		{
+			throw std::runtime_error{ "DisableView must not be called before Initialize." };
+		}
+	}
+	
     void SetMouseButtonState(uint32_t buttonId, bool isDown, uint32_t x, uint32_t y)
     {
         if (auto nativeModule{ g_nativeModule.lock() })
