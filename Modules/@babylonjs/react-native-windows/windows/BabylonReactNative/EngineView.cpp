@@ -16,8 +16,14 @@ namespace winrt::BabylonReactNative::implementation {
 	using namespace winrt::Windows::ApplicationModel;
 	using namespace Concurrency;
 
-
+	static EngineView* s_engineView{ nullptr };	// Only single view supported
+	static ID3D11Device1* s_d3dDevice{ nullptr };	// It will be released on bgfx.
+	static ::Microsoft::WRL::ComPtr<ID3D11DeviceContext1> s_d3dContext;
+	static Concurrency::critical_section s_criticalSection;
+	
 	EngineView::EngineView() {
+		if (s_engineView) return;
+
 		_revokerData.SizeChangedRevoker = SizeChanged(winrt::auto_revoke, { this, &EngineView::OnSizeChanged });
 		_revokerData.SuspendingRevoker = Application::Current().Suspending(winrt::auto_revoke, [weakThis{ get_weak() }](
 			auto const& /*sender*/,
@@ -37,7 +43,7 @@ namespace winrt::BabylonReactNative::implementation {
 					trueThis->OnResuming();
 			}
 		});
-
+		
 		auto swapChainPanel = static_cast<SwapChainPanel>(*this);
 		swapChainPanel.CompositionScaleChanged([this, weak_this{ get_weak() }]
 		(SwapChainPanel const& sender, IInspectable const& object)
@@ -47,8 +53,9 @@ namespace winrt::BabylonReactNative::implementation {
 		});
 
 		RegisterInput();
-
 		RegisterRender();
+
+		s_engineView = this;
 	}
 
 	EngineView::~EngineView()
@@ -59,21 +66,14 @@ namespace winrt::BabylonReactNative::implementation {
 		if(_renderLoopWorker)
 			_renderLoopWorker.Cancel();
 		
-		if(_resetView.valid())
-			_resetView.wait();	// waiting for bgfx to shutdown..
-
-		_criticalSection.lock();
+		s_criticalSection.lock();
 		_dxgiOutput = nullptr;
 		_backBufferPtr = nullptr;
 		_swapChain = nullptr;
-		_d3dContext = nullptr;
-		_d3dDevice = nullptr;		// It will be released on bgfx.
-		_criticalSection.unlock();
+		s_criticalSection.unlock();
+
+		s_engineView = nullptr;
 	}
-
-	void EngineView::Reset()
-	{}
-
 
 	void EngineView::RegisterInput()
 	{
@@ -98,30 +98,28 @@ namespace winrt::BabylonReactNative::implementation {
 
 	void EngineView::RegisterRender()
 	{
-		_criticalSection.lock();
+		s_criticalSection.lock();
 		CreateDeviceResources();
 		CreateSizeDependentResources();
-		_criticalSection.unlock();
+		s_criticalSection.unlock();
 		
-		std::promise<void> promise;
-		_resetView = promise.get_future();
-
 		// Calculate the updated frame and render once per vertical blanking interval
-		WorkItemHandler workItemHandler([this, p = std::move(promise)](IAsyncAction const& action) mutable
+		WorkItemHandler workItemHandler([this](IAsyncAction const& action) mutable
 		{
-			{
-				critical_section::scoped_lock lock(_criticalSection);
-				Babylon::EnableView();
-			}
+			//{
+			//	critical_section::scoped_lock lock(s_criticalSection);
+			//	Babylon::EnableView();
+			//}
 
 			while (action.Status() == AsyncStatus::Started)
 				OnRendering();
-
-			{
-				critical_section::scoped_lock lock(_criticalSection);
-				Babylon::DisableView();
-				p.set_value();
-			}
+			
+			// I successfully shut down bgfx when working with live scripting, but after that, 
+			// bgfx related calls are called, causing a crash.Do not shut down bgfx.
+			//{
+			//	critical_section::scoped_lock lock(s_criticalSection);
+			//	Babylon::DisableView();
+			//}
 		});
 
 		_renderLoopWorker = ThreadPool::RunAsync(workItemHandler, WorkItemPriority::High, WorkItemOptions::TimeSliced);
@@ -129,7 +127,7 @@ namespace winrt::BabylonReactNative::implementation {
 
 	void EngineView::OnSizeChanged(IInspectable const& /*sender*/, SizeChangedEventArgs const& args)
 	{
-		critical_section::scoped_lock lock(_criticalSection);
+		critical_section::scoped_lock lock(s_criticalSection);
 
 		const auto size = args.NewSize();
 		_width = std::max(size.Width, 1.0f);
@@ -240,7 +238,7 @@ namespace winrt::BabylonReactNative::implementation {
 	{
 		if (_compositionScaleX != sender.CompositionScaleX() || _compositionScaleY != sender.CompositionScaleY())
 		{
-			critical_section::scoped_lock lock(_criticalSection);
+			critical_section::scoped_lock lock(s_criticalSection);
 
 			// Store values so they can be accessed from a background thread.
 			_compositionScaleX = sender.CompositionScaleX();
@@ -257,10 +255,10 @@ namespace winrt::BabylonReactNative::implementation {
 
 	void EngineView::OnSuspending()
 	{
-		critical_section::scoped_lock lock(_criticalSection);
+		critical_section::scoped_lock lock(s_criticalSection);
 
 		::Microsoft::WRL::ComPtr<IDXGIDevice3> dxgiDevice;
-		_d3dDevice->QueryInterface(__uuidof(IDXGIDevice3), &dxgiDevice);
+		s_d3dDevice->QueryInterface(__uuidof(IDXGIDevice3), &dxgiDevice);
 
 		// Hints to the driver that the app is entering an idle state and that its memory can be used temporarily for other apps.
 		dxgiDevice->Trim();
@@ -271,14 +269,14 @@ namespace winrt::BabylonReactNative::implementation {
 
 	void EngineView::OnRendering()
 	{
-		Concurrency::critical_section::scoped_lock lock(_criticalSection);
+		Concurrency::critical_section::scoped_lock lock(s_criticalSection);
 
 		if (!_backBufferPtr)
 			return;
 
 		// Clear the back buffer and depth stencil view.
 		float clearColor[4]{ 0.392156899f, 0.584313750f, 0.929411829f, 1.000000000f };
-		_d3dContext->ClearRenderTargetView(_backBufferPtr.Get(), clearColor);
+		s_d3dContext->ClearRenderTargetView(_backBufferPtr.Get(), clearColor);
 
 		Babylon::RenderView();
 
@@ -309,15 +307,23 @@ namespace winrt::BabylonReactNative::implementation {
 		_swapChain = nullptr;
 
 		// Make sure the rendering state has been released.
-		_d3dContext->OMSetRenderTargets(0, nullptr, nullptr);
-		_d3dContext->Flush();
+		s_d3dContext->OMSetRenderTargets(0, nullptr, nullptr);
+		s_d3dContext->Flush();
 
+		if(s_d3dDevice)
+		{
+			s_d3dDevice->Release();
+			s_d3dDevice = nullptr;
+		}
+		
 		CreateDeviceResources();
 		CreateSizeDependentResources();
 	}
 
 	void EngineView::CreateDeviceResources()
 	{
+		if(s_d3dDevice) return;
+		
 		D3D_FEATURE_LEVEL featureLevels[] =
 		{
 			D3D_FEATURE_LEVEL_11_1,
@@ -349,17 +355,17 @@ namespace winrt::BabylonReactNative::implementation {
 		);
 
 		// Get D3D11.1 device
-		if (_d3dDevice) _d3dDevice->Release();
-		device->QueryInterface(__uuidof(ID3D11Device1), (void**)&_d3dDevice);
+		if (s_d3dDevice) s_d3dDevice->Release();
+		device->QueryInterface(__uuidof(ID3D11Device1), (void**)&s_d3dDevice);
 
 		// Get D3D11.1 context
-		context.As(&_d3dContext);
+		context.As(&s_d3dContext);
 	}
 
 	void EngineView::CreateSizeDependentResources()
 	{
-		_d3dContext->OMSetRenderTargets(0, nullptr, nullptr);
-		_d3dContext->Flush();
+		s_d3dContext->OMSetRenderTargets(0, nullptr, nullptr);
+		s_d3dContext->Flush();
 
 		// Set render target size to the rendered size of the panel including the composition scale, 
 		// defaulting to the minimum of 1px if no size was specified.
@@ -403,7 +409,7 @@ namespace winrt::BabylonReactNative::implementation {
 
 			// Get underlying DXGI Device from D3D Device.
 			::Microsoft::WRL::ComPtr<IDXGIDevice1> dxgiDevice;
-			_d3dDevice->QueryInterface(__uuidof(IDXGIDevice1), &dxgiDevice);
+			s_d3dDevice->QueryInterface(__uuidof(IDXGIDevice1), &dxgiDevice);
 			
 			// Get adapter.
 			::Microsoft::WRL::ComPtr<IDXGIAdapter> dxgiAdapter;
@@ -418,7 +424,7 @@ namespace winrt::BabylonReactNative::implementation {
 			// Create swap chain.
 			::Microsoft::WRL::ComPtr<IDXGISwapChain1> swapChain;
 			dxgiFactory->CreateSwapChainForComposition(
-				_d3dDevice,
+				s_d3dDevice,
 				&scd,
 				nullptr,
 				&swapChain
@@ -434,13 +440,14 @@ namespace winrt::BabylonReactNative::implementation {
 		::Microsoft::WRL::ComPtr<ID3D11Texture2D> texture;
 		::Microsoft::WRL::ComPtr<ID3D11RenderTargetView> backBufferPtr;
 		_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&texture);
-		_d3dDevice->CreateRenderTargetView(texture.Get(), nullptr, &backBufferPtr);
+		s_d3dDevice->CreateRenderTargetView(texture.Get(), nullptr, &backBufferPtr);
 		backBufferPtr.As(&_backBufferPtr);
 
 		// Use windowTypePtr == 2 for xaml swap chain panels
+		auto swapChainPanel = static_cast<SwapChainPanel>(*this);
 		auto windowTypePtr = reinterpret_cast<void*>(2);
-		auto windowPtr = reinterpret_cast<void*>(0);
+		auto windowPtr = get_abi(swapChainPanel);
 
-		Babylon::UpdateView(windowPtr, (size_t)_renderTargetWidth, (size_t)_renderTargetHeight, windowTypePtr, _d3dDevice, _backBufferPtr.Get());
+		Babylon::UpdateView(windowPtr, (size_t)_renderTargetWidth, (size_t)_renderTargetHeight, windowTypePtr, s_d3dDevice, _backBufferPtr.Get());
 	}
 }

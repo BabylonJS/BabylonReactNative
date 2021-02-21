@@ -37,7 +37,6 @@ namespace winrt::BabylonReactNative::implementation {
 
     private:
         winrt::Microsoft::ReactNative::IReactContext _reactContext{ nullptr };
-        winrt::BabylonReactNative::EngineView _engineView{ nullptr };
     };
 
 } // namespace winrt::BabylonReactNative::implementation

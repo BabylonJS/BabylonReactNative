@@ -26,8 +26,6 @@
 #include <d2d1_2.h>
 #include <windows.ui.xaml.media.dxinterop.h>
 
-#include <future>
-
 // BabylonNative
 #ifndef NODE_ADDON_API_DISABLE_NODE_SPECIFIC
 #define NODE_ADDON_API_DISABLE_NODE_SPECIFIC

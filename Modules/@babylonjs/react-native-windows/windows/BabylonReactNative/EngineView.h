@@ -10,8 +10,6 @@ namespace winrt::BabylonReactNative::implementation {
         EngineView();
         ~EngineView() noexcept;
 
-        void Reset();
-
     private:
         void OnSizeChanged(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::SizeChangedEventArgs const& args);
         void OnPointerPressed(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Core::PointerEventArgs const& args);
@@ -51,14 +49,10 @@ namespace winrt::BabylonReactNative::implementation {
         };
         RevokerData _revokerData{};
 
-        Concurrency::critical_section _criticalSection;
-        ID3D11Device1* _d3dDevice{ nullptr };
-		::Microsoft::WRL::ComPtr<ID3D11DeviceContext1> _d3dContext;
 		::Microsoft::WRL::ComPtr<IDXGISwapChain2>_swapChain;
 		::Microsoft::WRL::ComPtr <ID3D11RenderTargetView> _backBufferPtr;
         ::Microsoft::WRL::ComPtr<IDXGIOutput> _dxgiOutput;
         winrt::Windows::Foundation::IAsyncAction _renderLoopWorker{};
-        std::future<void> _resetView;
     };
 }
 
