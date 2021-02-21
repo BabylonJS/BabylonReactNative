@@ -145,6 +145,33 @@ namespace Babylon
             });
         }
        
+		struct JSGuard
+		{
+			JSGuard(Dispatcher& dispatcher)
+			{
+                std::promise<void> promise;
+				std::future<void> future = promise.get_future();
+                std::future<void> blocking = get().get_future();
+                dispatcher([&]() mutable
+				{
+                    promise.set_value();
+                    blocking.wait();
+				});
+				future.wait();
+			}
+
+			~JSGuard()
+			{
+                get().set_value();
+			}
+
+            static std::promise<void>& get()
+            {
+                static std::promise<void> promise;
+                return promise;
+            }
+		};
+
         void EnableView()
         {
             if (!m_graphics)
@@ -156,17 +183,8 @@ namespace Babylon
             }
             else
             {
-                std::promise<void> jsPromise, promise;
-                std::future<void> future = jsPromise.get_future();
-                m_jsBlocking = promise.get_future();
-                m_jsDispatcher([&]() mutable
-                {
-                    jsPromise.set_value();
-                    m_jsBlocking.wait();
-                });
-                future.wait();
+                JSGuard guard(m_jsDispatcher);
                 m_graphics->EnableRendering();
-                promise.set_value();
             }
         }
 		
@@ -181,17 +199,8 @@ namespace Babylon
 			}
             else
             {
-                std::promise<void> jsPromise, promise;
-                std::future<void> future = jsPromise.get_future();
-                m_jsBlocking = promise.get_future();
-                m_jsDispatcher([&]() mutable
-                {
-                    jsPromise.set_value();
-                    m_jsBlocking.wait();
-                });
-                future.wait();
+                JSGuard guard(m_jsDispatcher);
                 m_graphics->DisableRendering();
-                promise.set_value();
             }
         }
 		
@@ -281,7 +290,6 @@ namespace Babylon
         Plugins::NativeInput* m_nativeInput{};
 
         std::function<void()> m_disposeEngine{};
-        std::future<void> m_jsBlocking;
     };
 
     namespace
