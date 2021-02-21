@@ -11,6 +11,8 @@
 
 #include <DispatchFunction.h>
 
+#include <future>
+
 namespace Babylon
 {
     using namespace Babylon::Plugins;
@@ -82,7 +84,7 @@ namespace Babylon
             }
         }
 
-        void UpdateView(void* windowPtr, void* windowTypePtr, size_t width, size_t height)
+        void UpdateView(void* windowPtr, void* windowTypePtr, void* contextPtr, void* backBufferPtr, size_t width, size_t height)
         {
             // TODO: We shouldn't have to dispatch to the JS thread for CreateGraphics/UpdateWindow/UpdateSize, but not doing so results in a crash.
             //       I don't understand the issue yet, but for now just retain the pre-refactor logic. We'll need to resolve this to enable manual
@@ -95,11 +97,11 @@ namespace Babylon
             auto renderDispatcher = m_autoRender ? m_jsDispatcher : g_inlineDispatcher;
             auto jsDispatcher = m_autoRender ? g_inlineDispatcher : m_jsDispatcher;
 
-            renderDispatcher([this, windowPtr, width, height, windowTypePtr, jsDispatcher{ std::move(jsDispatcher) }]()
+            renderDispatcher([this, windowPtr, width, height, windowTypePtr, contextPtr, backBufferPtr, jsDispatcher{ std::move(jsDispatcher) }]()
             {
                 if (!m_graphics)
                 {
-                    m_graphics = Graphics::CreateGraphics(windowPtr, windowTypePtr, width, height);
+                    m_graphics = Graphics::CreateGraphics(windowPtr, windowTypePtr, contextPtr, backBufferPtr, width, height);
                     jsDispatcher([this]()
                     {
                         m_graphics->AddToJavaScript(m_env);
@@ -109,7 +111,7 @@ namespace Babylon
                 }
                 else
                 {
-                    m_graphics->UpdateWindow(windowPtr, windowTypePtr);
+                    m_graphics->UpdateWindow(windowPtr, windowTypePtr, contextPtr, backBufferPtr);
                     m_graphics->UpdateSize(width, height);
                 }
             });
@@ -142,21 +144,55 @@ namespace Babylon
                 }
             });
         }
-
+       
         void EnableView()
         {
-            if (m_graphics)
+            if (!m_graphics)
+                return;
+            
+            if (m_autoRender)
             {
                 m_graphics->EnableRendering();
+            }
+            else
+            {
+                std::promise<void> jsPromise, promise;
+                std::future<void> future = jsPromise.get_future();
+                m_jsBlocking = promise.get_future();
+                m_jsDispatcher([&]() mutable
+                {
+                    jsPromise.set_value();
+                    m_jsBlocking.wait();
+                });
+                future.wait();
+                m_graphics->EnableRendering();
+                promise.set_value();
             }
         }
 		
 		void DisableView()
         {            
-			if (m_graphics)
+            if (!m_graphics)
+                return;
+
+			if (m_autoRender)
 			{
-				m_graphics->DisableRendering();
+			    m_graphics->EnableRendering();
 			}
+            else
+            {
+                std::promise<void> jsPromise, promise;
+                std::future<void> future = jsPromise.get_future();
+                m_jsBlocking = promise.get_future();
+                m_jsDispatcher([&]() mutable
+                {
+                    jsPromise.set_value();
+                    m_jsBlocking.wait();
+                });
+                future.wait();
+                m_graphics->DisableRendering();
+                promise.set_value();
+            }
         }
 		
         void SetMouseButtonState(uint32_t buttonId, bool isDown, uint32_t x, uint32_t y)
@@ -245,6 +281,7 @@ namespace Babylon
         Plugins::NativeInput* m_nativeInput{};
 
         std::function<void()> m_disposeEngine{};
+        std::future<void> m_jsBlocking;
     };
 
     namespace
@@ -271,11 +308,11 @@ namespace Babylon
         }
     }
 
-    void UpdateView(void* windowPtr, size_t width, size_t height, void* windowTypePtr)
+    void UpdateView(void* windowPtr, size_t width, size_t height, void* windowTypePtr, void* contextPtr, void* backBufferPtr)
     {
         if (auto nativeModule{ g_nativeModule.lock() })
         {
-            nativeModule->UpdateView(windowPtr, windowTypePtr, width, height);
+            nativeModule->UpdateView(windowPtr, windowTypePtr, contextPtr, backBufferPtr, width, height);
         }
         else
         {

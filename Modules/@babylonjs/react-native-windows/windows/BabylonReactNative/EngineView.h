@@ -42,22 +42,17 @@ namespace winrt::BabylonReactNative::implementation {
 
         winrt::Windows::Foundation::IAsyncAction _inputLoopWorker{};
         std::unordered_set<uint32_t> _pressedMouseButtons{};
-        winrt::Windows::UI::Core::CoreIndependentInputSource _inputSource{ nullptr };
-        std::unordered_set<uint32_t> _pressedPointers{};
 
         struct RevokerData
         {
             winrt::Windows::UI::Xaml::FrameworkElement::SizeChanged_revoker SizeChangedRevoker{};
             winrt::Windows::UI::Xaml::IApplication::Suspending_revoker SuspendingRevoker{};
             winrt::Windows::UI::Xaml::IApplication::Resuming_revoker ResumingRevoker{};
-            winrt::Windows::UI::Core::CoreIndependentInputSource::PointerPressed_revoker PointerPressedRevoker{};
-            winrt::Windows::UI::Core::CoreIndependentInputSource::PointerMoved_revoker PointerMovedRevoker{};
-            winrt::Windows::UI::Core::CoreIndependentInputSource::PointerReleased_revoker PointerReleasedRevoker{};
         };
         RevokerData _revokerData{};
 
         Concurrency::critical_section _criticalSection;
-		::Microsoft::WRL::ComPtr<ID3D11Device1> _d3dDevice;
+        ID3D11Device1* _d3dDevice{ nullptr };
 		::Microsoft::WRL::ComPtr<ID3D11DeviceContext1> _d3dContext;
 		::Microsoft::WRL::ComPtr<IDXGISwapChain2>_swapChain;
 		::Microsoft::WRL::ComPtr <ID3D11RenderTargetView> _backBufferPtr;

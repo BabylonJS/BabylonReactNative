@@ -53,18 +53,22 @@ namespace winrt::BabylonReactNative::implementation {
 
 	EngineView::~EngineView()
 	{
+		if(_inputLoopWorker)
+			_inputLoopWorker.Cancel();
+
+		if(_renderLoopWorker)
+			_renderLoopWorker.Cancel();
+		
+		if(_resetView.valid())
+			_resetView.wait();	// waiting for bgfx to shutdown..
+
 		_criticalSection.lock();
 		_dxgiOutput = nullptr;
 		_backBufferPtr = nullptr;
 		_swapChain = nullptr;
 		_d3dContext = nullptr;
-		//_d3dDevice = nullptr;		// It will be released on bgfx.
+		_d3dDevice = nullptr;		// It will be released on bgfx.
 		_criticalSection.unlock();
-
-		_inputLoopWorker.Cancel();
-		_renderLoopWorker.Cancel();
-		
-		_resetView.wait();	// waiting for bgfx to shutdown..
 	}
 
 	void EngineView::Reset()
@@ -73,28 +77,25 @@ namespace winrt::BabylonReactNative::implementation {
 
 	void EngineView::RegisterInput()
 	{
-        WorkItemHandler workItemHandler([weakThis{ this->get_weak() }](IAsyncAction const& /* action */)
-        {
-            if (auto trueThis = weakThis.get())
-            {
-                auto deviceTypes = static_cast<CoreInputDeviceTypes>(
-                    static_cast<uint32_t>(Windows::UI::Core::CoreInputDeviceTypes::Mouse) |
-                    static_cast<uint32_t>(Windows::UI::Core::CoreInputDeviceTypes::Touch) |
-                    static_cast<uint32_t>(Windows::UI::Core::CoreInputDeviceTypes::Pen));
-                trueThis->_inputSource = trueThis->CreateCoreIndependentInputSource(deviceTypes);
+		WorkItemHandler workItemHandler([this](IAsyncAction const& /* action */) mutable
+		{
+			auto deviceTypes = static_cast<CoreInputDeviceTypes>(
+				static_cast<uint32_t>(Windows::UI::Core::CoreInputDeviceTypes::Mouse) |
+				static_cast<uint32_t>(Windows::UI::Core::CoreInputDeviceTypes::Touch) |
+				static_cast<uint32_t>(Windows::UI::Core::CoreInputDeviceTypes::Pen));
+			auto coreInput = CreateCoreIndependentInputSource(deviceTypes);
 
-                trueThis->_revokerData.PointerPressedRevoker = trueThis->_inputSource.PointerPressed(winrt::auto_revoke, { trueThis.get(), &EngineView::OnPointerPressed });
-                trueThis->_revokerData.PointerMovedRevoker = trueThis->_inputSource.PointerMoved(winrt::auto_revoke, { trueThis.get(), &EngineView::OnPointerMoved });
-                trueThis->_revokerData.PointerReleasedRevoker = trueThis->_inputSource.PointerReleased(winrt::auto_revoke, { trueThis.get(), &EngineView::OnPointerReleased });
+			auto PointerPressedRevoker = coreInput.PointerPressed(winrt::auto_revoke, { this, &EngineView::OnPointerPressed });
+			auto PointerMovedRevoker = coreInput.PointerMoved(winrt::auto_revoke, { this, &EngineView::OnPointerMoved });
+			auto PointerReleasedRevoker = coreInput.PointerReleased(winrt::auto_revoke, { this, &EngineView::OnPointerReleased });
 
-                trueThis->_inputSource.Dispatcher().ProcessEvents(Windows::UI::Core::CoreProcessEventsOption::ProcessUntilQuit);
-            }
-        });
+			coreInput.Dispatcher().ProcessEvents(Windows::UI::Core::CoreProcessEventsOption::ProcessUntilQuit);
+		});
 
-        // TODO: move to std::thread compared to consuming ThreadPool resources once engine lifecycle bugs are addressed and EngineView's destructor can be successfully invoked.
-        _inputLoopWorker = ThreadPool::RunAsync(workItemHandler, WorkItemPriority::High, WorkItemOptions::TimeSliced);
-    }
-    
+		// TODO: move to std::thread compared to consuming ThreadPool resources once engine lifecycle bugs are addressed and EngineView's destructor can be successfully invoked.
+		_inputLoopWorker = ThreadPool::RunAsync(workItemHandler, WorkItemPriority::High, WorkItemOptions::TimeSliced);
+	}
+
 	void EngineView::RegisterRender()
 	{
 		_criticalSection.lock();
@@ -139,10 +140,6 @@ namespace winrt::BabylonReactNative::implementation {
 		auto swapChainPanel = static_cast<SwapChainPanel>(*this);
 		auto swapChainPanelNative = swapChainPanel.as<ISwapChainPanelNative>().get();;
 		swapChainPanelNative->SetSwapChain(_swapChain.Get());
-
-		// Set render targets to the screen.
-		ID3D11RenderTargetView* const targets[1] = { _backBufferPtr.Get() };
-		_d3dContext->OMSetRenderTargets(1, targets, nullptr);
 	}
 
 	void EngineView::OnPointerPressed(IInspectable const& /*sender*/, PointerEventArgs const& args)
@@ -255,10 +252,6 @@ namespace winrt::BabylonReactNative::implementation {
 			auto swapChainPanel = static_cast<SwapChainPanel>(*this);
 			auto swapChainPanelNative = swapChainPanel.as<ISwapChainPanelNative>().get();;
 			swapChainPanelNative->SetSwapChain(_swapChain.Get());
-
-			// Set render targets to the screen.
-			ID3D11RenderTargetView* const targets[1] = { _backBufferPtr.Get() };
-			_d3dContext->OMSetRenderTargets(1, targets, nullptr);
 		}
 	}
 
@@ -267,7 +260,7 @@ namespace winrt::BabylonReactNative::implementation {
 		critical_section::scoped_lock lock(_criticalSection);
 
 		::Microsoft::WRL::ComPtr<IDXGIDevice3> dxgiDevice;
-		_d3dDevice.As(&dxgiDevice);
+		_d3dDevice->QueryInterface(__uuidof(IDXGIDevice3), &dxgiDevice);
 
 		// Hints to the driver that the app is entering an idle state and that its memory can be used temporarily for other apps.
 		dxgiDevice->Trim();
@@ -275,7 +268,7 @@ namespace winrt::BabylonReactNative::implementation {
 
 	void EngineView::OnResuming()
 	{}
-	
+
 	void EngineView::OnRendering()
 	{
 		Concurrency::critical_section::scoped_lock lock(_criticalSection);
@@ -336,7 +329,7 @@ namespace winrt::BabylonReactNative::implementation {
 			D3D_FEATURE_LEVEL_9_1
 		};
 
-		::Microsoft::WRL::ComPtr<ID3D11Device> device;
+		ID3D11Device* device{ nullptr };
 		::Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
 		D3D11CreateDevice(
 			nullptr,
@@ -356,7 +349,8 @@ namespace winrt::BabylonReactNative::implementation {
 		);
 
 		// Get D3D11.1 device
-		device.As(&_d3dDevice);
+		if (_d3dDevice) _d3dDevice->Release();
+		device->QueryInterface(__uuidof(ID3D11Device1), (void**)&_d3dDevice);
 
 		// Get D3D11.1 context
 		context.As(&_d3dContext);
@@ -409,8 +403,8 @@ namespace winrt::BabylonReactNative::implementation {
 
 			// Get underlying DXGI Device from D3D Device.
 			::Microsoft::WRL::ComPtr<IDXGIDevice1> dxgiDevice;
-			_d3dDevice.As(&dxgiDevice);
-
+			_d3dDevice->QueryInterface(__uuidof(IDXGIDevice1), &dxgiDevice);
+			
 			// Get adapter.
 			::Microsoft::WRL::ComPtr<IDXGIAdapter> dxgiAdapter;
 			dxgiDevice->GetAdapter(&dxgiAdapter);
@@ -424,7 +418,7 @@ namespace winrt::BabylonReactNative::implementation {
 			// Create swap chain.
 			::Microsoft::WRL::ComPtr<IDXGISwapChain1> swapChain;
 			dxgiFactory->CreateSwapChainForComposition(
-				_d3dDevice.Get(),
+				_d3dDevice,
 				&scd,
 				nullptr,
 				&swapChain
@@ -447,6 +441,6 @@ namespace winrt::BabylonReactNative::implementation {
 		auto windowTypePtr = reinterpret_cast<void*>(2);
 		auto windowPtr = reinterpret_cast<void*>(0);
 
-		Babylon::UpdateView(windowPtr, (size_t)_renderTargetWidth, (size_t)_renderTargetHeight, windowTypePtr, _d3dDevice.Get(), _backBufferPtr.Get());
+		Babylon::UpdateView(windowPtr, (size_t)_renderTargetWidth, (size_t)_renderTargetHeight, windowTypePtr, _d3dDevice, _backBufferPtr.Get());
 	}
 }
