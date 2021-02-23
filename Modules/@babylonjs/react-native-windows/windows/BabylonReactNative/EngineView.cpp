@@ -263,7 +263,7 @@ namespace winrt::BabylonReactNative::implementation {
             return;
 
         // Clear the back buffer and depth stencil view.
-        float clearColor[4]{ 0.392156899f, 0.584313750f, 0.929411829f, 1.000000000f };
+        float clearColor[4]{ 0.0f, 0.0f, 0.0, 1.0f };
         s_d3dContext->ClearRenderTargetView(_backBufferPtr.Get(), clearColor);
 
         Babylon::RenderView();
