@@ -28,9 +28,8 @@ namespace winrt::BabylonReactNative::implementation {
         void CreateDeviceResources();
         void CreateSizeDependentResources();
         
-
-		float _renderTargetHeight;
-		float _renderTargetWidth;
+        float _renderTargetHeight{ 1.0f };
+        float _renderTargetWidth{ 1.0f };
               
         float _compositionScaleX{ 1.0f };
         float _compositionScaleY{ 1.0f };
@@ -49,8 +48,8 @@ namespace winrt::BabylonReactNative::implementation {
         };
         RevokerData _revokerData{};
 
-		::Microsoft::WRL::ComPtr<IDXGISwapChain2>_swapChain;
-		::Microsoft::WRL::ComPtr <ID3D11RenderTargetView> _backBufferPtr;
+        ::Microsoft::WRL::ComPtr<IDXGISwapChain2>_swapChain;
+        ::Microsoft::WRL::ComPtr <ID3D11RenderTargetView> _backBufferPtr;
         ::Microsoft::WRL::ComPtr<IDXGIOutput> _dxgiOutput;
         winrt::Windows::Foundation::IAsyncAction _renderLoopWorker{};
     };

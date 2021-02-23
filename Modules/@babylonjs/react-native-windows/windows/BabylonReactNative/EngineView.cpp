@@ -4,7 +4,7 @@
 
 
 namespace winrt::BabylonReactNative::implementation {
-    using namespace winrt::Windows::Foundation;
+	using namespace winrt::Windows::Foundation;
 	using namespace winrt::Windows::Devices::Input;
 	using namespace winrt::Windows::System::Threading;
 	using namespace winrt::Windows::UI::Core;
@@ -106,20 +106,8 @@ namespace winrt::BabylonReactNative::implementation {
 		// Calculate the updated frame and render once per vertical blanking interval
 		WorkItemHandler workItemHandler([this](IAsyncAction const& action) mutable
 		{
-			//{
-			//	critical_section::scoped_lock lock(s_criticalSection);
-			//	Babylon::EnableView();
-			//}
-
 			while (action.Status() == AsyncStatus::Started)
 				OnRendering();
-			
-			// I successfully shut down bgfx when working with live scripting, but after that, 
-			// bgfx related calls are called, causing a crash.Do not shut down bgfx.
-			//{
-			//	critical_section::scoped_lock lock(s_criticalSection);
-			//	Babylon::DisableView();
-			//}
 		});
 
 		_renderLoopWorker = ThreadPool::RunAsync(workItemHandler, WorkItemPriority::High, WorkItemOptions::TimeSliced);
@@ -136,7 +124,7 @@ namespace winrt::BabylonReactNative::implementation {
 		CreateSizeDependentResources();
 
 		auto swapChainPanel = static_cast<SwapChainPanel>(*this);
-		auto swapChainPanelNative = swapChainPanel.as<ISwapChainPanelNative>().get();;
+		auto swapChainPanelNative = swapChainPanel.as<ISwapChainPanelNative>().get();
 		swapChainPanelNative->SetSwapChain(_swapChain.Get());
 	}
 
