@@ -11,6 +11,8 @@ import android.view.PixelCopy;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
 
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.UIManagerModule;
@@ -18,28 +20,56 @@ import com.facebook.react.uimanager.events.EventDispatcher;
 
 import java.io.ByteArrayOutputStream;
 
-public final class EngineView extends SurfaceView implements SurfaceHolder.Callback, View.OnTouchListener {
+public final class EngineView extends FrameLayout implements View.OnTouchListener {
+    private final SurfaceView primarySurfaceView;
+    private final SurfaceView xrSurfaceView;
     private final EventDispatcher reactEventDispatcher;
 
     public EngineView(ReactContext reactContext) {
         super(reactContext);
-        this.getHolder().addCallback(this);
+
+        final FrameLayout.LayoutParams childViewLayoutParams = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+
+        this.primarySurfaceView = new SurfaceView(reactContext);
+        this.primarySurfaceView.setLayoutParams(childViewLayoutParams);
+        this.addView(this.primarySurfaceView);
+        this.primarySurfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
+                // surfaceChanged is also called when the surface is created, so just do all the handling there
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int i, int width, int height) {
+                BabylonNativeInterop.updateView(holder.getSurface());
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+            }
+        });
+
+        this.xrSurfaceView = new SurfaceView(reactContext);
+        this.xrSurfaceView.setLayoutParams(childViewLayoutParams);
+        this.addView(this.xrSurfaceView);
+        this.xrSurfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+                BabylonNativeInterop.updateXRView(holder.getSurface());
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+
+            }
+        });
+
         this.setOnTouchListener(this);
         this.reactEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
-    }
-
-    @Override
-    public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        // surfaceChanged is also called when the surface is created, so just do all the handling there
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int width, int height) {
-        BabylonNativeInterop.updateView(surfaceHolder.getSurface());
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
     }
 
     @Override
@@ -68,7 +98,7 @@ public final class EngineView extends SurfaceView implements SurfaceHolder.Callb
         final Handler helperThreadHandler = new Handler(helperThread.getLooper());
 
         // Request the pixel copy.
-        PixelCopy.request(this, bitmap, (copyResult) ->  {
+        PixelCopy.request(this.primarySurfaceView, bitmap, (copyResult) ->  {
             // If the pixel copy was a success then convert the image to a base 64 encoded jpeg and fire the event.
             String encoded = "";
             if (copyResult == PixelCopy.SUCCESS) {
