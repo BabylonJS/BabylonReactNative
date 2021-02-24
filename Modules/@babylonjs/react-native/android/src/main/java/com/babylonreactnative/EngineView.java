@@ -112,8 +112,13 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
         helperThread.start();
         final Handler helperThreadHandler = new Handler(helperThread.getLooper());
 
+        SurfaceView surfaceView = this.primarySurfaceView;
+        if (BabylonNativeInterop.isXRActive()) {
+            surfaceView = this.xrSurfaceView;
+        }
+
         // Request the pixel copy.
-        PixelCopy.request(this.primarySurfaceView, bitmap, (copyResult) ->  {
+        PixelCopy.request(surfaceView, bitmap, (copyResult) ->  {
             // If the pixel copy was a success then convert the image to a base 64 encoded jpeg and fire the event.
             String encoded = "";
             if (copyResult == PixelCopy.SUCCESS) {
