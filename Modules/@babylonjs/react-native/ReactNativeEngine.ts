@@ -1,10 +1,5 @@
-import { ensureInitialized } from './BabylonModule';
+import { ensureInitialized, reset } from './BabylonModule';
 import { NativeEngine } from '@babylonjs/core';
-
-// This global object is owned by Babylon Native.
-declare const _native: {
-    whenGraphicsReady: () => Promise<void>;
-};
 
 // This JSI-based global object is owned by Babylon React Native.
 // This will likely be converted to a TurboModule when they are fully supported.
@@ -27,16 +22,8 @@ export class ReactNativeEngine extends NativeEngine {
             return null;
         }
 
-        // This waits Graphics/NativeEngine to be created (which in turn makes the whenGraphicsReady available).
+        // This waits Graphics/NativeEngine to be created.
         await BabylonNative.initializationPromise;
-
-        // Check for cancellation.
-        if (abortSignal.aborted) {
-            return null;
-        }
-
-        // This waits for the Graphics system to be up and running.
-        await _native.whenGraphicsReady();
 
         // Check for cancellation.
         if (abortSignal.aborted) {
@@ -58,12 +45,10 @@ export class ReactNativeEngine extends NativeEngine {
             // makes it quite difficult to get this to work correctly (e.g. it re-runs previous useEffect instances, which means it can try to use Babylon Native in a de-initialized state).
             // TODO: https://github.com/BabylonJS/BabylonReactNative/issues/125
             if (!__DEV__) {
-                BabylonNative.reset();
+                reset();
             }
 
             this._isDisposed = true;
         }
-
-        BabylonNative.setEngineInstance(null);
     }
 }
