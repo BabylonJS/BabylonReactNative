@@ -84,7 +84,6 @@ extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInter
     if (surface)
     {
         windowPtr = ANativeWindow_fromSurface(env, surface);
-        //ANativeWindow_acquire(windowPtr);
     }
     g_xrWindowPtr = windowPtr;
 }
