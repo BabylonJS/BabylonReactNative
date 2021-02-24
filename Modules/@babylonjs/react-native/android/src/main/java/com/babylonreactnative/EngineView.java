@@ -2,6 +2,7 @@ package com.babylonreactnative;
 
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -21,18 +22,19 @@ import com.facebook.react.uimanager.events.EventDispatcher;
 import java.io.ByteArrayOutputStream;
 
 public final class EngineView extends FrameLayout implements View.OnTouchListener {
+    private static final FrameLayout.LayoutParams childViewLayoutParams = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+
     private final SurfaceView primarySurfaceView;
-    private final SurfaceView xrSurfaceView;
     private final EventDispatcher reactEventDispatcher;
+    private SurfaceView xrSurfaceView;
 
     public EngineView(ReactContext reactContext) {
         super(reactContext);
 
-        final FrameLayout.LayoutParams childViewLayoutParams = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        //final FrameLayout.LayoutParams childViewLayoutParams = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
         this.primarySurfaceView = new SurfaceView(reactContext);
-        this.primarySurfaceView.setLayoutParams(childViewLayoutParams);
-        this.addView(this.primarySurfaceView);
+        this.primarySurfaceView.setLayoutParams(EngineView.childViewLayoutParams);
         this.primarySurfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
@@ -48,10 +50,10 @@ public final class EngineView extends FrameLayout implements View.OnTouchListene
             public void surfaceDestroyed(SurfaceHolder holder) {
             }
         });
+        this.addView(this.primarySurfaceView);
 
         this.xrSurfaceView = new SurfaceView(reactContext);
         this.xrSurfaceView.setLayoutParams(childViewLayoutParams);
-        this.addView(this.xrSurfaceView);
         this.xrSurfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
@@ -64,11 +66,16 @@ public final class EngineView extends FrameLayout implements View.OnTouchListene
 
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
-
+                BabylonNativeInterop.updateXRView(null);
             }
         });
+        this.xrSurfaceView.setVisibility(View.INVISIBLE);
+        this.addView(this.xrSurfaceView);
 
         this.setOnTouchListener(this);
+
+        this.setWillNotDraw(false);
+
         this.reactEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
     }
 
@@ -76,6 +83,42 @@ public final class EngineView extends FrameLayout implements View.OnTouchListene
     public boolean onTouch(View view, MotionEvent motionEvent) {
         BabylonNativeInterop.reportMotionEvent(motionEvent);
         return true;
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        if (BabylonNativeInterop.isXRActive()) {
+            this.xrSurfaceView.setVisibility(View.VISIBLE);
+        } else {
+            this.xrSurfaceView.setVisibility(View.INVISIBLE);
+        }
+
+//        if (this.xrSurfaceView == null && BabylonNativeInterop.isXRActive()) {
+//            this.xrSurfaceView = new SurfaceView(this.getContext());
+//            this.xrSurfaceView.setLayoutParams(EngineView.childViewLayoutParams);
+//            this.addView(this.xrSurfaceView);
+//            this.xrSurfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
+//                @Override
+//                public void surfaceCreated(SurfaceHolder holder) {
+//                }
+//
+//                @Override
+//                public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+//                    BabylonNativeInterop.updateXRView(holder.getSurface());
+//                }
+//
+//                @Override
+//                public void surfaceDestroyed(SurfaceHolder holder) {
+//
+//                }
+//            });
+//        } else if (this.xrSurfaceView != null && !BabylonNativeInterop.isXRActive()) {
+//            BabylonNativeInterop.updateXRView(null);
+//            this.removeView(this.xrSurfaceView);
+//            this.xrSurfaceView = null;
+//        }
+
+        invalidate();
     }
 
     @TargetApi(24)

@@ -80,14 +80,19 @@ extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInter
 ANativeWindow* g_xrWindowPtr{};
 extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_updateXRView(JNIEnv* env, jclass obj, jobject surface)
 {
-    ANativeWindow* windowPtr{ ANativeWindow_fromSurface(env, surface) };
+    ANativeWindow *windowPtr{};
+    if (surface)
+    {
+        windowPtr = ANativeWindow_fromSurface(env, surface);
+        //ANativeWindow_acquire(windowPtr);
+    }
     g_xrWindowPtr = windowPtr;
 }
 
-extern bool isXRActive;
+extern bool g_isXRActive;
 extern "C" JNIEXPORT jboolean JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_isXRActive(JNIEnv* env, jclass obj)
 {
-    return isXRActive;
+    return g_isXRActive;
 }
 
 extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_setTouchButtonState(JNIEnv* env, jclass obj, jint pointerId, jboolean isDown, jint x, jint y)
