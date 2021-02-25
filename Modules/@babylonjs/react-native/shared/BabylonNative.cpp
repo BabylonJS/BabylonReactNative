@@ -144,66 +144,7 @@ namespace Babylon
                 }
             });
         }
-       
-        struct JSGuard
-        {
-            JSGuard(Dispatcher& dispatcher)
-            {
-                std::promise<void> promise;
-                std::future<void> future = promise.get_future();
-                std::future<void> blocking = get().get_future();
-                dispatcher([&]() mutable
-                {
-                    promise.set_value();
-                    blocking.wait();
-				});
-                future.wait();
-            }
-
-            ~JSGuard()
-            {
-                get().set_value();
-            }
-
-            static std::promise<void>& get()
-            {
-                static std::promise<void> promise;
-                return promise;
-            }
-        };
-
-        void EnableView()
-        {
-            if (!m_graphics)
-                return;
-            
-            if (m_autoRender)
-            {
-                m_graphics->EnableRendering();
-            }
-            else
-            {
-                JSGuard guard(m_jsDispatcher);
-                m_graphics->EnableRendering();
-            }
-        }
-		
-        void DisableView()
-        {            
-            if (!m_graphics)
-                return;
-
-            if (m_autoRender)
-            {
-                m_graphics->EnableRendering();
-            }
-            else
-            {
-                JSGuard guard(m_jsDispatcher);
-                m_graphics->DisableRendering();
-            }
-        }
-		
+       			
         void SetMouseButtonState(uint32_t buttonId, bool isDown, uint32_t x, uint32_t y)
         {
             if (isDown)
@@ -337,30 +278,6 @@ namespace Babylon
         else
         {
             throw std::runtime_error{ "RenderView must not be called before Initialize." };
-        }
-    }
-
-    void EnableView()
-    {
-        if (auto nativeModule{ g_nativeModule.lock() })
-        {
-            nativeModule->EnableView();
-        }
-        else
-        {
-            throw std::runtime_error{ "EnableView must not be called before Initialize." };
-        }
-    }
-
-    void DisableView()
-    {
-        if (auto nativeModule{ g_nativeModule.lock() })
-        {
-            nativeModule->DisableView();
-        }
-        else
-        {
-            throw std::runtime_error{ "DisableView must not be called before Initialize." };
         }
     }
 	
