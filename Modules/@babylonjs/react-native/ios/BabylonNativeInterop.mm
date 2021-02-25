@@ -37,21 +37,6 @@ static NSMutableArray* activeTouches;
     } };
 
     Babylon::Initialize(*GetJSIRuntime(bridge), std::move(jsDispatcher));
-
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-        name:RCTBridgeWillInvalidateModulesNotification
-        object:bridge.parentBridge];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-        selector:@selector(onBridgeWillInvalidate:)
-        name:RCTBridgeWillInvalidateModulesNotification
-        object:bridge.parentBridge];
-}
-
-// NOTE: This happens during dev mode reload, when the JS engine is being shutdown and restarted.
-+ (void)onBridgeWillInvalidate:(NSNotification*)notification
-{
-    Babylon::Deinitialize();
 }
 
 + (void)updateView:(MTKView*)mtkView {
@@ -60,6 +45,14 @@ static NSMutableArray* activeTouches;
     if (width != 0 && height != 0) {
         Babylon::UpdateView((__bridge void*)mtkView, width, height);
     }
+}
+
++ (void)renderView {
+    Babylon::RenderView();
+}
+
++ (void)resetView {
+    Babylon::ResetView();
 }
 
 + (void)reportTouchEvent:(MTKView*)mtkView touches:(NSSet<UITouch*>*)touches event:(UIEvent*)event {
