@@ -53,6 +53,9 @@ namespace Babylon
 
             // Initialize Babylon Native plugins
             Plugins::NativeXr::Initialize(m_env);
+            Plugins::NativeXr::SetSessionStateChangedCallback(m_env, [this](bool isXRSessionActive) {
+                m_isXRActive = isXRSessionActive;
+            });
             Plugins::NativeCapture::Initialize(m_env);
             m_nativeInput = &Plugins::NativeInput::CreateForJavaScript(m_env);
 
@@ -177,6 +180,11 @@ namespace Babylon
             m_nativeInput->TouchMove(pointerId, x, y);
         }
 
+        bool IsXRActive()
+        {
+            return m_isXRActive;
+        }
+
         jsi::Value get(jsi::Runtime& runtime, const jsi::PropNameID& prop) override
         {
             const auto propName{ prop.utf8(runtime) };
@@ -227,6 +235,8 @@ namespace Babylon
         std::shared_ptr<bool> m_isRunning{};
         std::unique_ptr<Graphics> m_graphics{};
         Plugins::NativeInput* m_nativeInput{};
+
+        bool m_isXRActive{};
 
         std::function<void()> m_disposeEngine{};
     };
@@ -309,5 +319,15 @@ namespace Babylon
         {
             nativeModule->SetTouchPosition(pointerId, x, y);
         }
+    }
+
+    bool IsXRActive()
+    {
+        if (auto nativeModule{ g_nativeModule.lock() })
+        {
+            return nativeModule->IsXRActive();
+        }
+
+        return false;
     }
 }

@@ -88,10 +88,9 @@ extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInter
     g_xrWindowPtr = windowPtr;
 }
 
-extern bool g_isXRActive;
 extern "C" JNIEXPORT jboolean JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_isXRActive(JNIEnv* env, jclass obj)
 {
-    return g_isXRActive;
+    return Babylon::IsXRActive();
 }
 
 extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_setTouchButtonState(JNIEnv* env, jclass obj, jint pointerId, jboolean isDown, jint x, jint y)
