@@ -35,18 +35,7 @@ namespace Babylon
             , m_isRunning{ std::make_shared<bool>(true) }
         {
             // Initialize a JS promise that will be returned by whenInitialized, and completed when NativeEngine is initialized.
-            m_initPromise = jsiRuntime.global().getPropertyAsFunction(jsiRuntime, "Promise").callAsConstructor
-            (
-                jsiRuntime,
-                jsi::Function::createFromHostFunction(jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "executor"), 0, [this](jsi::Runtime& rt, const jsi::Value&, const jsi::Value* args, size_t) -> jsi::Value
-                {
-                    m_resolveInitPromise = [&rt, resolve{ std::make_shared<jsi::Value>(rt, args[0]) }]()
-                    {
-                        resolve->asObject(rt).asFunction(rt).call(rt);
-                    };
-                    return {};
-                })
-            );
+            CreateInitPromise();
 
             // Initialize Babylon Native core components
             JsRuntime::CreateForJavaScript(m_env, CreateJsRuntimeDispatcher(m_env, jsiRuntime, m_jsDispatcher, m_isRunning));
@@ -90,8 +79,12 @@ namespace Babylon
                 {
                     g_graphics->AddToJavaScript(m_env);
                     Plugins::NativeEngine::Initialize(m_env);
-                    m_resolveInitPromise();
                 });
+            });
+
+            m_jsDispatcher([this]()
+            {
+                m_resolveInitPromise();
             });
         }
 
@@ -109,6 +102,9 @@ namespace Babylon
             if (g_graphics)
             {
                 g_graphics->DisableRendering();
+
+                // Recreate the init promise.
+                CreateInitPromise();
             }
         }
 
@@ -178,6 +174,23 @@ namespace Babylon
         }
 
     private:
+        void CreateInitPromise()
+        {
+            jsi::Runtime& jsiRuntime{static_cast<napi_env>(m_env)->rt};
+            m_initPromise = jsiRuntime.global().getPropertyAsFunction(jsiRuntime, "Promise").callAsConstructor
+            (
+                jsiRuntime,
+                jsi::Function::createFromHostFunction(jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "executor"), 0, [this](jsi::Runtime& rt, const jsi::Value&, const jsi::Value* args, size_t) -> jsi::Value
+                {
+                    m_resolveInitPromise = [&rt, resolve{ std::make_shared<jsi::Value>(rt, args[0]) }]()
+                    {
+                        resolve->asObject(rt).asFunction(rt).call(rt);
+                    };
+                    return {};
+                })
+            );
+        }
+
         jsi::Value m_initPromise{};
         std::function<void()> m_resolveInitPromise{};
 
