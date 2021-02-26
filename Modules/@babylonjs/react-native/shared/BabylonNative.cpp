@@ -52,9 +52,12 @@ namespace Babylon
             JsRuntime::CreateForJavaScript(m_env, CreateJsRuntimeDispatcher(m_env, jsiRuntime, m_jsDispatcher, m_isRunning));
 
             // Initialize Babylon Native plugins
-            Plugins::NativeXr::Initialize(m_env);
-            Plugins::NativeXr::SetSessionStateChangedCallback(m_env, [this](bool isXRSessionActive) {
-                m_isXRActive = isXRSessionActive;
+            Plugins::NativeXr::Initialize(m_env,
+            {
+                [this](bool isXRSessionActive)
+                {
+                    m_isXRActive = isXRSessionActive;
+                }
             });
             Plugins::NativeCapture::Initialize(m_env);
             m_nativeInput = &Plugins::NativeInput::CreateForJavaScript(m_env);
