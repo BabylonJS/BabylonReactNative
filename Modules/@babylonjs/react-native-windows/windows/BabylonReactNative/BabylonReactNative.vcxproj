@@ -126,29 +126,35 @@
       <ModuleDefinitionFile>BabylonReactNative.def</ModuleDefinitionFile>
       <!-- Library directories when building in repo -->
       <!-- Note: you can add BabylonNative component build folders here as needed -->
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\Dependencies\arcana.cpp\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\Dependencies\bgfx.cmake\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\Dependencies\glslang\glslang\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\Dependencies\glslang\OGLCompilersDLL\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\Dependencies\napi\napi-jsi\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\jsi\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\Core\JsRuntime\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\Core\Graphics\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\Plugins\NativeCapture\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\Plugins\NativeEngine\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\Plugins\NativeInput\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\Plugins\NativeXr\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\Dependencies\xr\Dependencies\OpenXR-SDK\src\loader\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\Dependencies\glslang\glslang\OSDependent\Windows\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\Dependencies\SPIRV-Cross\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\Dependencies\glslang\SPIRV\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\Dependencies\UrlLib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\Polyfills\Window\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\Polyfills\XMLHttpRequest\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">$(BabylonNativeBuildDir)\Dependencies\xr\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">
+        $(BabylonNativeBuildDir)\Core\JsRuntime\$(Configuration);
+        $(BabylonNativeBuildDir)\Core\Graphics\$(Configuration);
+        $(BabylonNativeBuildDir)\Dependencies\arcana.cpp\$(Configuration);
+        $(BabylonNativeBuildDir)\Dependencies\bgfx.cmake\$(Configuration);
+        $(BabylonNativeBuildDir)\Dependencies\glslang\glslang\$(Configuration);
+        $(BabylonNativeBuildDir)\Dependencies\glslang\glslang\OSDependent\Windows\$(Configuration);
+        $(BabylonNativeBuildDir)\Dependencies\glslang\OGLCompilersDLL\$(Configuration);
+        $(BabylonNativeBuildDir)\Dependencies\glslang\SPIRV\$(Configuration);
+        $(BabylonNativeBuildDir)\Dependencies\napi\napi-jsi\$(Configuration);
+        $(BabylonNativeBuildDir)\Dependencies\SPIRV-Cross\$(Configuration);
+        $(BabylonNativeBuildDir)\Dependencies\UrlLib\$(Configuration);
+        $(BabylonNativeBuildDir)\Dependencies\xr\$(Configuration);
+        $(BabylonNativeBuildDir)\Dependencies\xr\Dependencies\OpenXR-SDK\src\loader\$(Configuration);
+        $(BabylonNativeBuildDir)\jsi\$(Configuration);
+        $(BabylonNativeBuildDir)\Plugins\NativeCapture\$(Configuration);
+        $(BabylonNativeBuildDir)\Plugins\NativeEngine\$(Configuration);
+        $(BabylonNativeBuildDir)\Plugins\NativeInput\$(Configuration);
+        $(BabylonNativeBuildDir)\Plugins\NativeXr\$(Configuration);
+        $(BabylonNativeBuildDir)\Polyfills\Window\$(Configuration);
+        $(BabylonNativeBuildDir)\Polyfills\XMLHttpRequest\$(Configuration);
+        $(BabylonNativeBuildDir)\$(Configuration);
+        %(AdditionalLibraryDirectories);
+      </AdditionalLibraryDirectories>
       <!-- Library directories when building from npm package -->
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeLibsDir)' != ''">$(BabylonNativeLibsDir)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="'$(BabylonNativeLibsDir)' != ''">
+        $(BabylonNativeLibsDir)\$(Configuration);
+        %(AdditionalLibraryDirectories)
+      </AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
@@ -159,7 +165,47 @@
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>arcana.lib;astc.lib;astc-codec.lib;BabylonNative.lib;bgfx.lib;bimg.lib;bx.lib;edtaa3.lib;etc1.lib;etc2.lib;GenericCodeGend.lib;glslangd.lib;Graphics.lib;iqa.lib;jsi.lib;JsRuntime.lib;MachineIndependentd.lib;napi.lib;NativeCapture.lib;NativeEngine.lib;NativeInput.lib;NativeXr.lib;nvtt.lib;OGLCompilerd.lib;openxr_loader.lib;OSDependentd.lib;pvrtc.lib;spirv-cross-core.lib;spirv-cross-glsl.lib;spirv-cross-hlsl.lib;SPIRVd.lib;squish.lib;UrlLib.lib;Window.lib;XMLHttpRequest.lib;xr.lib;WindowsApp.lib;%(AdditionalDependencies);</AdditionalDependencies>
+      <!-- Debug Libraries -->
+      <AdditionalDependencies>
+        arcana.lib;
+        astc.lib;
+        astc-codec.lib;
+        BabylonNative.lib;
+        bgfx.lib;
+        bimg.lib;
+        bx.lib;
+        edtaa3.lib;
+        etc1.lib;
+        etc2.lib;
+        GenericCodeGend.lib;
+        glslangd.lib;
+        Graphics.lib;
+        iqa.lib;
+        jsi.lib;
+        JsRuntime.lib;
+        MachineIndependentd.lib;
+        napi.lib;
+        NativeCapture.lib;
+        NativeEngine.lib;
+        NativeInput.lib;
+        NativeXr.lib;
+        nvtt.lib;
+        OGLCompilerd.lib;
+        openxr_loader.lib;
+        OSDependentd.lib;
+        pvrtc.lib;
+        spirv-cross-core.lib;
+        spirv-cross-glsl.lib;
+        spirv-cross-hlsl.lib;
+        SPIRVd.lib;
+        squish.lib;
+        UrlLib.lib;
+        Window.lib;
+        XMLHttpRequest.lib;
+        xr.lib;
+        WindowsApp.lib;
+        %(AdditionalDependencies);
+      </AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Link>
     <ProjectReference>
@@ -175,7 +221,47 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>arcana.lib;astc.lib;astc-codec.lib;BabylonNative.lib;bgfx.lib;bimg.lib;bx.lib;edtaa3.lib;etc1.lib;etc2.lib;GenericCodeGen.lib;glslang.lib;Graphics.lib;iqa.lib;jsi.lib;JsRuntime.lib;MachineIndependent.lib;napi.lib;NativeCapture.lib;NativeEngine.lib;NativeInput.lib;NativeXr.lib;nvtt.lib;OGLCompiler.lib;openxr_loader.lib;OSDependent.lib;pvrtc.lib;spirv-cross-core.lib;spirv-cross-glsl.lib;spirv-cross-hlsl.lib;SPIRV.lib;squish.lib;UrlLib.lib;Window.lib;XMLHttpRequest.lib;xr.lib;WindowsApp.lib;%(AdditionalDependencies);</AdditionalDependencies>
+      <!-- Release Libraries -->
+      <AdditionalDependencies>
+        arcana.lib;
+        astc.lib;
+        astc-codec.lib;
+        BabylonNative.lib;
+        bgfx.lib;
+        bimg.lib;
+        bx.lib;
+        edtaa3.lib;
+        etc1.lib;
+        etc2.lib;
+        GenericCodeGen.lib;
+        glslang.lib;
+        Graphics.lib;
+        iqa.lib;
+        jsi.lib;
+        JsRuntime.lib;
+        MachineIndependent.lib;
+        napi.lib;
+        NativeCapture.lib;
+        NativeEngine.lib;
+        NativeInput.lib;
+        NativeXr.lib;
+        nvtt.lib;
+        OGLCompiler.lib;
+        openxr_loader.lib;
+        OSDependent.lib;
+        pvrtc.lib;
+        spirv-cross-core.lib;
+        spirv-cross-glsl.lib;
+        spirv-cross-hlsl.lib;
+        SPIRV.lib;
+        squish.lib;
+        UrlLib.lib;
+        Window.lib;
+        XMLHttpRequest.lib;
+        xr.lib;
+        WindowsApp.lib;
+        %(AdditionalDependencies);
+      </AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
