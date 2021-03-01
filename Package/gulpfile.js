@@ -79,15 +79,97 @@ const makeUWPProject = gulp.parallel(
   makeUWPProjectARM64
 );
 
-const buildUWPProject = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\Build.bat');
+const buildUWPx86Debug = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\Build.bat -Platform Win32 -Configuration Debug');
 }
+
+const buildUWPx86Release = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\Build.bat -Platform Win32 -Configuration Release');
+}
+
+const buildUWPx64Debug = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\Build.bat -Platform x64 -Configuration Debug');
+}
+
+const buildUWPx64Release = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\Build.bat -Platform x64 -Configuration Release');
+}
+
+const buildUWPARMDebug = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\Build.bat -Platform ARM -Configuration Debug');
+}
+
+const buildUWPARMRelease = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\Build.bat -Platform ARM -Configuration Release');
+}
+
+const buildUWPARM64Debug = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\Build.bat -Platform ARM64 -Configuration Debug');
+}
+
+const buildUWPARM64Release = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\Build.bat -Platform ARM64 -Configuration Release');
+}
+
+const buildUWPProject = gulp.parallel(
+  buildUWPx86Debug,
+  buildUWPx86Release,
+  buildUWPx64Debug,
+  buildUWPx64Release,
+  buildUWPARMDebug,
+  buildUWPARMRelease,
+  buildUWPARM64Debug,
+  buildUWPARM64Release
+);
+
+const nugetRestoreUWPPlayground = async () => {
+  exec('nuget restore Playground.sln', './../Apps/Playground/windows');
+}
+
+const buildUWPPlaygroundx86Debug = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\BuildPlayground.bat -Platform x86 -Configuration Debug');
+}
+
+const buildUWPPlaygroundx86Release = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\BuildPlayground.bat -Platform x86 -Configuration Release');
+}
+
+const buildUWPPlaygroundx64Debug = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\BuildPlayground.bat -Platform x64 -Configuration Debug');
+}
+
+const buildUWPPlaygroundx64Release = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\BuildPlayground.bat -Platform x64 -Configuration Release');
+}
+
+const buildUWPPlaygroundARMDebug = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\BuildPlayground.bat -Platform ARM -Configuration Debug');
+}
+
+const buildUWPPlaygroundARMRelease = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\BuildPlayground.bat -Platform ARM -Configuration Release');
+}
+
+const buildUWPPlaygroundARM64Debug = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\BuildPlayground.bat -Platform ARM64 -Configuration Debug');
+}
+
+const buildUWPPlaygroundARM64Release = async () => {
+  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\BuildPlayground.bat -Platform ARM64 -Configuration Release');
+}
+
+const buildUWPPlayground = gulp.parallel(
+  buildUWPPlaygroundx86Debug,
+  buildUWPPlaygroundx86Release,
+  buildUWPPlaygroundx64Debug,
+  buildUWPPlaygroundx64Release,
+  buildUWPPlaygroundARMDebug,
+  buildUWPPlaygroundARMRelease,
+  buildUWPPlaygroundARM64Debug,
+  buildUWPPlaygroundARM64Release
+);
 
 const buildUWP = gulp.series(makeUWPProject, buildUWPProject);
-
-const buildUWPProjectPR = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\PRBuild.bat');
-}
 
 const copyCommonFiles = () => {
   return  gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/package.json')
@@ -339,8 +421,6 @@ exports.buildAndroid = buildAndroid;
 exports.createIOSUniversalLibs = createIOSUniversalLibs;
 exports.copyFiles = copyFiles;
 
-exports.buildUWP = buildUWP;
-
 exports.clean = clean;
 exports.build = build;
 exports.rebuild = rebuild;
@@ -359,15 +439,33 @@ exports.initializeSubmodulesWindowsAgent = initializeSubmodulesWindowsAgent;
 exports.makeUWPProjectx86 = makeUWPProjectx86;
 exports.makeUWPProjectx64 = makeUWPProjectx64;
 exports.makeUWPProjectARM = makeUWPProjectARM;
-exports.makeUWPProjectARM64 = makeUWPProjectARM64
+exports.makeUWPProjectARM64 = makeUWPProjectARM64;
 exports.makeUWPProject = makeUWPProject;
 
+exports.buildUWPx86Debug = buildUWPx86Debug;
+exports.buildUWPx86Release = buildUWPx86Release;
+exports.buildUWPx64Debug = buildUWPx64Debug;
+exports.buildUWPx64Release = buildUWPx64Release;
+exports.buildUWPARMDebug = buildUWPARMDebug;
+exports.buildUWPARMRelease = buildUWPARMRelease;
+exports.buildUWPARM64Debug = buildUWPARM64Debug;
+exports.buildUWPARM64Release = buildUWPARM64Release;
 exports.buildUWPProject = buildUWPProject;
-exports.makeUWPProjectPR = makeUWPProjectPR;
-exports.buildUWPProjectPR = buildUWPProjectPR;
+
+exports.nugetRestoreUWPPlayground = nugetRestoreUWPPlayground;
+exports.buildUWPPlaygroundx86Debug = buildUWPPlaygroundx86Debug;
+exports.buildUWPPlaygroundx86Release = buildUWPPlaygroundx86Release;
+exports.buildUWPPlaygroundx64Debug = buildUWPPlaygroundx64Debug;
+exports.buildUWPPlaygroundx64Release = buildUWPPlaygroundx64Release;
+exports.buildUWPPlaygroundARMDebug = buildUWPPlaygroundARMDebug;
+exports.buildUWPPlaygroundARMRelease = buildUWPPlaygroundARMRelease;
+exports.buildUWPPlaygroundARM64Debug = buildUWPPlaygroundARM64Debug;
+exports.buildUWPPlaygroundARM64Release = buildUWPPlaygroundARM64Release;
+exports.buildUWPPlayground = buildUWPPlayground;
+
 exports.buildUWP = buildUWP;
-exports.buildUWPPR = buildUWPPR;
 exports.buildUWPPublish = buildUWPPublish;
+
 exports.copyUWPFiles = copyUWPFiles;
 exports.packUWP = packUWP;
 exports.packUWPNoBuild = packUWPNoBuild;
