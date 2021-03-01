@@ -52,16 +52,32 @@ const initializeSubmodulesWindowsAgent = async () => {
   exec('git -c submodule."Dependencies/xr/Dependencies/arcore-android-sdk".update=none submodule update --init --recursive "./../Modules/@babylonjs/react-native/submodules/BabylonNative');
 }
 
-const makeUWPProject = async () => {
-  shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64');
-  exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI ./../../../../react-native-windows/windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64');
+const makeUWPProjectx86 = async () => {
   shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x86');
   exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI -A Win32 ./../../../../react-native-windows/windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x86');
+}
+
+const makeUWPProjectx64 = async () => {
+  shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64');
+  exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI ./../../../../react-native-windows/windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64');
+}
+
+const makeUWPProjectARM = async () => {
   shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm');
   exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI -A arm ./../../../../react-native-windows/windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm');
+}
+
+const makeUWPProjectARM64 = async () => {
   shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm64');
   exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI -A arm64 ./../../../../react-native-windows/windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_arm64');
 }
+
+const makeUWPProject = gulp.parallel(
+  makeUWPProjectx86,
+  makeUWPProjectx64,
+  makeUWPProjectARM,
+  makeUWPProjectARM64
+);
 
 const buildUWPProject = async () => {
   exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\Build.bat');
@@ -69,16 +85,9 @@ const buildUWPProject = async () => {
 
 const buildUWP = gulp.series(makeUWPProject, buildUWPProject);
 
-const makeUWPProjectPR = async () => {
-  shelljs.mkdir('-p', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64');
-  exec('cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -D NAPI_JAVASCRIPT_ENGINE=JSI ./../../../../react-native-windows/windows', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Build_uwp_x64');
-}
-
 const buildUWPProjectPR = async () => {
   exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\PRBuild.bat');
 }
-
-const buildUWPPR = gulp.series(makeUWPProjectPR, buildUWPProjectPR);
 
 const copyCommonFiles = () => {
   return  gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/package.json')
@@ -347,7 +356,12 @@ const packUWP = gulp.series(clean, buildUWP, copyPackageFilesUWP, createPackage,
 const packUWPNoBuild = gulp.series(clean, copyPackageFilesUWP, createPackage, createPackageUWP);
 
 exports.initializeSubmodulesWindowsAgent = initializeSubmodulesWindowsAgent;
+exports.makeUWPProjectx86 = makeUWPProjectx86;
+exports.makeUWPProjectx64 = makeUWPProjectx64;
+exports.makeUWPProjectARM = makeUWPProjectARM;
+exports.makeUWPProjectARM64 = makeUWPProjectARM64
 exports.makeUWPProject = makeUWPProject;
+
 exports.buildUWPProject = buildUWPProject;
 exports.makeUWPProjectPR = makeUWPProjectPR;
 exports.buildUWPProjectPR = buildUWPProjectPR;
