@@ -150,25 +150,6 @@ namespace Babylon
             {
                 return { runtime, m_initPromise };
             }
-            else if (propName == "setEngineInstance")
-            {
-                return jsi::Function::createFromHostFunction(runtime, prop, 0, [this](jsi::Runtime& rt, const jsi::Value&, const jsi::Value* args, size_t count) -> jsi::Value
-                {
-                    if (count == 0 || !args[0].isObject())
-                    {
-                        m_disposeEngine = {};
-                    }
-                    else
-                    {
-                        m_disposeEngine = [&rt, engineInstanceValue{ std::make_shared<jsi::Value>(rt, args[0]) }]()
-                        {
-                            auto engineInstance{ engineInstanceValue->getObject(rt) };
-                            engineInstance.getPropertyAsFunction(rt, "dispose").callWithThis(rt, engineInstance);
-                        };
-                    }
-                    return {};
-                });
-            }
 
             return {};
         }
@@ -200,8 +181,6 @@ namespace Babylon
         std::shared_ptr<bool> m_isRunning{};
         std::once_flag m_isGraphicsInitialized{};
         Plugins::NativeInput* m_nativeInput{};
-
-        std::function<void()> m_disposeEngine{};
     };
 
     namespace

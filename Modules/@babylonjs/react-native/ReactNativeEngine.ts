@@ -5,17 +5,11 @@ import { NativeEngine } from '@babylonjs/core';
 // This will likely be converted to a TurboModule when they are fully supported.
 declare const BabylonNative: {
     readonly initializationPromise: Promise<void>;
-    setEngineInstance: (engine: NativeEngine | null) => void;
     reset: () => void;
 };
 
 export class ReactNativeEngine extends NativeEngine {
     private _isDisposed = false;
-
-    private constructor() {
-        super();
-        BabylonNative.setEngineInstance(this);
-    }
 
     public static async tryCreateAsync(abortSignal: AbortSignal): Promise<ReactNativeEngine | null> {
         if (!await ensureInitialized() || abortSignal.aborted) {
