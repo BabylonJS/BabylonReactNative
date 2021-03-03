@@ -21,6 +21,25 @@ namespace winrt::BabylonReactNative::implementation {
     static ::Microsoft::WRL::ComPtr<ID3D11DeviceContext1> s_d3dContext;
     static Concurrency::critical_section s_criticalSection;
     
+    enum class MSAA
+    {
+        NONE,
+        X2,
+        X4,
+        X8,
+        X16,
+        MAX
+    };
+
+    static std::array<uint32_t, static_cast<uint32_t>(MSAA::MAX)> s_checkMsaa = { 0, 2, 4, 8, 16 };
+    static std::array<DXGI_SAMPLE_DESC, static_cast<uint32_t>(MSAA::MAX)> s_msaa = {
+        DXGI_SAMPLE_DESC{  1, 0 },
+        DXGI_SAMPLE_DESC{  2, 0 },
+        DXGI_SAMPLE_DESC{  4, 0 },
+        DXGI_SAMPLE_DESC{  8, 0 },
+        DXGI_SAMPLE_DESC{ 16, 0 }
+    };
+
     EngineView::EngineView() {
         if (s_engineView) return;
 
@@ -275,8 +294,18 @@ namespace winrt::BabylonReactNative::implementation {
         parameters.pScrollRect = nullptr;
         parameters.pScrollOffset = nullptr;
 
-        HRESULT hr = S_OK;
+        if (_sampleDesc.Count > 1)
+        {
+            ::Microsoft::WRL::ComPtr<ID3D11Texture2D> originBackBuffer, msaaTexutePtr;
+            _swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), &originBackBuffer);
 
+            ::Microsoft::WRL::ComPtr<ID3D11Resource> resource;
+            _backBufferPtr->GetResource(&resource);
+            resource.As(&msaaTexutePtr);
+            s_d3dContext->ResolveSubresource(originBackBuffer.Get(), 0, msaaTexutePtr.Get(), 0, DXGI_FORMAT_B8G8R8A8_UNORM);
+        }
+
+        HRESULT hr = S_OK;
         hr = _swapChain->Present1(1, 0, &parameters);
 
         if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
@@ -348,6 +377,25 @@ namespace winrt::BabylonReactNative::implementation {
 
         // Get D3D11.1 context
         context.As(&s_d3dContext);
+
+        // Check MultiSampQuality
+        for (uint32_t i = 1, last = 0; i < s_msaa.size(); ++i)
+        {
+            uint32_t msaa = s_checkMsaa[i];
+            uint32_t quality = 0;
+            HRESULT hr = s_d3dDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_B8G8R8A8_UNORM, msaa, &quality);
+
+            if (SUCCEEDED(hr) && 0 < quality)
+            {
+                s_msaa[i].Count = msaa;
+                s_msaa[i].Quality = quality - 1;
+                last = i;
+            }
+            else
+            {
+                s_msaa[i] = s_msaa[last];
+            }
+        }
     }
 
     void EngineView::CreateSizeDependentResources()
@@ -383,16 +431,17 @@ namespace winrt::BabylonReactNative::implementation {
         }
         else // Otherwise, create a new one
         {
+            _sampleDesc = s_msaa[static_cast<uint32_t>(MSAA::NONE)];  // MSAA::X4 Default Setting in BabylonNative
+
             DXGI_SWAP_CHAIN_DESC1 scd{ 0 };
             scd.Width = static_cast<UINT>(_renderTargetWidth);
             scd.Height = static_cast<UINT>(_renderTargetHeight);
             scd.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
             scd.Stereo = false;
-            scd.SampleDesc.Count = 1;
-            scd.SampleDesc.Quality = 0;
+            scd.SampleDesc = { 1, 0 };
             scd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-            scd.BufferCount = 2;
             scd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+            scd.BufferCount = 2;
             scd.Flags = 0;
 
             // Get underlying DXGI Device from D3D Device.
@@ -425,10 +474,30 @@ namespace winrt::BabylonReactNative::implementation {
             dxgiDevice->SetMaximumFrameLatency(1);
         }
 
-        ::Microsoft::WRL::ComPtr<ID3D11Texture2D> texture;
+        ::Microsoft::WRL::ComPtr<ID3D11Texture2D> texturePtr;
         ::Microsoft::WRL::ComPtr<ID3D11RenderTargetView> backBufferPtr;
-        _swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&texture);
-        s_d3dDevice->CreateRenderTargetView(texture.Get(), nullptr, &backBufferPtr);
+        if (_sampleDesc.Count > 1)
+        {
+            D3D11_TEXTURE2D_DESC desc{ 0 };
+            desc.Width = static_cast<UINT>(_renderTargetWidth);
+            desc.Height = static_cast<UINT>(_renderTargetHeight);
+            desc.MipLevels = 1;
+            desc.ArraySize = 1;
+            desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+            desc.SampleDesc = _sampleDesc;
+            desc.Usage = D3D11_USAGE_DEFAULT;
+            desc.BindFlags = D3D11_BIND_RENDER_TARGET;
+            desc.CPUAccessFlags = 0;
+            desc.MiscFlags = 0;
+            s_d3dDevice->CreateTexture2D(&desc, NULL, &texturePtr);
+        }
+        else
+        {
+            _swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&texturePtr);
+        }
+
+        s_d3dDevice->CreateRenderTargetView(texturePtr.Get(), nullptr, &backBufferPtr);
+        
         backBufferPtr.As(&_backBufferPtr);
 
         // Use windowTypePtr == 2 for xaml swap chain panels
