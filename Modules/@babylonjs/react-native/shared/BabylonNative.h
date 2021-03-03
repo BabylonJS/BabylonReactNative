@@ -7,6 +7,7 @@ namespace Babylon
     using Dispatcher = std::function<void(std::function<void()>)>;
 
     void Initialize(facebook::jsi::Runtime& jsiRuntime, Dispatcher jsDispatcher);
+    void Deinitialize();
     void UpdateView(void* windowPtr, size_t width, size_t height, void* windowTypePtr = nullptr);
     void RenderView();
     void ResetView();
