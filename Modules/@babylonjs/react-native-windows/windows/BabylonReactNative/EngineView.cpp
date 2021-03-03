@@ -16,8 +16,8 @@ namespace winrt::BabylonReactNative::implementation {
     using namespace winrt::Windows::ApplicationModel;
     using namespace Concurrency;
 
-    static EngineView* s_engineView{ nullptr };	// Only single view supported
-    static ID3D11Device1* s_d3dDevice{ nullptr };	// It will be released on bgfx.
+    static EngineView* s_engineView{ nullptr }; // Only single view supported
+    static ID3D11Device1* s_d3dDevice{ nullptr }; // It will be released on bgfx.
     static ::Microsoft::WRL::ComPtr<ID3D11DeviceContext1> s_d3dContext;
     static Concurrency::critical_section s_criticalSection;
     
@@ -88,6 +88,7 @@ namespace winrt::BabylonReactNative::implementation {
         s_criticalSection.lock();
         _dxgiOutput = nullptr;
         _backBufferPtr = nullptr;
+        _depthBufferPtr = nullptr;
         _swapChain = nullptr;
         s_criticalSection.unlock();
 
@@ -378,7 +379,7 @@ namespace winrt::BabylonReactNative::implementation {
         // Get D3D11.1 context
         context.As(&s_d3dContext);
 
-        // Check MultiSampQuality
+        // Check MultiSampleQuality
         for (uint32_t i = 1, last = 0; i < s_msaa.size(); ++i)
         {
             uint32_t msaa = s_checkMsaa[i];
@@ -412,6 +413,7 @@ namespace winrt::BabylonReactNative::implementation {
         if (_swapChain)
         {
             _backBufferPtr = nullptr;
+            _depthBufferPtr = nullptr;
 
             HRESULT hr = _swapChain->ResizeBuffers(
                 2,
@@ -431,7 +433,7 @@ namespace winrt::BabylonReactNative::implementation {
         }
         else // Otherwise, create a new one
         {
-            _sampleDesc = s_msaa[static_cast<uint32_t>(MSAA::NONE)];  // MSAA::X4 Default Setting in BabylonNative
+            _sampleDesc = s_msaa[static_cast<uint32_t>(MSAA::X4)];  // MSAA::X4 Default Setting in BabylonNative
 
             DXGI_SWAP_CHAIN_DESC1 scd{ 0 };
             scd.Width = static_cast<UINT>(_renderTargetWidth);
@@ -474,37 +476,40 @@ namespace winrt::BabylonReactNative::implementation {
             dxgiDevice->SetMaximumFrameLatency(1);
         }
 
-        ::Microsoft::WRL::ComPtr<ID3D11Texture2D> texturePtr;
-        ::Microsoft::WRL::ComPtr<ID3D11RenderTargetView> backBufferPtr;
+        ::Microsoft::WRL::ComPtr<ID3D11Texture2D> texturePtr, depthStencilPtr;
+
+        D3D11_TEXTURE2D_DESC desc{ 0 };
+        desc.Width = static_cast<UINT>(_renderTargetWidth);
+        desc.Height = static_cast<UINT>(_renderTargetHeight);
+        desc.MipLevels = 1;
+        desc.ArraySize = 1;
+        desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+        desc.SampleDesc = _sampleDesc;
+        desc.Usage = D3D11_USAGE_DEFAULT;
+        desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+        desc.CPUAccessFlags = 0;
+        desc.MiscFlags = 0;
+        s_d3dDevice->CreateTexture2D(&desc, nullptr, &depthStencilPtr);
+
         if (_sampleDesc.Count > 1)
         {
-            D3D11_TEXTURE2D_DESC desc{ 0 };
-            desc.Width = static_cast<UINT>(_renderTargetWidth);
-            desc.Height = static_cast<UINT>(_renderTargetHeight);
-            desc.MipLevels = 1;
-            desc.ArraySize = 1;
             desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-            desc.SampleDesc = _sampleDesc;
-            desc.Usage = D3D11_USAGE_DEFAULT;
             desc.BindFlags = D3D11_BIND_RENDER_TARGET;
-            desc.CPUAccessFlags = 0;
-            desc.MiscFlags = 0;
-            s_d3dDevice->CreateTexture2D(&desc, NULL, &texturePtr);
+            s_d3dDevice->CreateTexture2D(&desc, nullptr, &texturePtr);
         }
         else
         {
             _swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&texturePtr);
         }
 
-        s_d3dDevice->CreateRenderTargetView(texturePtr.Get(), nullptr, &backBufferPtr);
-        
-        backBufferPtr.As(&_backBufferPtr);
+        s_d3dDevice->CreateRenderTargetView(texturePtr.Get(), nullptr, &_backBufferPtr);
+        s_d3dDevice->CreateDepthStencilView(depthStencilPtr.Get(), nullptr, &_depthBufferPtr);
 
         // Use windowTypePtr == 2 for xaml swap chain panels
         auto swapChainPanel = static_cast<SwapChainPanel>(*this);
         auto windowTypePtr = reinterpret_cast<void*>(2);
         auto windowPtr = get_abi(swapChainPanel);
 
-        Babylon::UpdateView(windowPtr, (size_t)_renderTargetWidth, (size_t)_renderTargetHeight, windowTypePtr, s_d3dDevice, _backBufferPtr.Get());
+        Babylon::UpdateView(windowPtr, (size_t)_renderTargetWidth, (size_t)_renderTargetHeight, windowTypePtr, s_d3dDevice, _backBufferPtr.Get(), _depthBufferPtr.Get());
     }
 }
