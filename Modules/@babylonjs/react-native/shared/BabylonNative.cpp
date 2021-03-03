@@ -220,6 +220,12 @@ namespace Babylon
         }
     }
 
+    void Deinitialize()
+    {
+        // Prevent further interactions with the native module from the native interface.
+        g_nativeModule.reset();
+    }
+
     void UpdateView(void* windowPtr, size_t width, size_t height, void* windowTypePtr)
     {
         if (auto nativeModule{ g_nativeModule.lock() })
@@ -237,10 +243,6 @@ namespace Babylon
         if (auto nativeModule{ g_nativeModule.lock() })
         {
             nativeModule->RenderView();
-        }
-        else
-        {
-            throw std::runtime_error{ "RenderView must not be called before Initialize." };
         }
     }
 
