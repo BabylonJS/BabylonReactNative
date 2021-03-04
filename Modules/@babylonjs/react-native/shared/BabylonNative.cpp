@@ -279,7 +279,6 @@ namespace Babylon
             throw std::runtime_error{ "RenderView must not be called before Initialize." };
         }
     }
-	
     void SetMouseButtonState(uint32_t buttonId, bool isDown, uint32_t x, uint32_t y)
     {
         if (auto nativeModule{ g_nativeModule.lock() })
