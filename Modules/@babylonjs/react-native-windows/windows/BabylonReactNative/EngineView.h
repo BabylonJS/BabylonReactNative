@@ -50,7 +50,7 @@ namespace winrt::BabylonReactNative::implementation {
 
         DXGI_SAMPLE_DESC _sampleDesc{ 1, 0 };
         ::Microsoft::WRL::ComPtr<IDXGISwapChain2>_swapChain;
-        ::Microsoft::WRL::ComPtr <ID3D11RenderTargetView> _backBufferPtr;
+        ::Microsoft::WRL::ComPtr<ID3D11RenderTargetView> _backBufferPtr;
         ::Microsoft::WRL::ComPtr <ID3D11DepthStencilView> _depthBufferPtr;
         ::Microsoft::WRL::ComPtr<IDXGIOutput> _dxgiOutput;
         winrt::Windows::Foundation::IAsyncAction _renderLoopWorker{};
