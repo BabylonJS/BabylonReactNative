@@ -105,7 +105,6 @@ namespace Babylon
 
                 m_jsDispatcher([this]()
                 {
-                    // Recreate the init promise.
                     CreateInitPromise();
                 });
             }
