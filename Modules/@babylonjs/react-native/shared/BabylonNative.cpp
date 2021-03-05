@@ -103,8 +103,11 @@ namespace Babylon
             {
                 g_graphics->DisableRendering();
 
-                // Recreate the init promise.
-                CreateInitPromise();
+                m_jsDispatcher([this]()
+                {
+                    // Recreate the init promise.
+                    CreateInitPromise();
+                });
             }
         }
 
