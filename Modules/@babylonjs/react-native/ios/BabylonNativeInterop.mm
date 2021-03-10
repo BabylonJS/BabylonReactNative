@@ -59,6 +59,7 @@ static NSMutableArray* activeTouches;
     const int height = static_cast<int>(mtkView.bounds.size.height * UIScreen.mainScreen.scale);
     if (width != 0 && height != 0) {
         Babylon::UpdateView((__bridge void*)mtkView, width, height);
+        Babylon::UpdateXRView((__bridge void*)mtkView);
     }
 }
 
