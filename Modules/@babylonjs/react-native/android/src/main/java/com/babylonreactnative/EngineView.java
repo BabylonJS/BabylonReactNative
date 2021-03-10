@@ -92,6 +92,7 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
             this.xrSurfaceView.setVisibility(View.INVISIBLE);
         }
 
+        BabylonNativeInterop.renderView();
         invalidate();
     }
 
@@ -135,11 +136,5 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
             reactEventDispatcher.dispatchEvent(snapshotEvent);
             helperThread.quitSafely();
         }, helperThreadHandler);
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        BabylonNativeInterop.renderView();
-        invalidate();
     }
 }
