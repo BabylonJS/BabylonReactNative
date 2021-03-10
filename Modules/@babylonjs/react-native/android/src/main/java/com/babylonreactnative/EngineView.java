@@ -60,6 +60,8 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
         this.setWillNotDraw(false);
 
         this.reactEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
+
+        setWillNotDraw(false);
     }
 
     @Override
@@ -133,5 +135,11 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
             reactEventDispatcher.dispatchEvent(snapshotEvent);
             helperThread.quitSafely();
         }, helperThreadHandler);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        BabylonNativeInterop.renderView();
+        invalidate();
     }
 }
