@@ -317,7 +317,7 @@ const copyOpenXRPreviewHeaders = () => {
 
 const copyOpenXRUtilityHeaders = () => {
   return gulp.src('../Modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/xr/Dependencies/OpenXR-MixedReality/shared/XrUtility/*')
-    .pipe(gulp.dest('Assembled-Windows/windows/OpenXR-MixedReality/include/XrUtility'));
+  .pipe(gulp.dest('Assembled-Windows/windows/OpenXR-MixedReality/include/XrUtility'));
 }
 
 const copyOpenXRHelperHeaders = () => {
