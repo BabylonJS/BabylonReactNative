@@ -320,13 +320,9 @@ const copyOpenXRUtilityHeaders = () => {
     .pipe(gulp.dest('Assembled-Windows/windows/OpenXR-MixedReality/include/XrUtility'));
 }
 
-const copyOpenXRExtensionHeader = () => {
+const copyOpenXRHelperHeaders = () => {
   return gulp.src('../Modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/xr/Source/OpenXR/Include/*')
-  .pipe(gulp.dest('Assembled-Windows/windows/include'));
-}
-
-const copyOpenXRHelperHeader = () => {
-  return gulp.src('../Modules/@babylonjs/react-native-windows/windows/include/*')
+  .pipe(gulp.src('../Modules/@babylonjs/react-native-windows/windows/include/*'))
   .pipe(gulp.dest('Assembled-Windows/windows/include'));
 }
 
@@ -346,8 +342,7 @@ const copyUWPFiles = gulp.series(
     copyOpenXRInfoFiles,
     copyOpenXRPreviewHeaders,
     copyOpenXRUtilityHeaders,
-    copyOpenXRExtensionHeader,
-    copyOpenXRHelperHeader));
+    copyOpenXRHelperHeaders));
 
 const validate = async () => {
   // When the package contents are updated *and validated*, update the expected below by running 'find Assembled | pbcopy' and pasting it over the expected string.
