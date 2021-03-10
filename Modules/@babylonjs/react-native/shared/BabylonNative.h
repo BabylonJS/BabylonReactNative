@@ -16,6 +16,7 @@ namespace Babylon
     void SetTouchButtonState(uint32_t pointerId, bool isDown, uint32_t x, uint32_t y);
     void SetTouchPosition(uint32_t pointerId, uint32_t x, uint32_t y);
     bool IsXRActive();
+    void UpdateXRView(void* windowPtr);
 
     extern const uint32_t LEFT_MOUSE_BUTTON_ID;
     extern const uint32_t MIDDLE_MOUSE_BUTTON_ID;

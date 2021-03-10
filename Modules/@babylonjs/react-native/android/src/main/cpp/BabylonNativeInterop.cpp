@@ -82,7 +82,6 @@ extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInter
     Babylon::ResetView();
 }
 
-ANativeWindow* g_xrWindowPtr{};
 extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_updateXRView(JNIEnv* env, jclass obj, jobject surface)
 {
     ANativeWindow *windowPtr{};
@@ -90,7 +89,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInter
     {
         windowPtr = ANativeWindow_fromSurface(env, surface);
     }
-    g_xrWindowPtr = windowPtr;
+    Babylon::UpdateXRView(windowPtr);
 }
 
 extern "C" JNIEXPORT jboolean JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_isXRActive(JNIEnv* env, jclass obj)
