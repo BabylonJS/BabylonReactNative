@@ -34,7 +34,6 @@ namespace Babylon
             , m_jsDispatcher{ std::move(jsDispatcher) }
             , m_isRunning{ std::make_shared<bool>(true) }
             , m_isXRActive{ std::make_shared<bool>(false) }
-            , m_xrWindow{ std::make_shared<void*>(nullptr) }
         {
             // Initialize a JS promise that will be returned by whenInitialized, and completed when NativeEngine is initialized.
             CreateInitPromise();
@@ -43,17 +42,13 @@ namespace Babylon
             JsRuntime::CreateForJavaScript(m_env, CreateJsRuntimeDispatcher(m_env, jsiRuntime, m_jsDispatcher, m_isRunning));
 
             // Initialize Babylon Native plugins
-            Plugins::NativeXr::Initialize(m_env,
+            m_nativeXr.emplace(Plugins::NativeXr::Initialize(m_env,
             {
                 [isXRActive{ m_isXRActive }](bool isXRSessionActive)
                 {
                     *isXRActive = isXRSessionActive;
                 },
-                [xrWindow{ m_xrWindow }]()
-                {
-                    return *xrWindow;
-                },
-            });
+            }));
             Plugins::NativeCapture::Initialize(m_env);
             m_nativeInput = &Plugins::NativeInput::CreateForJavaScript(m_env);
 
@@ -163,7 +158,7 @@ namespace Babylon
 
         void UpdateXRView(void* windowPtr)
         {
-            *m_xrWindow = windowPtr;
+            m_nativeXr->UpdateWindow(windowPtr);
         }
 
         jsi::Value get(jsi::Runtime& runtime, const jsi::PropNameID& prop) override
@@ -205,9 +200,9 @@ namespace Babylon
         std::shared_ptr<bool> m_isRunning{};
         std::once_flag m_isGraphicsInitialized{};
         Plugins::NativeInput* m_nativeInput{};
+        std::optional<Plugins::NativeXr> m_nativeXr;
 
         std::shared_ptr<bool> m_isXRActive{};
-        std::shared_ptr<void*> m_xrWindow{};
     };
 
     namespace
