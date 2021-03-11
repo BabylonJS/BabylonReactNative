@@ -42,12 +42,9 @@ namespace Babylon
             JsRuntime::CreateForJavaScript(m_env, CreateJsRuntimeDispatcher(m_env, jsiRuntime, m_jsDispatcher, m_isRunning));
 
             // Initialize Babylon Native plugins
-            m_nativeXr.emplace(Plugins::NativeXr::Initialize(m_env,
-            {
-                [isXRActive{ m_isXRActive }](bool isXRSessionActive)
-                {
-                    *isXRActive = isXRSessionActive;
-                },
+            m_nativeXr.emplace(Plugins::NativeXr::Initialize(m_env));
+            m_XrSessionStateChangedTicket.emplace(m_nativeXr->AddSessionStateChangedCallback([isXRActive{ m_isXRActive }](bool isSessionActive) {
+                *isXRActive = isSessionActive;
             }));
             Plugins::NativeCapture::Initialize(m_env);
             m_nativeInput = &Plugins::NativeInput::CreateForJavaScript(m_env);
@@ -200,7 +197,8 @@ namespace Babylon
         std::shared_ptr<bool> m_isRunning{};
         std::once_flag m_isGraphicsInitialized{};
         Plugins::NativeInput* m_nativeInput{};
-        std::optional<Plugins::NativeXr> m_nativeXr;
+        std::optional<NativeXr::SessionStateChangedCallbackTicket> m_XrSessionStateChangedTicket{};
+        std::optional<Plugins::NativeXr> m_nativeXr{};
 
         std::shared_ptr<bool> m_isXRActive{};
     };
