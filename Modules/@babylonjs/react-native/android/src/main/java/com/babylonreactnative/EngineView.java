@@ -60,8 +60,6 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
         this.setWillNotDraw(false);
 
         this.reactEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
-
-        setWillNotDraw(false);
     }
 
     @Override
