@@ -84,7 +84,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInter
 
 extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_updateXRView(JNIEnv* env, jclass obj, jobject surface)
 {
-    ANativeWindow *windowPtr{};
+    ANativeWindow* windowPtr{};
     if (surface)
     {
         windowPtr = ANativeWindow_fromSurface(env, surface);
