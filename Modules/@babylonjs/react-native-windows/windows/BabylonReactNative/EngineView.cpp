@@ -56,7 +56,7 @@ namespace winrt::BabylonReactNative::implementation {
         // Use windowTypePtr == 2 for xaml swap chain panels
         auto windowTypePtr = reinterpret_cast<void*>(2);
         auto windowPtr = get_abi(static_cast<winrt::Windows::UI::Xaml::Controls::SwapChainPanel>(*this));
-        Babylon::UpdateView(windowPtr, _width, _height, windowTypePtr);
+        Babylon::UpdateView(static_cast<void*>(windowPtr), _width, _height, windowTypePtr);
     }
 
     void EngineView::OnPointerPressed(IInspectable const& /*sender*/, PointerEventArgs const& args)

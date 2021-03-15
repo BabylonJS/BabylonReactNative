@@ -63,13 +63,19 @@ namespace Babylon
 
         void UpdateView(void* windowPtr, void* windowTypePtr, size_t width, size_t height)
         {
+            GraphicsConfiguration graphicsConfig = GraphicsConfiguration();
+            graphicsConfig.windowPtr = static_cast<WindowType>(windowPtr);
+            graphicsConfig.windowTypePtr = windowTypePtr;
+            graphicsConfig.width = width;
+            graphicsConfig.height = height;
+
             if (!g_graphics)
             {
-                g_graphics = Graphics::CreateGraphics(windowPtr, windowTypePtr, width, height);
+                g_graphics = Graphics::CreateGraphics(graphicsConfig);
             }
             else
             {
-                g_graphics->UpdateWindow(windowPtr, windowTypePtr);
+                g_graphics->UpdateWindow(graphicsConfig);
                 g_graphics->UpdateSize(width, height);
             }
 
