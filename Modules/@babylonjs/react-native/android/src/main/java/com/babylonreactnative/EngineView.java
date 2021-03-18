@@ -28,6 +28,7 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
 
     public EngineView(ReactContext reactContext) {
         super(reactContext);
+
         this.primarySurfaceView = new SurfaceView(reactContext);
         this.primarySurfaceView.setLayoutParams(EngineView.childViewLayoutParams);
         this.primarySurfaceView.getHolder().addCallback(this);
