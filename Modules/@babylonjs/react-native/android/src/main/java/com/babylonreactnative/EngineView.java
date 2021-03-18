@@ -2,18 +2,15 @@ package com.babylonreactnative;
 
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Base64;
-import android.view.Choreographer;
 import android.view.MotionEvent;
 import android.view.PixelCopy;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.inputmethod.CursorAnchorInfo;
 import android.widget.FrameLayout;
 
 import com.facebook.react.bridge.ReactContext;
@@ -28,7 +25,6 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
     private final SurfaceView xrSurfaceView;
     private final EventDispatcher reactEventDispatcher;
     private Runnable renderRunnable;
-    //private Choreographer.FrameCallback frameCallback;
 
     public EngineView(ReactContext reactContext) {
         super(reactContext);
@@ -60,41 +56,22 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
 
         this.setOnTouchListener(this);
 
-        //this.setWillNotDraw(false);
-
-//        this.postOnAnimation(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (BabylonNativeInterop.isXRActive()) {
-//                    xrSurfaceView.setVisibility(View.VISIBLE);
-//                } else {
-//                    xrSurfaceView.setVisibility(View.INVISIBLE);
-//                }
-//
-//                BabylonNativeInterop.renderView();
-//                postOnAnimation(this);
-//            }
-//        });
-
-        //this.updateRenderRunnable();
-
         this.reactEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        //this.updateRenderRunnable();
         this.renderRunnable = new Runnable() {
             @Override
             public void run() {
                 if (BabylonNativeInterop.isXRActive()) {
-                    xrSurfaceView.setVisibility(View.VISIBLE);
+                    EngineView.this.xrSurfaceView.setVisibility(View.VISIBLE);
                 } else {
-                    xrSurfaceView.setVisibility(View.INVISIBLE);
+                    EngineView.this.xrSurfaceView.setVisibility(View.INVISIBLE);
                 }
 
                 BabylonNativeInterop.renderView();
-                postOnAnimation(this);
+                EngineView.this.postOnAnimation(this);
             }
         };
         this.postOnAnimation(this.renderRunnable);
@@ -107,7 +84,6 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
 
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-        //this.updateRenderRunnable();
         this.removeCallbacks(this.renderRunnable);
         this.renderRunnable = null;
     }
@@ -117,73 +93,6 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
         BabylonNativeInterop.reportMotionEvent(motionEvent);
         return true;
     }
-
-//    @Override
-//    public void setVisibility(int visibility) {
-//        super.setVisibility(visibility);
-//        this.updateRenderRunnable();
-//    }
-
-//    private void updateRenderRunnable() {
-//        if (this.getVisibility() == VISIBLE && this.primarySurfaceView.getHolder().getSurface() != null) {
-//            if (this.renderRunnable == null) {
-//                this.renderRunnable = new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        if (BabylonNativeInterop.isXRActive()) {
-//                            xrSurfaceView.setVisibility(View.VISIBLE);
-//                        } else {
-//                            xrSurfaceView.setVisibility(View.INVISIBLE);
-//                        }
-//
-//                        BabylonNativeInterop.renderView();
-//                        postOnAnimation(this);
-//                    }
-//                };
-//                this.postOnAnimation(this.renderRunnable);
-//            }
-//        } else if (this.renderRunnable != null) {
-//            this.removeCallbacks(this.renderRunnable);
-//            this.renderRunnable = null;
-//        }
-//    }
-
-//    private void updateRenderRunnable() {
-//        if (this.getVisibility() == VISIBLE && this.primarySurfaceView.getHolder().getSurface() != null) {
-//            if (this.frameCallback == null) {
-//                Choreographer choreographer = Choreographer.getInstance();
-//                this.frameCallback = new Choreographer.FrameCallback() {
-//                    @Override
-//                    public void doFrame(long frameTimeNanos) {
-//                        if (BabylonNativeInterop.isXRActive()) {
-//                            xrSurfaceView.setVisibility(View.VISIBLE);
-//                        } else {
-//                            xrSurfaceView.setVisibility(View.INVISIBLE);
-//                        }
-//
-//                        BabylonNativeInterop.renderView();
-//                        choreographer.postFrameCallback(this);
-//                    }
-//                };
-//                choreographer.postFrameCallback(this.frameCallback);
-//            }
-//        } else if (this.frameCallback != null) {
-//            Choreographer.getInstance().removeFrameCallback(this.frameCallback);
-//            this.frameCallback = null;
-//        }
-//    }
-
-//    @Override
-//    protected void onDraw(Canvas canvas) {
-//        if (BabylonNativeInterop.isXRActive()) {
-//            this.xrSurfaceView.setVisibility(View.VISIBLE);
-//        } else {
-//            this.xrSurfaceView.setVisibility(View.INVISIBLE);
-//        }
-//
-//        BabylonNativeInterop.renderView();
-//        this.postInvalidate();
-//    }
 
     @TargetApi(24)
     public void takeSnapshot() {
