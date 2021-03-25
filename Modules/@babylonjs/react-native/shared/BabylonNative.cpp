@@ -1,6 +1,7 @@
 #include "BabylonNative.h"
 
 #include <Babylon/Graphics.h>
+#include <Babylon/GraphicsPlatform.h>
 #include <Babylon/JsRuntime.h>
 #include <Babylon/Plugins/NativeCapture.h>
 #include <Babylon/Plugins/NativeEngine.h>
@@ -59,11 +60,10 @@ namespace Babylon
             Napi::Detach(m_env);
         }
 
-        void UpdateView(void* windowPtr, void* windowTypePtr, size_t width, size_t height)
+        void UpdateView(WindowType windowPtr, size_t width, size_t height)
         {
             GraphicsConfiguration graphicsConfig = GraphicsConfiguration();
-            graphicsConfig.windowPtr = static_cast<WindowType>(windowPtr);
-            graphicsConfig.windowTypePtr = windowTypePtr;
+            graphicsConfig.windowPtr = windowPtr;
             graphicsConfig.width = width;
             graphicsConfig.height = height;
 
@@ -213,11 +213,11 @@ namespace Babylon
         g_nativeModule.reset();
     }
 
-    void UpdateView(void* windowPtr, size_t width, size_t height, void* windowTypePtr)
+    void UpdateView(WindowType windowPtr, size_t width, size_t height)
     {
         if (auto nativeModule{ g_nativeModule.lock() })
         {
-            nativeModule->UpdateView(windowPtr, windowTypePtr, width, height);
+            nativeModule->UpdateView(windowPtr, width, height);
         }
         else
         {
