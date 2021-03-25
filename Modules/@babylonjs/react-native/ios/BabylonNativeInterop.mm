@@ -24,7 +24,7 @@ namespace {
 
 @implementation BabylonNativeInterop
 
-static NSMutableArray* activeTouches;
+static NSMutableArray* activeTouches = [NSMutableArray new];
 
 + (void)initialize:(RCTBridge*)bridge {
     auto jsCallInvoker{ bridge.jsCallInvoker };
@@ -68,6 +68,14 @@ static NSMutableArray* activeTouches;
 
 + (void)resetView {
     Babylon::ResetView();
+}
+
++ (void)updateXRView:(MTKView*)mtkView {
+    Babylon::UpdateXRView((__bridge void*)mtkView);
+}
+
++ (bool)isXRActive {
+    return Babylon::IsXRActive();
 }
 
 + (void)reportTouchEvent:(MTKView*)mtkView touches:(NSSet<UITouch*>*)touches event:(UIEvent*)event {
