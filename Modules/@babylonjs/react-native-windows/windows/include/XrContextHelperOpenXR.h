@@ -9,21 +9,28 @@ namespace BabylonReactNative
     bool TryGetXrContext(facebook::jsi::Runtime& jsiRuntime, IXrContextOpenXR*& xrContext)
     {
         xrContext = nullptr;
-        if (jsiRuntime.global().hasProperty(jsiRuntime, "navigator") &&
-            jsiRuntime.global().getProperty(jsiRuntime, "navigator").asObject(jsiRuntime).hasProperty(jsiRuntime, "xr"))
+        if (!jsiRuntime.global().hasProperty(jsiRuntime, "navigator"))
         {
-            auto nativeXr = jsiRuntime.global().getProperty(jsiRuntime, "navigator").asObject(jsiRuntime).getProperty(jsiRuntime, "xr").asObject(jsiRuntime);
-            if (nativeXr.hasProperty(jsiRuntime, "nativeXrContext") &&
-                nativeXr.hasProperty(jsiRuntime, "nativeXrContextType") &&
-                nativeXr.getProperty(jsiRuntime, "nativeXrContextType").asString(jsiRuntime).utf8(jsiRuntime) == "OpenXR")
-            {
-                auto nativeExtensionPtr = static_cast<uintptr_t>(nativeXr.getProperty(jsiRuntime, "nativeXrContext").asNumber());
-                xrContext = reinterpret_cast<IXrContextOpenXR*>(nativeExtensionPtr);
-                return true;
-            }
+            return false;
         }
 
-        return false;
+        auto navigator{ jsiRuntime.global().getProperty(jsiRuntime, "navigator").asObject(jsiRuntime) };
+        if (!navigator.hasProperty(jsiRuntime, "xr"))
+        {
+            return false;
+        }
+
+        auto nativeXr{ navigator.getProperty(jsiRuntime, "xr").asObject(jsiRuntime) };
+        if (!nativeXr.hasProperty(jsiRuntime, "nativeXrContext") ||
+            !nativeXr.hasProperty(jsiRuntime, "nativeXrContextType") ||
+            nativeXr.getProperty(jsiRuntime, "nativeXrContextType").asString(jsiRuntime).utf8(jsiRuntime) != "OpenXR")
+        {
+            return false;
+        }
+
+        auto nativeExtensionPtr = static_cast<uintptr_t>(nativeXr.getProperty(jsiRuntime, "nativeXrContext").asNumber());
+        xrContext = reinterpret_cast<IXrContextOpenXR*>(nativeExtensionPtr);
+        return true;
     }
 }
 #endif
