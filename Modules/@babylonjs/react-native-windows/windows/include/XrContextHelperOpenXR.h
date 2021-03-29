@@ -6,20 +6,24 @@
 
 namespace BabylonReactNative
 {
-    bool TryGetXrContext(facebook::jsi::Runtime& jsiRuntime, const facebook::jsi::Value& xrSession, IXrContextOpenXR*& xrContext)
+    bool TryGetXrContext(facebook::jsi::Runtime& jsiRuntime, IXrContextOpenXR*& xrContext)
     {
         xrContext = nullptr;
-        if (!xrSession.isObject() ||
-            !xrSession.asObject(jsiRuntime).hasProperty(jsiRuntime, "nativeXrContext") ||
-            !xrSession.asObject(jsiRuntime).hasProperty(jsiRuntime, "nativeXrContextType") ||
-            xrSession.asObject(jsiRuntime).getProperty(jsiRuntime, "nativeXrContextType").asString(jsiRuntime).utf8(jsiRuntime) != "OpenXR")
+        if (jsiRuntime.global().hasProperty(jsiRuntime, "navigator") &&
+            jsiRuntime.global().getProperty(jsiRuntime, "navigator").asObject(jsiRuntime).hasProperty(jsiRuntime, "xr"))
         {
-            return false;
+            auto nativeXr = jsiRuntime.global().getProperty(jsiRuntime, "navigator").asObject(jsiRuntime).getProperty(jsiRuntime, "xr").asObject(jsiRuntime);
+            if (nativeXr.hasProperty(jsiRuntime, "nativeXrContext") &&
+                nativeXr.hasProperty(jsiRuntime, "nativeXrContextType") &&
+                nativeXr.getProperty(jsiRuntime, "nativeXrContextType").asString(jsiRuntime).utf8(jsiRuntime) == "OpenXR")
+            {
+                auto nativeExtensionPtr = static_cast<uintptr_t>(nativeXr.getProperty(jsiRuntime, "nativeXrContext").asNumber());
+                xrContext = reinterpret_cast<IXrContextOpenXR*>(nativeExtensionPtr);
+                return true;
+            }
         }
 
-        auto nativeExtensionPtr = static_cast<uintptr_t>(xrSession.asObject(jsiRuntime).getProperty(jsiRuntime, "nativeXrContext").asNumber());
-        xrContext = reinterpret_cast<IXrContextOpenXR*>(nativeExtensionPtr);
-        return true;
+        return false;
     }
 }
 #endif
