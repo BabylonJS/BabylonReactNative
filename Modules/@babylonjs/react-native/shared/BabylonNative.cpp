@@ -65,9 +65,9 @@ namespace Babylon
         void UpdateView(WindowType windowPtr, size_t width, size_t height)
         {
             GraphicsConfiguration graphicsConfig = GraphicsConfiguration();
-            graphicsConfig.windowPtr = windowPtr;
-            graphicsConfig.width = width;
-            graphicsConfig.height = height;
+            graphicsConfig.WindowPtr = windowPtr;
+            graphicsConfig.Width = width;
+            graphicsConfig.Height = height;
 
             if (!g_graphics)
             {
