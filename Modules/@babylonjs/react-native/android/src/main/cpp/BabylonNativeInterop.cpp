@@ -66,7 +66,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInter
 
 extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_updateView(JNIEnv* env, jclass obj, jobject surface)
 {
-    ANativeWindow* windowPtr = ANativeWindow_fromSurface(env, surface);
+    ANativeWindow* windowPtr{ ANativeWindow_fromSurface(env, surface) };
     auto width{ static_cast<size_t>(ANativeWindow_getWidth(windowPtr)) };
     auto height{ static_cast<size_t>(ANativeWindow_getHeight(windowPtr)) };
     Babylon::UpdateView(windowPtr, width, height);
