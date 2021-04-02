@@ -43,7 +43,7 @@ const buildIphoneSimulator = async () => {
 const buildIOS = gulp.series(makeXCodeProj, buildIphoneOS, buildIphoneSimulator);
 
 const buildAndroid = async () => {
-  exec('./gradlew babylonjs_react-native:assembleRelease --stacktrace --info', '../Apps/Playground/android');
+  exec('./gradlew babylonjs_react-native:assembleRelease --stacktrace --info --no-parallel --max-workers=1', '../Apps/Playground/android');
 };
 
 const initializeSubmodulesWindowsAgent = async () => {
