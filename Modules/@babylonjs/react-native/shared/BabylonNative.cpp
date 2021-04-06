@@ -1,7 +1,6 @@
 #include "BabylonNative.h"
 
 #include <Babylon/Graphics.h>
-#include <Babylon/GraphicsPlatform.h>
 #include <Babylon/JsRuntime.h>
 #include <Babylon/Plugins/NativeCapture.h>
 #include <Babylon/Plugins/NativeEngine.h>
