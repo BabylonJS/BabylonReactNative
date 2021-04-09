@@ -208,6 +208,13 @@ const copyAndroidFiles = async () => {
   });
 
   await new Promise(resolve => {
+    gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/android/include/*')
+      .pipe(gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/xr/src/ARCore/Include/*'))
+      .pipe(gulp.dest('Assembled/android/include'))
+      .on('end', resolve);
+  })
+
+  await new Promise(resolve => {
           gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/android/build/intermediates/library_and_local_jars_jni/release/jni/**/*')
     .pipe(gulp.dest('Assembled/android/src/main/jniLibs/'))
     .on('end', resolve);
@@ -395,6 +402,9 @@ Assembled/README.md
 Assembled/package.json
 Assembled/android
 Assembled/android/build.gradle
+Assembled/android/include
+Assembled/android/include/IXrContextARCore.h
+Assembled/android/include/XrContextHelperARCore.h 
 Assembled/android/src
 Assembled/android/src/main
 Assembled/android/src/main/AndroidManifest.xml
