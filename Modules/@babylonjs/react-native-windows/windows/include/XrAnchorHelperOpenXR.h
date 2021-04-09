@@ -31,8 +31,9 @@ namespace BabylonReactNative
             return false;
         }
 
-        auto getNativeAnchor = nativeXr.getPropertyAsFunction(jsiRuntime, "getNativeAnchor");
-        auto nativeAnchorPtr = static_cast<uintptr_t>(getNativeAnchor.call(jsiRuntime, { jsAnchor.asObject(jsiRuntime) }).asNumber());
+        auto getNativeAnchor{nativeXr.getPropertyAsFunction(jsiRuntime, "getNativeAnchor")};
+        auto nativeAnchorPtr{static_cast<uintptr_t>(getNativeAnchor.call(jsiRuntime, { jsAnchor.asObject(jsiRuntime) }).asNumber())};
+
         nativeAnchor = reinterpret_cast<XrSpatialAnchorMSFT>(nativeAnchorPtr);
         return true;
     }
