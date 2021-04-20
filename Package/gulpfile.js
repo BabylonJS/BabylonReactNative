@@ -6,6 +6,7 @@ const gulp = require('gulp');
 const shelljs = require('shelljs');
 const rename = require('gulp-rename');
 const { join } = require('path');
+const { exit } = require('process');
 
 function exec(command, workingDirectory = '.', logCommand = true) {
   if (logCommand) {
@@ -439,6 +440,18 @@ const createPackageUWP = async () => {
   exec('npm pack', 'Assembled-Windows');
 }
 
+const checkNPMVersion = async () => {
+  const output = shelljs.exec('npm list -g npm');
+  const parts = output.split("npm@");
+  const version = parts[1].trim();
+  
+  // Check if using npm version 7+
+  if (version.charAt(0) == '7')
+  {
+    throw `Error: BabylonReactNative development requires npm version 6.13.*, Your current npm version is ${version}. Run npm install -g npm@6.13 to update your npm version.`;
+  }
+}
+
 const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyIOSFiles, copyAndroidFiles);
 
 const build = gulp.series(buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validate);
@@ -498,5 +511,7 @@ exports.buildUWPPublish = buildUWPPublish;
 exports.copyUWPFiles = copyUWPFiles;
 exports.packUWP = packUWP;
 exports.packUWPNoBuild = packUWPNoBuild;
+
+exports.checkNPMVersion = checkNPMVersion;
 
 exports.default = build;
