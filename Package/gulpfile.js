@@ -6,7 +6,6 @@ const gulp = require('gulp');
 const shelljs = require('shelljs');
 const rename = require('gulp-rename');
 const { join } = require('path');
-const { exit } = require('process');
 
 function exec(command, workingDirectory = '.', logCommand = true) {
   if (logCommand) {
