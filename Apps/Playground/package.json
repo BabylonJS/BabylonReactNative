@@ -10,7 +10,7 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "postinstall": "npx gulp --gulpfile ../../Package/gulpfile.js checkNPMVersion"
+    "postinstall": "node scripts/postinstall.js"
   },
   "dependencies": {
     "@babylonjs/core": "^5.0.0-alpha.13",
@@ -37,7 +37,6 @@
     "@typescript-eslint/parser": "^2.27.0",
     "babel-jest": "^26.6.3",
     "eslint": "7.14.0",
-    "gulp": "^4.0.2",
     "jest": "^26.6.3",
     "metro-config": "^0.64.0",
     "metro-react-native-babel-preset": "^0.64.0",
