@@ -8,7 +8,6 @@ if (!output.includes("npm@")) {
 
 if (!output.includes("npm@")) {
     shelljs.echo("local npm version not found");
-
 }
 else {
     const parts = output.split("npm@");
