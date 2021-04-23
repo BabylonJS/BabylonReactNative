@@ -126,6 +126,8 @@ npm run android
 
 After having run the above commands, you can also open `Apps/Playground/android` in Android Studio and run the app from there.
 
+Ensure that OpenGL ES API Level is set to 'Render maximum' to make use of OpenGL ES 3. Otherwise the Playground app will crash. ([Android Simulator Doc](https://github.com/BabylonJS/BabylonNative/blob/master/Documentation/AndroidSimulator.md))
+
 #### iOS
 
 iOS can only be built on a Mac. Additionally, `CMake` must manually be run to generate the XCode project that the [Playground XCode workspace](Apps/Playground/ios/Playground.xcworkspace/contents.xcworkspacedata) includes.
@@ -150,6 +152,16 @@ UWP can only be built on a PC. `CMake` must be manually run to generate project 
 1. Run `npx gulp buildUWP` in Package. This command will run cmake and build BabylonNative dependencies. It may take a while to complete.
 1. In Apps\Playground, run `npm run windows`.
 > Note: if you experience build issues for Apps\Playground related to autolinking, try running `npx react-native autolink-windows` in the Apps\Playground folder. You can also run `npm run windows-verbose` to view logging.
+
+#### React Native
+
+Regardless of whether the app is developed for Android, iOS or Windows, it is necessary to specify the flex property for the SafeAreaView and EngineView components so that the engine can be created.
+
+```
+<SafeAreaView style={{flex: 1}}>
+    <EngineView style={{flex: 1}} />
+</SafeAreaView>
+```
 
 ### **Testing in the Playground App** ###
 
