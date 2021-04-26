@@ -54,7 +54,9 @@ const initializeSubmodulesWindowsAgent = async () => {
 
 const initializeSubmodulesMostRecentBabylonNative = async () => {
   exec('git submodule init ./../Modules/@babylonjs/react-native/submodules/BabylonNative');
-  exec('git pull origin master', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
+  exec('git fetch origin master', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
+  exec('git checkout origin/master', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
+  exec('git rev-parse HEAD', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
   exec('git submodule update --init --recursive *', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
 }
 
