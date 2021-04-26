@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.13.2)
 project(ReactNativeBabylon)
+
+add_definitions(-DENABLE_PCH=OFF)
 include(${CMAKE_CURRENT_LIST_DIR}/../shared/CMakeLists.txt)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
