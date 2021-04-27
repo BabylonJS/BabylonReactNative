@@ -78,7 +78,7 @@ jobs:
         run: npm install
         working-directory: ./Package
       - name: Git (Update to BabylonNative ${{ github.event.client_payload.sha }})
-        run: npx gulp initializeSubmodulesMostRecentBabylonNativeWindowsAgent --sha ${{ github.event.client_payload.sha }}
+        run: npx gulp initializeSubmodulesMostRecentBabylonNative --sha ${{ github.event.client_payload.sha }} --windows
         working-directory: ./Package
       - name: Gulp Setup Project ${{ matrix.platform }} (Windows)
         run: npx gulp makeUWPProject${{ matrix.platform }}
