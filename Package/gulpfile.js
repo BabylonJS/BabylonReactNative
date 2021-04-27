@@ -78,11 +78,11 @@ const initializeSubmodulesMostRecentBabylonNative = async () => {
 
   if (process.argv.indexOf('--windows') >= 0)
   {
-    exec('git -c submodule."Dependencies/xr/Dependencies/arcore-android-sdk".update=none submodule update --recursive --merge ./../Modules/@babylonjs/react-native/submodules/BabylonNative');
+    exec('git -c submodule."Dependencies/xr/Dependencies/arcore-android-sdk".update=none submodule update --init --recursive *', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
   }
   else
   {
-    exec('git submodule update --recursive --merge *', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
+    exec('git submodule update --init --recursive *', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
   }
 
   exec('git status');
