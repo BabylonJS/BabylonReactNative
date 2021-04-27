@@ -25,7 +25,7 @@ jobs:
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
-      - name: Git (Update to BabylonNative master)
+      - name: Git (Update to BabylonNative ${{ github.event.client_payload.sha }})
         run: npx gulp initializeSubmodulesMostRecentBabylonNative --sha ${{ github.event.client_payload.sha }}
         working-directory: ./Package
       - name: Gulp (Android)
@@ -46,7 +46,7 @@ jobs:
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
-      - name: Git (Update to BabylonNative master)
+      - name: Git (Update to BabylonNative ${{ github.event.client_payload.sha }})
         run: npx gulp initializeSubmodulesMostRecentBabylonNative --sha ${{ github.event.client_payload.sha }}
         working-directory: ./Package
       - name: Gulp (iOS)
@@ -77,7 +77,7 @@ jobs:
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
-      - name: Git (Update to BabylonNative master)
+      - name: Git (Update to BabylonNative ${{ github.event.client_payload.sha }})
         run: npx gulp initializeSubmodulesMostRecentBabylonNativeWindowsAgent --sha ${{ github.event.client_payload.sha }}
         working-directory: ./Package
       - name: Gulp Setup Project ${{ matrix.platform }} (Windows)
