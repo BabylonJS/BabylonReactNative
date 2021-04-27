@@ -6,6 +6,7 @@ on:
 
 jobs:
   build-android:
+    name: Build Android - BabylonNative ${{ github.event.client_payload.sha }}
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
@@ -25,13 +26,14 @@ jobs:
         run: npm install
         working-directory: ./Package
       - name: Git (Update to BabylonNative master)
-        run: npx gulp initializeSubmodulesMostRecentBabylonNative
+        run: npx gulp initializeSubmodulesMostRecentBabylonNative --sha ${{ github.event.client_payload.sha }}
         working-directory: ./Package
       - name: Gulp (Android)
         run: npx gulp buildAndroid
         working-directory: ./Package
 
   build-iOS:
+    name: Build iOS - BabylonNative ${{ github.event.client_payload.sha }}
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
@@ -45,13 +47,14 @@ jobs:
         run: npm install
         working-directory: ./Package
       - name: Git (Update to BabylonNative master)
-        run: npx gulp initializeSubmodulesMostRecentBabylonNative
+        run: npx gulp initializeSubmodulesMostRecentBabylonNative --sha ${{ github.event.client_payload.sha }}
         working-directory: ./Package
       - name: Gulp (iOS)
         run: npx gulp buildIOS
         working-directory: ./Package
 
   build-windows:
+    name: Build Windows - BabylonNative ${{ github.event.client_payload.sha }}
     runs-on: windows-latest
     strategy:
       matrix:
@@ -75,7 +78,7 @@ jobs:
         run: npm install
         working-directory: ./Package
       - name: Git (Update to BabylonNative master)
-        run: npx gulp initializeSubmodulesMostRecentBabylonNativeWindowsAgent
+        run: npx gulp initializeSubmodulesMostRecentBabylonNativeWindowsAgent --sha ${{ github.event.client_payload.sha }}
         working-directory: ./Package
       - name: Gulp Setup Project ${{ matrix.platform }} (Windows)
         run: npx gulp makeUWPProject${{ matrix.platform }}
