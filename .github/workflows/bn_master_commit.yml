@@ -54,7 +54,7 @@ jobs:
         working-directory: ./Package
 
   build-windows:
-    name: Build Windows - BabylonNative ${{ github.event.client_payload.sha }}
+    name: Build Windows ${{ matrix.platform }} ${{ matrix.config }} - BabylonNative ${{ github.event.client_payload.sha }}
     runs-on: windows-latest
     strategy:
       matrix:
