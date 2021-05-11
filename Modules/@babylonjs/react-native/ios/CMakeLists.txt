@@ -24,6 +24,7 @@ target_include_directories(reactnative INTERFACE ${REACTNATIVE_DIR}/ReactCommon/
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/")
 
 set(BABYLON_NATIVE_DIR "${CMAKE_CURRENT_LIST_DIR}/../submodules/BabylonNative")
+# Only add the subdirectories we need to avoid consuming the BabylonNative/Apps folder
 add_subdirectory("${BABYLON_NATIVE_DIR}/Dependencies" ${BABYLON_NATIVE_DIR}/build/ios/Dependencies EXCLUDE_FROM_ALL)
 add_subdirectory("${BABYLON_NATIVE_DIR}/Core" ${BABYLON_NATIVE_DIR}/build/ios/Core EXCLUDE_FROM_ALL)
 add_subdirectory("${BABYLON_NATIVE_DIR}/Plugins" ${BABYLON_NATIVE_DIR}/build/ios/Plugins EXCLUDE_FROM_ALL)
