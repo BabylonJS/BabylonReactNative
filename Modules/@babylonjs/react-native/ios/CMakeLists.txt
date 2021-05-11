@@ -24,10 +24,10 @@ target_include_directories(reactnative INTERFACE ${REACTNATIVE_DIR}/ReactCommon/
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/")
 
 set(BABYLON_NATIVE_DIR "${CMAKE_CURRENT_LIST_DIR}/../submodules/BabylonNative")
-add_subdirectory("${BABYLON_NATIVE_DIR}/Dependencies" ${BABYLON_NATIVE_DIR}/build/ios/Dependencies)
-add_subdirectory("${BABYLON_NATIVE_DIR}/Core" ${BABYLON_NATIVE_DIR}/build/ios/Core)
-add_subdirectory("${BABYLON_NATIVE_DIR}/Plugins" ${BABYLON_NATIVE_DIR}/build/ios/Plugins)
-add_subdirectory("${BABYLON_NATIVE_DIR}/Polyfills" ${BABYLON_NATIVE_DIR}/build/ios/Polyfills)
+add_subdirectory("${BABYLON_NATIVE_DIR}/Dependencies" ${BABYLON_NATIVE_DIR}/build/ios/Dependencies EXCLUDE_FROM_ALL)
+add_subdirectory("${BABYLON_NATIVE_DIR}/Core" ${BABYLON_NATIVE_DIR}/build/ios/Core EXCLUDE_FROM_ALL)
+add_subdirectory("${BABYLON_NATIVE_DIR}/Plugins" ${BABYLON_NATIVE_DIR}/build/ios/Plugins EXCLUDE_FROM_ALL)
+add_subdirectory("${BABYLON_NATIVE_DIR}/Polyfills" ${BABYLON_NATIVE_DIR}/build/ios/Polyfills EXCLUDE_FROM_ALL)
 
 set(BABYLON_REACT_NATIVE_SHARED_DIR "${CMAKE_CURRENT_LIST_DIR}/../shared")
 add_subdirectory(${BABYLON_REACT_NATIVE_SHARED_DIR} ${CMAKE_CURRENT_BINARY_DIR}/shared)
