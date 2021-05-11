@@ -29,6 +29,8 @@ const clean = async () => {
 
 const makeXCodeProj = async () => {
   shelljs.mkdir('-p', 'iOS/Build');
+  // TODO: determine why iOS cmake definitions include BabylonNative apps directories while other platforms do not
+  exec('npm install', './../Modules/@babylonjs/react-native/submodules/BabylonNative/Apps');
   exec('cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../../Apps/Playground/node_modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/ios-cmake/ios.toolchain.cmake -DPLATFORM=OS64COMBINED -DENABLE_ARC=0 -DENABLE_BITCODE=1 -DDEPLOYMENT_TARGET=12 -DENABLE_GLSLANG_BINARIES=OFF -DSPIRV_CROSS_CLI=OFF -DENABLE_PCH=OFF ..', 'iOS/Build');
 };
 
