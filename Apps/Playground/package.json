@@ -9,11 +9,12 @@
     "windows-verbose": "react-native run-windows --arch x64 --logging",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "postinstall": "node scripts/postinstall.js"
   },
   "dependencies": {
-    "@babylonjs/core": "^5.0.0-alpha.13",
-    "@babylonjs/loaders": "^5.0.0-alpha.13",
+    "@babylonjs/core": "^5.0.0-alpha.22",
+    "@babylonjs/loaders": "^5.0.0-alpha.22",
     "@babylonjs/react-native": "file:../../Modules/@babylonjs/react-native",
     "@babylonjs/react-native-windows": "file:../../Modules/@babylonjs/react-native-windows",
     "@react-native-community/slider": "4.0.0-rc.3",
@@ -42,6 +43,7 @@
     "prettier": "^2.0.4",
     "react-native-codegen": "^0.0.6",
     "react-test-renderer": "^17.0.1",
+    "shelljs": "^0.8.4",
     "typescript": "^3.8.3"
   },
   "jest": {

@@ -132,7 +132,7 @@ iOS can only be built on a Mac. Additionally, `CMake` must manually be run to ge
 
 ```
 pushd Apps/Playground/node_modules/@babylonjs/react-native/ios
-cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../submodules/BabylonNative/Dependencies/ios-cmake/ios.toolchain.cmake -DPLATFORM=OS64COMBINED -DENABLE_ARC=0 -DENABLE_BITCODE=1 -DDEPLOYMENT_TARGET=12 -DENABLE_GLSLANG_BINARIES=OFF -DSPIRV_CROSS_CLI=OFF .
+cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../submodules/BabylonNative/Dependencies/ios-cmake/ios.toolchain.cmake -DPLATFORM=OS64COMBINED -DENABLE_ARC=0 -DENABLE_BITCODE=1 -DDEPLOYMENT_TARGET=12 -DENABLE_GLSLANG_BINARIES=OFF -DSPIRV_CROSS_CLI=OFF -DENABLE_PCH=OFF .
 popd
 
 cd Apps/Playground
@@ -186,6 +186,19 @@ cd <directory of your React Native app>
 npm install <root directory of your BabylonReactNative clone>/Package/Assembled/babylonjs-react-native-0.0.1.tgz
 ```
 
+If you wish to test the locally-built NPM packages with the apps in the `PackageTest` directory, before running `npm install` be sure to run:
+
+```
+cd Apps\PackageTest\<package test app version>
+
+npm uninstall @babylon/react-native
+
+# If you're also updating the react-native-windows package:
+npm uninstall @bablyon/react-native-windows
+```
+
+This will allow the local package dependencies to update without the package-lock.json file worrying about new content without a new version number. You can then run the above command to install the locally-built NPM modules located in `Package/Assembled`.
+
 ### **Debugging in Context**
 
 If you want to consume `@babylonjs/react-native` as source in your React Native app (for debugging or for iterating on the code when making a contribution), you can install the package source directory as an npm package.
@@ -204,3 +217,9 @@ For iOS the XCode project needs to be generated with `CMake` as described [above
 ## Security
 
 If you believe you have found a security vulnerability in this repository, please see [SECURITY.md](SECURITY.md).
+
+## Known Issues
+
+We have seen issues when using npm 7+ to install local symbolic linked npm packages. For this reason, we suggest using npm 6.13 for BabylonReactNative development. To install npm 6.13, run the following command:
+
+`npm install -g npm@6.13`
