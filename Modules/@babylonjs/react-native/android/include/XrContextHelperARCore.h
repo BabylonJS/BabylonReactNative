@@ -1,8 +1,10 @@
 #pragma once
 
+#include "IXrContextARCore.h"
+#include <android/log.h>
+
 #if __has_include("jsi/jsi.h")
 #include "jsi/jsi.h"
-#include "IXrContextARCore.h"
 
 namespace BabylonReactNative
 {
@@ -29,6 +31,40 @@ namespace BabylonReactNative
         }
 
         auto nativeExtensionPtr = static_cast<uintptr_t>(nativeXr.getProperty(jsiRuntime, "nativeXrContext").asNumber());
+        xrContext = reinterpret_cast<IXrContextARCore*>(nativeExtensionPtr);
+        return true;
+    }
+}
+#endif
+
+#if __has_include("napi/env.h")
+#include "napi/env.h"
+
+namespace BabylonReactNative
+{
+    bool TryGetXrContext(Napi::Env env, IXrContextARCore*& xrContext)
+    {
+        xrContext = nullptr;
+        if (!env.Global().Has("navigator"))
+        {
+            return false;
+        }
+
+        auto navigator{ env.Global().Get("navigator").As<Napi::Object>() };
+        if (!navigator.Has("xr"))
+        {
+            return false;
+        }
+
+        auto nativeXr{ navigator.Get("xr").As<Napi::Object>() };
+        if (!nativeXr.Has("nativeXrContext") ||
+            !nativeXr.Has("nativeXrContextType") ||
+            nativeXr.Get("nativeXrContextType").As<Napi::String>().Utf8Value() != "ARCore")
+        {
+            return false;
+        }
+
+        auto nativeExtensionPtr = static_cast<uintptr_t>(nativeXr.Get("nativeXrContext").As<Napi::Number>().DoubleValue());
         xrContext = reinterpret_cast<IXrContextARCore*>(nativeExtensionPtr);
         return true;
     }
