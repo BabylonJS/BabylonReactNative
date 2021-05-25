@@ -1,7 +1,6 @@
 #pragma once
 
 #include "IXrContextARCore.h"
-#include <android/log.h>
 
 #if __has_include("jsi/jsi.h")
 #include "jsi/jsi.h"
