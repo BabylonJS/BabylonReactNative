@@ -7,7 +7,7 @@
 
 namespace BabylonReactNative
 {
-    bool TryGetNativeAnchor(facebook::jsi::Runtime& jsiRuntime, facebook::jsi::Value& jsAnchor, XrSpatialAnchorMSFT& nativeAnchor)
+    bool TryGetNativeAnchor(facebook::jsi::Runtime& jsiRuntime, facebook::jsi::Value& jsAnchor, ArAnchor*& nativeAnchor)
     {
         nativeAnchor = nullptr;
         if (!jsAnchor.isObject())
