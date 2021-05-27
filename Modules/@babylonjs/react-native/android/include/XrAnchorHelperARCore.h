@@ -46,7 +46,7 @@ namespace BabylonReactNative
 
 namespace BabylonReactNative
 {
-    bool TryGetNativeAnchor(Napi::Env env, Napi::Value& anchor, ArAnchor*& nativeAnchor)
+    bool TryGetNativeAnchor(Napi::Env env, Napi::Value anchor, ArAnchor*& nativeAnchor)
     {
         nativeAnchor = nullptr;
         if (!anchor.IsObject())
@@ -72,7 +72,7 @@ namespace BabylonReactNative
         }
 
         auto getNativeAnchor{nativeXr.Get("getNativeAnchor").As<Napi::Function>()};
-        auto nativeAnchorPtr{static_cast<uintptr_t>(getNativeAnchor.Call(nativeXr, { anchor.ToObject() }).As<Napi::Number>().Uint32Value())};
+        auto nativeAnchorPtr{static_cast<uintptr_t>(getNativeAnchor.Call({ anchor }).As<Napi::Number>().DoubleValue())};
         nativeAnchor = reinterpret_cast<ArAnchor*>(nativeAnchorPtr);
         return true;
     }
