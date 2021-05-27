@@ -246,7 +246,7 @@ const copyAndroidFiles = async () => {
   });
 
   await new Promise(resolve => {
-    gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/xr/src/ARCore/Include/*'))
+    gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/xr/src/ARCore/Include/*')
       .pipe(gulp.dest('Assembled/android/include'))
       .on('end', resolve);
   })

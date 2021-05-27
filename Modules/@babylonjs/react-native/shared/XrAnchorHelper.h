@@ -6,7 +6,7 @@ namespace Babylon::Plugins::NativeXr
 {
     bool TryGetNativeAnchor(facebook::jsi::Runtime& jsiRuntime, facebook::jsi::Value& jsAnchor, uintptr_t& nativeAnchorPtr)
     {
-        nativeAnchorPtr = static_cast<uintptr_t>(nullptr);
+        nativeAnchorPtr = reinterpret_cast<uintptr_t>(nullptr);
         if (!jsAnchor.isObject())
         {
             return false;
@@ -42,7 +42,7 @@ namespace Babylon::Plugins::NativeXr
 {
     bool TryGetNativeAnchor(Napi::Env env, Napi::Value anchor, uintptr_t& nativeAnchorPtr)
     {
-        nativeAnchorPtr = static_cast<uintptr_t>(nullptr);
+        nativeAnchorPtr = reinterpret_cast<uintptr_t>(nullptr);
         if (!anchor.IsObject())
         {
             return false;
@@ -80,7 +80,7 @@ namespace Babylon::Plugins::NativeXr
     bool TryGetNativeAnchor(facebook::jsi::Runtime& jsiRuntime, facebook::jsi::Value& jsAnchor, XrSpatialAnchorMSFT& nativeAnchor)
     {
         nativeAnchor = nullptr;
-        uintptr_t nativeAnchorPtr{static_cast<uintptr_t>(nullptr)};
+        uintptr_t nativeAnchorPtr{reinterpret_cast<uintptr_t>(nullptr)};
         if (TryGetNativeAnchor(jsiRuntime, jsAnchor, nativeAnchorPtr))
         {
             nativeAnchor = reinterpret_cast<XrSpatialAnchorMSFT>(nativeAnchorPtr);
@@ -97,7 +97,7 @@ namespace Babylon::Plugins::NativeXr
     bool TryGetNativeAnchor(Napi::Env env, Napi::Value anchor, XrSpatialAnchorMSFT& nativeAnchor)
     {
         nativeAnchor = nullptr;
-        uintptr_t nativeAnchorPtr{static_cast<uintptr_t>(nullptr)};
+        uintptr_t nativeAnchorPtr{reinterpret_cast<uintptr_t>(nullptr)};
         if (TryGetNativeAnchor(env, anchor, nativeAnchorPtr))
         {
             nativeAnchor = reinterpret_cast<XrSpatialAnchorMSFT>(nativeAnchorPtr);
@@ -118,7 +118,7 @@ namespace Babylon::Plugins::NativeXr
     bool TryGetNativeAnchor(facebook::jsi::Runtime& jsiRuntime, facebook::jsi::Value& jsAnchor, ArAnchor*& nativeAnchor)
     {
         nativeAnchor = nullptr;
-        uintptr_t nativeAnchorPtr{static_cast<uintptr_t>(nullptr)};
+        uintptr_t nativeAnchorPtr{reinterpret_cast<uintptr_t>(nullptr)};
         if (TryGetNativeAnchor(jsiRuntime, jsAnchor, nativeAnchorPtr))
         {
             nativeAnchor = reinterpret_cast<ArAnchor*>(nativeAnchorPtr);
@@ -135,7 +135,7 @@ namespace Babylon::Plugins::NativeXr
     bool TryGetNativeAnchor(Napi::Env env, Napi::Value anchor, ArAnchor*& nativeAnchor)
     {
         nativeAnchor = nullptr;
-        uintptr_t nativeAnchorPtr{static_cast<uintptr_t>(nullptr)};
+        uintptr_t nativeAnchorPtr{reinterpret_cast<uintptr_t>(nullptr)};
         if (TryGetNativeAnchor(env, anchor, nativeAnchorPtr))
         {
             nativeAnchor = reinterpret_cast<ArAnchor*>(nativeAnchorPtr);

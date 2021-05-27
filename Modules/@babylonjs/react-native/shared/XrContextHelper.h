@@ -6,7 +6,7 @@ namespace Babylon::Plugins::NativeXr
 {
     bool TryGetXrContext(facebook::jsi::Runtime& jsiRuntime, const std::string nativeXrContextType, uintptr_t& nativeXrContext)
     {
-        nativeXrContext = static_cast<uintptr_t>(nullptr);
+        nativeXrContext = reinterpret_cast<uintptr_t>(nullptr);
         if (!jsiRuntime.global().hasProperty(jsiRuntime, "navigator"))
         {
             return false;
@@ -38,7 +38,7 @@ namespace Babylon::Plugins::NativeXr
 {
     bool TryGetXrContext(Napi::Env env, const std::string nativeXrContextType, uintptr_t& nativeXrContext)
     {
-        nativeXrContext = static_cast<uintptr_t>(nullptr);
+        nativeXrContext = reinterpret_cast<uintptr_t>(nullptr);
         if (!env.Global().Has("navigator"))
         {
             return false;
@@ -72,7 +72,7 @@ namespace Babylon::Plugins::NativeXr
     bool TryGetXrContext(facebook::jsi::Runtime& jsiRuntime, IXrContextOpenXR*& xrContext)
     {
         xrContext = nullptr;
-        uintptr_t nativePtr{static_cast<uintptr_t>(nullptr)};
+        uintptr_t nativePtr{reinterpret_cast<uintptr_t>(nullptr)};
         if (TryGetXrContext(jsiRuntime, "OpenXR", nativePtr))
         {
             xrContext = reinterpret_cast<IXrContextOpenXR*>(nativePtr);
@@ -89,7 +89,7 @@ namespace Babylon::Plugins::NativeXr
     bool TryGetXrContext(Napi::Env env, IXrContextOpenXR*& xrContext)
     {
         xrContext = nullptr;
-        uintptr_t nativePtr{static_cast<uintptr_t>(nullptr)};
+        uintptr_t nativePtr{reinterpret_cast<uintptr_t>(nullptr)};
         if (TryGetXrContext(env, "OpenXR", nativePtr))
         {
             xrContext = reinterpret_cast<IXrContextOpenXR*>(nativePtr);
@@ -110,8 +110,8 @@ namespace Babylon::Plugins::NativeXr
     bool TryGetXrContext(facebook::jsi::Runtime& jsiRuntime, IXrContextARCore*& xrContext)
     {
         xrContext = nullptr;
-        uintptr_t nativePtr{static_cast<uintptr_t>(nullptr)};
-        if (TryGetXrContext(env, "ARCore", nativePtr))
+        uintptr_t nativePtr{reinterpret_cast<uintptr_t>(nullptr)};
+        if (TryGetXrContext(jsiRuntime, "ARCore", nativePtr))
         {
             xrContext = reinterpret_cast<IXrContextARCore*>(nativePtr);
             return true;
@@ -127,7 +127,7 @@ namespace Babylon::Plugins::NativeXr
     bool TryGetXrContext(Napi::Env env, IXrContextARCore*& xrContext)
     {
         xrContext = nullptr;
-        uintptr_t nativePtr{static_cast<uintptr_t>(nullptr)};
+        uintptr_t nativePtr{reinterpret_cast<uintptr_t>(nullptr)};
         if (TryGetXrContext(env, "ARCore", nativePtr))
         {
             xrContext = reinterpret_cast<IXrContextARCore*>(nativePtr);
