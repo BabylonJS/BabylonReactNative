@@ -440,9 +440,9 @@ Assembled/ios/BabylonModule.mm
 Assembled/README.md
 Assembled/package.json
 Assembled/android
-Assembled/android/build.gradle
 Assembled/android/include
 Assembled/android/include/IXrContextARCore.h
+Assembled/android/build.gradle
 Assembled/android/src
 Assembled/android/src/main
 Assembled/android/src/main/AndroidManifest.xml
