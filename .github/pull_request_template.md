@@ -14,4 +14,4 @@ Have you updated the [documentation](../README.md) to reflect your changes? (*Ye
 
 **Testing**
 
-Have you [tested](../README.md#testing-in-the-playground-app) the final iteration of your changes? (*Yes* or *I need help testing on [Android|iOS|Windows]*)
+Have you [tested](../README.md#testing-in-the-playground-app) the final iteration of your changes? (*Yes* or *N/A* or *I need help testing on [Android|iOS|Windows]*)
