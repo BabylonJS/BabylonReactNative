@@ -10,8 +10,8 @@ If applicable, add screenshots to help explain your change. Consider using tools
 
 **Documentation**
 
-Have you updated the [documentation](../README.md) to reflect your changes? (Yes or N/A)
+Have you updated the [documentation](../README.md) to reflect your changes? (*Yes* or *N/A*)
 
 **Testing**
 
-Have you [tested](../README.md#testing-in-the-playground-app) the final iteration of your changes? (Yes)
+Have you [tested](../README.md#testing-in-the-playground-app) the final iteration of your changes? (*Yes* or *I need help testing on [Android|iOS|Windows]*)
