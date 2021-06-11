@@ -26,13 +26,6 @@
         super.translatesAutoresizingMaskIntoConstraints = false;
         super.colorPixelFormat = MTLPixelFormatBGRA8Unorm_sRGB;
         super.depthStencilPixelFormat = MTLPixelFormatDepth32Float;
-
-        xrView = [[MTKView alloc] initWithFrame:self.bounds device:self.device];
-        xrView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        xrView.userInteractionEnabled = false;
-        xrView.hidden = true;
-        [self addSubview:xrView];
-        [BabylonNativeInterop updateXRView:xrView];
     }
     return self;
 }
@@ -60,9 +53,17 @@
 
 - (void)drawRect:(CGRect)rect {
     if ([BabylonNativeInterop isXRActive]) {
-        xrView.hidden = false;
-    } else {
-        xrView.hidden = true;
+        if (!xrView) {
+            xrView = [[MTKView alloc] initWithFrame:self.bounds device:self.device];
+            xrView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            xrView.userInteractionEnabled = false;
+            [self addSubview:xrView];
+            [BabylonNativeInterop updateXRView:xrView];
+        }
+    } else if (xrView) {
+        [BabylonNativeInterop updateXRView:nil];
+        [xrView removeFromSuperview];
+        xrView = nil;
     }
 
     [BabylonNativeInterop renderView];
