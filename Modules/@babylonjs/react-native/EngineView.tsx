@@ -1,10 +1,13 @@
 import React, { Component, FunctionComponent, SyntheticEvent, useCallback, useEffect, useState, useRef } from 'react';
 import { requireNativeComponent, ViewProps, AppState, AppStateStatus, View, Text, findNodeHandle, UIManager } from 'react-native';
-import { Camera } from '@babylonjs/core';
+import { Camera, Nullable, InternalTexture } from '@babylonjs/core';
 import { ensureInitialized } from './BabylonModule';
 import { ReactNativeEngine } from './ReactNativeEngine';
 
 declare const global: any;
+
+// TODO: remove once canvas polyfill is setup correctly and loads a default font
+declare const _native: any;
 
 interface NativeEngineViewProps extends ViewProps {
     onSnapshotDataReturned: (event: SyntheticEvent) => void;
@@ -31,6 +34,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
     const [fps, setFps] = useState<number>();
     const engineViewRef = useRef<Component<NativeEngineViewProps>>(null);
     const snapshotPromise = useRef<{ promise: Promise<string>, resolve: (data: string) => void }>();
+    const [fontsInitialized, setFontsInitialized] = useState<boolean>(false);
 
     useEffect(() => {
         (async () => {
@@ -122,6 +126,35 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
             });
         }
     }, [props.onInitialized]);
+
+    // TODO: remove once canvas polyfill is setup correctly and loads a default font
+    useEffect(() => {
+        if (!!props.camera &&
+            !fontsInitialized) {
+
+            setFontsInitialized(true);
+
+            if ((typeof _native.copyTexture) === undefined ||
+                (typeof _native.loadTTF) === undefined)
+            {
+                // Canvas polyfill not supported by babylon.js/BabylonNative
+                return;
+            }
+
+            const engine = props.camera.getScene().getEngine();
+            engine.updateDynamicTexture = (texture: Nullable<InternalTexture>, source: any, invertY?: boolean, premulAlpha?: boolean, format?: number) => {
+                if (premulAlpha === void 0) {
+                    premulAlpha = false;
+                }
+
+                var webGLTexture = texture._hardwareTexture.underlyingResource;
+
+                _native.copyTexture(webGLTexture, source.getCanvasTexture());
+                texture.isReady = true;
+                console.log("updated dyanmic texture");
+            };
+        }
+    }, [props.camera]);
 
     // Handle snapshot data returned.
     const snapshotDataReturnedHandler = useCallback((event: SyntheticEvent) => {
