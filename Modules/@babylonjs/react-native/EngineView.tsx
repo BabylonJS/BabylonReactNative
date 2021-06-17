@@ -127,35 +127,6 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
         }
     }, [props.onInitialized]);
 
-    // TODO: remove once canvas polyfill is setup correctly and loads a default font
-    useEffect(() => {
-        if (!!props.camera &&
-            !fontsInitialized) {
-
-            setFontsInitialized(true);
-
-            if ((typeof _native.copyTexture) === undefined ||
-                (typeof _native.loadTTF) === undefined)
-            {
-                // Canvas polyfill not supported by babylon.js/BabylonNative
-                return;
-            }
-
-            const engine = props.camera.getScene().getEngine();
-            engine.updateDynamicTexture = (texture: Nullable<InternalTexture>, source: any, invertY?: boolean, premulAlpha?: boolean, format?: number) => {
-                if (premulAlpha === void 0) {
-                    premulAlpha = false;
-                }
-
-                var webGLTexture = texture._hardwareTexture.underlyingResource;
-
-                _native.copyTexture(webGLTexture, source.getCanvasTexture());
-                texture.isReady = true;
-                console.log("updated dyanmic texture");
-            };
-        }
-    }, [props.camera]);
-
     // Handle snapshot data returned.
     const snapshotDataReturnedHandler = useCallback((event: SyntheticEvent) => {
         // The nativeEvent is a DOMEvent which doesn't have a typescript definition. Cast it to an Event object with a data property.
