@@ -1,6 +1,6 @@
 import React, { Component, FunctionComponent, SyntheticEvent, useCallback, useEffect, useState, useRef } from 'react';
 import { requireNativeComponent, ViewProps, AppState, AppStateStatus, View, Text, findNodeHandle, UIManager } from 'react-native';
-import { Camera, Nullable, InternalTexture } from '@babylonjs/core';
+import { Camera } from '@babylonjs/core';
 import { ensureInitialized } from './BabylonModule';
 import { ReactNativeEngine } from './ReactNativeEngine';
 
@@ -31,7 +31,6 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
     const [fps, setFps] = useState<number>();
     const engineViewRef = useRef<Component<NativeEngineViewProps>>(null);
     const snapshotPromise = useRef<{ promise: Promise<string>, resolve: (data: string) => void }>();
-    const [fontsInitialized, setFontsInitialized] = useState<boolean>(false);
 
     useEffect(() => {
         (async () => {
