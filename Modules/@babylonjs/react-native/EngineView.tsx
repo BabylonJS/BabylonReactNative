@@ -6,9 +6,6 @@ import { ReactNativeEngine } from './ReactNativeEngine';
 
 declare const global: any;
 
-// TODO: remove once canvas polyfill is setup correctly and loads a default font
-declare const _native: any;
-
 interface NativeEngineViewProps extends ViewProps {
     onSnapshotDataReturned: (event: SyntheticEvent) => void;
 }
