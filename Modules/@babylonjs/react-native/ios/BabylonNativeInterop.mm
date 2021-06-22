@@ -55,8 +55,9 @@ static NSMutableArray* activeTouches = [NSMutableArray new];
 }
 
 + (void)updateView:(MTKView*)mtkView {
-    const int width = static_cast<int>(mtkView.bounds.size.width * UIScreen.mainScreen.scale);
-    const int height = static_cast<int>(mtkView.bounds.size.height * UIScreen.mainScreen.scale);
+    const CGFloat scale = mtkView.contentScaleFactor;
+    const int width = static_cast<int>(mtkView.bounds.size.width * scale);
+    const int height = static_cast<int>(mtkView.bounds.size.height * scale);
     if (width != 0 && height != 0) {
         Babylon::UpdateView((__bridge void*)mtkView, width, height);
     }
@@ -81,19 +82,21 @@ static NSMutableArray* activeTouches = [NSMutableArray new];
 + (void)reportTouchEvent:(MTKView*)mtkView touches:(NSSet<UITouch*>*)touches event:(UIEvent*)event {
     for (UITouch* touch in touches) {
         if (touch.view == mtkView) {
-            const CGFloat scale = UIScreen.mainScreen.scale;
+            const CGFloat scale = mtkView.contentScaleFactor;
             const CGPoint pointerPosition = [touch locationInView:mtkView];
             const uint32_t x = static_cast<uint32_t>(pointerPosition.x * scale);
             const uint32_t y = static_cast<uint32_t>(pointerPosition.y * scale);
 
             switch (touch.phase) {
                 case UITouchPhaseBegan: {
+                    // The activeTouches array only grows, it does not shrink (to keep indices constant since they are used as pointer ids),
+                    // so look for an unused (null) array element and reuse it if found. Otherwise, add a new entry to the array.
                     NSUInteger pointerId = [activeTouches indexOfObject:[NSNull null]];
-                    if (pointerId == NSNotFound) {
+                    if (pointerId != NSNotFound) {
+                        [activeTouches replaceObjectAtIndex:pointerId withObject:touch];
+                    } else {
                         pointerId = [activeTouches count];
                         [activeTouches addObject:touch];
-                    } else {
-                        [activeTouches replaceObjectAtIndex:pointerId withObject:touch];
                     }
                     Babylon::SetTouchButtonState(static_cast<uint32_t>(pointerId), true, x, y);
                     break;
@@ -101,15 +104,19 @@ static NSMutableArray* activeTouches = [NSMutableArray new];
 
                 case UITouchPhaseMoved: {
                     NSUInteger pointerId = [activeTouches indexOfObject:touch];
-                    Babylon::SetTouchPosition(static_cast<uint32_t>(pointerId), x, y);
+                    if (pointerId != NSNotFound) {
+                        Babylon::SetTouchPosition(static_cast<uint32_t>(pointerId), x, y);
+                    }
                     break;
                 }
 
                 case UITouchPhaseEnded:
                 case UITouchPhaseCancelled: {
                     NSUInteger pointerId = [activeTouches indexOfObject:touch];
-                    [activeTouches replaceObjectAtIndex:pointerId withObject:[NSNull null]];
-                    Babylon::SetTouchButtonState(static_cast<uint32_t>(pointerId), false, x, y);
+                    if (pointerId != NSNotFound) {
+                        [activeTouches replaceObjectAtIndex:pointerId withObject:[NSNull null]];
+                        Babylon::SetTouchButtonState(static_cast<uint32_t>(pointerId), false, x, y);
+                    }
                     break;
                 }
 
