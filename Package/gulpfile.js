@@ -413,6 +413,7 @@ Assembled/ios/libs/libNativeXr.a
 Assembled/ios/libs/libNativeCapture.a
 Assembled/ios/libs/libspirv-cross-glsl.a
 Assembled/ios/libs/libNativeInput.a
+Assembled/ios/libs/libNativeOptimizations.a
 Assembled/ios/libs/libJsRuntime.a
 Assembled/ios/libs/libGraphics.a
 Assembled/ios/libs/libOSDependent.a

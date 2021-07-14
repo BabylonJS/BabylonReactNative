@@ -492,7 +492,7 @@ SPEC CHECKSUMS:
   React-jsi: 5de8204706bd872b78ea646aee5d2561ca1214b6
   React-jsiexecutor: 124e8f99992490d0d13e0649d950d3e1aae06fe9
   React-jsinspector: 500a59626037be5b3b3d89c5151bc3baa9abf1a9
-  react-native-babylon: 67b39de846123d0846b28ce0e38671c7e3c4e04f
+  react-native-babylon: 47ed99257b75b4b899f1aba39966b34904c5704f
   react-native-slider: e45c8376012e5ace012e5eef62e9c85c68e50a0f
   React-perflogger: aad6d4b4a267936b3667260d1f649b6f6069a675
   React-RCTActionSheet: fc376be462c9c8d6ad82c0905442fd77f82a9d2a

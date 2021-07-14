@@ -52,6 +52,7 @@ target_link_libraries(BabylonNative
     NativeCapture
     NativeEngine
     NativeInput
+    NativeOptimizations
     NativeXr
     Window
     XMLHttpRequest)

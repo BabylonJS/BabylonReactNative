@@ -19,6 +19,7 @@ set(PACKAGED_LIBS
     NativeCapture
     NativeEngine
     NativeInput
+    NativeOptimizations
     NativeXr
     SPIRV
     spirv-cross-core
