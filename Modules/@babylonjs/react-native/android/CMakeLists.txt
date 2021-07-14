@@ -81,4 +81,5 @@ target_link_libraries(BabylonNative
     NativeOptimizations
     NativeXr
     Window
-    XMLHttpRequest)
+    XMLHttpRequest
+    Canvas)

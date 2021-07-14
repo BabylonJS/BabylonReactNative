@@ -420,6 +420,7 @@ Assembled/ios/libs/libOSDependent.a
 Assembled/ios/libs/libXMLHttpRequest.a
 Assembled/ios/libs/libUrlLib.a
 Assembled/ios/libs/libastc-codec.a
+Assembled/ios/libs/libCanvas.a
 Assembled/ios/libs/libGenericCodeGen.a
 Assembled/ios/libs/libspirv-cross-core.a
 Assembled/ios/libs/libspirv-cross-msl.a
@@ -493,6 +494,8 @@ const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyIOSFiles, 
 const build = gulp.series(buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validate);
 const rebuild = gulp.series(clean, build);
 const pack = gulp.series(rebuild, createPackage);
+
+exports.validate = validate;
 
 exports.buildIOS = buildIOS;
 exports.buildAndroid = buildAndroid;
