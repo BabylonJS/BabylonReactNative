@@ -30,7 +30,7 @@ const [command] = process.argv.slice(2);
 
 if (command === 'postinstall') {
   postInstall();
-} else if (command === 'iosCmake') {
+} else if (command === 'iosCMake') {
   iosCmake();
 } else {
   console.error(chalk.black.bgRedBright(`Unkown command: ${command}`));
