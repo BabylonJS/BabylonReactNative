@@ -1,5 +1,6 @@
 const util = require('util');
 const fs = require('fs');
+const path = require('path');
 const readdirAsync = util.promisify(fs.readdir);
 const log = require('fancy-log');
 const gulp = require('gulp');
@@ -26,6 +27,15 @@ const clean = async () => {
   if (shelljs.test('-d', 'Assembled-Windows')) {
     shelljs.rm('-r', 'Assembled');
   }
+};
+
+const buildTypeScript = async () => {
+  exec('node_modules/typescript/bin/tsc --noEmit false --outDir ../../../Package/Assembled', '../Modules/@babylonjs/react-native');
+
+  // Update the 'main' property in package.json to be 'index.js' instead of 'index.ts'
+  const packageJson = JSON.parse(fs.readFileSync('Assembled/package.json'));
+  packageJson.main = `${path.basename(packageJson.main, '.ts')}.js`;
+  fs.writeFileSync('Assembled/package.json', JSON.stringify(packageJson, null, 4));
 };
 
 const makeXCodeProj = async () => {
@@ -209,9 +219,7 @@ const buildUWPPlayground = gulp.parallel(
 const buildUWP = gulp.series(makeUWPProject, buildUWPProject);
 
 const copyCommonFiles = () => {
-  return  gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/package.json')
-    .pipe(gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/README.md'))
-    .pipe(gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/*.ts*'))
+  return gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/README.md')
     .pipe(gulp.src('react-native-babylon.podspec'))
     .pipe(gulp.dest('Assembled'));
 };
@@ -419,10 +427,18 @@ const validate = async () => {
     'Assembled/android/src/main/jniLibs/x86',
     'Assembled/android/src/main/jniLibs/x86/libBabylonNative.so',
     'Assembled/android/src/main/jniLibs/x86/libturbomodulejsijni.so',
-    'Assembled/BabylonModule.ts',
-    'Assembled/EngineHook.ts',
-    'Assembled/EngineView.tsx',
-    'Assembled/index.ts',
+    'Assembled/BabylonModule.d.ts',
+    'Assembled/BabylonModule.js',
+    'Assembled/BabylonModule.js.map',
+    'Assembled/EngineHook.d.ts',
+    'Assembled/EngineHook.js',
+    'Assembled/EngineHook.js.map',
+    'Assembled/EngineView.d.ts',
+    'Assembled/EngineView.js',
+    'Assembled/EngineView.js.map',
+    'Assembled/index.d.ts',
+    'Assembled/index.js',
+    'Assembled/index.js.map',
     'Assembled/ios',
     'Assembled/ios/BabylonModule.mm',
     'Assembled/ios/BabylonNativeInterop.h',
@@ -462,16 +478,22 @@ const validate = async () => {
     'Assembled/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace',
     'Assembled/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata',
     'Assembled/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings',
-    'Assembled/NativeCapture.ts',
+    'Assembled/NativeCapture.d.ts',
+    'Assembled/NativeCapture.js',
+    'Assembled/NativeCapture.js.map',
     'Assembled/package.json',
     'Assembled/react-native-babylon.podspec',
-    'Assembled/ReactNativeEngine.ts',
+    'Assembled/ReactNativeEngine.d.ts',
+    'Assembled/ReactNativeEngine.js',
+    'Assembled/ReactNativeEngine.js.map',
     'Assembled/README.md',
     'Assembled/shared',
     'Assembled/shared/BabylonNative.h',
     'Assembled/shared/XrAnchorHelper.h',
     'Assembled/shared/XrContextHelper.h',
-    'Assembled/VersionValidation.ts'
+    'Assembled/VersionValidation.d.ts',
+    'Assembled/VersionValidation.js',
+    'Assembled/VersionValidation.js.map'
   ];
 
   const actual = glob.sync('Assembled/**/*');
@@ -510,12 +532,13 @@ const createPackageUWP = async () => {
 
 const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyIOSFiles, copyAndroidFiles);
 
-const build = gulp.series(buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validate);
+const build = gulp.series(buildTypeScript, buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validate);
 const rebuild = gulp.series(clean, build);
 const pack = gulp.series(rebuild, createPackage);
 
 exports.validate = validate;
 
+exports.buildTypeScript = buildTypeScript;
 exports.buildIOS = buildIOS;
 exports.buildAndroid = buildAndroid;
 exports.createIOSUniversalLibs = createIOSUniversalLibs;
