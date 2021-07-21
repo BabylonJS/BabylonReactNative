@@ -245,7 +245,7 @@ const copyIOSFiles = async () => {
     gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/xr/Source/ARKit/Include/*')
       .pipe(gulp.dest('Assembled/ios/include'))
       .on('end', resolve);
-  })
+  });
 };
 
 const createIOSUniversalLibs = async () => {
@@ -267,7 +267,7 @@ const copyAndroidFiles = async () => {
     gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/xr/Source/ARCore/Include/*')
       .pipe(gulp.dest('Assembled/android/include'))
       .on('end', resolve);
-  })
+  });
 
   await new Promise(resolve => {
           gulp.src('../Apps/Playground/node_modules/@babylonjs/react-native/android/build/intermediates/library_and_local_jars_jni/release/jni/**/*')
