@@ -22,10 +22,10 @@ jobs:
       - name: Setup Ninja
         run: brew install ninja
       - name: NPM Install (Playground)
-        run: npm install
+        run: npm ci
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
-        run: npm install
+        run: npm ci
         working-directory: ./Package
       - name: Git (Update to BabylonNative ${{ github.event.client_payload.sha }})
         run: npx gulp initializeSubmodulesMostRecentBabylonNative --sha ${{ github.event.client_payload.sha }}
@@ -45,10 +45,10 @@ jobs:
       - name: Clean NPM Cache
         run: npm cache clean --force
       - name: NPM Install (Playground)
-        run: npm install
+        run: npm ci
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
-        run: npm install
+        run: npm ci
         working-directory: ./Package
       - name: Git (Update to BabylonNative ${{ github.event.client_payload.sha }})
         run: npx gulp initializeSubmodulesMostRecentBabylonNative --sha ${{ github.event.client_payload.sha }}
@@ -78,10 +78,10 @@ jobs:
         with:
           nuget-version: '5.x'
       - name: NPM Install (Playground)
-        run: npm install
+        run: npm ci
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
-        run: npm install
+        run: npm ci
         working-directory: ./Package
       - name: Git (Update to BabylonNative ${{ github.event.client_payload.sha }})
         run: npx gulp initializeSubmodulesMostRecentBabylonNative --sha ${{ github.event.client_payload.sha }} --windows

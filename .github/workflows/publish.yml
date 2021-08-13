@@ -20,10 +20,10 @@ jobs:
       - name: Setup Ninja
         run: brew install ninja
       - name: NPM Install (Playground)
-        run: npm install
+        run: npm ci
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
-        run: npm install
+        run: npm ci
         working-directory: ./Package
       - name: Gulp
         run: npx gulp
@@ -50,10 +50,10 @@ jobs:
         with:
           nuget-version: '5.x'
       - name: NPM Install (Playground)
-        run: npm install
+        run: npm ci
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
-        run: npm install
+        run: npm ci
         working-directory: ./Package
       - name: Git (Windows)
         run: npx gulp initializeSubmodulesWindowsAgent
@@ -76,7 +76,7 @@ jobs:
       - name: Clean NPM Cache
         run: npm cache clean --force
       - name: NPM Install (Binary Package)
-        run: npm install
+        run: npm ci
         working-directory: ./Package
       - name: Download Assembled Folder
         uses: actions/download-artifact@v2

@@ -22,10 +22,10 @@ jobs:
       - name: Setup Ninja
         run: brew install ninja
       - name: NPM Install (Playground)
-        run: npm install
+        run: npm ci
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
-        run: npm install
+        run: npm ci
         working-directory: ./Package
       - name: Gulp (Android)
         run: npx gulp buildAndroid
@@ -41,10 +41,10 @@ jobs:
       - name: Clean NPM Cache
         run: npm cache clean --force
       - name: NPM Install (Playground)
-        run: npm install
+        run: npm ci
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
-        run: npm install
+        run: npm ci
         working-directory: ./Package
       - name: Gulp (iOS)
         run: npx gulp buildIOS
@@ -66,10 +66,10 @@ jobs:
       - name: Setup Ninja
         run: brew install ninja
       - name: NPM Install (Playground)
-        run: npm install
+        run: npm ci
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
-        run: npm install
+        run: npm ci
         working-directory: ./Package
       - name: Gulp
         run: npx gulp
@@ -95,10 +95,10 @@ jobs:
         with:
           nuget-version: '5.x'
       - name: NPM Install (Playground)
-        run: npm install
+        run: npm ci
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
-        run: npm install
+        run: npm ci
         working-directory: ./Package
       - name: Git (Windows)
         run: npx gulp initializeSubmodulesWindowsAgent
