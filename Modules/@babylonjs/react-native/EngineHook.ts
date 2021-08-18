@@ -81,7 +81,8 @@ if (Platform.OS === "android" || Platform.OS === "ios") {
         return sessionManager;
     };
 
-    // Skip clearing render target texture back buffer for XR RTTs.
+    // TODO: https://github.com/BabylonJS/BabylonNative/issues/871
+    // Workaround to skip clearing render target texture back buffer for XR RTTs.
     const originalCreateRenderTargetTexture: (...args: any[]) => RenderTargetTexture = (WebXRSessionManager.prototype as any)._createRenderTargetTexture;
     (WebXRSessionManager.prototype as any)._createRenderTargetTexture = function (...args: any[]): RenderTargetTexture {
         const renderTargetTexture = originalCreateRenderTargetTexture.apply(this, args);
