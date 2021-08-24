@@ -25,7 +25,7 @@ export class FontFace {
     try {
       this._status = "loading";
       if (typeof this.source === 'string') {
-        this.source = await Tools.LoadFileAsync(this.source as string);
+        this.source = await Tools.LoadFileAsync(this.source);
       }
 
       await _native.NativeCanvas.loadTTFAsync(this.family, this.source);
