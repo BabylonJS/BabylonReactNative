@@ -8,28 +8,32 @@ declare var _native: any;
  */
 export class FontFace {
   private source: string | ArrayBuffer | undefined;
-  private status: "unloaded" | "loading" | "loaded" | "error" = "unloaded";
+  private _status: "unloaded" | "loading" | "loaded" | "error" = "unloaded";
+  public get status(): "unloaded" | "loading" | "loaded" | "error" {
+    return this._status;
+  }
+
+  public get loaded(): boolean {
+    return this._status === "loaded";
+  }
+
   public constructor(public readonly family: string, source: string | ArrayBuffer) {
     this.source = source;
   }
 
   public async load(): Promise<void> {
     try {
-      this.status = "loading";
+      this._status = "loading";
       if (typeof this.source === 'string') {
         this.source = await Tools.LoadFileAsync(this.source as string);
       }
 
       await _native.NativeCanvas.loadTTFAsync(this.family, this.source);
       this.source = undefined;
-      this.status = "loaded"
+      this._status = "loaded"
     } catch (ex) {
       console.error("Error encountered when loading font: " + ex);
-      this.status = "error";
+      this._status = "error";
     }
-  }
-
-  public get loaded(): boolean {
-    return this.status === "loaded";
   }
 }
