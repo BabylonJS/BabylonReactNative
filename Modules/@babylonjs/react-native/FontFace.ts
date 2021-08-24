@@ -11,13 +11,12 @@ export class FontFace {
   private status: "unloaded" | "loading" | "loaded" | "error" = "unloaded";
   public constructor(public readonly family: string, source: string | ArrayBuffer) {
     this.source = source;
-    console.warn(`FontFace is experimental and likely to change significantly or be removed in future version of Babylon React Native.`);
   }
 
   public async load(): Promise<void> {
     try {
       this.status = "loading";
-      if (this.source as ArrayBuffer === undefined) {
+      if (typeof this.source === 'string') {
         this.source = await Tools.LoadFileAsync(this.source as string);
       }
 
