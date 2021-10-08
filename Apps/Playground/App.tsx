@@ -135,8 +135,12 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const onLoadModel = useCallback(() => {
     (async () => {
       if (rootNode && scene) {
-        const pickedFile = await DocumentPicker.pickSingle();
-        setModelUrl(pickedFile.uri);
+        const pickedFile = await DocumentPicker.pickSingle({copyTo: 'documentDirectory'});
+        let uri = pickedFile.fileCopyUri!;
+        if (!(/file:\/\/.*/).test(uri)) {
+          uri = `file://${uri}`;
+        }
+        setModelUrl(uri);
       }
     })();
   }, [rootNode, scene]);
