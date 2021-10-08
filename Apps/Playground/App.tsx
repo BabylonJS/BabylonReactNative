@@ -12,6 +12,7 @@ import { EngineView, useEngine, EngineViewCallbacks } from '@babylonjs/react-nat
 import { Scene, Vector3, ArcRotateCamera, Camera, WebXRSessionManager, SceneLoader, TransformNode, DeviceSourceManager, DeviceType, DeviceSource, PointerInput, WebXRTrackingState, Nullable } from '@babylonjs/core';
 import '@babylonjs/loaders';
 import Slider from '@react-native-community/slider';
+import * as DocumentPicker from 'react-native-document-picker';
 
 const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const defaultScale = 1;
@@ -27,6 +28,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
   const [snapshotData, setSnapshotData] = useState<string>();
   const [engineViewCallbacks, setEngineViewCallbacks] = useState<EngineViewCallbacks>();
   const [trackingState, setTrackingState] = useState<WebXRTrackingState>();
+  const [modelUrl, setModelUrl] = useState<string>('https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF-Binary/BoxAnimated.glb');
 
   useEffect(() => {
     if (engine) {
@@ -62,22 +64,34 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
           });
         }
       });
+    }
+  }, [engine]);
 
+  useEffect(() => {
+    if (scene && rootNode) {
       const transformContainer = new TransformNode('Transform Container', scene);
       transformContainer.parent = rootNode;
       transformContainer.scaling.scaleInPlace(0.2);
       transformContainer.position.y -= .2;
 
-      scene.beforeRender = function () {
+      const beforeRenderObserver = scene.onBeforeRenderObservable.add(() => {
         transformContainer.rotate(Vector3.Up(), 0.005 * scene.getAnimationRatio());
-      };
+      });
 
-      SceneLoader.ImportMeshAsync('', 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF-Binary/BoxAnimated.glb').then(result => {
+      const start = performance.now();
+      SceneLoader.ImportMeshAsync('', modelUrl).then(result => {
+        const end = performance.now();
+        console.log(`${modelUrl} loaded in ${end - start}ms`);
         const mesh = result.meshes[0];
         mesh.parent = transformContainer;
       });
+
+      return () => {
+        scene.onBeforeRenderObservable.remove(beforeRenderObserver);
+        transformContainer.dispose();
+      };
     }
-  }, [engine]);
+  }, [modelUrl, scene, rootNode]);
 
   useEffect(() => {
     if (rootNode) {
@@ -118,6 +132,15 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
     })();
   }, [rootNode, scene, xrSession]);
 
+  const onLoadModel = useCallback(() => {
+    (async () => {
+      if (rootNode && scene) {
+        const pickedFile = await DocumentPicker.pickSingle();
+        setModelUrl(pickedFile.uri);
+      }
+    })();
+  }, [rootNode, scene]);
+
   const onInitialized = useCallback(async(engineViewCallbacks: EngineViewCallbacks) => {
     setEngineViewCallbacks(engineViewCallbacks);
   }, [engine]);
@@ -132,7 +155,14 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
     <>
       <View style={props.style}>
         <Button title="Toggle EngineView" onPress={() => { setToggleView(!toggleView) }} />
-        <Button title={ xrSession ? 'Stop XR' : 'Start XR'} onPress={onToggleXr} />
+        <View style={{flexDirection: 'row'}}>
+          <View style={{flex:1}}>
+            <Button title={xrSession ? 'Stop XR' : 'Start XR'} onPress={onToggleXr} />
+          </View>
+          <View style={{flex:1}}>
+            <Button title={'Load Model'} onPress={onLoadModel} />
+          </View>
+        </View>
         { !toggleView &&
           <View style={{flex: 1}}>
             { enableSnapshots && 
