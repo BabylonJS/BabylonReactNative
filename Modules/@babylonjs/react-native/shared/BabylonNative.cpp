@@ -59,7 +59,7 @@ namespace Babylon
             Polyfills::XMLHttpRequest::Initialize(m_env);
 
             // Initialize Canvas polyfill for text support
-            g_nativeCanvas = std::make_unique <Babylon::Polyfills::Canvas>(Babylon::Polyfills::Canvas::Initialize(m_env));
+            g_nativeCanvas = std::make_unique<Babylon::Polyfills::Canvas>(Babylon::Polyfills::Canvas::Initialize(m_env));
         }
 
         ~ReactNativeModule() override
