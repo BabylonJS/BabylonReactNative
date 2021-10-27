@@ -10,6 +10,10 @@
     <ProjectReference Include="$(ProjectDir)..\..\node_modules\@react-native-community\slider\windows\SliderWindows\SliderWindows.vcxproj">
       <Project>{685a83ae-36bc-4e9d-bdc6-417ebf168463}</Project>
     </ProjectReference>
+    <!-- Projects from react-native-document-picker -->
+    <ProjectReference Include="$(ProjectDir)..\..\node_modules\react-native-document-picker\windows\ReactNativeDocumentPicker\ReactNativeDocumentPicker.csproj">
+      <Project>{A4C9C727-0AEB-4A3D-B547-BEDB812B172D}</Project>
+    </ProjectReference>
     <!-- Projects from react-native-permissions -->
     <ProjectReference Include="$(ProjectDir)..\..\node_modules\react-native-permissions\windows\RNPermissions\RNPermissions.vcxproj">
       <Project>{99677b9d-a27b-4239-930e-c36c8d339c54}</Project>
