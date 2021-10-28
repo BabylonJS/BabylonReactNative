@@ -69,6 +69,8 @@ function Compile-Solution {
     )
 
     $MSBuild = Get-MSBuildPath
+    # NOTE: React Native for Windows 0.66+ contains a fix that will correctly find the UWP SDK. Until we upgrade, we'll need to
+    #       manually specify UWPCoreRuntimeSdkVersion/DotNetNativeVersion/DotNetNativeRuntimeVersion to support consuming C# packages.
     & "$MSBuild" /p:Configuration="$Configuration" /p:Platform="$Platform" /p:UWPCoreRuntimeSdkVersion="2.2.12" /p:DotNetNativeVersion="2.2.10-rel-29722-00" /p:DotNetNativeRuntimeVersion="2.2.8-rel-29722-00" /m $Solution
     if ($? -Eq $False) {
         Write-Error "$Platform $Configuration Build failed."
