@@ -69,7 +69,7 @@ function Compile-Solution {
     )
 
     $MSBuild = Get-MSBuildPath
-    & "$MSBuild" /p:Configuration="$Configuration" /p:Platform="$Platform" /m $Solution
+    & "$MSBuild" /p:Configuration="$Configuration" /p:Platform="$Platform" /p:UWPCoreRuntimeSdkVersion="2.2.12" /p:DotNetNativeVersion="2.2.10-rel-29722-00" /p:DotNetNativeRuntimeVersion="2.2.8-rel-29722-00" /m $Solution
     if ($? -Eq $False) {
         Write-Error "$Platform $Configuration Build failed."
         exit 1
