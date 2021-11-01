@@ -35,6 +35,7 @@ Pod::Spec.new do |s|
                 'NativeEngine',
                 'NativeInput',
                 'NativeOptimizations',
+                'NativePerformanceLogger',
                 'NativeXR',
                 'SPIRV',
                 'spirv-cross-core',

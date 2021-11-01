@@ -79,6 +79,7 @@ target_link_libraries(BabylonNative
     NativeEngine
     NativeInput
     NativeOptimizations
+    NativePerformanceLogger
     NativeXr
     Window
     XMLHttpRequest
