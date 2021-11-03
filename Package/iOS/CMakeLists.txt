@@ -21,7 +21,7 @@ set(PACKAGED_LIBS
     NativeEngine
     NativeInput
     NativeOptimizations
-    NativePerformanceLogger
+    NativeTracing
     NativeXr
     SPIRV
     spirv-cross-core
