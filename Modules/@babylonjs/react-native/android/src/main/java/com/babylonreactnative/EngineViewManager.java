@@ -1,5 +1,7 @@
 package com.babylonreactnative;
 
+import android.widget.FrameLayout;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -7,12 +9,14 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.annotations.ReactProp;
 
 import java.util.Map;
 
 public final class EngineViewManager extends SimpleViewManager<EngineView> {
     public static final int COMMAND_TAKE_SNAPSHOT = 0;
     public static final String COMMAND_TAKE_SNAPSHOT_NAME = "takeSnapshot";
+    private Boolean isTransparent = false;
 
     @NonNull
     @Override
@@ -20,10 +24,16 @@ public final class EngineViewManager extends SimpleViewManager<EngineView> {
         return "EngineView";
     }
 
+    @ReactProp(name = "isTransparent")
+    public void setIsTransparent(EngineView view, Boolean _isTransparent) {
+      isTransparent = _isTransparent;
+    }
+  
+
     @NonNull
     @Override
     protected EngineView createViewInstance(@NonNull ThemedReactContext reactContext) {
-        return new EngineView(reactContext);
+        return new EngineView(reactContext, isTransparent);
     }
 
     @Override

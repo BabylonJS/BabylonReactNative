@@ -2,16 +2,21 @@ package com.babylonreactnative;
 
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
+import android.graphics.SurfaceTexture;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Base64;
 import android.view.MotionEvent;
 import android.view.PixelCopy;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
 
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.uimanager.UIManagerModule;
@@ -19,46 +24,96 @@ import com.facebook.react.uimanager.events.EventDispatcher;
 
 import java.io.ByteArrayOutputStream;
 
-public final class EngineView extends FrameLayout implements SurfaceHolder.Callback, View.OnTouchListener {
+public final class EngineView extends FrameLayout implements TextureView.SurfaceTextureListener, SurfaceHolder.Callback, View.OnTouchListener {
     private static final FrameLayout.LayoutParams childViewLayoutParams = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-    private final SurfaceView primarySurfaceView;
-    private final SurfaceView xrSurfaceView;
+    private TextureView textureView;
+    private Surface s;
+    private SurfaceView primarySurfaceView;
+    private SurfaceView xrSurfaceView;
     private final EventDispatcher reactEventDispatcher;
     private Runnable renderRunnable;
+    private boolean isTransparent;
 
-    public EngineView(ReactContext reactContext) {
+    public EngineView(ReactContext reactContext, Boolean isTransparent) {
         super(reactContext);
 
-        this.primarySurfaceView = new SurfaceView(reactContext);
-        this.primarySurfaceView.setLayoutParams(EngineView.childViewLayoutParams);
-        this.primarySurfaceView.getHolder().addCallback(this);
-        this.addView(this.primarySurfaceView);
+        this.isTransparent = isTransparent;
 
-        this.xrSurfaceView = new SurfaceView(reactContext);
-        this.xrSurfaceView.setLayoutParams(childViewLayoutParams);
-        this.xrSurfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                // surfaceChanged is also called when the surface is created, so just do all the handling there
-            }
+        if(isTransparent){
+            this.textureView = new TextureView(reactContext);
+            this.textureView.setLayoutParams(EngineView.childViewLayoutParams);
+            this.textureView.setSurfaceTextureListener(this);
+            this.textureView.setOpaque(false);
+            this.addView(this.textureView);
+        } else {
+            this.primarySurfaceView = new SurfaceView(reactContext);
+            this.primarySurfaceView.setLayoutParams(EngineView.childViewLayoutParams);
+            this.primarySurfaceView.getHolder().addCallback(this);
+            this.addView(this.primarySurfaceView);
 
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                BabylonNativeInterop.updateXRView(holder.getSurface());
-            }
+            this.xrSurfaceView = new SurfaceView(reactContext);
+            this.xrSurfaceView.setLayoutParams(childViewLayoutParams);
+            this.xrSurfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
+                @Override
+                public void surfaceCreated(SurfaceHolder holder) {
+                    // surfaceChanged is also called when the surface is created, so just do all the handling there
+                }
 
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                BabylonNativeInterop.updateXRView(null);
-            }
-        });
-        this.xrSurfaceView.setVisibility(View.INVISIBLE);
-        this.addView(this.xrSurfaceView);
+                @Override
+                public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+                    BabylonNativeInterop.updateXRView(holder.getSurface());
+                }
+
+                @Override
+                public void surfaceDestroyed(SurfaceHolder holder) {
+                    BabylonNativeInterop.updateXRView(null);
+                }
+            });
+            this.xrSurfaceView.setVisibility(View.INVISIBLE);
+            this.addView(this.xrSurfaceView);
+
+        }
 
         this.setOnTouchListener(this);
 
         this.reactEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
     }
+
+    // ------------------------------------
+    // TextureView related
+
+    @Override
+    public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
+        if(this.renderRunnable == null){
+            this.renderRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    BabylonNativeInterop.renderView();
+                    EngineView.this.postOnAnimation(this);
+                }
+            };
+            this.postOnAnimation(this.renderRunnable);
+        }
+
+        s = new Surface(surfaceTexture);
+        BabylonNativeInterop.updateView(s);
+    }
+
+    @Override
+    public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {}
+
+    @Override
+    public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surfaceTexture) {
+        boolean b = this.removeCallbacks(this.renderRunnable);
+        s.release();
+        return false;
+    }
+
+    @Override
+    public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surfaceTexture) {}
+
+    // ------------------------------------
+    // SurfaceHolder related
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
@@ -89,6 +144,9 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
         this.renderRunnable = null;
     }
 
+    // ------------------------------------
+    // Common
+
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         BabylonNativeInterop.reportMotionEvent(motionEvent);
@@ -114,13 +172,26 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
         helperThread.start();
         final Handler helperThreadHandler = new Handler(helperThread.getLooper());
 
-        SurfaceView surfaceView = this.primarySurfaceView;
-        if (BabylonNativeInterop.isXRActive()) {
-            surfaceView = this.xrSurfaceView;
-        }
 
-        // Request the pixel copy.
-        PixelCopy.request(surfaceView, bitmap, (copyResult) ->  {
+      if(isTransparent){
+          SurfaceView surfaceView = this.primarySurfaceView;
+          if (BabylonNativeInterop.isXRActive()) {
+              surfaceView = this.xrSurfaceView;
+          }
+          // Request the pixel copy.
+          PixelCopy.request(surfaceView, bitmap, getOnPixelCopyFinishedListener(bitmap, helperThread), helperThreadHandler);
+      } else {
+          // Request the pixel copy.
+          PixelCopy.request(s, bitmap, getOnPixelCopyFinishedListener(bitmap, helperThread), helperThreadHandler);
+      }
+
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // Returns the listener for the PixelCopy.request function call
+    @NonNull
+    private PixelCopy.OnPixelCopyFinishedListener getOnPixelCopyFinishedListener(Bitmap bitmap, HandlerThread helperThread) {
+        return (copyResult) -> {
             // If the pixel copy was a success then convert the image to a base 64 encoded jpeg and fire the event.
             String encoded = "";
             if (copyResult == PixelCopy.SUCCESS) {
@@ -130,10 +201,11 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
                 bitmap.recycle();
                 encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
             }
-
             SnapshotDataReturnedEvent snapshotEvent = new SnapshotDataReturnedEvent(this.getId(), encoded);
             reactEventDispatcher.dispatchEvent(snapshotEvent);
             helperThread.quitSafely();
-        }, helperThreadHandler);
+        };
     }
+
+
 }

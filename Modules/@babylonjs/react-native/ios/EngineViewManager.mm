@@ -11,6 +11,8 @@
 @interface EngineView : MTKView
 
 @property (nonatomic, copy) RCTDirectEventBlock onSnapshotDataReturned;
+@property (nonatomic, assign) BOOL isTransparent;
+
 
 @end
 
@@ -22,12 +24,23 @@
 - (instancetype)init:(RCTBridge*)_bridge {
     if (self = [super initWithFrame:CGRectZero device:MTLCreateSystemDefaultDevice()]) {
         bridge = _bridge;
-
         super.translatesAutoresizingMaskIntoConstraints = false;
         super.colorPixelFormat = MTLPixelFormatBGRA8Unorm_sRGB;
         super.depthStencilPixelFormat = MTLPixelFormatDepth32Float;
     }
     return self;
+}
+
+- (void)setIsTransparentFlag:(NSNumber*)isTransparentFlag {
+    BOOL isTransparent = [isTransparentFlag intValue] == 1;
+    if(isTransparent){
+        [self setOpaque:NO];
+        [self.window setOpaque:NO];
+    } else {
+        [self setOpaque:YES];
+        [self.window setOpaque:YES];
+    }
+    self.isTransparent = isTransparent;
 }
 
 - (void)setBounds:(CGRect)bounds {
@@ -55,6 +68,10 @@
     if ([BabylonNativeInterop isXRActive]) {
         if (!xrView) {
             xrView = [[MTKView alloc] initWithFrame:self.bounds device:self.device];
+            if(self.isTransparent == YES){
+                [xrView setOpaque:NO];
+                [xrView.window setOpaque:NO];
+            }
             xrView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             xrView.userInteractionEnabled = false;
             [self addSubview:xrView];
@@ -102,6 +119,10 @@
 @end
 
 @implementation EngineViewManager
+
+RCT_CUSTOM_VIEW_PROPERTY(isTransparent, NSNumber*, EngineView){
+    [view setIsTransparentFlag:json];
+}
 
 RCT_EXPORT_MODULE(EngineViewManager)
 
