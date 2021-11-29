@@ -9,6 +9,9 @@
 // Includes from @react-native-community/slider
 #include <winrt/SliderWindows.h>
 
+// Includes from react-native-document-picker
+#include <winrt/ReactNativeDocumentPicker.h>
+
 // Includes from react-native-permissions
 #include <winrt/RNPermissions.h>
 
@@ -21,6 +24,8 @@ void RegisterAutolinkedNativeModulePackages(winrt::Windows::Foundation::Collecti
     packageProviders.Append(winrt::BabylonReactNative::ReactPackageProvider());
     // IReactPackageProviders from @react-native-community/slider
     packageProviders.Append(winrt::SliderWindows::ReactPackageProvider());
+    // IReactPackageProviders from react-native-document-picker
+    packageProviders.Append(winrt::ReactNativeDocumentPicker::ReactPackageProvider());
     // IReactPackageProviders from react-native-permissions
     packageProviders.Append(winrt::RNPermissions::ReactPackageProvider());
 }
