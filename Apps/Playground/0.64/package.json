@@ -10,8 +10,8 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "postinstall": "node ../scripts/tools.js postinstall",
-    "iosCmake": "node ../scripts/tools.js iosCMake"
+    "postinstall": "node scripts/tools.js postinstall",
+    "iosCmake": "node scripts/tools.js iosCMake"
   },
   "dependencies": {
     "@babylonjs/core": "5.0.0-alpha.60",
