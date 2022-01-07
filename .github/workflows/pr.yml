@@ -95,7 +95,7 @@ jobs:
         with:
           nuget-version: '5.x'
       - name: Make symlink
-        run: mklink /d Playground 0.64
+        run: cmd /c mklink /J "Playground" "0.64"
         working-directory: ./Apps/Playground
       - name: NPM Install (Playground)
         run: npm install
