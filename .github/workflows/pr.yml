@@ -19,7 +19,8 @@ jobs:
       - name: Setup Ninja
         run: brew install ninja
       - name: Make symlink
-        run: ln -s ./Apps/Playground/0.64 ./Apps/Playground/Playground
+        run: ln -s 0.64 Playground
+        working-directory: ./Apps/Playground
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground/Playground
@@ -38,7 +39,8 @@ jobs:
         with:
           submodules: 'recursive'
       - name: Make symlink
-        run: ln -s ./Apps/Playground/0.64 ./Apps/Playground/Playground
+        run: ln -s 0.64 Playground
+        working-directory: ./Apps/Playground
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground/Playground
@@ -63,7 +65,8 @@ jobs:
       - name: Setup Ninja
         run: brew install ninja
       - name: Make symlink
-        run: ln -s ./Apps/Playground/0.64 ./Apps/Playground/Playground
+        run: ln -s 0.64 Playground
+        working-directory: ./Apps/Playground
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground/Playground
@@ -92,7 +95,8 @@ jobs:
         with:
           nuget-version: '5.x'
       - name: Make symlink
-        run: mklink /d ./Apps/Playground/Playground ./Apps/Playground/0.64
+        run: mklink /d Playground 0.64
+        working-directory: ./Apps/Playground
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground/Playground
