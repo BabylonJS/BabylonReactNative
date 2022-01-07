@@ -18,6 +18,7 @@
     "@babylonjs/loaders": "5.0.0-alpha.60",
     "@babylonjs/react-native": "file:../../Modules/@babylonjs/react-native",
     "@babylonjs/react-native-windows": "file:../../Modules/@babylonjs/react-native-windows",
+    "@babylonjs/playground-shared": "file:./playground-shared",
     "@react-native-community/slider": "4.0.0-rc.3",
     "logkitty": "^0.7.1",
     "react": "^17.0.1",

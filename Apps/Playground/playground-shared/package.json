@@ -1,6 +1,6 @@
 {
   "name": "playground-shared",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "playground shared resources",
   "main": "App.tsx",
   "scripts": {
