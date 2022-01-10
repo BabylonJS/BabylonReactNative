@@ -5,6 +5,7 @@ on:
       - master
 env:
   BRN_Version: 0.64
+
 jobs:
   build-android:
     runs-on: macos-latest
