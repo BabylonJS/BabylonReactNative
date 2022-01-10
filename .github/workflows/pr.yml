@@ -3,7 +3,8 @@ on:
   pull_request:
     branches:
       - master
-
+env:
+  BRN_Version: 0.64
 jobs:
   build-android:
     runs-on: macos-latest
@@ -19,7 +20,7 @@ jobs:
       - name: Setup Ninja
         run: brew install ninja
       - name: Make symlink
-        run: ln -s 0.64 Playground
+        run: ln -s ${{ env.BRN_Version }} Playground
         working-directory: ./Apps/Playground
       - name: NPM Install (Playground)
         run: npm install
@@ -39,7 +40,7 @@ jobs:
         with:
           submodules: 'recursive'
       - name: Make symlink
-        run: ln -s 0.64 Playground
+        run: ln -s ${{ env.BRN_Version }} Playground
         working-directory: ./Apps/Playground
       - name: NPM Install (Playground)
         run: npm install
@@ -65,7 +66,7 @@ jobs:
       - name: Setup Ninja
         run: brew install ninja
       - name: Make symlink
-        run: ln -s 0.64 Playground
+        run: ln -s ${{ env.BRN_Version }} Playground
         working-directory: ./Apps/Playground
       - name: NPM Install (Playground)
         run: npm install
@@ -95,7 +96,7 @@ jobs:
         with:
           nuget-version: '5.x'
       - name: Make symlink
-        run: cmd /c mklink /J "Playground" "0.64"
+        run: cmd /c mklink /J "Playground" "${{ env.BRN_Version }}"
         working-directory: ./Apps/Playground
       - name: NPM Install (Playground)
         run: npm install
