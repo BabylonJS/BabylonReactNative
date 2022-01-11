@@ -112,10 +112,27 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 
 On either Mac or Windows, NPM is used to build and run the Playground sample/test app from the command line. Open a command prompt at the root of the BabylonReactNative repo if you don't have one already open.
 
+Build script and Package building scripts expect to use a folder named `Apps/Playground/Playground`. Create a symlink to a react-native version in `Apps/Playground`.
+For a react-native 0.64 version:
+
+on MacOS/Linux:
+```
+cd Apps/Playground
+ln -s 0.64 Playground
+```
+
+on Windows:
+```
+cd Apps/Playground
+mklink /J Playground 0.64
+```
+
+Then building and packaging steps are the same.
+
 #### Android
 
 ```
-cd Apps/Playground
+cd Apps/Playground/Playground
 npm run android
 ```
 
@@ -126,7 +143,7 @@ After having run the above commands, you can also open `Apps/Playground/android`
 iOS can only be built on a Mac.
 
 ```
-cd Apps/Playground
+cd Apps/Playground/Playground
 npm run ios
 ```
 
@@ -136,11 +153,11 @@ After having run the above commands, you can also open `Apps/Playground/ios/Play
 
 UWP can only be built on a PC. `CMake` must be manually run to generate project definitions for BabylonNative dependencies.
 
-1. Run `npm install` in Apps\Playground.
+1. Run `npm install` in Apps\Playground\Playground.
 1. Run `npm install` in Package.
 1. Run `npx gulp buildUWP` in Package. This command will run cmake and build BabylonNative dependencies. It may take a while to complete.
 1. In Apps\Playground, run `npm run windows`.
-> Note: if you experience build issues for Apps\Playground related to autolinking, try running `npx react-native autolink-windows` in the Apps\Playground folder. You can also run `npm run windows-verbose` to view logging.
+> Note: if you experience build issues for Apps\Playground related to autolinking, try running `npx react-native autolink-windows` in the Apps\Playground\Playground folder. You can also run `npm run windows-verbose` to view logging.
 
 ### **Testing in the Playground App** ###
 
