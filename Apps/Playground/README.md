@@ -24,3 +24,74 @@ import {name as appName} from '../playground-shared/app.json';
 AppRegistry.registerComponent(appName, () => App);
 ```
 
+## iOS
+Add BabylonReactNative in the Xcode workspace:
+
+```
+...
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:../node_modules/@babylonjs/react-native/ios/ReactNativeBabylon.xcodeproj">
+   </FileRef>
+   ...
+```
+
+For camera access, add a key in `Info.plist` :
+
+```
+...
+<dict>
+    <key>NSCameraUsageDescription</key>
+    <string></string>
+    <key>CFBundleDevelopmentRegion</key>
+    ...
+```
+
+and add permission in the pod file:
+```
+...
+target 'Playground' do
+  permissions_path = '../node_modules/react-native-permissions/ios'
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+  ...
+```
+
+## Android
+
+Add camera and AR permission in `AndroidManifest.xml` :
+
+```
+...
+<uses-permission android:name="android.permission.CAMERA"/>
+...
+```
+
+and 
+
+```
+...
+</activity>
+      <meta-data android:name="com.google.ar.core" android:value="optional" />
+    </application>
+...
+```
+
+## Troubleshooting
+
+When running the Playground, if you encounter this error message:
+
+```
+TypeScript 'declare' fields must first be transformed by @babel/plugin-transform-typescript.
+```
+
+Modify `babel.config.js` with these lines:
+
+```
+module.exports = {
+  presets: [
+    'module:metro-react-native-babel-preset',
+    ['@babel/preset-typescript', {allowDeclareFields: true}],
+    ],
+};
+```
