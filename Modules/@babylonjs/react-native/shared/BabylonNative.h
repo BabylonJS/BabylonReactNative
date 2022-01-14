@@ -35,8 +35,12 @@ namespace BabylonNative
     void SetMousePosition(uint32_t x, uint32_t y);
     void SetTouchButtonState(uint32_t pointerId, bool isDown, uint32_t x, uint32_t y);
     void SetTouchPosition(uint32_t pointerId, uint32_t x, uint32_t y);
+
     bool IsXRActive();
+
+#if defined(__APPLE__) || defined(ANDROID)
     void UpdateXRView(WindowType window);
+#endif
 
     extern const uint32_t LEFT_MOUSE_BUTTON_ID;
     extern const uint32_t MIDDLE_MOUSE_BUTTON_ID;

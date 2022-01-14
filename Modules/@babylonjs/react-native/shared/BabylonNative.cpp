@@ -175,10 +175,12 @@ namespace BabylonNative
             return *m_isXRActive;
         }
 
+#if defined(__APPLE__) || defined(ANDROID)
         void UpdateXRView(WindowType window)
         {
             m_nativeXr->UpdateWindow(window);
         }
+#endif
 
         jsi::Value get(jsi::Runtime& runtime, const jsi::PropNameID& prop) override
         {
@@ -321,6 +323,7 @@ namespace BabylonNative
         return false;
     }
 
+#if defined(__APPLE__) || defined(ANDROID)
     void UpdateXRView(WindowType window)
     {
         if (auto nativeModule{ g_nativeModule.lock() })
@@ -328,4 +331,5 @@ namespace BabylonNative
             nativeModule->UpdateXRView(window);
         }
     }
+#endif
 }
