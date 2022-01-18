@@ -1,7 +1,6 @@
 name: BabylonNative master branch update
 
 on:
-  workflow_dispatch:
   repository_dispatch:
     types: [babylonnative-master-update]
 
