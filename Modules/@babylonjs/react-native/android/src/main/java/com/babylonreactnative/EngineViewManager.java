@@ -16,7 +16,6 @@ import java.util.Map;
 public final class EngineViewManager extends SimpleViewManager<EngineView> {
     public static final int COMMAND_TAKE_SNAPSHOT = 0;
     public static final String COMMAND_TAKE_SNAPSHOT_NAME = "takeSnapshot";
-    private Boolean isTransparent = false;
 
     @NonNull
     @Override
@@ -25,15 +24,14 @@ public final class EngineViewManager extends SimpleViewManager<EngineView> {
     }
 
     @ReactProp(name = "isTransparent")
-    public void setIsTransparent(EngineView view, Boolean _isTransparent) {
-      isTransparent = _isTransparent;
+    public void setIsTransparent(EngineView view, Boolean isTransparent) {
+        view.setIsTransparent(isTransparent);
     }
-  
 
     @NonNull
     @Override
     protected EngineView createViewInstance(@NonNull ThemedReactContext reactContext) {
-        return new EngineView(reactContext, isTransparent);
+        return new EngineView(reactContext);
     }
 
     @Override
