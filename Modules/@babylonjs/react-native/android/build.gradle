@@ -41,6 +41,8 @@ buildscript {
     }
 }
 
+def graphics_api = safeExtGet('GRAPHICS_API', "OpenGL")
+
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 
@@ -63,8 +65,7 @@ android {
             cmake {
                 abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64'
                 arguments '-DANDROID_STL=c++_static',
-                        '-DENABLE_GLSLANG_BINARIES=OFF',
-                        '-DSPIRV_CROSS_CLI=OFF',
+                        "-DGRAPHICS_API=${graphics_api}",
                         "-DARCORE_LIBPATH=${extractedLibDir}/jni",
                         "-DFBJNI_INCPATH=${extractedLibDir}/fbjni/",
                         "-DFBJNI_LIBPATH=${extractedLibDir}/jni",
@@ -125,11 +126,11 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation 'com.facebook.react:react-native:+'  // From node_modules
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'com.google.ar:core:1.27.0'
+    implementation 'com.google.ar:core:1.22.0'
 
     api("com.facebook.fbjni:fbjni-java-only:0.0.3")
 
-    natives 'com.google.ar:core:1.27.0'
+    natives 'com.google.ar:core:1.22.0'
     fbjniHeaders 'com.facebook.fbjni:fbjni:0.0.2:headers'
     fbjniLibs 'com.facebook.fbjni:fbjni:0.0.2'
 }
