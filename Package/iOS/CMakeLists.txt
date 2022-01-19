@@ -26,6 +26,7 @@ set(PACKAGED_LIBS
     SPIRV
     spirv-cross-core
     spirv-cross-glsl
+    spirv-cross-hlsl
     spirv-cross-msl
     tinyexr
     UrlLib

@@ -36,7 +36,7 @@ static NSMutableArray* activeTouches = [NSMutableArray new];
         });
     } };
 
-    BabylonNative::Initialize(*GetJSIRuntime(bridge), std::move(jsDispatcher));
+    Babylon::Initialize(*GetJSIRuntime(bridge), std::move(jsDispatcher));
 
     [[NSNotificationCenter defaultCenter] removeObserver:self
         name:RCTBridgeWillInvalidateModulesNotification
@@ -51,7 +51,7 @@ static NSMutableArray* activeTouches = [NSMutableArray new];
 // NOTE: This happens during dev mode reload, when the JS engine is being shutdown and restarted.
 + (void)onBridgeWillInvalidate:(NSNotification*)notification
 {
-    BabylonNative::Deinitialize();
+    Babylon::Deinitialize();
 }
 
 + (void)updateView:(MTKView*)mtkView {
@@ -59,24 +59,24 @@ static NSMutableArray* activeTouches = [NSMutableArray new];
     const int width = static_cast<int>(mtkView.bounds.size.width * scale);
     const int height = static_cast<int>(mtkView.bounds.size.height * scale);
     if (width != 0 && height != 0) {
-        BabylonNative::UpdateView(mtkView, width, height);
+        Babylon::UpdateView((__bridge void*)mtkView, width, height);
     }
 }
 
 + (void)renderView {
-    BabylonNative::RenderView();
+    Babylon::RenderView();
 }
 
 + (void)resetView {
-    BabylonNative::ResetView();
+    Babylon::ResetView();
 }
 
 + (void)updateXRView:(MTKView*)mtkView {
-    BabylonNative::UpdateXRView(mtkView);
+    Babylon::UpdateXRView((__bridge void*)mtkView);
 }
 
 + (bool)isXRActive {
-    return BabylonNative::IsXRActive();
+    return Babylon::IsXRActive();
 }
 
 + (void)reportTouchEvent:(MTKView*)mtkView touches:(NSSet<UITouch*>*)touches event:(UIEvent*)event {
@@ -98,14 +98,14 @@ static NSMutableArray* activeTouches = [NSMutableArray new];
                         pointerId = [activeTouches count];
                         [activeTouches addObject:touch];
                     }
-                    BabylonNative::SetTouchButtonState(static_cast<uint32_t>(pointerId), true, x, y);
+                    Babylon::SetTouchButtonState(static_cast<uint32_t>(pointerId), true, x, y);
                     break;
                 }
 
                 case UITouchPhaseMoved: {
                     NSUInteger pointerId = [activeTouches indexOfObject:touch];
                     if (pointerId != NSNotFound) {
-                        BabylonNative::SetTouchPosition(static_cast<uint32_t>(pointerId), x, y);
+                        Babylon::SetTouchPosition(static_cast<uint32_t>(pointerId), x, y);
                     }
                     break;
                 }
@@ -115,7 +115,7 @@ static NSMutableArray* activeTouches = [NSMutableArray new];
                     NSUInteger pointerId = [activeTouches indexOfObject:touch];
                     if (pointerId != NSNotFound) {
                         [activeTouches replaceObjectAtIndex:pointerId withObject:[NSNull null]];
-                        BabylonNative::SetTouchButtonState(static_cast<uint32_t>(pointerId), false, x, y);
+                        Babylon::SetTouchButtonState(static_cast<uint32_t>(pointerId), false, x, y);
                     }
                     break;
                 }

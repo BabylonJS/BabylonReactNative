@@ -46,7 +46,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInter
         });
     } };
 
-    BabylonNative::Initialize(*jsiRuntime, std::move(jsDispatcher));
+    Babylon::Initialize(*jsiRuntime, std::move(jsDispatcher));
 }
 
 extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_setCurrentActivity(JNIEnv* env, jclass obj, jobject activity)
@@ -66,43 +66,43 @@ extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInter
 
 extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_updateView(JNIEnv* env, jclass obj, jobject surface)
 {
-    ANativeWindow* window{ ANativeWindow_fromSurface(env, surface) };
-    auto width{ static_cast<size_t>(ANativeWindow_getWidth(window)) };
-    auto height{ static_cast<size_t>(ANativeWindow_getHeight(window)) };
-    BabylonNative::UpdateView(window, width, height);
+    ANativeWindow* windowPtr{ ANativeWindow_fromSurface(env, surface) };
+    auto width{ static_cast<size_t>(ANativeWindow_getWidth(windowPtr)) };
+    auto height{ static_cast<size_t>(ANativeWindow_getHeight(windowPtr)) };
+    Babylon::UpdateView(windowPtr, width, height);
 }
 
 extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_renderView(JNIEnv* env, jclass obj)
 {
-    BabylonNative::RenderView();
+    Babylon::RenderView();
 }
 
 extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_resetView(JNIEnv* env, jclass obj)
 {
-    BabylonNative::ResetView();
+    Babylon::ResetView();
 }
 
 extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_updateXRView(JNIEnv* env, jclass obj, jobject surface)
 {
-    ANativeWindow* window{};
+    ANativeWindow* windowPtr{};
     if (surface)
     {
-        window = ANativeWindow_fromSurface(env, surface);
+        windowPtr = ANativeWindow_fromSurface(env, surface);
     }
-    BabylonNative::UpdateXRView(window);
+    Babylon::UpdateXRView(windowPtr);
 }
 
 extern "C" JNIEXPORT jboolean JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_isXRActive(JNIEnv* env, jclass obj)
 {
-    return BabylonNative::IsXRActive();
+    return Babylon::IsXRActive();
 }
 
 extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_setTouchButtonState(JNIEnv* env, jclass obj, jint pointerId, jboolean isDown, jint x, jint y)
 {
-    BabylonNative::SetTouchButtonState(static_cast<uint32_t>(pointerId), isDown, static_cast<uint32_t>(x), static_cast<uint32_t>(y));
+    Babylon::SetTouchButtonState(static_cast<uint32_t>(pointerId), isDown, static_cast<uint32_t>(x), static_cast<uint32_t>(y));
 }
 
 extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_setTouchPosition(JNIEnv* env, jclass obj, jint pointerId, jint x, jint y)
 {
-    BabylonNative::SetTouchPosition(static_cast<uint32_t>(pointerId), static_cast<uint32_t>(x), static_cast<uint32_t>(y));
+    Babylon::SetTouchPosition(static_cast<uint32_t>(pointerId), static_cast<uint32_t>(x), static_cast<uint32_t>(y));
 }
