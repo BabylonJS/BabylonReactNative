@@ -24,10 +24,11 @@ import com.facebook.react.uimanager.events.EventDispatcher;
 
 import java.io.ByteArrayOutputStream;
 
-public final class EngineView extends FrameLayout implements TextureView.SurfaceTextureListener, View.OnTouchListener {
+public final class EngineView extends FrameLayout implements SurfaceHolder.Callback, TextureView.SurfaceTextureListener, View.OnTouchListener {
     private static final FrameLayout.LayoutParams childViewLayoutParams = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-    private TextureView textureView;
-    private Surface surface;
+    private TextureView transparentTextureView;
+    private Surface transparentSurface = null;
+    private SurfaceView opaqueSurfaceView = null;
     private SurfaceView xrSurfaceView;
     private final EventDispatcher reactEventDispatcher;
     private Runnable renderRunnable;
@@ -35,11 +36,7 @@ public final class EngineView extends FrameLayout implements TextureView.Surface
     public EngineView(ReactContext reactContext) {
         super(reactContext);
 
-        this.textureView = new TextureView(reactContext);
-        this.textureView.setLayoutParams(EngineView.childViewLayoutParams);
-        this.textureView.setSurfaceTextureListener(this);
-        this.textureView.setOpaque(true);
-        this.addView(this.textureView);
+        this.setIsTransparent(false);
 
         this.xrSurfaceView = new SurfaceView(reactContext);
         this.xrSurfaceView.setLayoutParams(childViewLayoutParams);
@@ -71,33 +68,76 @@ public final class EngineView extends FrameLayout implements TextureView.Surface
     // TextureView related
 
     public void setIsTransparent(Boolean isTransparent) {
-        this.textureView.setOpaque(!isTransparent);
+        if (isTransparent) {
+            if (this.opaqueSurfaceView != null) {
+                opaqueSurfaceView.setVisibility(View.GONE);
+                this.opaqueSurfaceView = null;
+            }
+            if (this.transparentTextureView == null) {
+                this.transparentTextureView = new TextureView(this.getContext());
+                this.transparentTextureView.setLayoutParams(EngineView.childViewLayoutParams);
+                this.transparentTextureView.setSurfaceTextureListener(this);
+                this.transparentTextureView.setOpaque(false);
+                this.addView(this.transparentTextureView);
+            }
+        } else {
+            if (this.transparentTextureView != null) {
+                this.transparentTextureView.setVisibility(View.GONE);
+                this.transparentTextureView = null;
+            }
+            if (this.opaqueSurfaceView == null) {
+                this.opaqueSurfaceView = new SurfaceView(this.getContext());
+                this.opaqueSurfaceView.setLayoutParams(EngineView.childViewLayoutParams);
+                this.opaqueSurfaceView.getHolder().addCallback(this);
+                this.addView(this.opaqueSurfaceView);
+            }
+        }
+        // xr view needs to be on top of views that might be created after it.
+        if (this.xrSurfaceView != null) {
+            this.xrSurfaceView.bringToFront();
+        }
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        this.startRenderLoop();
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int width, int height) {
+        BabylonNativeInterop.updateView(surfaceHolder.getSurface());
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+        this.removeCallbacks(this.renderRunnable);
+        this.renderRunnable = null;
     }
 
     @Override
     public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
         this.startRenderLoop();
-        surface = new Surface(surfaceTexture);
-        BabylonNativeInterop.updateView(surface);
+        transparentSurface = new Surface(surfaceTexture);
+        BabylonNativeInterop.updateView(transparentSurface);
     }
 
     @Override
     public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
-        surface = new Surface(surfaceTexture);
-        BabylonNativeInterop.updateView(surface);
+        transparentSurface = new Surface(surfaceTexture);
+        BabylonNativeInterop.updateView(transparentSurface);
     }
 
     @Override
     public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surfaceTexture) {
         this.stopRenderLoop();
-        surface.release();
+        transparentSurface.release();
         return false;
     }
 
     @Override
     public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surfaceTexture) {
-        surface = new Surface(surfaceTexture);
-        BabylonNativeInterop.updateView(surface);
+        transparentSurface = new Surface(surfaceTexture);
+        BabylonNativeInterop.updateView(transparentSurface);
     }
 
     // ------------------------------------
@@ -128,9 +168,11 @@ public final class EngineView extends FrameLayout implements TextureView.Surface
         helperThread.start();
         final Handler helperThreadHandler = new Handler(helperThread.getLooper());
 
-        Surface sourceSurface = this.surface;
+        Surface sourceSurface = this.transparentSurface;
         if (BabylonNativeInterop.isXRActive()) {
             sourceSurface = this.xrSurfaceView.getHolder().getSurface();
+        } else if (this.opaqueSurfaceView != null) {
+            sourceSurface = this.opaqueSurfaceView.getHolder().getSurface();
         }
         PixelCopy.request(sourceSurface, bitmap, getOnPixelCopyFinishedListener(bitmap, helperThread), helperThreadHandler);
     }
