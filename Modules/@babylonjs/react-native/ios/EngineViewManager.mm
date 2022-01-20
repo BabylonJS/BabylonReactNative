@@ -35,10 +35,8 @@
     BOOL isTransparent = [isTransparentFlag intValue] == 1;
     if(isTransparent){
         [self setOpaque:NO];
-        [self.window setOpaque:NO];
     } else {
         [self setOpaque:YES];
-        [self.window setOpaque:YES];
     }
     self.isTransparent = isTransparent;
 }
