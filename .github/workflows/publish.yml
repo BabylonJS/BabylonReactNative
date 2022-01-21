@@ -20,11 +20,12 @@ jobs:
           cmake-version: '3.19.6' # See https://gitlab.kitware.com/cmake/cmake/-/issues/22021
       - name: Setup Ninja
         run: brew install ninja
-      - name: Make symlink
-        run: ln -s ${{ env.BRN_Version }} Playground
       - name: NPM Install (Playground)
         run: npm install
-        working-directory: ./Apps/Playground/Playground
+        working-directory: ./Apps/Playground
+      - name: NPM Install (React Native ${{ env.BRN_Version }})
+        run: npm run select --reactNative ${{ env.BRN_Version }}
+        working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
@@ -50,12 +51,12 @@ jobs:
         uses: nuget/setup-nuget@v1
         with:
           nuget-version: '5.x'
-      - name: Make symlink
-        run: cmd /c mklink /J "Playground" "${{ env.BRN_Version }}"
-        working-directory: ./Apps/Playground
       - name: NPM Install (Playground)
         run: npm install
-        working-directory: ./Apps/Playground/Playground
+        working-directory: ./Apps/Playground
+      - name: NPM Install (React Native ${{ env.BRN_Version }})
+        run: npm run select --reactNative ${{ env.BRN_Version }}
+        working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
