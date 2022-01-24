@@ -16,7 +16,7 @@ function selectRN(version) {
 
 // First arg will be 'node', second arg will be 'tools.js'
 const [command] = process.argv.slice(2);
-const [version] = process.argv.slice(4);
+const [version] = process.argv.slice(3);
 
 if (command === 'selectRN') {
   selectRN(version);
