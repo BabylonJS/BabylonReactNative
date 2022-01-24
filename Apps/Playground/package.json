@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "select": "node scripts/version.js selectRN ${reactNative}"
+    "select": "node scripts/version.js selectRN"
   },
   "devDependencies": {
     "chalk": "^4.1.1",

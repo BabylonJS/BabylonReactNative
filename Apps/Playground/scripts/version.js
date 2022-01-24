@@ -14,7 +14,7 @@ function selectRN(version) {
   shelljs.exec('npm install', {cwd: './Playground'});
 }
 
-// First arg will be 'node', second arg will be 'tools.js'
+// First arg will be 'node', second arg will be 'version.js'
 const [command] = process.argv.slice(2);
 const [version] = process.argv.slice(3);
 
