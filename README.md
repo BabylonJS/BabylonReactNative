@@ -26,25 +26,6 @@ This quick overview will help you get started developing in the Babylon React Na
 
 If you are interested in making contributions, be sure to also review [CONTRIBUTING.md](CONTRIBUTING.md).
 
-### **Chosing a react-native version**
-
-Build script and Package building scripts expect to use a folder named `Apps/Playground/Playground`. Create a symlink to a react-native version in `Apps/Playground`.
-For a react-native 0.64 version:
-
-on MacOS/Linux:
-```
-cd Apps/Playground
-ln -s 0.64 Playground
-```
-
-on Windows:
-```
-cd Apps/Playground
-mklink /J Playground 0.64
-```
-
-Then building and packaging steps are the same.
-
 ### **Preparing a new Repo**
 
 **Required Tools:** [git](https://git-scm.com/), [Node.js (16.13.0+)](https://nodejs.org/en/download/)
@@ -55,12 +36,14 @@ Step 1 for all development environments and targets is to clone the repo. Use a 
 git clone https://github.com/BabylonJS/BabylonReactNative
 ```
 
-The Playground sample/test app is a standard React Native app, and as such makes extensive use of NPM packages to supply its dependencies, so it's also necessary to install these packages.
+Then, a React Native target must be chosen. For a React-Native 0.64 build:
 
 ```
-cd Apps/Playground/Playground
+cd Apps/Playground
 npm install
+npm run select --reactNative 0.64
 ```
+Selecting the React Native install will also install all NPM packages and its dependencies for the Playground sample/test app.
 
 This will also automatically do the following to prepare your repo for development:
 
