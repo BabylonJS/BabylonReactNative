@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "EngineView.h"
 #include "EngineView.g.cpp"
+#include "JSValueXaml.h"
 
 using namespace winrt::Windows::Devices::Input;
 using namespace winrt::Windows::Foundation;
@@ -11,6 +12,7 @@ using namespace winrt::Windows::UI::Xaml;
 using namespace winrt::Windows::UI::Xaml::Input;
 using namespace winrt::Windows::UI::Xaml::Media;
 using namespace winrt::Windows::UI::Xaml::Controls;
+using namespace winrt::Microsoft::ReactNative;
 
 namespace winrt::BabylonReactNative::implementation {
     EngineView::EngineView() {
@@ -167,5 +169,23 @@ namespace winrt::BabylonReactNative::implementation {
     void EngineView::OnRendering()
     {
         BabylonNative::RenderView();
+    }
+
+    void EngineView::UpdateProperties(IJSValueReader const& reader)
+    {
+        auto const& propertyMap = JSValueObject::ReadFrom(reader);
+
+        for (auto const& pair : propertyMap)
+        {
+            auto const& propertyName = pair.first;
+            auto const& propertyValue = pair.second;
+
+            if (propertyName == "isTransparent")
+            {
+                bool isTransparent = propertyValue.AsBoolean();
+                auto engineView = static_cast<winrt::Windows::UI::Xaml::Controls::SwapChainPanel>(*this);
+                engineView.CompositeMode(isTransparent ? winrt::Windows::UI::Xaml::Media::ElementCompositeMode::SourceOver : winrt::Windows::UI::Xaml::Media::ElementCompositeMode::Inherit);
+            }
+        }
     }
 }
