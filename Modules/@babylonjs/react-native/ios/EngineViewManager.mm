@@ -66,10 +66,6 @@
     if ([BabylonNativeInterop isXRActive]) {
         if (!xrView) {
             xrView = [[MTKView alloc] initWithFrame:self.bounds device:self.device];
-            if(self.isTransparent == YES){
-                [xrView setOpaque:NO];
-                [xrView.window setOpaque:NO];
-            }
             xrView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             xrView.userInteractionEnabled = false;
             [self addSubview:xrView];

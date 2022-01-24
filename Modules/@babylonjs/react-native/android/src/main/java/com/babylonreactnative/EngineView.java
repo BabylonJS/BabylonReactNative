@@ -70,7 +70,7 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
     public void setIsTransparent(Boolean isTransparent) {
         if (isTransparent) {
             if (this.opaqueSurfaceView != null) {
-                opaqueSurfaceView.setVisibility(View.GONE);
+                this.opaqueSurfaceView.setVisibility(View.GONE);
                 this.opaqueSurfaceView = null;
             }
             if (this.transparentTextureView == null) {
@@ -117,13 +117,13 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
     @Override
     public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
         this.startRenderLoop();
-        transparentSurface = new Surface(surfaceTexture);
+        this.transparentSurface = new Surface(surfaceTexture);
         BabylonNativeInterop.updateView(transparentSurface);
     }
 
     @Override
     public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
-        transparentSurface = new Surface(surfaceTexture);
+        this.transparentSurface = new Surface(surfaceTexture);
         BabylonNativeInterop.updateView(transparentSurface);
     }
 
@@ -136,7 +136,7 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
 
     @Override
     public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surfaceTexture) {
-        transparentSurface = new Surface(surfaceTexture);
+        this.transparentSurface = new Surface(surfaceTexture);
         BabylonNativeInterop.updateView(transparentSurface);
     }
 
