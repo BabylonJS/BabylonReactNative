@@ -117,27 +117,35 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
     @Override
     public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
         this.startRenderLoop();
-        this.transparentSurface = new Surface(surfaceTexture);
-        BabylonNativeInterop.updateView(transparentSurface);
+        this.acquireNewTransparentSurface(surfaceTexture);
+        BabylonNativeInterop.updateView(this.transparentSurface);
     }
 
     @Override
     public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
-        this.transparentSurface = new Surface(surfaceTexture);
-        BabylonNativeInterop.updateView(transparentSurface);
+        this.acquireNewTransparentSurface(surfaceTexture);
+        BabylonNativeInterop.updateView(this.transparentSurface);
     }
 
     @Override
     public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surfaceTexture) {
         this.stopRenderLoop();
-        transparentSurface.release();
+        this.transparentSurface.release();
+        this.transparentSurface = null;
         return false;
     }
 
     @Override
     public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surfaceTexture) {
+        this.acquireNewTransparentSurface(surfaceTexture);
+        BabylonNativeInterop.updateView(this.transparentSurface);
+    }
+
+    private void acquireNewTransparentSurface(@NonNull SurfaceTexture surfaceTexture) {
+        if (this.transparentSurface != null) {
+            this.transparentSurface.release();
+        }
         this.transparentSurface = new Surface(surfaceTexture);
-        BabylonNativeInterop.updateView(transparentSurface);
     }
 
     // ------------------------------------
