@@ -24,7 +24,7 @@ jobs:
         run: npm install
         working-directory: ./Apps/Playground
       - name: NPM Install (React Native ${{ env.BRN_Version }})
-        run: npm run select --reactNative ${{ env.BRN_Version }}
+        run: npm run select ${{ env.BRN_Version }}
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install
@@ -100,7 +100,7 @@ jobs:
         run: npm install
         working-directory: ./Apps/Playground
       - name: NPM Install (React Native ${{ env.BRN_Version }})
-        run: npm run select --reactNative ${{ env.BRN_Version }}
+        run: npm run select ${{ env.BRN_Version }}
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install

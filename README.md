@@ -41,7 +41,7 @@ Then, a React Native target must be chosen. For a React-Native 0.64 build:
 ```
 cd Apps/Playground
 npm install
-npm run select --reactNative 0.64
+npm run select 0.64
 ```
 Selecting the React Native install will also install all NPM packages and its dependencies for the Playground sample/test app.
 
