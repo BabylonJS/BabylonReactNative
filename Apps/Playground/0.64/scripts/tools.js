@@ -4,17 +4,17 @@ const chalk = require('chalk');
 
 function iosCmake() {
   console.log(chalk.black.bgCyan('Running CMake for iOS...'));
-  shelljs.exec('cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../submodules/BabylonNative/Dependencies/ios-cmake/ios.toolchain.cmake -DPLATFORM=OS64COMBINED -DENABLE_ARC=0 -DENABLE_BITCODE=1 -DDEPLOYMENT_TARGET=12 -DENABLE_GLSLANG_BINARIES=OFF -DSPIRV_CROSS_CLI=OFF -DENABLE_PCH=OFF .', {cwd: 'node_modules/@babylonjs/react-native/ios'});
+  shelljs.exec('cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../submodules/BabylonNative/Dependencies/ios-cmake/ios.toolchain.cmake -DPLATFORM=OS64COMBINED -DENABLE_ARC=0 -DENABLE_BITCODE=1 -DDEPLOYMENT_TARGET=12 -DENABLE_PCH=OFF .', {cwd: 'node_modules/@babylonjs/react-native/ios'});
 }
 
 function postInstall() {
   const version = shelljs.exec('npm --version', {silent: true});
 
   console.log(chalk.black.bgCyan('Installing Babylon React Native npm packages...'));
-  shelljs.exec('npm install --legacy-peer-deps', {cwd: '../../Modules/@babylonjs/react-native'});
+  shelljs.exec('npm install --legacy-peer-deps', {cwd: '../../../Modules/@babylonjs/react-native'});
 
   console.log(chalk.black.bgCyan('Updating submodules...'));
-  shelljs.exec('git submodule update --init --recursive', {cwd: '../../'});
+  shelljs.exec('git submodule update --init --recursive', {cwd: '../../../'});
 
   if (os.platform() === 'darwin') {
     iosCmake();
