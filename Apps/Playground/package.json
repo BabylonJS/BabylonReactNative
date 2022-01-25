@@ -3,7 +3,31 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+<<<<<<< HEAD
     "select": "node scripts/version.js selectRN"
+=======
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "windows": "react-native run-windows --arch x64",
+    "windows-verbose": "react-native run-windows --arch x64 --logging",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "postinstall": "node scripts/tools.js postinstall",
+    "iosCmake": "node scripts/tools.js iosCMake"
+  },
+  "dependencies": {
+    "@babylonjs/core": "5.0.0-alpha.65",
+    "@babylonjs/loaders": "5.0.0-alpha.65",
+    "@babylonjs/react-native": "file:../../Modules/@babylonjs/react-native",
+    "@babylonjs/react-native-windows": "file:../../Modules/@babylonjs/react-native-windows",
+    "@react-native-community/slider": "4.0.0-rc.3",
+    "logkitty": "^0.7.1",
+    "react": "^17.0.1",
+    "react-native": "^0.64.1",
+    "react-native-permissions": "^3.0.0",
+    "react-native-windows": "^0.64.1"
+>>>>>>> 5e2ad3c0b2d80f9f866d2da09b3befc5384354e0
   },
   "devDependencies": {
     "chalk": "^4.1.1",
