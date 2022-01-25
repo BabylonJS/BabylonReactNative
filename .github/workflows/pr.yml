@@ -3,6 +3,8 @@ on:
   pull_request:
     branches:
       - master
+env:
+  BRN_Version: 0.64
 
 jobs:
   build-android:
@@ -21,6 +23,9 @@ jobs:
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
+      - name: NPM Install (React Native ${{ env.BRN_Version }})
+        run: npm run select ${{ env.BRN_Version }}
+        working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
@@ -37,6 +42,9 @@ jobs:
           submodules: 'recursive'
       - name: NPM Install (Playground)
         run: npm install
+        working-directory: ./Apps/Playground
+      - name: NPM Install (React Native ${{ env.BRN_Version }})
+        run: npm run select --reactNative ${{ env.BRN_Version }}
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install
@@ -60,6 +68,9 @@ jobs:
         run: brew install ninja
       - name: NPM Install (Playground)
         run: npm install
+        working-directory: ./Apps/Playground
+      - name: NPM Install (React Native ${{ env.BRN_Version }})
+        run: npm run select --reactNative ${{ env.BRN_Version }}
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install
@@ -87,6 +98,9 @@ jobs:
           nuget-version: '5.x'
       - name: NPM Install (Playground)
         run: npm install
+        working-directory: ./Apps/Playground
+      - name: NPM Install (React Native ${{ env.BRN_Version }})
+        run: npm run select ${{ env.BRN_Version }}
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install
