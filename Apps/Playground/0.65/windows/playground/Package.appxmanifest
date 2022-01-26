@@ -8,7 +8,7 @@
 
   <Identity
     Name="ea4725ba-8a89-4cd9-b0cb-5eb16ddaecba"
-    Publisher="CN=cedricguillemet"
+    Publisher="CN=cedri"
     Version="1.0.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="ea4725ba-8a89-4cd9-b0cb-5eb16ddaecba" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
