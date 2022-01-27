@@ -26,7 +26,7 @@ App::App() noexcept
     InstanceSettings().UseFastRefresh(false);
 #else
     JavaScriptBundleFile(L"index");
-    InstanceSettings().UseWebDebugger(true);
+    InstanceSettings().UseWebDebugger(false); // BabylonReactNative accesses the jsi runtime, which isn't possible with the web debugger
     InstanceSettings().UseFastRefresh(true);
 #endif
 
