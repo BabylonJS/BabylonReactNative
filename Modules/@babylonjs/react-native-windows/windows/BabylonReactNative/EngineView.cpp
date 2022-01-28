@@ -184,7 +184,7 @@ namespace winrt::BabylonReactNative::implementation {
             {
                 bool isTransparent = propertyValue.AsBoolean();
                 auto engineView = static_cast<winrt::Windows::UI::Xaml::Controls::SwapChainPanel>(*this);
-                engineView.CompositeMode(isTransparent ? winrt::Windows::UI::Xaml::Media::ElementCompositeMode::SourceOver : winrt::Windows::UI::Xaml::Media::ElementCompositeMode::Inherit);
+                engineView.CompositeMode(isTransparent ? winrt::Windows::UI::Xaml::Media::ElementCompositeMode::MinBlend : winrt::Windows::UI::Xaml::Media::ElementCompositeMode::Inherit);
             }
         }
     }
