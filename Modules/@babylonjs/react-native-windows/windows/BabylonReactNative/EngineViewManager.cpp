@@ -47,8 +47,7 @@ namespace winrt::BabylonReactNative::implementation {
 
         if (auto engineView = view.try_as<EngineView>()) {
             engineView->UpdateProperties(propertyMapReader);
-        }
-        else {
+        } else {
             OutputDebugStringW(L"Type deduction for EngineView failed.");
         }
     }
