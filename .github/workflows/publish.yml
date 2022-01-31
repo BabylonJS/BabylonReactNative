@@ -3,12 +3,12 @@ on:
   release:
     types: [published]
 
-env:
-  BRN_Version: 0.64
 
 jobs:
   select-react-native-version:
     runs-on: macos-latest
+    outputs:
+      BRN_Version: ${{ steps.stepVersion.outputs.version }}
     steps:
       - uses: actions-ecosystem/action-regex-match@v2
         id: regex-match
@@ -20,13 +20,11 @@ jobs:
           echo "- Tag ${GITHUB_REF/refs\/tags\//}"
           echo "- Name: ${{ github.event.release.name }}"
           echo "- Description: ${{ github.event.release.body }}"
-      - name: Set environment variable
-        run: |
-          echo "BRN_Version=${{ steps.regex-match.outputs.match }}" >> $GITHUB_ENV
-      - name: Using React Native ${{ env.BRN_Version }}
-        run: echo ${{ env.BRN_Version }}
+      - id: stepVersion
+        run: "::set-output name=${{ steps.regex-match.outputs.match }}"
   build-android-ios:
     runs-on: macos-latest
+    needs: select-react-native-version
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2.3.3
@@ -41,8 +39,8 @@ jobs:
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
-      - name: NPM Install (React Native ${{ env.BRN_Version }})
-        run: npm run select --reactNative ${{ env.BRN_Version }}
+      - name: NPM Install (React Native ${{ needs.select-react-native-version.outputs.BRN_Version }})
+        run: npm run select --reactNative ${{ needs.select-react-native-version.outputs.BRN_Version }}
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install
@@ -58,6 +56,7 @@ jobs:
 
   build-windows:
     runs-on: windows-latest
+    needs: select-react-native-version
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2.3.3
@@ -72,8 +71,8 @@ jobs:
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
-      - name: NPM Install (React Native ${{ env.BRN_Version }})
-        run: npm run select --reactNative ${{ env.BRN_Version }}
+      - name: NPM Install (React Native ${{ needs.select-react-native-version.outputs.BRN_Version }})
+        run: npm run select --reactNative ${{ needs.select-react-native-version.outputs.BRN_Version }}
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install
