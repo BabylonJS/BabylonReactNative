@@ -22,7 +22,7 @@ jobs:
           echo "- Description: ${{ github.event.release.body }}"
       - name: Set environment variable
         run: |
-          echo "BRN_Version=${{ steps.regex-match.outputs.match }}" >> $GITHUB_ENV
+          echo "env.BRN_Version=${{ steps.regex-match.outputs.match }}" >> $GITHUB_ENV
   build-android-ios:
     runs-on: macos-latest
     steps:
