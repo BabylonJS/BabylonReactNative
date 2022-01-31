@@ -7,6 +7,22 @@ env:
   BRN_Version: 0.64
 
 jobs:
+  select-react-native-version:
+    runs-on: macos-latest
+    steps:
+      - uses: actions-ecosystem/action-regex-match@v2
+        id: regex-match
+        with:
+          text: ${{ github.event.release.name }}
+          regex: '^(\d+\.)?(\d+)'
+      - name: Debug infos
+        run: |
+          echo "- Tag ${GITHUB_REF/refs\/tags\//}"
+          echo "- Name: ${{ github.event.release.name }}"
+          echo "- Description: ${{ github.event.release.body }}"
+      - name: Set environment variable
+        run: |
+          echo "BRN_Version=${{ steps.regex-match.outputs.match }}" >> $GITHUB_ENV
   build-android-ios:
     runs-on: macos-latest
     steps:
@@ -73,7 +89,7 @@ jobs:
           path: Package/Assembled-Windows
 
   package:
-    needs: [build-android-ios, build-windows]
+    needs: [select-react-native-version, build-android-ios, build-windows]
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
@@ -93,23 +109,23 @@ jobs:
           path: Package/Assembled-Windows
       - name: Display structure of downloaded Assembled and Assembled-Windows folders
         run: ls -R
-      - name: Setup Node.js
-        uses: actions/setup-node@v2.1.2
-        with:
-          node-version: '12.x'
-          registry-url: 'https://registry.npmjs.org'
-          scope: '@babylonjs'
-      - name: Version & Publish Package @babylonjs/react-native
-        run: |
-          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
-          npm publish --access public
-        working-directory: ./Package/Assembled
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Version & Publish Package @babylonjs/react-native-windows
-        run: |
-          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
-          npm publish --access public
-        working-directory: ./Package/Assembled-Windows
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+#      - name: Setup Node.js
+#        uses: actions/setup-node@v2.1.2
+#        with:
+#          node-version: '12.x'
+#          registry-url: 'https://registry.npmjs.org'
+#          scope: '@babylonjs'
+#      - name: Version & Publish Package @babylonjs/react-native
+#        run: |
+#          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
+#          npm publish --access public
+#        working-directory: ./Package/Assembled
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+#      - name: Version & Publish Package @babylonjs/react-native-windows
+#        run: |
+#          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
+#          npm publish --access public
+#        working-directory: ./Package/Assembled-Windows
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
