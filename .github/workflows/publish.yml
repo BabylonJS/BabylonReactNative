@@ -8,7 +8,7 @@ jobs:
   select-react-native-version:
     runs-on: macos-latest
     outputs:
-      BRN_Version: ${{ steps.stepVersion.outputs.version }}
+      version: ${{ steps.stepVersion.outputs.version }}
     steps:
       - uses: actions-ecosystem/action-regex-match@v2
         id: regex-match
@@ -21,7 +21,7 @@ jobs:
           echo "- Name: ${{ github.event.release.name }}"
           echo "- Description: ${{ github.event.release.body }}"
       - id: stepVersion
-        run: echo "::set-output name=${{ steps.regex-match.outputs.match }}"
+        run: echo "::set-output name=version::${{ steps.regex-match.outputs.match }}"
   build-android-ios:
     runs-on: macos-latest
     needs: select-react-native-version
@@ -39,8 +39,8 @@ jobs:
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
-      - name: NPM Install (React Native ${{ needs.select-react-native-version.outputs.BRN_Version }})
-        run: npm run select --reactNative ${{ needs.select-react-native-version.outputs.BRN_Version }}
+      - name: NPM Install (React Native ${{ needs.select-react-native-version.outputs.version }})
+        run: npm run select --reactNative ${{ needs.select-react-native-version.outputs.version }}
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install
@@ -71,8 +71,8 @@ jobs:
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
-      - name: NPM Install (React Native ${{ needs.select-react-native-version.outputs.BRN_Version }})
-        run: npm run select --reactNative ${{ needs.select-react-native-version.outputs.BRN_Version }}
+      - name: NPM Install (React Native ${{ needs.select-react-native-version.outputs.version }})
+        run: npm run select --reactNative ${{ needs.select-react-native-version.outputs.version }}
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install
