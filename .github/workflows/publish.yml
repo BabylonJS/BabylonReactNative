@@ -3,9 +3,6 @@ on:
   release:
     types: [published]
 
-env:
-  BRN_Version: 0.64
-
 jobs:
   select-react-native-version:
     runs-on: macos-latest
@@ -22,7 +19,7 @@ jobs:
           echo "- Description: ${{ github.event.release.body }}"
       - name: Set environment variable
         run: |
-          echo "env.BRN_Version=${{ steps.regex-match.outputs.match }}" >> $GITHUB_ENV
+          echo "BRN_Version=${{ steps.regex-match.outputs.match }}" >> $GITHUB_ENV
   build-android-ios:
     runs-on: macos-latest
     steps:
