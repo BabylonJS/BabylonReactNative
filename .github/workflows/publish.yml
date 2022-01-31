@@ -21,7 +21,7 @@ jobs:
           echo "- Name: ${{ github.event.release.name }}"
           echo "- Description: ${{ github.event.release.body }}"
       - id: stepVersion
-        run: "::set-output name=${{ steps.regex-match.outputs.match }}"
+        run: echo "::set-output name=${{ steps.regex-match.outputs.match }}"
   build-android-ios:
     runs-on: macos-latest
     needs: select-react-native-version
