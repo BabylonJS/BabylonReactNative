@@ -1,0 +1,38 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Build & Debug Android",
+            "cwd": "${workspaceFolder}/Apps/Playground",
+            "type": "reactnativedirect",
+            "request": "launch",
+            "platform": "android"
+        },
+        {
+            "name": "Build & Debug iOS on Device",
+            "cwd": "${workspaceFolder}/Apps/Playground",
+            "type": "reactnativedirect",
+            "request": "launch",
+            "platform": "ios",
+            "port": 9221,
+            "target": "device"
+        },
+        {
+            "name": "Attach to Android",
+            "cwd": "${workspaceFolder}/Apps/Playground",
+            "type": "reactnativedirect",
+            "request": "attach"
+        },
+        {
+            "name": "Attach to iOS on Device",
+            "cwd": "${workspaceFolder}/Apps/Playground",
+            "type": "reactnativedirect",
+            "request": "attach",
+            "platform": "ios",
+            "port": 9221
+        },
+    ]
+}
