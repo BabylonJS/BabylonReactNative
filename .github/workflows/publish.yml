@@ -46,7 +46,7 @@ jobs:
         run: npm install
         working-directory: ./Package
       - name: Gulp
-        run: npx gulp
+        run: npx gulp --reactNative ${{ needs.select-react-native-version.outputs.version }}
         working-directory: ./Package
       - name: Upload Assembled Folder
         uses: actions/upload-artifact@v2
@@ -78,7 +78,7 @@ jobs:
         run: npm install
         working-directory: ./Package
       - name: Git (Windows)
-        run: npx gulp initializeSubmodulesWindowsAgent
+        run: npx gulp initializeSubmodulesWindowsAgent --reactNative ${{ needs.select-react-native-version.outputs.version }}
         working-directory: ./Package
       - name: Gulp (Windows)
         run: npx gulp buildUWPPublish
