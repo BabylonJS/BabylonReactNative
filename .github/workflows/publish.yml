@@ -39,7 +39,7 @@ jobs:
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
-      - name: NPM Install (React Native ${{ needs.select-react-native-version.outputs.version }})
+      - name: Select React Native Version ${{ needs.select-react-native-version.outputs.version }}
         run: npm run select --reactNative ${{ needs.select-react-native-version.outputs.version }}
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
