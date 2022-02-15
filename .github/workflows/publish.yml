@@ -3,12 +3,28 @@ on:
   release:
     types: [published]
 
-env:
-  BRN_Version: 0.64
 
 jobs:
+  select-react-native-version:
+    runs-on: macos-latest
+    outputs:
+      version: ${{ steps.stepVersion.outputs.version }}
+    steps:
+      - uses: actions-ecosystem/action-regex-match@v2
+        id: regex-match
+        with:
+          text: ${{ github.event.release.name }}
+          regex: '^(\d+\.)?(\d+)'
+      - name: Release infos
+        run: |
+          echo "- Tag ${GITHUB_REF/refs\/tags\//}"
+          echo "- Name: ${{ github.event.release.name }}"
+          echo "- Description: ${{ github.event.release.body }}"
+      - id: stepVersion
+        run: echo "::set-output name=version::${{ steps.regex-match.outputs.match }}"
   build-android-ios:
     runs-on: macos-latest
+    needs: select-react-native-version
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2.3.3
@@ -23,14 +39,14 @@ jobs:
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
-      - name: NPM Install (React Native ${{ env.BRN_Version }})
-        run: npm run select --reactNative ${{ env.BRN_Version }}
+      - name: Select React Native Version ${{ needs.select-react-native-version.outputs.version }}
+        run: npm run select --reactNative ${{ needs.select-react-native-version.outputs.version }}
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
       - name: Gulp
-        run: npx gulp
+        run: npx gulp --reactNative ${{ needs.select-react-native-version.outputs.version }}
         working-directory: ./Package
       - name: Upload Assembled Folder
         uses: actions/upload-artifact@v2
@@ -40,6 +56,7 @@ jobs:
 
   build-windows:
     runs-on: windows-latest
+    needs: select-react-native-version
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2.3.3
@@ -54,14 +71,14 @@ jobs:
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
-      - name: NPM Install (React Native ${{ env.BRN_Version }})
-        run: npm run select --reactNative ${{ env.BRN_Version }}
+      - name: NPM Install (React Native ${{ needs.select-react-native-version.outputs.version }})
+        run: npm run select --reactNative ${{ needs.select-react-native-version.outputs.version }}
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
       - name: Git (Windows)
-        run: npx gulp initializeSubmodulesWindowsAgent
+        run: npx gulp initializeSubmodulesWindowsAgent --reactNative ${{ needs.select-react-native-version.outputs.version }}
         working-directory: ./Package
       - name: Gulp (Windows)
         run: npx gulp buildUWPPublish
@@ -73,7 +90,7 @@ jobs:
           path: Package/Assembled-Windows
 
   package:
-    needs: [build-android-ios, build-windows]
+    needs: [select-react-native-version, build-android-ios, build-windows]
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
