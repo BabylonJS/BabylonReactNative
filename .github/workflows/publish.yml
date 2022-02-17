@@ -55,7 +55,7 @@ jobs:
           path: Package/Assembled
 
   build-windows:
-    runs-on: windows-latest
+    runs-on: windows-2019
     needs: select-react-native-version
     steps:
       - name: Checkout Repo

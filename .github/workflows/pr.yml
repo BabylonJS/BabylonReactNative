@@ -80,7 +80,7 @@ jobs:
         working-directory: ./Package
 
   build-windows:
-    runs-on: windows-latest
+    runs-on: windows-2019
     strategy:
       matrix:
         platform: [x86, x64, ARM64]
