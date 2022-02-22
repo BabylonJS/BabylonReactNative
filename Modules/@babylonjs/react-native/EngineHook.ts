@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Platform } from 'react-native';
+import { AppState, AppStateStatus, Platform } from 'react-native';
 import { PERMISSIONS, check, request } from 'react-native-permissions';
 import { Engine, WebXRSessionManager, WebXRExperienceHelper, Color4, Tools } from '@babylonjs/core';
 import { ReactNativeEngine } from './ReactNativeEngine';
@@ -183,6 +183,44 @@ declare var _native: {
             },
         });
     }
+}
+
+export function useAppState(): string {
+    const [appState, setAppState] = useState(AppState.currentState);
+
+    useEffect(() => {
+        const onAppStateChanged = (appState: AppStateStatus) => {
+            setAppState(appState);
+        };
+
+        AppState.addEventListener("change", onAppStateChanged);
+
+        return () => {
+            AppState.removeEventListener("change", onAppStateChanged);
+        }
+    }, []);
+
+    return appState;
+}
+
+export function useRenderLoop(engine: ReactNativeEngine | undefined, renderCallback: () => void): void {
+    const appState = useAppState();
+
+    useEffect(() => {
+        if (engine && appState === "active") {
+            if (!engine.isDisposed) {
+                engine.runRenderLoop(renderCallback);
+
+                return () => {
+                    if (!engine.isDisposed) {
+                        engine.stopRenderLoop();
+                    }
+                };
+            }
+        }
+
+        return undefined;
+    }, [appState]);
 }
 
 export function useEngine(): Engine | undefined {
