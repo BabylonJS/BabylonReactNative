@@ -52,5 +52,5 @@ export function useRenderLoop(engine: ReactNativeEngine | undefined, renderCallb
         }
 
         return undefined;
-    }, [appState]);
+    }, [appState, engine]);
 }
