@@ -26,7 +26,13 @@
   <PropertyGroup Label="UserMacros">
     <AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
   </PropertyGroup>
-  <PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)..\..\0.64\windows\$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <OutDir>$(SolutionDir)..\..\0.64\windows\$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)..\..\0.64\windows\$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutDir>
   </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
@@ -104,11 +110,23 @@
     <ClCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <AllowIsolation Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</AllowIsolation>
+    </Link>
+    <Link>
+      <UACUIAccess Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</UACUIAccess>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
     <ClCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <AllowIsolation Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</AllowIsolation>
+    </Link>
+    <Link>
+      <UACUIAccess Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</UACUIAccess>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="MainPage.h">
