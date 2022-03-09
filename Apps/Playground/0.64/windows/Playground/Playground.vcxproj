@@ -26,6 +26,10 @@
   <PropertyGroup Label="UserMacros">
     <AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
   </PropertyGroup>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutDir>$(SolutionDir)..\..\0.64\windows\$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutDir>
+  </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|ARM">
       <Configuration>Debug</Configuration>

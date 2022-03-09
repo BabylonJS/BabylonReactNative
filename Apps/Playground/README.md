@@ -98,6 +98,12 @@ Disable use of webDebugger in `Apps.cpp` because BabylonReactNative accesses the
 InstanceSettings().UseWebDebugger(false);
 ```
 
+Because of a symlink, deployment is not allowed for UWP. Change the output directory to the effective folder instead. This can be done in the Project properties->General->Output directory.
+For example, it is for React Native 0.65:
+```
+$(SolutionDir)..\..\0.65\windows\$(Platform)\$(Configuration)\$(MSBuildProjectName)\
+```
+
 ## Update toolchain scripts
 
 Build tools must be updated to reflect new version of React Native support (or removal).

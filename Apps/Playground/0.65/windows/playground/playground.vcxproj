@@ -79,6 +79,9 @@
   <PropertyGroup Label="UserMacros">
     <AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
   </PropertyGroup>
+  <PropertyGroup>
+    <OutDir>$(SolutionDir)..\..\0.65\windows\$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
