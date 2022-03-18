@@ -5,26 +5,8 @@ on:
 
 
 jobs:
-  select-react-native-version:
-    runs-on: macos-latest
-    outputs:
-      version: ${{ steps.stepVersion.outputs.version }}
-    steps:
-      - uses: actions-ecosystem/action-regex-match@v2
-        id: regex-match
-        with:
-          text: ${{ github.event.release.name }}
-          regex: '^(\d+\.)?(\d+)'
-      - name: Release infos
-        run: |
-          echo "- Tag ${GITHUB_REF/refs\/tags\//}"
-          echo "- Name: ${{ github.event.release.name }}"
-          echo "- Description: ${{ github.event.release.body }}"
-      - id: stepVersion
-        run: echo "::set-output name=version::${{ steps.regex-match.outputs.match }}"
   build-android-ios:
     runs-on: macos-latest
-    needs: select-react-native-version
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2.3.3
@@ -39,14 +21,14 @@ jobs:
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
-      - name: Select React Native Version ${{ needs.select-react-native-version.outputs.version }}
-        run: npm run select --reactNative ${{ needs.select-react-native-version.outputs.version }}
+      - name: Select React Native Version 0.64
+        run: npm run select --reactNative 0.64
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
       - name: Gulp
-        run: npx gulp --reactNative ${{ needs.select-react-native-version.outputs.version }}
+        run: npx gulp --reactNative 0.64
         working-directory: ./Package
       - name: Upload Assembled Folder
         uses: actions/upload-artifact@v2
@@ -56,7 +38,6 @@ jobs:
 
   build-windows:
     runs-on: windows-2019
-    needs: select-react-native-version
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2.3.3
@@ -71,14 +52,14 @@ jobs:
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
-      - name: NPM Install (React Native ${{ needs.select-react-native-version.outputs.version }})
-        run: npm run select --reactNative ${{ needs.select-react-native-version.outputs.version }}
+      - name: NPM Install (React Native 0.64)
+        run: npm run select --reactNative 0.64
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
       - name: Git (Windows)
-        run: npx gulp initializeSubmodulesWindowsAgent --reactNative ${{ needs.select-react-native-version.outputs.version }}
+        run: npx gulp initializeSubmodulesWindowsAgent --reactNative 0.64
         working-directory: ./Package
       - name: Gulp (Windows)
         run: npx gulp buildUWPPublish
@@ -90,7 +71,7 @@ jobs:
           path: Package/Assembled-Windows
 
   package:
-    needs: [select-react-native-version, build-android-ios, build-windows]
+    needs: [build-android-ios, build-windows]
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
