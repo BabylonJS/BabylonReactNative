@@ -9,9 +9,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -x objective-c++")
 # configure Babylon Native to use JSI
 set(NAPI_JAVASCRIPT_ENGINE "JSI" CACHE STRING "The JavaScript engine to power N-API")
 
-get_filename_component(REACTNATIVE_DIR "${CMAKE_CURRENT_LIST_DIR}/../../../react-native" ABSOLUTE)
+get_filename_component(REACTNATIVE_DIR "${CMAKE_CURRENT_LIST_DIR}/../../../react-native-iosandroid" ABSOLUTE)
 if(NOT EXISTS ${REACTNATIVE_DIR})
-    get_filename_component(REACTNATIVE_DIR "${CMAKE_CURRENT_LIST_DIR}/../../../../Apps/Playground/Playground/node_modules/react-native" ABSOLUTE)
+    get_filename_component(REACTNATIVE_DIR "${CMAKE_CURRENT_LIST_DIR}/../../../../Apps/Playground/Playground/node_modules/react-native-iosandroid" ABSOLUTE)
 endif()
 
 # The CMake generator for XCode produces relative paths to source files. Additionally, when an XCode project
