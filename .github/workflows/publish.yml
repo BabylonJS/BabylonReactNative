@@ -20,7 +20,7 @@ jobs:
     with:
       react-native-version: 0.64
 
-  build-windows-064:
+  build-windows-065:
     uses: CedricGuillemet/BabylonReactNative-1/.github/workflows/windows.yml@master
     with:
       react-native-version: 0.65
