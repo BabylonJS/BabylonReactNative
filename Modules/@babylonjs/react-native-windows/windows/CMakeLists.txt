@@ -5,7 +5,7 @@ project(ReactNativeBabylon)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(BABYLON_REACT_NATIVE_DIR "${CMAKE_CURRENT_LIST_DIR}/../../react-native")
+set(BABYLON_REACT_NATIVE_DIR "${CMAKE_CURRENT_LIST_DIR}/../../react-native-iosandroid")
 include(${BABYLON_REACT_NATIVE_DIR}/shared/CMakeLists.txt)
 
 # Configure Babylon Native to use JSI
