@@ -239,7 +239,7 @@ const copyIOSFiles = async () => {
 const createIOSUniversalLibs = async () => {
   shelljs.mkdir('-p', 'Assembled-iOSAndroid/ios/libs');
   const libs = await readdirAsync('iOS/Build/Release-iphoneos');
-  libs.map(lib => exec(`lipo -create iOS/Build/Release-iphoneos/${lib} iOS/Build/Release-iphonesimulator/${lib} -output Assembled/ios/libs/${lib}`));
+  libs.map(lib => exec(`lipo -create iOS/Build/Release-iphoneos/${lib} iOS/Build/Release-iphonesimulator/${lib} -output Assembled-iOSAndroid/ios/libs/${lib}`));
 };
 
 const copyAndroidFiles = async () => {
