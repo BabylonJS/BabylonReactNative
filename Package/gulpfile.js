@@ -24,6 +24,10 @@ const clean = async () => {
     shelljs.rm('-r', 'Assembled');
   }
 
+  if (shelljs.test('-d', 'Assembled-iOSAndroid')) {
+    shelljs.rm('-r', 'Assembled');
+  }
+
   if (shelljs.test('-d', 'Assembled-Windows')) {
     shelljs.rm('-r', 'Assembled');
   }
@@ -40,7 +44,7 @@ const buildTypeScript = async () => {
 
 const makeXCodeProj = async () => {
   shelljs.mkdir('-p', 'iOS/Build');
-  exec('cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../../Apps/Playground/Playground/node_modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/ios-cmake/ios.toolchain.cmake -DPLATFORM=OS64COMBINED -DENABLE_ARC=0 -DENABLE_BITCODE=1 -DDEPLOYMENT_TARGET=12 -DENABLE_PCH=OFF ..', 'iOS/Build');
+  exec('cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative/Dependencies/ios-cmake/ios.toolchain.cmake -DPLATFORM=OS64COMBINED -DENABLE_ARC=0 -DENABLE_BITCODE=1 -DDEPLOYMENT_TARGET=12 -DENABLE_PCH=OFF ..', 'iOS/Build');
 };
 
 const buildIphoneOS = async () => {
@@ -60,7 +64,7 @@ const buildAndroid = async () => {
 const initializeSubmodulesWindowsAgent = async () => {
   // windows build agents don't support the path lengths required for initializing arcore dependencies,
   // so we manually initialize the submodules we need here.
-  exec('git -c submodule."Dependencies/xr/Dependencies/arcore-android-sdk".update=none submodule update --init --recursive "./../Modules/@babylonjs/react-native/submodules/BabylonNative');
+  exec('git -c submodule."Dependencies/xr/Dependencies/arcore-android-sdk".update=none submodule update --init --recursive "./../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative');
 }
 
 const initializeSubmodulesMostRecentBabylonNative = async () => {
@@ -72,9 +76,9 @@ const initializeSubmodulesMostRecentBabylonNative = async () => {
       shaFound = true;
       const sha = process.argv[shaIndex];
       console.log("Using provided commit: " + sha);
-      exec('git submodule init ./../Modules/@babylonjs/react-native/submodules/BabylonNative');
-      exec('git fetch origin ' + sha, './../Modules/@babylonjs/react-native/submodules/BabylonNative');
-      exec('git checkout ' + sha, './../Modules/@babylonjs/react-native/submodules/BabylonNative');
+      exec('git submodule init ./../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative');
+      exec('git fetch origin ' + sha, './../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative');
+      exec('git checkout ' + sha, './../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative');
     }
   }
 
@@ -209,31 +213,31 @@ const copyCommonFiles = () => {
 };
 
 const copySharedFiles = () => {
-  return gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native/shared/BabylonNative.h')
-    .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native/shared/XrContextHelper.h'))
-    .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native/shared/XrAnchorHelper.h'))
-    .pipe(gulp.dest('Assembled/shared'));
+  return gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/shared/BabylonNative.h')
+    .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/shared/XrContextHelper.h'))
+    .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/shared/XrAnchorHelper.h'))
+    .pipe(gulp.dest('Assembled-iOSAndroid/shared'));
 };
 
 const copyIOSFiles = async () => {
   await new Promise(resolve => {
-    gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native/ios/*.h')
-      .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native/ios/*.mm'))
+    gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/ios/*.h')
+      .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/ios/*.mm'))
       // This xcodeproj is garbage that we don't need in the package, but `pod install` ignores the package if it doesn't contain at least one xcodeproj. 🤷🏼‍♂️
       .pipe(gulp.src('iOS/Build/ReactNativeBabylon.xcodeproj**/**/*'))
-      .pipe(gulp.dest('Assembled/ios'))
+      .pipe(gulp.dest('Assembled-iOSAndroid/ios'))
       .on('end', resolve);
   });
 
   await new Promise(resolve => {
-    gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/xr/Source/ARKit/Include/*')
-      .pipe(gulp.dest('Assembled/ios/include'))
+    gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative/Dependencies/xr/Source/ARKit/Include/*')
+      .pipe(gulp.dest('Assembled-iOSAndroid/ios/include'))
       .on('end', resolve);
   });
 };
 
 const createIOSUniversalLibs = async () => {
-  shelljs.mkdir('-p', 'Assembled/ios/libs');
+  shelljs.mkdir('-p', 'Assembled-iOSAndroid/ios/libs');
   const libs = await readdirAsync('iOS/Build/Release-iphoneos');
   libs.map(lib => exec(`lipo -create iOS/Build/Release-iphoneos/${lib} iOS/Build/Release-iphonesimulator/${lib} -output Assembled/ios/libs/${lib}`));
 };
@@ -241,29 +245,29 @@ const createIOSUniversalLibs = async () => {
 const copyAndroidFiles = async () => {
   await new Promise(resolve => {
     gulp.src('Android/build.gradle')
-      .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native/android/src**/main/AndroidManifest.xml'))
-      .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native/android/src**/main/java/**/*'))
-      .pipe(gulp.dest('Assembled/android'))
+      .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/src**/main/AndroidManifest.xml'))
+      .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/src**/main/java/**/*'))
+      .pipe(gulp.dest('Assembled-iOSAndroid/android'))
       .on('end', resolve);
   });
 
   await new Promise(resolve => {
-    gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/xr/Source/ARCore/Include/*')
-      .pipe(gulp.dest('Assembled/android/include'))
+    gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative/Dependencies/xr/Source/ARCore/Include/*')
+      .pipe(gulp.dest('Assembled-iOSAndroid/android/include'))
       .on('end', resolve);
   });
 
   await new Promise(resolve => {
-    gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native/android/build/intermediates/library_and_local_jars_jni/release/jni/**/*')
-      .pipe(gulp.dest('Assembled/android/src/main/jniLibs/'))
+    gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/build/intermediates/library_and_local_jars_jni/release/jni/**/*')
+      .pipe(gulp.dest('Assembled-iOSAndroid/android/src/main/jniLibs/'))
       .on('end', resolve);
   });
 
   // This is no longer found in the directory above because it is explicitly excluded because Playground has been updated to RN 0.64 which includes
   // the real implementation of libturbomodulejsijni.so, but we still need to support RN 0.63 consumers, so grab this one explicitly to include it in the package.
   await new Promise(resolve => {
-    gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native/android/build/intermediates/cmake/release/obj/**/libturbomodulejsijni.so')
-      .pipe(gulp.dest('Assembled/android/src/main/jniLibs/'))
+    gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/build/intermediates/cmake/release/obj/**/libturbomodulejsijni.so')
+      .pipe(gulp.dest('Assembled-iOSAndroid/android/src/main/jniLibs/'))
       .on('end', resolve);
   });
 };
@@ -351,23 +355,23 @@ const copyVCXProjUWPFiles = () => {
 }
 
 const copyOpenXRInfoFiles = () => {
-  return gulp.src('../Modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/xr/Dependencies/OpenXR-MixedReality/LICENSE')
-    .pipe(gulp.src('../Modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/xr/Dependencies/OpenXR-MixedReality/README.md'))
+  return gulp.src('../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative/Dependencies/xr/Dependencies/OpenXR-MixedReality/LICENSE')
+    .pipe(gulp.src('../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative/Dependencies/xr/Dependencies/OpenXR-MixedReality/README.md'))
     .pipe(gulp.dest('Assembled-Windows/windows/OpenXR-MixedReality'));
 }
 
 const copyOpenXRPreviewHeaders = () => {
-  return gulp.src('../Modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/xr/Dependencies/OpenXR-MixedReality/openxr_preview/include/openxr/*')
+  return gulp.src('../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative/Dependencies/xr/Dependencies/OpenXR-MixedReality/openxr_preview/include/openxr/*')
     .pipe(gulp.dest('Assembled-Windows/windows/OpenXR-MixedReality/include/openxr'));
 }
 
 const copyOpenXRUtilityHeaders = () => {
-  return gulp.src('../Modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/xr/Dependencies/OpenXR-MixedReality/shared/XrUtility/*')
+  return gulp.src('../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative/Dependencies/xr/Dependencies/OpenXR-MixedReality/shared/XrUtility/*')
     .pipe(gulp.dest('Assembled-Windows/windows/OpenXR-MixedReality/include/XrUtility'));
 }
 
 const copyOpenXRHelperHeaders = () => {
-  return gulp.src('../Modules/@babylonjs/react-native/submodules/BabylonNative/Dependencies/xr/Source/OpenXR/Include/*')
+  return gulp.src('../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative/Dependencies/xr/Source/OpenXR/Include/*')
     .pipe(gulp.src('../Modules/@babylonjs/react-native-windows/windows/include/*'))
     .pipe(gulp.dest('Assembled-Windows/windows/include'));
 }
@@ -394,32 +398,32 @@ const validate = async () => {
   // When the package contents are updated *and validated*, update the expected below from the output of the failed validation console output (run `gulp validate`).
   // This helps ensure a bad package is not accidentally published due to tooling changes, etc.
   const expected = [
-    'Assembled/android',
-    'Assembled/android/build.gradle',
-    'Assembled/android/include',
-    'Assembled/android/include/IXrContextARCore.h',
-    'Assembled/android/src',
-    'Assembled/android/src/main',
-    'Assembled/android/src/main/AndroidManifest.xml',
-    'Assembled/android/src/main/java',
-    'Assembled/android/src/main/java/com',
-    'Assembled/android/src/main/java/com/babylonreactnative',
-    'Assembled/android/src/main/java/com/babylonreactnative/BabylonModule.java',
-    'Assembled/android/src/main/java/com/babylonreactnative/BabylonNativeInterop.java',
-    'Assembled/android/src/main/java/com/babylonreactnative/BabylonPackage.java',
-    'Assembled/android/src/main/java/com/babylonreactnative/EngineView.java',
-    'Assembled/android/src/main/java/com/babylonreactnative/EngineViewManager.java',
-    'Assembled/android/src/main/java/com/babylonreactnative/SnapshotDataReturnedEvent.java',
-    'Assembled/android/src/main/jniLibs',
-    'Assembled/android/src/main/jniLibs/arm64-v8a',
-    'Assembled/android/src/main/jniLibs/arm64-v8a/libBabylonNative.so',
-    'Assembled/android/src/main/jniLibs/arm64-v8a/libturbomodulejsijni.so',
-    'Assembled/android/src/main/jniLibs/armeabi-v7a',
-    'Assembled/android/src/main/jniLibs/armeabi-v7a/libBabylonNative.so',
-    'Assembled/android/src/main/jniLibs/armeabi-v7a/libturbomodulejsijni.so',
-    'Assembled/android/src/main/jniLibs/x86',
-    'Assembled/android/src/main/jniLibs/x86/libBabylonNative.so',
-    'Assembled/android/src/main/jniLibs/x86/libturbomodulejsijni.so',
+    'Assembled-iOSAndroid/android',
+    'Assembled-iOSAndroid/android/build.gradle',
+    'Assembled-iOSAndroid/android/include',
+    'Assembled-iOSAndroid/android/include/IXrContextARCore.h',
+    'Assembled-iOSAndroid/android/src',
+    'Assembled-iOSAndroid/android/src/main',
+    'Assembled-iOSAndroid/android/src/main/AndroidManifest.xml',
+    'Assembled-iOSAndroid/android/src/main/java',
+    'Assembled-iOSAndroid/android/src/main/java/com',
+    'Assembled-iOSAndroid/android/src/main/java/com/babylonreactnative',
+    'Assembled-iOSAndroid/android/src/main/java/com/babylonreactnative/BabylonModule.java',
+    'Assembled-iOSAndroid/android/src/main/java/com/babylonreactnative/BabylonNativeInterop.java',
+    'Assembled-iOSAndroid/android/src/main/java/com/babylonreactnative/BabylonPackage.java',
+    'Assembled-iOSAndroid/android/src/main/java/com/babylonreactnative/EngineView.java',
+    'Assembled-iOSAndroid/android/src/main/java/com/babylonreactnative/EngineViewManager.java',
+    'Assembled-iOSAndroid/android/src/main/java/com/babylonreactnative/SnapshotDataReturnedEvent.java',
+    'Assembled-iOSAndroid/android/src/main/jniLibs',
+    'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a',
+    'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libBabylonNative.so',
+    'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libturbomodulejsijni.so',
+    'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a',
+    'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libBabylonNative.so',
+    'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libturbomodulejsijni.so',
+    'Assembled-iOSAndroid/android/src/main/jniLibs/x86',
+    'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libBabylonNative.so',
+    'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libturbomodulejsijni.so',
     'Assembled/BabylonModule.d.ts',
     'Assembled/BabylonModule.js',
     'Assembled/BabylonModule.js.map',
@@ -432,71 +436,71 @@ const validate = async () => {
     'Assembled/index.d.ts',
     'Assembled/index.js',
     'Assembled/index.js.map',
-    'Assembled/ios',
-    'Assembled/ios/BabylonModule.mm',
-    'Assembled/ios/BabylonNativeInterop.h',
-    'Assembled/ios/BabylonNativeInterop.mm',
-    'Assembled/ios/EngineViewManager.mm',
-    'Assembled/ios/include',
-    'Assembled/ios/include/IXrContextARKit.h',
-    'Assembled/ios/libs',
-    'Assembled/ios/libs/libastc-codec.a',
-    'Assembled/ios/libs/libastc.a',
-    'Assembled/ios/libs/libBabylonNative.a',
-    'Assembled/ios/libs/libbgfx.a',
-    'Assembled/ios/libs/libbimg.a',
-    'Assembled/ios/libs/libbx.a',
-    'Assembled/ios/libs/libCanvas.a',
-    'Assembled/ios/libs/libGenericCodeGen.a',
-    'Assembled/ios/libs/libglslang.a',
-    'Assembled/ios/libs/libGraphics.a',
-    'Assembled/ios/libs/libJsRuntime.a',
-    'Assembled/ios/libs/libMachineIndependent.a',
-    'Assembled/ios/libs/libnapi.a',
-    'Assembled/ios/libs/libNativeCapture.a',
-    'Assembled/ios/libs/libNativeEngine.a',
-    'Assembled/ios/libs/libNativeInput.a',
-    'Assembled/ios/libs/libNativeOptimizations.a',
-    'Assembled/ios/libs/libNativeTracing.a',
-    'Assembled/ios/libs/libNativeXr.a',
-    'Assembled/ios/libs/libOGLCompiler.a',
-    'Assembled/ios/libs/libOSDependent.a',
-    'Assembled/ios/libs/libspirv-cross-core.a',
-    'Assembled/ios/libs/libspirv-cross-glsl.a',
-    'Assembled/ios/libs/libspirv-cross-msl.a',
-    'Assembled/ios/libs/libSPIRV.a',
-    'Assembled/ios/libs/libtinyexr.a',
-    'Assembled/ios/libs/libUrlLib.a',
-    'Assembled/ios/libs/libWindow.a',
-    'Assembled/ios/libs/libXMLHttpRequest.a',
-    'Assembled/ios/libs/libxr.a',
-    'Assembled/ios/ReactNativeBabylon.xcodeproj',
-    'Assembled/ios/ReactNativeBabylon.xcodeproj/project.pbxproj',
-    'Assembled/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace',
-    'Assembled/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata',
-    'Assembled/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings',
-    'Assembled/NativeCapture.d.ts',
-    'Assembled/NativeCapture.js',
-    'Assembled/NativeCapture.js.map',
-    'Assembled/NativeEngineHook.d.ts',
-    'Assembled/NativeEngineHook.js',
-    'Assembled/NativeEngineHook.js.map',
-    'Assembled/NativeEngineView.d.ts',
-    'Assembled/NativeEngineView.js',
-    'Assembled/NativeEngineView.js.map',
-    'Assembled/FontFace.d.ts',
-    'Assembled/FontFace.js',
-    'Assembled/FontFace.js.map',
-    'Assembled/package.json',
-    'Assembled/react-native-babylon.podspec',
-    'Assembled/ReactNativeEngine.d.ts',
-    'Assembled/ReactNativeEngine.js',
-    'Assembled/ReactNativeEngine.js.map',
+    'Assembled-iOSAndroid/ios',
+    'Assembled-iOSAndroid/ios/BabylonModule.mm',
+    'Assembled-iOSAndroid/ios/BabylonNativeInterop.h',
+    'Assembled-iOSAndroid/ios/BabylonNativeInterop.mm',
+    'Assembled-iOSAndroid/ios/EngineViewManager.mm',
+    'Assembled-iOSAndroid/ios/include',
+    'Assembled-iOSAndroid/ios/include/IXrContextARKit.h',
+    'Assembled-iOSAndroid/ios/libs',
+    'Assembled-iOSAndroid/ios/libs/libastc-codec.a',
+    'Assembled-iOSAndroid/ios/libs/libastc.a',
+    'Assembled-iOSAndroid/ios/libs/libBabylonNative.a',
+    'Assembled-iOSAndroid/ios/libs/libbgfx.a',
+    'Assembled-iOSAndroid/ios/libs/libbimg.a',
+    'Assembled-iOSAndroid/ios/libs/libbx.a',
+    'Assembled-iOSAndroid/ios/libs/libCanvas.a',
+    'Assembled-iOSAndroid/ios/libs/libGenericCodeGen.a',
+    'Assembled-iOSAndroid/ios/libs/libglslang.a',
+    'Assembled-iOSAndroid/ios/libs/libGraphics.a',
+    'Assembled-iOSAndroid/ios/libs/libJsRuntime.a',
+    'Assembled-iOSAndroid/ios/libs/libMachineIndependent.a',
+    'Assembled-iOSAndroid/ios/libs/libnapi.a',
+    'Assembled-iOSAndroid/ios/libs/libNativeCapture.a',
+    'Assembled-iOSAndroid/ios/libs/libNativeEngine.a',
+    'Assembled-iOSAndroid/ios/libs/libNativeInput.a',
+    'Assembled-iOSAndroid/ios/libs/libNativeOptimizations.a',
+    'Assembled-iOSAndroid/ios/libs/libNativeTracing.a',
+    'Assembled-iOSAndroid/ios/libs/libNativeXr.a',
+    'Assembled-iOSAndroid/ios/libs/libOGLCompiler.a',
+    'Assembled-iOSAndroid/ios/libs/libOSDependent.a',
+    'Assembled-iOSAndroid/ios/libs/libspirv-cross-core.a',
+    'Assembled-iOSAndroid/ios/libs/libspirv-cross-glsl.a',
+    'Assembled-iOSAndroid/ios/libs/libspirv-cross-msl.a',
+    'Assembled-iOSAndroid/ios/libs/libSPIRV.a',
+    'Assembled-iOSAndroid/ios/libs/libtinyexr.a',
+    'Assembled-iOSAndroid/ios/libs/libUrlLib.a',
+    'Assembled-iOSAndroid/ios/libs/libWindow.a',
+    'Assembled-iOSAndroid/ios/libs/libXMLHttpRequest.a',
+    'Assembled-iOSAndroid/ios/libs/libxr.a',
+    'Assembled-iOSAndroid/ios/ReactNativeBabylon.xcodeproj',
+    'Assembled-iOSAndroid/ios/ReactNativeBabylon.xcodeproj/project.pbxproj',
+    'Assembled-iOSAndroid/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace',
+    'Assembled-iOSAndroid/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata',
+    'Assembled-iOSAndroid/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings',
+    'Assembled-iOSAndroid/NativeCapture.d.ts',
+    'Assembled-iOSAndroid/NativeCapture.js',
+    'Assembled-iOSAndroid/NativeCapture.js.map',
+    'Assembled-iOSAndroid/NativeEngineHook.d.ts',
+    'Assembled-iOSAndroid/NativeEngineHook.js',
+    'Assembled-iOSAndroid/NativeEngineHook.js.map',
+    'Assembled-iOSAndroid/NativeEngineView.d.ts',
+    'Assembled-iOSAndroid/NativeEngineView.js',
+    'Assembled-iOSAndroid/NativeEngineView.js.map',
+    'Assembled-iOSAndroid/FontFace.d.ts',
+    'Assembled-iOSAndroid/FontFace.js',
+    'Assembled-iOSAndroid/FontFace.js.map',
+    'Assembled-iOSAndroid/package.json',
+    'Assembled-iOSAndroid/react-native-babylon.podspec',
+    'Assembled-iOSAndroid/ReactNativeEngine.d.ts',
+    'Assembled-iOSAndroid/ReactNativeEngine.js',
+    'Assembled-iOSAndroid/ReactNativeEngine.js.map',
     'Assembled/README.md',
-    'Assembled/shared',
-    'Assembled/shared/BabylonNative.h',
-    'Assembled/shared/XrAnchorHelper.h',
-    'Assembled/shared/XrContextHelper.h',
+    'Assembled-iOSAndroid/shared',
+    'Assembled-iOSAndroid/shared/BabylonNative.h',
+    'Assembled-iOSAndroid/shared/XrAnchorHelper.h',
+    'Assembled-iOSAndroid/shared/XrContextHelper.h',
     'Assembled/VersionValidation.d.ts',
     'Assembled/VersionValidation.js',
     'Assembled/VersionValidation.js.map'
@@ -530,6 +534,10 @@ const validate = async () => {
 
 const createPackage = async () => {
   exec('npm pack', 'Assembled');
+};
+
+const createPackageiOSAndroid = async () => {
+  exec('npm pack', 'Assembled-iOSAndroid');
 };
 
 const createPackageUWP = async () => {
@@ -582,7 +590,7 @@ exports.build = build;
 exports.rebuild = rebuild;
 exports.pack = pack;
 
-const packAndroid = gulp.series(clean, buildAndroid, copyFiles, createPackage);
+const packAndroid = gulp.series(clean, buildAndroid, copyFiles, createPackage, createPackageiOSAndroid);
 exports.buildAndroid = buildAndroid;
 exports.packAndroid = packAndroid;
 
