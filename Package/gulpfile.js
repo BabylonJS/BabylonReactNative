@@ -216,7 +216,7 @@ const copySharedFiles = () => {
   return gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/shared/BabylonNative.h')
     .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/shared/XrContextHelper.h'))
     .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/shared/XrAnchorHelper.h'))
-    .pipe(gulp.dest('Assembled-iOSAndroid/shared'));
+    .pipe(gulp.dest('Assembled/shared'));
 };
 
 const copyIOSFiles = async () => {
@@ -497,10 +497,10 @@ const validate = async () => {
     'Assembled/ReactNativeEngine.js',
     'Assembled/ReactNativeEngine.js.map',
     'Assembled/README.md',
-    'Assembled-iOSAndroid/shared',
-    'Assembled-iOSAndroid/shared/BabylonNative.h',
-    'Assembled-iOSAndroid/shared/XrAnchorHelper.h',
-    'Assembled-iOSAndroid/shared/XrContextHelper.h',
+    'Assembled/shared',
+    'Assembled/shared/BabylonNative.h',
+    'Assembled/shared/XrAnchorHelper.h',
+    'Assembled/shared/XrContextHelper.h',
     'Assembled/VersionValidation.d.ts',
     'Assembled/VersionValidation.js',
     'Assembled/VersionValidation.js.map'
