@@ -398,6 +398,46 @@ const validate = async () => {
   // When the package contents are updated *and validated*, update the expected below from the output of the failed validation console output (run `gulp validate`).
   // This helps ensure a bad package is not accidentally published due to tooling changes, etc.
   const expected = [
+    'Assembled/BabylonModule.d.ts',
+    'Assembled/BabylonModule.js',
+    'Assembled/BabylonModule.js.map',
+    'Assembled/EngineHook.d.ts',
+    'Assembled/EngineHook.js',
+    'Assembled/EngineHook.js.map',
+    'Assembled/EngineView.d.ts',
+    'Assembled/EngineView.js',
+    'Assembled/EngineView.js.map',
+    'Assembled/index.d.ts',
+    'Assembled/index.js',
+    'Assembled/index.js.map',
+    'Assembled/NativeCapture.d.ts',
+    'Assembled/NativeCapture.js',
+    'Assembled/NativeCapture.js.map',
+    'Assembled/NativeEngineHook.d.ts',
+    'Assembled/NativeEngineHook.js',
+    'Assembled/NativeEngineHook.js.map',
+    'Assembled/NativeEngineView.d.ts',
+    'Assembled/NativeEngineView.js',
+    'Assembled/NativeEngineView.js.map',
+    'Assembled/FontFace.d.ts',
+    'Assembled/FontFace.js',
+    'Assembled/FontFace.js.map',
+    'Assembled/package.json',
+    'Assembled/react-native-babylon.podspec',
+    'Assembled/ReactNativeEngine.d.ts',
+    'Assembled/ReactNativeEngine.js',
+    'Assembled/ReactNativeEngine.js.map',
+    'Assembled/README.md',
+    'Assembled/shared',
+    'Assembled/shared/BabylonNative.h',
+    'Assembled/shared/XrAnchorHelper.h',
+    'Assembled/shared/XrContextHelper.h',
+    'Assembled/VersionValidation.d.ts',
+    'Assembled/VersionValidation.js',
+    'Assembled/VersionValidation.js.map'
+  ];
+
+  const expectediosandroid = [
     'Assembled-iOSAndroid/android',
     'Assembled-iOSAndroid/android/build.gradle',
     'Assembled-iOSAndroid/android/include',
@@ -424,18 +464,6 @@ const validate = async () => {
     'Assembled-iOSAndroid/android/src/main/jniLibs/x86',
     'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libBabylonNative.so',
     'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libturbomodulejsijni.so',
-    'Assembled/BabylonModule.d.ts',
-    'Assembled/BabylonModule.js',
-    'Assembled/BabylonModule.js.map',
-    'Assembled/EngineHook.d.ts',
-    'Assembled/EngineHook.js',
-    'Assembled/EngineHook.js.map',
-    'Assembled/EngineView.d.ts',
-    'Assembled/EngineView.js',
-    'Assembled/EngineView.js.map',
-    'Assembled/index.d.ts',
-    'Assembled/index.js',
-    'Assembled/index.js.map',
     'Assembled-iOSAndroid/ios',
     'Assembled-iOSAndroid/ios/BabylonModule.mm',
     'Assembled-iOSAndroid/ios/BabylonNativeInterop.h',
@@ -479,57 +507,38 @@ const validate = async () => {
     'Assembled-iOSAndroid/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace',
     'Assembled-iOSAndroid/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata',
     'Assembled-iOSAndroid/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings',
-    'Assembled/NativeCapture.d.ts',
-    'Assembled/NativeCapture.js',
-    'Assembled/NativeCapture.js.map',
-    'Assembled/NativeEngineHook.d.ts',
-    'Assembled/NativeEngineHook.js',
-    'Assembled/NativeEngineHook.js.map',
-    'Assembled/NativeEngineView.d.ts',
-    'Assembled/NativeEngineView.js',
-    'Assembled/NativeEngineView.js.map',
-    'Assembled/FontFace.d.ts',
-    'Assembled/FontFace.js',
-    'Assembled/FontFace.js.map',
-    'Assembled/package.json',
-    'Assembled/react-native-babylon.podspec',
-    'Assembled/ReactNativeEngine.d.ts',
-    'Assembled/ReactNativeEngine.js',
-    'Assembled/ReactNativeEngine.js.map',
-    'Assembled/README.md',
-    'Assembled/shared',
-    'Assembled/shared/BabylonNative.h',
-    'Assembled/shared/XrAnchorHelper.h',
-    'Assembled/shared/XrContextHelper.h',
-    'Assembled/VersionValidation.d.ts',
-    'Assembled/VersionValidation.js',
-    'Assembled/VersionValidation.js.map'
+    'Assembled-iOSAndroid/package.json',
   ];
 
   const actual = glob.sync('Assembled/**/*');
+  const actualiosandroid = glob.sync('Assembled-iOSAndroid/**/*');
 
-  const extras = actual.filter(path => !expected.includes(path));
-  const missing = expected.filter(path => !actual.includes(path));
+  var checkDirectory = function(actualList, expectedList) {
+    const extras = actualList.filter(path => !expectedList.includes(path));
+    const missing = expected.filter(path => !actualList.includes(path));
 
-  let isValid = true;
+    let isValid = true;
 
-  if (extras.length !== 0) {
-    console.error(chalk.white.bgRedBright(`The Assembled directory contains unexpected files:`));
-    console.log(extras);
-    isValid = false;
+    if (extras.length !== 0) {
+      console.error(chalk.white.bgRedBright(`The Assembled directory contains unexpected files:`));
+      console.log(extras);
+      isValid = false;
+    }
+
+    if (missing.length !== 0) {
+      console.error(chalk.white.bgRedBright(`The Assembled directory is missing some expected files:`));
+      console.log(missing);
+      isValid = false;
+    }
+
+    if (!isValid) {
+      console.log(chalk.black.bgCyan(`If the Assembled directory is correct, update the file validation list in gulpfile.js with the following:`))
+      console.log(actualList);
+      throw `The Assembled directory does not contain the expected files.`;
+    }
   }
-
-  if (missing.length !== 0) {
-    console.error(chalk.white.bgRedBright(`The Assembled directory is missing some expected files:`));
-    console.log(missing);
-    isValid = false;
-  }
-
-  if (!isValid) {
-    console.log(chalk.black.bgCyan(`If the Assembled directory is correct, update the file validation list in gulpfile.js with the following:`))
-    console.log(actual);
-    throw `The Assembled directory does not contain the expected files.`;
-  }
+  checkDirectory(actual, expected);
+  checkDirectory(actualiosandroid, expectediosandroid);
 }
 
 const createPackage = async () => {
