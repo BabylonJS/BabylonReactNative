@@ -1,5 +1,7 @@
 name: 'build ios-android'
 
+on: [workflow_call]
+
 jobs:
   Build:
     runs-on: macos-latest
