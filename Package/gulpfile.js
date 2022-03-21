@@ -213,9 +213,9 @@ const copyCommonFiles = () => {
 };
 
 const copySharedFiles = () => {
-  return gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/shared/BabylonNative.h')
-    .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/shared/XrContextHelper.h'))
-    .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/shared/XrAnchorHelper.h'))
+  return gulp.src('../Modules/@babylonjs/react-native-iosandroid/shared/BabylonNative.h')
+    .pipe(gulp.src('../Modules/@babylonjs/react-native-iosandroid/shared/XrContextHelper.h'))
+    .pipe(gulp.src('../Modules/@babylonjs/react-native-iosandroid/shared/XrAnchorHelper.h'))
     .pipe(gulp.dest('Assembled/shared'));
 };
 
@@ -583,8 +583,8 @@ const patchPackageVersion = async () => {
     console.log(process.argv[4], process.argv[5], process.argv[6]);
     const releaseVersion = (process.argv[4] == '--releaseVersion') ? process.argv[5] : ((process.argv[5] == '--releaseVersion') ? process.argv[6] : '');
     if (releaseVersion !== '') {
-      packageJsonWindows.peerDependencies['@babylonjs/react-native'] = releaseVersion;
-      packageJsoniOSAndroid.peerDependencies['@babylonjs/react-native'] = releaseVersion;
+      packageJsonWindows.peerDependencies["@babylonjs/react-native"] = releaseVersion;
+      packageJsoniOSAndroid.peerDependencies["@babylonjs/react-native"] = releaseVersion;
     }
 
     fs.writeFileSync(packageJsonPathWindows, JSON.stringify(packageJsonWindows, null, 2));
@@ -594,9 +594,9 @@ const patchPackageVersion = async () => {
   }
 }
 
-const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyIOSAndroidCommonFiles, copyIOSFiles, copyAndroidFiles);
+const copyFiles = gulp.parallel(copyCommonFiles, copyIOSAndroidCommonFiles, copyIOSFiles, copyAndroidFiles);
 
-const buildTS = gulp.series(buildTypeScript);
+const buildTS = gulp.series(copySharedFiles, buildTypeScript);
 const build = gulp.series(patchPackageVersion, buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validate);
 const rebuild = gulp.series(clean, build);
 const pack = gulp.series(rebuild, createPackage);
@@ -618,7 +618,7 @@ const packAndroid = gulp.series(clean, buildAndroid, copyFiles, createPackage, c
 exports.buildAndroid = buildAndroid;
 exports.packAndroid = packAndroid;
 
-const copyPackageFilesUWP = gulp.series(copyCommonFiles, copySharedFiles, copyUWPFiles);
+const copyPackageFilesUWP = gulp.series(copyCommonFiles, copyUWPFiles);
 const buildUWPPublish = gulp.series(buildUWP, copyPackageFilesUWP);
 const packUWP = gulp.series(clean, buildUWP, copyPackageFilesUWP, createPackage, createPackageUWP);
 const packUWPNoBuild = gulp.series(clean, copyPackageFilesUWP, createPackage, createPackageUWP);
