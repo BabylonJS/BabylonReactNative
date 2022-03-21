@@ -608,7 +608,6 @@ const pack = gulp.series(rebuild, createPackage);
 
 exports.validate = validate;
 
-exports.buildTypeScript = buildTypeScript;
 exports.buildIOS = buildIOS;
 exports.buildAndroid = buildAndroid;
 exports.createIOSUniversalLibs = createIOSUniversalLibs;
