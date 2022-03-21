@@ -32,7 +32,7 @@
     "@babylonjs/react-native": "version",
     "react": ">=16.13.1",
     "react-native": ">=0.63.1",
-    "react-native-permissions": "^2.1.4"
+    "react-native-permissions": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",

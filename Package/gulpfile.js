@@ -563,8 +563,10 @@ const patchPackageVersion = async () => {
   if (version == '0.64' || version == '0.65') {
     console.log(chalk.black.bgCyan(`Updating Package.json for React Native ${version}.`))
 
+    const packageJsonPath = '../Modules/@babylonjs/react-native/package.json';
     const packageJsonPathWindows = '../Modules/@babylonjs/react-native-windows/package.json';
     const packageJsonPathiOSAndroid = '../Modules/@babylonjs/react-native-iosandroid/package.json';
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath));
     const packageJsonWindows = JSON.parse(fs.readFileSync(packageJsonPathWindows));
     const packageJsoniOSAndroid = JSON.parse(fs.readFileSync(packageJsonPathiOSAndroid));
 
@@ -579,14 +581,17 @@ const patchPackageVersion = async () => {
     }
 
     // release version
-    console.log(" ******** ");
-    console.log(process.argv[4], process.argv[5], process.argv[6]);
     const releaseVersion = (process.argv[4] == '--releaseVersion') ? process.argv[5] : ((process.argv[5] == '--releaseVersion') ? process.argv[6] : '');
     if (releaseVersion !== '') {
       packageJsonWindows.peerDependencies["@babylonjs/react-native"] = releaseVersion;
       packageJsoniOSAndroid.peerDependencies["@babylonjs/react-native"] = releaseVersion;
+
+      packageJsonWindows["version"] = releaseVersion;
+      packageJsoniOSAndroid["version"] = releaseVersion;
+      packageJson["version"] = releaseVersion;
     }
 
+    fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
     fs.writeFileSync(packageJsonPathWindows, JSON.stringify(packageJsonWindows, null, 2));
     fs.writeFileSync(packageJsonPathiOSAndroid, JSON.stringify(packageJsoniOSAndroid, null, 2));
   } else {
@@ -596,7 +601,7 @@ const patchPackageVersion = async () => {
 
 const copyFiles = gulp.parallel(copyCommonFiles, copyIOSAndroidCommonFiles, copyIOSFiles, copyAndroidFiles);
 
-const buildTS = gulp.series(copySharedFiles, buildTypeScript);
+const buildTS = gulp.series(patchPackageVersion, copySharedFiles, buildTypeScript);
 const build = gulp.series(patchPackageVersion, buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validate);
 const rebuild = gulp.series(clean, build);
 const pack = gulp.series(rebuild, createPackage);
