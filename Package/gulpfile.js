@@ -588,7 +588,7 @@ const patchPackageVersion = async () => {
     }
 
     fs.writeFileSync(packageJsonPathWindows, JSON.stringify(packageJsonWindows, null, 2));
-    fs.writeFileSync(packageJsoniOSAndroid, JSON.stringify(packageJsoniOSAndroid, null, 2));
+    fs.writeFileSync(packageJsonPathiOSAndroid, JSON.stringify(packageJsoniOSAndroid, null, 2));
   } else {
     console.log(chalk.black.bgCyan(`No valid React Native version set. Letting Package.json unchanged.`))
   }
@@ -623,6 +623,7 @@ const buildUWPPublish = gulp.series(buildUWP, copyPackageFilesUWP);
 const packUWP = gulp.series(clean, buildUWP, copyPackageFilesUWP, createPackage, createPackageUWP);
 const packUWPNoBuild = gulp.series(clean, copyPackageFilesUWP, createPackage, createPackageUWP);
 
+exports.buildTS = buildTS;
 exports.initializeSubmodulesWindowsAgent = gulp.series(patchPackageVersion, initializeSubmodulesWindowsAgent);
 exports.makeUWPProjectx86 = makeUWPProjectx86;
 exports.makeUWPProjectx64 = makeUWPProjectx64;
