@@ -1,12 +1,5 @@
 name: 'build ios-android'
 
-on:
-  workflow_call:
-    inputs:
-      react-native-version:
-        required: true
-        type: string
-
 jobs:
   Build:
     runs-on: macos-latest
@@ -24,5 +17,5 @@ jobs:
       - name: Upload Assembled Folder
         uses: actions/upload-artifact@v2
         with:
-          name: 'Assembled${{ inputs.react-native-version }}'
+          name: 'Assembled'
           path: Package/Assembled
