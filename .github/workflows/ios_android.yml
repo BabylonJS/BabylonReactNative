@@ -38,3 +38,8 @@ jobs:
         with:
           name: 'Assembled${{ inputs.react-native-version }}'
           path: Package/Assembled
+      - name: Upload Assembled iOS Android Folder
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'Assembled-iOSAndroid${{ inputs.react-native-version }}'
+          path: Package/Assembled-iOSAndroid
