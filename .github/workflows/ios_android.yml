@@ -33,11 +33,6 @@ jobs:
       - name: Gulp
         run: npx gulp --reactNative ${{ inputs.react-native-version }} --releaseVersion ${{ github.event.release.name }}
         working-directory: ./Package
-      - name: Upload Assembled Folder
-        uses: actions/upload-artifact@v2
-        with:
-          name: 'Assembled${{ inputs.react-native-version }}'
-          path: Package/Assembled
       - name: Upload Assembled iOS Android Folder
         uses: actions/upload-artifact@v2
         with:

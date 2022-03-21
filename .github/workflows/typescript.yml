@@ -1,0 +1,28 @@
+name: 'build ios-android'
+
+on:
+  workflow_call:
+    inputs:
+      react-native-version:
+        required: true
+        type: string
+
+jobs:
+  Build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+        with:
+          submodules: 'recursive'
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Gulp
+        run: npx gulp buildTS
+        working-directory: ./Package
+      - name: Upload Assembled Folder
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'Assembled${{ inputs.react-native-version }}'
+          path: Package/Assembled
