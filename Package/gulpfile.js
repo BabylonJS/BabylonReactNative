@@ -543,7 +543,7 @@ const validate = async () => {
     }
   }
   //checkDirectory(actual, expected);
-  //checkDirectory(actualiosandroid, expectediosandroid);
+  checkDirectory(actualiosandroid, expectediosandroid);
 }
 
 const createPackage = async () => {
@@ -565,21 +565,35 @@ const patchPackageVersion = async () => {
 
     const packageJsonPath = '../Modules/@babylonjs/react-native/package.json';
     const packageJsonPathWindows = '../Modules/@babylonjs/react-native-windows/package.json';
+    const packageJsonPathiOSAndroid = '../Modules/@babylonjs/react-native-iosandroid/package.json';
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath));
     const packageJsonWindows = JSON.parse(fs.readFileSync(packageJsonPathWindows));
+    const packageJsoniOSAndroid = JSON.parse(fs.readFileSync(packageJsonPathiOSAndroid));
 
     if (version == '0.64') {
       packageJson.peerDependencies['react-native'] = '>=0.63.1 <0.65.0';
       packageJsonWindows.peerDependencies['react-native'] = '>=0.63.1 <0.65.0';
+      packageJsoniOSAndroid.peerDependencies['react-native'] = '>=0.63.1 <0.65.0';
       packageJsonWindows.peerDependencies['react-native-windows'] = '>=0.63.1 <0.65.0';
     } else {
       packageJson.peerDependencies['react-native'] = '>=0.65.0';
       packageJsonWindows.peerDependencies['react-native'] = '>=0.65.0';
+      packageJsoniOSAndroid.peerDependencies['react-native'] = '>=0.65.0';
       packageJsonWindows.peerDependencies['react-native-windows'] = '>=0.65.0';
+    }
+
+    // release version
+    console.log(" ******** ");
+    console.log(process.argv[4], process.argv[5], process.argv[6]);
+    const releaseVersion = (process.argv[4] == '--releaseVersion') ? process.argv[5] : ((process.argv[5] == '--releaseVersion') ? process.argv[6] : '');
+    if (releaseVersion !== '') {
+      ackageJsonWindows.peerDependencies['@babylonjs/react-native'] = releaseVersion;
+      packageJsoniOSAndroid.peerDependencies['@babylonjs/react-native'] = releaseVersion;
     }
 
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
     fs.writeFileSync(packageJsonPathWindows, JSON.stringify(packageJsonWindows, null, 2));
+    fs.writeFileSync(packageJsoniOSAndroid, JSON.stringify(packageJsoniOSAndroid, null, 2));
   } else {
     console.log(chalk.black.bgCyan(`No valid React Native version set. Letting Package.json unchanged.`))
   }
