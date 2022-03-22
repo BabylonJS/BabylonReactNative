@@ -237,9 +237,9 @@ const copyCommonFiles = () => {
 };
 
 const copySharedFiles = () => {
-  return gulp.src('../Modules/@babylonjs/react-native-iosandroid/shared/BabylonNative.h')
-    .pipe(gulp.src('../Modules/@babylonjs/react-native-iosandroid/shared/XrContextHelper.h'))
-    .pipe(gulp.src('../Modules/@babylonjs/react-native-iosandroid/shared/XrAnchorHelper.h'))
+  return gulp.src('../Modules/@babylonjs/react-native/shared/BabylonNative.h')
+    .pipe(gulp.src('../Modules/@babylonjs/react-native/shared/XrContextHelper.h'))
+    .pipe(gulp.src('../Modules/@babylonjs/react-native/shared/XrAnchorHelper.h'))
     .pipe(gulp.dest('Assembled/shared'));
 };
 
