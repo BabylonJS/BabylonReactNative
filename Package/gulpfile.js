@@ -542,8 +542,8 @@ const validate = async () => {
       throw `The Assembled directory does not contain the expected files.`;
     }
   }
-  //checkDirectory(actual, expected);
-  //checkDirectory(actualiosandroid, expectediosandroid);
+  checkDirectory(actual, expected);
+  checkDirectory(actualiosandroid, expectediosandroid);
 }
 
 const createPackage = async () => {
