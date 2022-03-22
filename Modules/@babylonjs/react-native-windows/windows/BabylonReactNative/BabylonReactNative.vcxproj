@@ -164,6 +164,7 @@
     <ClCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <!-- Include project headers when building in the repo -->
+      <AdditionalIncludeDirectories Condition="Exists('$(BabylonReactNativeDir)shared')">$(BabylonReactNativeDir)shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="Exists('$(BabylonNativeIOSAndroidProjDir)shared')">$(BabylonNativeIOSAndroidProjDir)shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -222,6 +223,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
     <ClCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories Condition="Exists('$(BabylonReactNativeDir)shared')">$(BabylonReactNativeDir)shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="Exists('$(BabylonNativeIOSAndroidProjDir)shared')">$(BabylonNativeIOSAndroidProjDir)shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
