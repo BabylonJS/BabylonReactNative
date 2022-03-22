@@ -604,9 +604,9 @@ const patchPackageVersion = async () => {
   }
 }
 
-const copyFiles = gulp.parallel(copyCommonFiles, copyIOSAndroidCommonFiles, copyIOSFiles, copyAndroidFiles);
+const copyFiles = gulp.parallel(copyIOSAndroidCommonFiles, copyIOSFiles, copyAndroidFiles);
 
-const buildTS = gulp.series(patchPackageVersion, copySharedFiles, buildTypeScript, validateAssembled);
+const buildTS = gulp.series(patchPackageVersion, copyCommonFiles, copySharedFiles, buildTypeScript, validateAssembled);
 const build = gulp.series(patchPackageVersion, buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validateAssemblediOSAndroid);
 const rebuild = gulp.series(clean, build);
 const pack = gulp.series(rebuild, createPackage);
@@ -628,7 +628,7 @@ const packAndroid = gulp.series(clean, buildAndroid, copyFiles, createPackage, c
 exports.buildAndroid = buildAndroid;
 exports.packAndroid = packAndroid;
 
-const copyPackageFilesUWP = gulp.series(copyCommonFiles, copyUWPFiles);
+const copyPackageFilesUWP = gulp.series(copyUWPFiles);
 const buildUWPPublish = gulp.series(buildUWP, copyPackageFilesUWP);
 const packUWP = gulp.series(clean, buildUWP, copyPackageFilesUWP, createPackage, createPackageUWP);
 const packUWPNoBuild = gulp.series(clean, copyPackageFilesUWP, createPackage, createPackageUWP);
