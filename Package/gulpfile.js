@@ -19,6 +19,31 @@ function exec(command, workingDirectory = '.', logCommand = true) {
   }
 }
 
+function checkDirectory(actualList, expectedList) {
+  const extras = actualList.filter(path => !expectedList.includes(path));
+  const missing = expected.filter(path => !actualList.includes(path));
+
+  let isValid = true;
+
+  if (extras.length !== 0) {
+    console.error(chalk.white.bgRedBright(`The Assembled directory contains unexpected files:`));
+    console.log(extras);
+    isValid = false;
+  }
+
+  if (missing.length !== 0) {
+    console.error(chalk.white.bgRedBright(`The Assembled directory is missing some expected files:`));
+    console.log(missing);
+    isValid = false;
+  }
+
+  if (!isValid) {
+    console.log(chalk.black.bgCyan(`If the Assembled directory is correct, update the file validation list in gulpfile.js with the following:`))
+    console.log(actualList);
+    throw `The Assembled directory does not contain the expected files.`;
+  }
+}
+
 const clean = async () => {
   if (shelljs.test('-d', 'Assembled')) {
     shelljs.rm('-r', 'Assembled');
@@ -399,8 +424,8 @@ const copyUWPFiles = gulp.series(
     copyOpenXRUtilityHeaders,
     copyOpenXRHelperHeaders));
 
-const validate = async () => {
-  // When the package contents are updated *and validated*, update the expected below from the output of the failed validation console output (run `gulp validate`).
+const validateAssembled = async () => {
+  // When the package contents are updated *and validated*, update the expected below from the output of the failed validation console output (run `gulp validateAssembled`).
   // This helps ensure a bad package is not accidentally published due to tooling changes, etc.
   const expected = [
     'Assembled/BabylonModule.d.ts',
@@ -442,6 +467,11 @@ const validate = async () => {
     'Assembled/VersionValidation.js.map'
   ];
 
+  const actual = glob.sync('Assembled/**/*');
+  checkDirectory(actual, expected);
+}
+
+const validateAssemblediOSAndroid = async () => {
   const expectediosandroid = [
     'Assembled-iOSAndroid/android',
     'Assembled-iOSAndroid/android/build.gradle',
@@ -515,34 +545,7 @@ const validate = async () => {
     'Assembled-iOSAndroid/package.json',
   ];
 
-  const actual = glob.sync('Assembled/**/*');
   const actualiosandroid = glob.sync('Assembled-iOSAndroid/**/*');
-
-  var checkDirectory = function(actualList, expectedList) {
-    const extras = actualList.filter(path => !expectedList.includes(path));
-    const missing = expected.filter(path => !actualList.includes(path));
-
-    let isValid = true;
-
-    if (extras.length !== 0) {
-      console.error(chalk.white.bgRedBright(`The Assembled directory contains unexpected files:`));
-      console.log(extras);
-      isValid = false;
-    }
-
-    if (missing.length !== 0) {
-      console.error(chalk.white.bgRedBright(`The Assembled directory is missing some expected files:`));
-      console.log(missing);
-      isValid = false;
-    }
-
-    if (!isValid) {
-      console.log(chalk.black.bgCyan(`If the Assembled directory is correct, update the file validation list in gulpfile.js with the following:`))
-      console.log(actualList);
-      throw `The Assembled directory does not contain the expected files.`;
-    }
-  }
-  checkDirectory(actual, expected);
   checkDirectory(actualiosandroid, expectediosandroid);
 }
 
@@ -601,12 +604,13 @@ const patchPackageVersion = async () => {
 
 const copyFiles = gulp.parallel(copyCommonFiles, copyIOSAndroidCommonFiles, copyIOSFiles, copyAndroidFiles);
 
-const buildTS = gulp.series(patchPackageVersion, copySharedFiles, buildTypeScript);
-const build = gulp.series(patchPackageVersion, buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validate);
+const buildTS = gulp.series(patchPackageVersion, copySharedFiles, buildTypeScript, validateAssembled);
+const build = gulp.series(patchPackageVersion, buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validateAssemblediOSAndroid);
 const rebuild = gulp.series(clean, build);
 const pack = gulp.series(rebuild, createPackage);
 
-exports.validate = validate;
+exports.validateAssembled = validateAssembled;
+exports.validateAssemblediOSAndroid = validateAssemblediOSAndroid;
 
 exports.buildIOS = buildIOS;
 exports.buildAndroid = buildAndroid;
