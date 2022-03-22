@@ -21,7 +21,7 @@ function exec(command, workingDirectory = '.', logCommand = true) {
 
 function checkDirectory(actualList, expectedList) {
   const extras = actualList.filter(path => !expectedList.includes(path));
-  const missing = expected.filter(path => !actualList.includes(path));
+  const missing = expectedList.filter(path => !actualList.includes(path));
 
   let isValid = true;
 
