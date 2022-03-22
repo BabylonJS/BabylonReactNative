@@ -232,8 +232,7 @@ const buildUWPPlayground = gulp.parallel(
 const buildUWP = gulp.series(makeUWPProject, buildUWPProject);
 
 const copyCommonFiles = () => {
-  return gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native/README.md')
-    .pipe(gulp.src('react-native-babylon.podspec'))
+  return gulp.src('../Modules/@babylonjs/react-native/README.md')
     .pipe(gulp.dest('Assembled'));
 };
 
@@ -246,6 +245,8 @@ const copySharedFiles = () => {
 
 const copyIOSAndroidCommonFiles = () => {
   return gulp.src('../Modules/@babylonjs/react-native-iosandroid/package.json')
+    .pipe(gulp.src('../Modules/@babylonjs/react-native-iosandroid/README.md'))
+    .pipe(gulp.src('../Modules/@babylonjs/react-native-iosandroid/react-native-babylon.podspec'))
     .pipe(gulp.dest('Assembled-iOSAndroid/'));
 };
 
@@ -453,7 +454,6 @@ const validateAssembled = async () => {
     'Assembled/FontFace.js',
     'Assembled/FontFace.js.map',
     'Assembled/package.json',
-    'Assembled/react-native-babylon.podspec',
     'Assembled/ReactNativeEngine.d.ts',
     'Assembled/ReactNativeEngine.js',
     'Assembled/ReactNativeEngine.js.map',
@@ -543,6 +543,8 @@ const validateAssemblediOSAndroid = async () => {
     'Assembled-iOSAndroid/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata',
     'Assembled-iOSAndroid/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings',
     'Assembled-iOSAndroid/package.json',
+    'Assembled-iOSAndroid/react-native-babylon.podspec',
+    'Assembled-iOSAndroid/README.md',
   ];
 
   const actualiosandroid = glob.sync('Assembled-iOSAndroid/**/*');
