@@ -19,7 +19,7 @@ cmake_minimum_required(VERSION 3.13.2)
 #                    detection.
 #   [24, infinite)   ES2 & ES3 & Vulkan
 project(ReactNativeBabylon)
-include(${CMAKE_CURRENT_LIST_DIR}/../shared/CMakeLists.txt)
+include(${CMAKE_CURRENT_LIST_DIR}/../../react-native/shared/CMakeLists.txt)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 set(CMAKE_CXX_STANDARD 17)
