@@ -1,4 +1,4 @@
-name: 'build ios-android'
+name: 'build Typescript'
 
 on: [workflow_call]
 
