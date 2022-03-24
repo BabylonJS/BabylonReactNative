@@ -1,6 +1,11 @@
 name: 'build Typescript'
 
-on: [workflow_call]
+on:
+  workflow_call:
+    inputs:
+      react-native-version:
+        required: true
+        type: string
 
 jobs:
   Build:
@@ -14,13 +19,13 @@ jobs:
         run: npm install
         working-directory: ./Apps/Playground
       - name: Select React Native Version 
-        run: npm run select --reactNative 0.64
+        run: npm run select --reactNative ${{ inputs.react-native-version }}
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
       - name: Gulp
-        run: npx gulp buildTS
+        run: npx gulp buildTS --reactNative ${{ inputs.react-native-version }} --releaseVersion ${{ github.event.release.name }}
         working-directory: ./Package
       - name: Upload Assembled Folder
         uses: actions/upload-artifact@v2
