@@ -575,7 +575,7 @@ const patchPackageVersion = async () => {
     const packageJsonWindows = JSON.parse(fs.readFileSync(packageJsonPathWindows));
     const packageJsoniOSAndroid = JSON.parse(fs.readFileSync(packageJsonPathiOSAndroid));
 
-    if (version != -1) {
+    if (versionIndex != -1) {
       const version = process.argv[versionIndex];
       if (version == '0.64' || version == '0.65') {
         console.log(chalk.black.bgCyan(`Updating Package.json for React Native ${version}.`))
