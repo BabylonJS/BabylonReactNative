@@ -50,7 +50,7 @@ const clean = async () => {
   }
 
   if (shelljs.test('-d', 'Assembled-iOSAndroid')) {
-    shelljs.rm('-r', 'Assembled');
+    shelljs.rm('-r', 'Assembled-iOSAndroid');
   }
 
   if (shelljs.test('-d', 'Assembled-Windows')) {
