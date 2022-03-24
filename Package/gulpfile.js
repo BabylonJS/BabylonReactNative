@@ -578,16 +578,13 @@ const patchPackageVersion = async () => {
     if (versionIndex != -1) {
       const version = process.argv[versionIndex];
       if (version == '0.64' || version == '0.65') {
-        console.log(chalk.black.bgCyan(`Updating Package.json for React Native ${version}.`))
-        if (version == '0.64') {
-          packageJsonWindows.peerDependencies['react-native'] = '>=0.63.1 <0.65.0';
-          packageJsoniOSAndroid.peerDependencies['react-native'] = '>=0.63.1 <0.65.0';
-          packageJsonWindows.peerDependencies['react-native-windows'] = '>=0.63.1 <0.65.0';
-        } else {
-          packageJsonWindows.peerDependencies['react-native'] = '>=0.65.0';
-          packageJsoniOSAndroid.peerDependencies['react-native'] = '>=0.65.0';
-          packageJsonWindows.peerDependencies['react-native-windows'] = '>=0.65.0';
-        }
+        console.log(chalk.black.bgCyan(`Updating Package.json for React Native ${version}.`));
+        let peerDep = (version == '0.64') ? '>=0.63.1 <0.65.0' : '>=0.65.0';
+        
+        packageJson.peerDependencies['react-native'] = peerDep;
+        packageJsoniOSAndroid.peerDependencies['react-native'] = peerDep;
+        packageJsonWindows.peerDependencies['react-native'] = peerDep;
+        packageJsonWindows.peerDependencies['react-native-windows'] = peerDep;
       }
     }
     // release version
