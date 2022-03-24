@@ -564,9 +564,9 @@ const createPackageUWP = async () => {
 }
 
 const patchPackageVersion = async () => {
-  const version = (process.argv[2] == '--reactNative') ? process.argv[3] : ((process.argv[3] == '--reactNative') ? process.argv[4] : '');
-  if (version == '0.64' || version == '0.65') {
-    console.log(chalk.black.bgCyan(`Updating Package.json for React Native ${version}.`))
+  const releaseVersionIndex = process.argv.indexOf('--releaseVersion');
+  const versionIndex = process.argv.indexOf('--reactNative');
+  if (releaseVersionIndex != -1 || versionIndex != -1) {
 
     const packageJsonPath = '../Modules/@babylonjs/react-native/package.json';
     const packageJsonPathWindows = '../Modules/@babylonjs/react-native-windows/package.json';
@@ -575,19 +575,24 @@ const patchPackageVersion = async () => {
     const packageJsonWindows = JSON.parse(fs.readFileSync(packageJsonPathWindows));
     const packageJsoniOSAndroid = JSON.parse(fs.readFileSync(packageJsonPathiOSAndroid));
 
-    if (version == '0.64') {
-      packageJsonWindows.peerDependencies['react-native'] = '>=0.63.1 <0.65.0';
-      packageJsoniOSAndroid.peerDependencies['react-native'] = '>=0.63.1 <0.65.0';
-      packageJsonWindows.peerDependencies['react-native-windows'] = '>=0.63.1 <0.65.0';
-    } else {
-      packageJsonWindows.peerDependencies['react-native'] = '>=0.65.0';
-      packageJsoniOSAndroid.peerDependencies['react-native'] = '>=0.65.0';
-      packageJsonWindows.peerDependencies['react-native-windows'] = '>=0.65.0';
+    if (version != -1) {
+      const version = process.argv[versionIndex];
+      if (version == '0.64' || version == '0.65') {
+        console.log(chalk.black.bgCyan(`Updating Package.json for React Native ${version}.`))
+        if (version == '0.64') {
+          packageJsonWindows.peerDependencies['react-native'] = '>=0.63.1 <0.65.0';
+          packageJsoniOSAndroid.peerDependencies['react-native'] = '>=0.63.1 <0.65.0';
+          packageJsonWindows.peerDependencies['react-native-windows'] = '>=0.63.1 <0.65.0';
+        } else {
+          packageJsonWindows.peerDependencies['react-native'] = '>=0.65.0';
+          packageJsoniOSAndroid.peerDependencies['react-native'] = '>=0.65.0';
+          packageJsonWindows.peerDependencies['react-native-windows'] = '>=0.65.0';
+        }
+      }
     }
-
     // release version
-    const releaseVersion = (process.argv[4] == '--releaseVersion') ? process.argv[5] : ((process.argv[5] == '--releaseVersion') ? process.argv[6] : '');
-    if (releaseVersion !== '') {
+    if (releaseVersionIndex !== -1) {
+      const releaseVersion = process.argv[releaseVersionIndex + 1];
       packageJsonWindows.peerDependencies["@babylonjs/react-native"] = releaseVersion;
       packageJsoniOSAndroid.peerDependencies["@babylonjs/react-native"] = releaseVersion;
 
