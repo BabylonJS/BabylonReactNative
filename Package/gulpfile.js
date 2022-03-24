@@ -19,28 +19,28 @@ function exec(command, workingDirectory = '.', logCommand = true) {
   }
 }
 
-function checkDirectory(actualList, expectedList) {
+function checkDirectory(actualList, expectedList, directoryName) {
   const extras = actualList.filter(path => !expectedList.includes(path));
   const missing = expectedList.filter(path => !actualList.includes(path));
 
   let isValid = true;
 
   if (extras.length !== 0) {
-    console.error(chalk.white.bgRedBright(`The Assembled directory contains unexpected files:`));
+    console.error(chalk.white.bgRedBright(`The ${directoryName} directory contains unexpected files:`));
     console.log(extras);
     isValid = false;
   }
 
   if (missing.length !== 0) {
-    console.error(chalk.white.bgRedBright(`The Assembled directory is missing some expected files:`));
+    console.error(chalk.white.bgRedBright(`The ${directoryName} directory is missing some expected files:`));
     console.log(missing);
     isValid = false;
   }
 
   if (!isValid) {
-    console.log(chalk.black.bgCyan(`If the Assembled directory is correct, update the file validation list in gulpfile.js with the following:`))
+    console.log(chalk.black.bgCyan(`If the ${directoryName} directory is correct, update the file validation list in gulpfile.js with the following:`))
     console.log(actualList);
-    throw `The Assembled directory does not contain the expected files.`;
+    throw `The ${directoryName} directory does not contain the expected files.`;
   }
 }
 
@@ -468,7 +468,7 @@ const validateAssembled = async () => {
   ];
 
   const actual = glob.sync('Assembled/**/*');
-  checkDirectory(actual, expected);
+  checkDirectory(actual, expected, 'Assembled');
 }
 
 const validateAssemblediOSAndroid = async () => {
@@ -548,7 +548,7 @@ const validateAssemblediOSAndroid = async () => {
   ];
 
   const actualiosandroid = glob.sync('Assembled-iOSAndroid/**/*');
-  checkDirectory(actualiosandroid, expectediosandroid);
+  checkDirectory(actualiosandroid, expectediosandroid, 'Assembled-iOSAndroid');
 }
 
 const createPackage = async () => {
