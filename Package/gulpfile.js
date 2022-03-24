@@ -246,7 +246,7 @@ const copySharedFiles = () => {
 const copyIOSAndroidCommonFiles = () => {
   return gulp.src('../Modules/@babylonjs/react-native-iosandroid/package.json')
     .pipe(gulp.src('../Modules/@babylonjs/react-native-iosandroid/README.md'))
-    .pipe(gulp.src('../Modules/@babylonjs/react-native-iosandroid/react-native-babylon.podspec'))
+    .pipe(gulp.src('react-native-babylon.podspec'))
     .pipe(gulp.dest('Assembled-iOSAndroid/'));
 };
 
@@ -580,7 +580,7 @@ const patchPackageVersion = async () => {
       if (version == '0.64' || version == '0.65') {
         console.log(chalk.black.bgCyan(`Updating Package.json for React Native ${version}.`));
         let peerDep = (version == '0.64') ? '>=0.63.1 <0.65.0' : '>=0.65.0';
-        
+
         packageJson.peerDependencies['react-native'] = peerDep;
         packageJsoniOSAndroid.peerDependencies['react-native'] = peerDep;
         packageJsonWindows.peerDependencies['react-native'] = peerDep;
