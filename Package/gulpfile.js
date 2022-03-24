@@ -54,7 +54,7 @@ const clean = async () => {
   }
 
   if (shelljs.test('-d', 'Assembled-Windows')) {
-    shelljs.rm('-r', 'Assembled');
+    shelljs.rm('-r', 'Assembled-Windows');
   }
 };
 
