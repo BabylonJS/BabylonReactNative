@@ -580,6 +580,10 @@ const patchPackageVersion = async () => {
       if (version == '0.64' || version == '0.65') {
         console.log(chalk.black.bgCyan(`Updating Package.json for React Native ${version}.`));
         let peerDep = (version == '0.64') ? '>=0.63.1 <0.65.0' : '>=0.65.0';
+        let packageNamePostfix = (version == '0.64') ? '-0-64' : '-0-65';
+
+        packageJsoniOSAndroid["name"] = "@babylonjs/react-native-iosandroid" + packageNamePostfix;
+        packageJsonWindows["name"] = "@babylonjs/react-native-windows" + packageNamePostfix;
 
         packageJson.peerDependencies['react-native'] = peerDep;
         packageJsoniOSAndroid.peerDependencies['react-native'] = peerDep;
