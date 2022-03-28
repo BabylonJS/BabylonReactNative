@@ -1,18 +1,13 @@
-name: Publish Package
-#on:
-#  release:
-#    types: [published]
+name: Publish Package Without Release
 
 on:
   workflow_dispatch:
     inputs:
       release_version:
-        description: 'Release Version'
+        description: 'NPM Release Version'
         required: true 
         type: string
         default: 0.0.1
-
-# replace ${{ github.event.inputs.release_version }} with ${GITHUB_REF/refs\/tags\//} in this script of ${{ github.event.release.name }} in reusable workflows
 
 jobs:
   build-android-ios-064:
