@@ -1,0 +1,34 @@
+name: 'build Typescript'
+
+on:
+  workflow_call:
+    inputs:
+      Release_Version:
+        required: true
+        type: string
+
+jobs:
+  Build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+        with:
+          submodules: 'recursive'
+      - name: NPM Install (Playground)
+        run: npm install
+        working-directory: ./Apps/Playground
+      - name: Select React Native Version 
+        run: npm run select 0.64
+        working-directory: ./Apps/Playground
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Gulp
+        run: npx gulp buildTS --releaseVersion ${{ inputs.Release_Version }}
+        working-directory: ./Package
+      - name: Upload Assembled Folder
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'Assembled'
+          path: Package/Assembled
