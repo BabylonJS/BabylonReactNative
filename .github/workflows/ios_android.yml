@@ -6,6 +6,12 @@ on:
       react-native-version:
         required: true
         type: string
+<<<<<<< HEAD
+=======
+      Release_Version:
+        required: true
+        type: string
+>>>>>>> 9054098bd2a56512dd6f3c3b44fb3f16aafff97f
 
 jobs:
   Build:
@@ -31,7 +37,11 @@ jobs:
         run: npm install
         working-directory: ./Package
       - name: Gulp
+<<<<<<< HEAD
         run: npx gulp --reactNative ${{ inputs.react-native-version }} --releaseVersion ${{ github.event.release.name }}
+=======
+        run: npx gulp --reactNative ${{ inputs.react-native-version }} --releaseVersion ${{ inputs.Release_Version }}
+>>>>>>> 9054098bd2a56512dd6f3c3b44fb3f16aafff97f
         working-directory: ./Package
       - name: Upload Assembled iOS Android Folder
         uses: actions/upload-artifact@v2

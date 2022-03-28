@@ -1,31 +1,43 @@
-name: Publish Package
+name: Publish Package Without Release
+
 on:
-  release:
-    types: [published]
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'NPM Release Version'
+        required: true 
+        type: string
+        default: 0.0.1
 
 jobs:
   build-android-ios-064:
     uses: ./.github/workflows/ios_android.yml
     with:
       react-native-version: 0.64
+      Release_Version: ${{ github.event.inputs.release_version }}
 
   build-android-ios-065:
     uses: ./.github/workflows/ios_android.yml
     with:
       react-native-version: 0.65
+      Release_Version: ${{ github.event.inputs.release_version }}
 
   build-windows-064:
     uses: ./.github/workflows/windows.yml
     with:
       react-native-version: 0.64
+      Release_Version: ${{ github.event.inputs.release_version }}
 
   build-windows-065:
     uses: ./.github/workflows/windows.yml
     with:
       react-native-version: 0.65
+      Release_Version: ${{ github.event.inputs.release_version }}
 
   build-typescript:
     uses: ./.github/workflows/typescript.yml
+    with:
+      Release_Version: ${{ github.event.inputs.release_version }}
 
   package:
     needs: [build-typescript, build-android-ios-064, build-android-ios-065, build-windows-064, build-windows-065]
@@ -71,7 +83,7 @@ jobs:
           scope: '@babylonjs'
       - name: Version & Publish Package @babylonjs/react-native
         run: |
-          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
+          npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
           npm publish --access public
         working-directory: ./Package/Assembled
         env:
@@ -79,14 +91,14 @@ jobs:
 
       - name: Version & Publish Package @babylonjs/react-native-iosandroid-0-64
         run: |
-          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
+          npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
           npm publish --access public
         working-directory: ./Package/Assembled-iOSAndroid0.64
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Version & Publish Package @babylonjs/react-native-iosandroid-0-65
         run: |
-          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
+          npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
           npm publish --access public
         working-directory: ./Package/Assembled-iOSAndroid0.65
         env:
@@ -94,14 +106,14 @@ jobs:
 
       - name: Version & Publish Package @babylonjs/react-native-windows-0-64
         run: |
-          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
+          npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
           npm publish --access public
         working-directory: ./Package/Assembled-Windows0.64
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Version & Publish Package @babylonjs/react-native-windows-0-65
         run: |
-          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
+          npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
           npm publish --access public
         working-directory: ./Package/Assembled-Windows0.64
         env:

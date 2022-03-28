@@ -1,6 +1,15 @@
 name: 'build Typescript'
 
+<<<<<<< HEAD
 on: [workflow_call]
+=======
+on:
+  workflow_call:
+    inputs:
+      Release_Version:
+        required: true
+        type: string
+>>>>>>> 9054098bd2a56512dd6f3c3b44fb3f16aafff97f
 
 jobs:
   Build:
@@ -20,7 +29,11 @@ jobs:
         run: npm install
         working-directory: ./Package
       - name: Gulp
+<<<<<<< HEAD
         run: npx gulp buildTS --releaseVersion ${{ github.event.release.name }}
+=======
+        run: npx gulp buildTS --releaseVersion ${{ inputs.Release_Version }}
+>>>>>>> 9054098bd2a56512dd6f3c3b44fb3f16aafff97f
         working-directory: ./Package
       - name: Upload Assembled Folder
         uses: actions/upload-artifact@v2
