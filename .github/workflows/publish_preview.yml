@@ -119,6 +119,6 @@ jobs:
         run: |
           npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
           npm publish --access public --tag ${{ github.event.inputs.NPM_tag }}
-        working-directory: ./Package/Assembled-Windows0.64
+        working-directory: ./Package/Assembled-Windows0.65
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
