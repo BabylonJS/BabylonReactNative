@@ -1,7 +1,11 @@
 name: 'build Typescript'
 
-on: [workflow_call]
-
+on:
+  workflow_call:
+    inputs:
+      release-version:
+        required: true
+        type: string
 jobs:
   Build:
     runs-on: macos-latest
@@ -20,7 +24,7 @@ jobs:
         run: npm install
         working-directory: ./Package
       - name: Gulp
-        run: npx gulp buildTS --releaseVersion ${{ github.event.release.name }}
+        run: npx gulp buildTS --releaseVersion ${{ inputs.release-version }}
         working-directory: ./Package
       - name: Upload Assembled Folder
         uses: actions/upload-artifact@v2

@@ -6,7 +6,7 @@ on:
         description: 'NPM Release Version'
         required: true 
         type: string
-        default: 0.0.1
+        default: 1.0.0
       NPM_tag:
         description: 'NPM Tag'
         required: true 
@@ -15,31 +15,31 @@ on:
 
 jobs:
   build-android-ios-064:
-    uses: ./.github/workflows/ios_android_tag.yml
+    uses: ./.github/workflows/ios_android.yml
     with:
       react-native-version: 0.64
       release-version: ${{ github.event.inputs.release_version }}
 
   build-android-ios-065:
-    uses: ./.github/workflows/ios_android_tag.yml
+    uses: ./.github/workflows/ios_android.yml
     with:
       react-native-version: 0.65
       release-version: ${{ github.event.inputs.release_version }}
 
   build-windows-064:
-    uses: ./.github/workflows/windows_tag.yml
+    uses: ./.github/workflows/windows.yml
     with:
       react-native-version: 0.64
       release-version: ${{ github.event.inputs.release_version }}
 
   build-windows-065:
-    uses: ./.github/workflows/windows_tag.yml
+    uses: ./.github/workflows/windows.yml
     with:
       react-native-version: 0.65
       release-version: ${{ github.event.inputs.release_version }}
 
   build-typescript:
-    uses: ./.github/workflows/typescript_tag.yml
+    uses: ./.github/workflows/typescript.yml
     with:
       release-version: ${{ github.event.inputs.release_version }}
 
