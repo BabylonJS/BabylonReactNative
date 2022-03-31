@@ -8,24 +8,30 @@ jobs:
     uses: ./.github/workflows/ios_android.yml
     with:
       react-native-version: 0.64
+      release-version: ${GITHUB_REF/refs\/tags\//}
 
   build-android-ios-065:
     uses: ./.github/workflows/ios_android.yml
     with:
       react-native-version: 0.65
+      release-version: ${GITHUB_REF/refs\/tags\//}
 
   build-windows-064:
     uses: ./.github/workflows/windows.yml
     with:
       react-native-version: 0.64
+      release-version: ${GITHUB_REF/refs\/tags\//}
 
   build-windows-065:
     uses: ./.github/workflows/windows.yml
     with:
       react-native-version: 0.65
+      release-version: ${GITHUB_REF/refs\/tags\//}
 
   build-typescript:
     uses: ./.github/workflows/typescript.yml
+    with:
+      release-version: ${GITHUB_REF/refs\/tags\//}
 
   package:
     needs: [build-typescript, build-android-ios-064, build-android-ios-065, build-windows-064, build-windows-065]
@@ -103,6 +109,6 @@ jobs:
         run: |
           npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
           npm publish --access public
-        working-directory: ./Package/Assembled-Windows0.64
+        working-directory: ./Package/Assembled-Windows0.65
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
