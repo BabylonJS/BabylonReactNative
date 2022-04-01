@@ -1,4 +1,4 @@
-# @babylonjs/react-native
+# Babylon React Native
 
 ## Usage
 
@@ -20,7 +20,7 @@ The minimum deployment target version is 12. This must be set as `iOS Deployment
 
 ### Platform Native Packages
 
-Babylon React Native platform native packages must also be installed for the platforms and React Native versions being targeted. This is only needed for ***apps*** using Babylon React Native, not for ***librarys (React Native packages)*** building on top of Babylon React Native.
+Babylon React Native platform native packages must also be installed for the platforms and React Native versions being targeted. This is only needed for ***apps*** using Babylon React Native, not for ***libraries (React Native packages)*** building on top of Babylon React Native.
 
 |         | React Native 0.63 - 0.64                                                                                         | React Native 0.65 - 0.66                                                                                         |
 | ------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
