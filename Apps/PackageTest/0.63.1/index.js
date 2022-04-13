@@ -3,7 +3,7 @@
  */
 
 import {AppRegistry} from 'react-native';
-import App from '../packagetest-shared/App';
-import {name as appName} from '../packagetest-shared/app.json';
+import App from './App';
+import {name as appName} from './app.json';
 
 AppRegistry.registerComponent(appName, () => App);
