@@ -12,9 +12,9 @@
   },
   "dependencies": {
     "@babylonjs/core": "^5.0.0",
-    "@babylonjs/loaders": "^5.0.0",
     "@babylonjs/react-native": "^1.0.1",
     "@babylonjs/react-native-iosandroid-0-65": "^1.0.1",
+    "@babylonjs/react-native-windows-0-65": "^1.0.1",
     "@babylonjs/packagetest-shared": "file:../packagetest-shared",
     "react": "17.0.2",
     "react-native": "0.65.0",
@@ -33,6 +33,14 @@
     "react-test-renderer": "17.0.2"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }
