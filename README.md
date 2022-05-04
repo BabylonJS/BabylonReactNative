@@ -113,11 +113,12 @@ export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 ```
 
-**Troubleshooting:**
+### **Troubleshooting**
 - If the Metro server is not started with `npm run android` , you can start it manually by running `npm run start` in a terminal.
 - Android Studio is the tool of choice for downloading the various versions of NDK.
 - If something goes wrong with the build `npm run android --verbose` can give some hints.
 - If the emulator is not launched by the build, you can run `~/Android/Sdk/emulator/emulator @name_of_your_image`.
+- For other emulator issues, follow the [instructions](https://github.com/BabylonJS/BabylonNative/blob/master/Documentation/AndroidEmulator.md) from Babylon Native documentation.
 
 ### **Building and Running the Playground App**
 
