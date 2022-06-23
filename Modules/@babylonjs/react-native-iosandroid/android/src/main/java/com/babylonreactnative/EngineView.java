@@ -2,6 +2,7 @@ package com.babylonreactnative;
 
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
+import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
 import android.os.Build;
 import android.os.Handler;
@@ -24,12 +25,11 @@ import com.facebook.react.uimanager.events.EventDispatcher;
 
 import java.io.ByteArrayOutputStream;
 
-public final class EngineView extends FrameLayout implements SurfaceHolder.Callback, TextureView.SurfaceTextureListener, View.OnTouchListener {
+public final class EngineView extends FrameLayout implements SurfaceHolder.Callback, View.OnTouchListener {
     private static final FrameLayout.LayoutParams childViewLayoutParams = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-    private TextureView transparentTextureView;
-    private Surface transparentSurface = null;
-    private SurfaceView opaqueSurfaceView = null;
+    private SurfaceView surfaceView = null;
     private SurfaceView xrSurfaceView;
+    private boolean isTransparent = false;
     private final EventDispatcher reactEventDispatcher;
     private Runnable renderRunnable;
 
@@ -68,30 +68,26 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
     // TextureView related
 
     public void setIsTransparent(Boolean isTransparent) {
-        if (isTransparent) {
-            if (this.opaqueSurfaceView != null) {
-                this.opaqueSurfaceView.setVisibility(View.GONE);
-                this.opaqueSurfaceView = null;
-            }
-            if (this.transparentTextureView == null) {
-                this.transparentTextureView = new TextureView(this.getContext());
-                this.transparentTextureView.setLayoutParams(EngineView.childViewLayoutParams);
-                this.transparentTextureView.setSurfaceTextureListener(this);
-                this.transparentTextureView.setOpaque(false);
-                this.addView(this.transparentTextureView);
-            }
-        } else {
-            if (this.transparentTextureView != null) {
-                this.transparentTextureView.setVisibility(View.GONE);
-                this.transparentTextureView = null;
-            }
-            if (this.opaqueSurfaceView == null) {
-                this.opaqueSurfaceView = new SurfaceView(this.getContext());
-                this.opaqueSurfaceView.setLayoutParams(EngineView.childViewLayoutParams);
-                this.opaqueSurfaceView.getHolder().addCallback(this);
-                this.addView(this.opaqueSurfaceView);
-            }
+        if (this.surfaceView != null && isTransparent == this.isTransparent) {
+            return;
         }
+        if (this.surfaceView != null) {
+            this.surfaceView.setVisibility(View.GONE);
+        }
+        this.surfaceView = new SurfaceView(this.getContext());
+        this.surfaceView.setLayoutParams(EngineView.childViewLayoutParams);
+        SurfaceHolder surfaceHolder = this.surfaceView.getHolder();
+
+        if (isTransparent) {
+            // ZOrder is not dynamic before Android 11. Recreate the surfaceView and set order before adding to the parent
+            // https://developer.android.com/reference/android/view/SurfaceView#setZOrderOnTop(boolean)
+            this.surfaceView.setZOrderOnTop(true);    // necessary
+            surfaceHolder.setFormat(PixelFormat.TRANSPARENT);
+        }
+        surfaceHolder.addCallback(this);
+        this.addView(this.surfaceView);
+        this.isTransparent = isTransparent;
+
         // xr view needs to be on top of views that might be created after it.
         if (this.xrSurfaceView != null) {
             this.xrSurfaceView.bringToFront();
@@ -112,40 +108,6 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         this.removeCallbacks(this.renderRunnable);
         this.renderRunnable = null;
-    }
-
-    @Override
-    public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
-        this.startRenderLoop();
-        this.acquireNewTransparentSurface(surfaceTexture);
-        BabylonNativeInterop.updateView(this.transparentSurface);
-    }
-
-    @Override
-    public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surfaceTexture, int i, int i1) {
-        this.acquireNewTransparentSurface(surfaceTexture);
-        BabylonNativeInterop.updateView(this.transparentSurface);
-    }
-
-    @Override
-    public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surfaceTexture) {
-        this.stopRenderLoop();
-        this.transparentSurface.release();
-        this.transparentSurface = null;
-        return false;
-    }
-
-    @Override
-    public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surfaceTexture) {
-        this.acquireNewTransparentSurface(surfaceTexture);
-        BabylonNativeInterop.updateView(this.transparentSurface);
-    }
-
-    private void acquireNewTransparentSurface(@NonNull SurfaceTexture surfaceTexture) {
-        if (this.transparentSurface != null) {
-            this.transparentSurface.release();
-        }
-        this.transparentSurface = new Surface(surfaceTexture);
     }
 
     // ------------------------------------
@@ -176,11 +138,9 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
         helperThread.start();
         final Handler helperThreadHandler = new Handler(helperThread.getLooper());
 
-        Surface sourceSurface = this.transparentSurface;
+        SurfaceView sourceSurface = this.surfaceView;
         if (BabylonNativeInterop.isXRActive()) {
-            sourceSurface = this.xrSurfaceView.getHolder().getSurface();
-        } else if (this.opaqueSurfaceView != null) {
-            sourceSurface = this.opaqueSurfaceView.getHolder().getSurface();
+            sourceSurface = this.xrSurfaceView;
         }
         PixelCopy.request(sourceSurface, bitmap, getOnPixelCopyFinishedListener(bitmap, helperThread), helperThreadHandler);
     }
