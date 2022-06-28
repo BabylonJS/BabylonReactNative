@@ -65,6 +65,7 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
     }
 
     public void setMSAA(Integer value) {
+        BabylonNativeInterop.updateMSAA(value);
     }
     // ------------------------------------
     // TextureView related

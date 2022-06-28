@@ -9,6 +9,7 @@ export interface EngineViewProps extends ViewProps {
     camera?: Camera;
     displayFrameRate?: boolean;
     isTransparent?: boolean;
+    MSAA: number;
     onInitialized?: (view: EngineViewCallbacks) => void;
 }
 
@@ -26,7 +27,8 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
     const [sceneStats, setSceneStats] = useState<SceneStats>();
     const engineViewRef = useRef<Component<NativeEngineViewProps>>(null);
     const snapshotPromise = useRef<{ promise: Promise<string>, resolve: (data: string) => void }>();
-    const isTransparent = props.isTransparent || false
+    const isTransparent = props.isTransparent || false;
+    const MSAA = props.MSAA || 0;
 
     const initialized = useModuleInitializer();
 
@@ -112,7 +114,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
     if (initialized !== false) {
         return (
             <View style={[{ flex: 1 }, props.style, { overflow: "hidden" }]}>
-                { initialized && <NativeEngineView ref={engineViewRef} style={{ flex: 1 }} onSnapshotDataReturned={snapshotDataReturnedHandler} isTransparent={isTransparent} /> }
+                { initialized && <NativeEngineView ref={engineViewRef} style={{ flex: 1 }} onSnapshotDataReturned={snapshotDataReturnedHandler} isTransparent={isTransparent} MSAA={MSAA}/> }
                 { sceneStats !== undefined &&
                 <View style={{ backgroundColor: '#00000040', opacity: 1, position: 'absolute', right: 0, left: 0, top: 0, flexDirection: 'row-reverse' }}>
                     <Text style={{ color: 'yellow', alignSelf: 'flex-end', margin: 3, fontVariant: ['tabular-nums'] }}>FPS: {sceneStats.frameRate.toFixed(0)}</Text>
