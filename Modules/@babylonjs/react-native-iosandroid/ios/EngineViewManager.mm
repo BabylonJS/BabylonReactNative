@@ -12,7 +12,7 @@
 
 @property (nonatomic, copy) RCTDirectEventBlock onSnapshotDataReturned;
 @property (nonatomic, assign) BOOL isTransparent;
-@property (nonatomic, assign) NSNumber MSAA;
+@property (nonatomic, assign) NSNumber* MSAA;
 
 @end
 
