@@ -12,7 +12,7 @@
 
 @property (nonatomic, copy) RCTDirectEventBlock onSnapshotDataReturned;
 @property (nonatomic, assign) BOOL isTransparent;
-
+@property (nonatomic, assign) NSNumber MSAA;
 
 @end
 
@@ -39,6 +39,10 @@
         [self setOpaque:YES];
     }
     self.isTransparent = isTransparent;
+}
+
+- (void)setMSAA:(NSNumber*)value {
+    [BabylonNativeInterop updateMSAA:value];
 }
 
 - (void)setBounds:(CGRect)bounds {

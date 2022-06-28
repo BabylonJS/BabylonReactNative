@@ -107,6 +107,18 @@ namespace BabylonNative
             });
         }
 
+        void UpdateMSAA(uint8_t value)
+        {
+            if (!g_graphics)
+            {
+                g_graphics->UpdateMSAA(value);
+            }
+            else
+            {
+                throw std::runtime_error{ "UpdateMSAA must happen after the view creation." };
+            }
+        }
+
         void RenderView()
         {
             // If rendering has not been explicitly enabled, or has been explicitly disabled, then don't try to render.
@@ -254,6 +266,18 @@ namespace BabylonNative
         if (auto nativeModule{ g_nativeModule.lock() })
         {
             nativeModule->UpdateView(window, width, height);
+        }
+        else
+        {
+            throw std::runtime_error{ "UpdateView must not be called before Initialize." };
+        }
+    }
+
+    void UpdateMSAA(uint8_t value)
+    {
+        if (auto nativeModule{ g_nativeModule.lock() })
+        {
+            nativeModule->UpdateMSAA(value);
         }
         else
         {

@@ -64,6 +64,8 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
         this.reactEventDispatcher = reactContext.getNativeModule(UIManagerModule.class).getEventDispatcher();
     }
 
+    public void setMSAA(Integer value) {
+    }
     // ------------------------------------
     // TextureView related
 
