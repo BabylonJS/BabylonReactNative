@@ -280,7 +280,7 @@ namespace BabylonNative
         }
         else
         {
-            throw std::runtime_error{ "UpdateView must not be called before Initialize." };
+            throw std::runtime_error{ "UpdateMSAA must not be called before Initialize." };
         }
     }
 
