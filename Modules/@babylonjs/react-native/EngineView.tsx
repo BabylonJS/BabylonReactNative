@@ -9,7 +9,7 @@ export interface EngineViewProps extends ViewProps {
     camera?: Camera;
     displayFrameRate?: boolean;
     isTransparent?: boolean;
-    MSAA: number;
+    antiAliasing?: 0 | 1 | 2 | 4 | 8 | 16;
     onInitialized?: (view: EngineViewCallbacks) => void;
 }
 
