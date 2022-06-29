@@ -27,8 +27,8 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
     const [sceneStats, setSceneStats] = useState<SceneStats>();
     const engineViewRef = useRef<Component<NativeEngineViewProps>>(null);
     const snapshotPromise = useRef<{ promise: Promise<string>, resolve: (data: string) => void }>();
-    const isTransparent = props.isTransparent || false;
-    const MSAA = props.MSAA || 0;
+    const isTransparent = props.isTransparent ?? false;
+    const MSAA = props.MSAA ?? 0;
 
     const initialized = useModuleInitializer();
 
