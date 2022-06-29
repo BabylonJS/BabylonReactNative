@@ -120,3 +120,21 @@ jobs:
       - name: Gulp Build ${{ matrix.platform }} ${{ matrix.config }} Playground (Windows)
         run: npx gulp buildUWPPlayground${{ matrix.platform }}${{ matrix.config }}
         working-directory: ./Package
+
+# Test packages
+  build-android-ios-065:
+    uses: ./.github/workflows/ios_android.yml
+    with:
+      react-native-version: 0.65
+      release-version: 2.0.0 # dummy version
+
+  build-windows-065:
+    uses: ./.github/workflows/windows.yml
+    with:
+      react-native-version: 0.65
+      release-version: 2.0.0
+
+  build-typescript:
+    uses: ./.github/workflows/typescript.yml
+    with:
+      release-version: 2.0.0
