@@ -122,6 +122,10 @@ RCT_CUSTOM_VIEW_PROPERTY(isTransparent, NSNumber*, EngineView){
     [view setIsTransparentFlag:json];
 }
 
+RCT_CUSTOM_VIEW_PROPERTY(MSAA, NSNumber*, EngineView){
+    [view setMSAA:json];
+}
+
 RCT_EXPORT_MODULE(EngineViewManager)
 
 RCT_EXPORT_VIEW_PROPERTY(onSnapshotDataReturned, RCTDirectEventBlock)
