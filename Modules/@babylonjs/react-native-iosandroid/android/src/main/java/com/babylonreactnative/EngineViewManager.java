@@ -28,9 +28,9 @@ public final class EngineViewManager extends SimpleViewManager<EngineView> {
         view.setIsTransparent(isTransparent);
     }
 
-    @ReactProp(name = "MSAA")
-    public void setMSAA(EngineView view, Integer value) {
-        view.setMSAA(value);
+    @ReactProp(name = "antiAliasing")
+    public void setAntiAliasing(EngineView view, Integer value) {
+        view.setAntiAliasing(value);
     }
 
     @NonNull

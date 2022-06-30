@@ -90,7 +90,7 @@ e.g.
 <EngineView style={{flex: 1}} camera={camera} isTransparent={true} />
 ```
 
-To configure MSAA, a property called `MSAA` can be changed to a value of 0 or 1 (disable MSAA, default), 2, 4, 8 or 16 (MSAA samples).
+To configure anti-aliasing, a property called `antiAliasing` can be changed to a value of 0 or 1 (disable anti-aliasing, default), 2, 4, 8 or 16 (anti-aliasing samples).
 
 e.g.
 

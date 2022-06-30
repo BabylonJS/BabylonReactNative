@@ -184,7 +184,7 @@ namespace winrt::BabylonReactNative::implementation {
             {
                 bool isTransparent = propertyValue.AsBoolean();
                 this->CompositeMode(isTransparent ? ElementCompositeMode::MinBlend : ElementCompositeMode::Inherit);
-            } else if (propertyName == "MSAA")
+            } else if (propertyName == "antiAliasing")
             {
                 auto value = propertyValue.AsUInt8();
                 BabylonNative::UpdateMSAA(value);
