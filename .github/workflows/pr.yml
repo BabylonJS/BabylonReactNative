@@ -6,6 +6,8 @@ on:
 env:
   BRN_Version: 0.64
 
+permissions: write-all
+
 jobs:
 #  build-android:
 #    runs-on: macos-latest
@@ -140,9 +142,6 @@ jobs:
 #      release-version: 1.0.0-${GITHUB_SHA::8}
 
   package:
-    permissions:
-      packages: read/write
-
 #    needs: [build-typescript] #, build-android-ios-065, build-windows-065]
     runs-on: ubuntu-latest
     steps:
