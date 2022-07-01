@@ -172,8 +172,8 @@ jobs:
 
       - name: Version & Publish Package @babylonjs/react-native
         run: |
-          npm version --no-git-tag-version 0.0.0-${GITHUB_SHA::8}
-          npm publish
+          npm version --no-git-tag-version 1.0.0
+          npm publish --access public
         working-directory: ./PackageUp
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
