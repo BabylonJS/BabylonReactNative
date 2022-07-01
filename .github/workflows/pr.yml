@@ -158,6 +158,14 @@ jobs:
 #        with:
 #          name: 'Assembled-Windows0.65'
 #          path: Package/Assembled-Windows0.65
+
+# TEMP
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+        with:
+          submodules: 'recursive'
+# TEMP
+
       - name: Setup Node.js
         uses: actions/setup-node@v2.1.2
         with:
