@@ -141,7 +141,7 @@ jobs:
 
   package:
     permissions:
-      packages: write
+      packages: read/write
 
 #    needs: [build-typescript] #, build-android-ios-065, build-windows-065]
     runs-on: ubuntu-latest
