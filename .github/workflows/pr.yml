@@ -7,120 +7,120 @@ env:
   BRN_Version: 0.64
 
 jobs:
-#  build-android:
-#    runs-on: macos-latest
-#    steps:
-#      - name: Checkout Repo
-#        uses: actions/checkout@v2.3.3
-#        with:
-#          submodules: 'recursive'
-#      - name: Setup CMake
-#        uses: jwlawson/actions-setup-cmake@v1.8
-#        with:
-#          cmake-version: '3.19.6' # See https://gitlab.kitware.com/cmake/cmake/-/issues/22021
-#      - name: Setup Ninja
-#        run: brew install ninja
-#      - name: NPM Install (Playground)
-#        run: npm install
-#        working-directory: ./Apps/Playground
-#      - name: NPM Install (React Native ${{ env.BRN_Version }})
-#        run: npm run select ${{ env.BRN_Version }}
-#        working-directory: ./Apps/Playground
-#      - name: NPM Install (Binary Package)
-#        run: npm install
-#        working-directory: ./Package
-#      - name: Gulp (Android)
-#        run: npx gulp buildAndroid
-#        working-directory: ./Package
-#
-#  build-iOS:
-#    runs-on: macos-latest
-#    steps:
-#      - name: Checkout Repo
-#        uses: actions/checkout@v2.3.3
-#        with:
-#          submodules: 'recursive'
-#      - name: NPM Install (Playground)
-#        run: npm install
-#        working-directory: ./Apps/Playground
-#      - name: NPM Install (React Native ${{ env.BRN_Version }})
-#        run: npm run select --reactNative ${{ env.BRN_Version }}
-#        working-directory: ./Apps/Playground
-#      - name: NPM Install (Binary Package)
-#        run: npm install
-#        working-directory: ./Package
-#      - name: Gulp (iOS)
-#        run: npx gulp buildIOS
-#        working-directory: ./Package
-#
-#  test-publish-android-ios:
-#    runs-on: macos-latest
-#    steps:
-#      - name: Checkout Repo
-#        uses: actions/checkout@v2.3.3
-#        with:
-#          submodules: 'recursive'
-#      - name: Setup CMake
-#        uses: jwlawson/actions-setup-cmake@v1.8
-#        with:
-#          cmake-version: '3.19.6' # See https://gitlab.kitware.com/cmake/cmake/-/issues/22021
-#      - name: Setup Ninja
-#        run: brew install ninja
-#      - name: NPM Install (Playground)
-#        run: npm install
-#        working-directory: ./Apps/Playground
-#      - name: NPM Install (React Native ${{ env.BRN_Version }})
-#        run: npm run select --reactNative ${{ env.BRN_Version }}
-#        working-directory: ./Apps/Playground
-#      - name: NPM Install (Binary Package)
-#        run: npm install
-#        working-directory: ./Package
-#      - name: Gulp
-#        run: npx gulp
-#        working-directory: ./Package
-#
-#  build-windows:
-#    runs-on: windows-2019
-#    strategy:
-#      matrix:
-#        platform: [x86, x64, ARM64]
-#        config: [Debug, Release]
-#    steps:
-#      - name: Checkout Repo
-#        uses: actions/checkout@v2.3.3
-#        with:
-#          submodules: 'true'
-#      - name: Setup MSBuild
-#        uses: microsoft/setup-msbuild@v1.0.2
-#      - name: Setup NuGet
-#        uses: nuget/setup-nuget@v1
-#        with:
-#          nuget-version: '5.x'
-#      - name: NPM Install (Playground)
-#        run: npm install
-#        working-directory: ./Apps/Playground
-#      - name: NPM Install (React Native ${{ env.BRN_Version }})
-#        run: npm run select ${{ env.BRN_Version }}
-#        working-directory: ./Apps/Playground
-#      - name: NPM Install (Binary Package)
-#        run: npm install
-#        working-directory: ./Package
-#      - name: Git (Windows)
-#        run: npx gulp initializeSubmodulesWindowsAgent
-#        working-directory: ./Package
-#      - name: Gulp Setup Project ${{ matrix.platform }} (Windows)
-#        run: npx gulp makeUWPProject${{ matrix.platform }}
-#        working-directory: ./Package
-#      - name: Gulp Build ${{ matrix.platform }} ${{ matrix.config }} (Windows)
-#        run: npx gulp buildUWP${{ matrix.platform }}${{ matrix.config }}
-#        working-directory: ./Package
-#      - name: Gulp NuGet Restore Playground
-#        run: npx gulp nugetRestoreUWPPlayground
-#        working-directory: ./Package
-#      - name: Gulp Build ${{ matrix.platform }} ${{ matrix.config }} Playground (Windows)
-#        run: npx gulp buildUWPPlayground${{ matrix.platform }}${{ matrix.config }}
-#        working-directory: ./Package
-#
+  build-android:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+        with:
+          submodules: 'recursive'
+      - name: Setup CMake
+        uses: jwlawson/actions-setup-cmake@v1.8
+        with:
+          cmake-version: '3.19.6' # See https://gitlab.kitware.com/cmake/cmake/-/issues/22021
+      - name: Setup Ninja
+        run: brew install ninja
+      - name: NPM Install (Playground)
+        run: npm install
+        working-directory: ./Apps/Playground
+      - name: NPM Install (React Native ${{ env.BRN_Version }})
+        run: npm run select ${{ env.BRN_Version }}
+        working-directory: ./Apps/Playground
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Gulp (Android)
+        run: npx gulp buildAndroid
+        working-directory: ./Package
+
+  build-iOS:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+        with:
+          submodules: 'recursive'
+      - name: NPM Install (Playground)
+        run: npm install
+        working-directory: ./Apps/Playground
+      - name: NPM Install (React Native ${{ env.BRN_Version }})
+        run: npm run select --reactNative ${{ env.BRN_Version }}
+        working-directory: ./Apps/Playground
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Gulp (iOS)
+        run: npx gulp buildIOS
+        working-directory: ./Package
+
+  test-publish-android-ios:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+        with:
+          submodules: 'recursive'
+      - name: Setup CMake
+        uses: jwlawson/actions-setup-cmake@v1.8
+        with:
+          cmake-version: '3.19.6' # See https://gitlab.kitware.com/cmake/cmake/-/issues/22021
+      - name: Setup Ninja
+        run: brew install ninja
+      - name: NPM Install (Playground)
+        run: npm install
+        working-directory: ./Apps/Playground
+      - name: NPM Install (React Native ${{ env.BRN_Version }})
+        run: npm run select --reactNative ${{ env.BRN_Version }}
+        working-directory: ./Apps/Playground
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Gulp
+        run: npx gulp
+        working-directory: ./Package
+
+  build-windows:
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        platform: [x86, x64, ARM64]
+        config: [Debug, Release]
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+        with:
+          submodules: 'true'
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.0.2
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: '5.x'
+      - name: NPM Install (Playground)
+        run: npm install
+        working-directory: ./Apps/Playground
+      - name: NPM Install (React Native ${{ env.BRN_Version }})
+        run: npm run select ${{ env.BRN_Version }}
+        working-directory: ./Apps/Playground
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Git (Windows)
+        run: npx gulp initializeSubmodulesWindowsAgent
+        working-directory: ./Package
+      - name: Gulp Setup Project ${{ matrix.platform }} (Windows)
+        run: npx gulp makeUWPProject${{ matrix.platform }}
+        working-directory: ./Package
+      - name: Gulp Build ${{ matrix.platform }} ${{ matrix.config }} (Windows)
+        run: npx gulp buildUWP${{ matrix.platform }}${{ matrix.config }}
+        working-directory: ./Package
+      - name: Gulp NuGet Restore Playground
+        run: npx gulp nugetRestoreUWPPlayground
+        working-directory: ./Package
+      - name: Gulp Build ${{ matrix.platform }} ${{ matrix.config }} Playground (Windows)
+        run: npx gulp buildUWPPlayground${{ matrix.platform }}${{ matrix.config }}
+        working-directory: ./Package
+
 # Test packages
   build-android-ios-065:
     uses: ./.github/workflows/ios_android.yml
