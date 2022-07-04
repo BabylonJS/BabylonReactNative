@@ -169,7 +169,7 @@ jobs:
         run: |
           npm version --no-git-tag-version 0.0.0-${GITHUB_SHA::8}
           npm publish --access public --verbose
-        working-directory: ./PackageUp
+        working-directory: ./Package/Assembled
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
