@@ -6,8 +6,6 @@ on:
 env:
   BRN_Version: 0.64
 
-permissions: write-all
-
 jobs:
 #  build-android:
 #    runs-on: macos-latest
@@ -128,28 +126,28 @@ jobs:
 #    uses: ./.github/workflows/ios_android.yml
 #    with:
 #      react-native-version: 0.65
-#      release-version: 1.0.0-${GITHUB_SHA::8}
+#      release-version: 0.0.0-${GITHUB_SHA::8}
 #
 #  build-windows-065:
 #    uses: ./.github/workflows/windows.yml
 #    with:
 #      react-native-version: 0.65
-#      release-version: 1.0.0-${GITHUB_SHA::8}
+#      release-version: 0.0.0-${GITHUB_SHA::8}
 
-#  build-typescript:
-#    uses: ./.github/workflows/typescript.yml
-#    with:
-#      release-version: 1.0.0-${GITHUB_SHA::8}
+  build-typescript:
+    uses: ./.github/workflows/typescript.yml
+    with:
+      release-version: 0.0.0-${GITHUB_SHA::8}
 
   package:
-#    needs: [build-typescript] #, build-android-ios-065, build-windows-065]
+    needs: [build-typescript] #, build-android-ios-065, build-windows-065]
     runs-on: ubuntu-latest
     steps:
-#      - name: Download Assembled Folder
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: 'Assembled'
-#          path: Package/Assembled
+      - name: Download Assembled Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled'
+          path: Package/Assembled
 #      - name: Download Assembled-iOSAndroid 0.65 Folder
 #        uses: actions/download-artifact@v2
 #        with:
@@ -161,11 +159,6 @@ jobs:
 #          name: 'Assembled-Windows0.65'
 #          path: Package/Assembled-Windows0.65
 
-# TEMP
-      - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
-# TEMP
-
       - name: Setup Node.js
         uses: actions/setup-node@v2.1.2
         with:
@@ -174,7 +167,7 @@ jobs:
 
       - name: Version & Publish Package @babylonjs/react-native
         run: |
-          npm version --no-git-tag-version 1.0.0
+          npm version --no-git-tag-version 0.0.0-${GITHUB_SHA::8}
           npm publish --access public --verbose
         working-directory: ./PackageUp
         env:
@@ -182,7 +175,7 @@ jobs:
 
 #      - name: Version & Publish Package @babylonjs/react-native-iosandroid-0-65
 #        run: |
-#          npm version --no-git-tag-version 1.0.0-${GITHUB_SHA::8}
+#          npm version --no-git-tag-version 0.0.0-${GITHUB_SHA::8}
 #          npm publish
 #        working-directory: ./Package/Assembled-iOSAndroid0.65
 #        env:
@@ -190,8 +183,17 @@ jobs:
 #
 #      - name: Version & Publish Package @babylonjs/react-native-windows-0-65
 #        run: |
-#          npm version --no-git-tag-version 1.0.0-${GITHUB_SHA::8}
+#          npm version --no-git-tag-version 0.0.0-${GITHUB_SHA::8}
 #          npm publish
 #        working-directory: ./Package/Assembled-Windows0.65
 #        env:
 #          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add SHORT_SHA env property with commit short sha
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA::8}`" >> $GITHUB_ENV
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v1
+        with:
+          message: |
+            Package available on https://npm.pkg.github.com registry. Packages version is 0.0.0-${{ env.SHORT_SHA }} . Packages list : https://github.com/BabylonJS/BabylonReactNative/packages
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
