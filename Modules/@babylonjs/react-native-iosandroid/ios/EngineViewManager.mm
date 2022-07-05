@@ -12,7 +12,7 @@
 
 @property (nonatomic, copy) RCTDirectEventBlock onSnapshotDataReturned;
 @property (nonatomic, assign) BOOL isTransparent;
-@property (nonatomic, assign) NSNumber* MSAA;
+@property (nonatomic, assign) NSNumber* antiAliasing;
 
 @end
 
@@ -122,7 +122,7 @@ RCT_CUSTOM_VIEW_PROPERTY(isTransparent, NSNumber*, EngineView){
     [view setIsTransparentFlag:json];
 }
 
-RCT_CUSTOM_VIEW_PROPERTY(MSAA, NSNumber*, EngineView){
+RCT_CUSTOM_VIEW_PROPERTY(antiAliasing, NSNumber*, EngineView){
     [view setMSAA:json];
 }
 
