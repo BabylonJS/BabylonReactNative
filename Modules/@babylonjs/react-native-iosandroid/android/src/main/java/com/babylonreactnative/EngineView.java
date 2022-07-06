@@ -99,6 +99,7 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
                 // https://developer.android.com/reference/android/view/SurfaceView#setZOrderOnTop(boolean)
                 this.surfaceView.setZOrderOnTop(true);    // necessary
                 surfaceHolder.setFormat(PixelFormat.TRANSPARENT);
+                this.addView(this.surfaceView);
             } else if (this.textureView == null) {
                 this.textureView = new TextureView(this.getContext());
                 this.textureView.setLayoutParams(EngineView.childViewLayoutParams);
