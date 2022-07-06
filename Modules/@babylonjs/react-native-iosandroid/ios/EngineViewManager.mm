@@ -13,6 +13,7 @@
 @property (nonatomic, copy) RCTDirectEventBlock onSnapshotDataReturned;
 @property (nonatomic, assign) BOOL isTransparent;
 @property (nonatomic, assign) NSNumber* antiAliasing;
+@property (nonatomic, assign) BOOL topMost;
 
 @end
 
@@ -43,6 +44,11 @@
 
 - (void)setMSAA:(NSNumber*)value {
     [BabylonNativeInterop updateMSAA:value];
+}
+
+- (void)setTopMostFlag:(NSNumber*)topMostFlag {
+    BOOL topMost = [topMostFlag intValue] == 1;
+    self.topMost = topMost;
 }
 
 - (void)setBounds:(CGRect)bounds {
@@ -124,6 +130,10 @@ RCT_CUSTOM_VIEW_PROPERTY(isTransparent, NSNumber*, EngineView){
 
 RCT_CUSTOM_VIEW_PROPERTY(antiAliasing, NSNumber*, EngineView){
     [view setMSAA:json];
+}
+
+RCT_CUSTOM_VIEW_PROPERTY(topMost, NSNumber*, EngineView){
+    [view setTopMostFlag:json];
 }
 
 RCT_EXPORT_MODULE(EngineViewManager)

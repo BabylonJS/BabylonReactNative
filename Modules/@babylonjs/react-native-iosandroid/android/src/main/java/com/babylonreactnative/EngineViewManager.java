@@ -33,6 +33,11 @@ public final class EngineViewManager extends SimpleViewManager<EngineView> {
         view.setAntiAliasing(value);
     }
 
+    @ReactProp(name = "topMost")
+    public void setTopMost(EngineView view, Boolean topMost) {
+        view.setTopMost(topMost);
+    }
+
     @NonNull
     @Override
     protected EngineView createViewInstance(@NonNull ThemedReactContext reactContext) {
