@@ -48,6 +48,7 @@
 
 - (void)setTopMostFlag:(NSNumber*)topMostFlag {
     BOOL topMost = [topMostFlag intValue] == 1;
+    self.layer.zPosition = topMost ? FLT_MAX : 0.f;
     self.topMost = topMost;
 }
 
