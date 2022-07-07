@@ -30,7 +30,7 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
     private SurfaceView surfaceView = null;
     private SurfaceView xrSurfaceView;
     private Surface transparentSurface = null;
-    private TextureView textureView;
+    private TextureView transparentTextureView;
     private boolean isTransparent = false;
     private boolean isTopMost = false;
     private final EventDispatcher reactEventDispatcher;
@@ -85,38 +85,30 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
             this.surfaceView.setVisibility(View.GONE);
             this.surfaceView = null;
         }
-        if (this.textureView != null) {
-            this.textureView.setVisibility(View.GONE);
-            this.textureView = null;
+        if (this.transparentTextureView != null) {
+            this.transparentTextureView.setVisibility(View.GONE);
+            this.transparentTextureView = null;
         }
-        if (isTransparent) {
-            if (isTopMost) {
-                this.surfaceView = new SurfaceView(this.getContext());
-                this.surfaceView.setLayoutParams(EngineView.childViewLayoutParams);
-                SurfaceHolder surfaceHolder = this.surfaceView.getHolder();
-
+        if (isTransparent && !isTopMost) {
+            this.transparentTextureView = new TextureView(this.getContext());
+            this.transparentTextureView.setLayoutParams(EngineView.childViewLayoutParams);
+            this.transparentTextureView.setSurfaceTextureListener(this);
+            this.transparentTextureView.setOpaque(false);
+            this.addView(this.transparentTextureView);
+        } else {
+            this.surfaceView = new SurfaceView(this.getContext());
+            this.surfaceView.setLayoutParams(EngineView.childViewLayoutParams);
+            SurfaceHolder surfaceHolder = this.surfaceView.getHolder();
+            if (isTransparent) {
+                surfaceHolder.setFormat(PixelFormat.TRANSPARENT);
+            }
+            if (isTopMost || isTransparent) {
                 // ZOrder is not dynamic before Android 11. Recreate the surfaceView and set order before adding to the parent
                 // https://developer.android.com/reference/android/view/SurfaceView#setZOrderOnTop(boolean)
-                this.surfaceView.setZOrderOnTop(true);    // necessary
-                surfaceHolder.setFormat(PixelFormat.TRANSPARENT);
-                this.addView(this.surfaceView);
-            } else if (this.textureView == null) {
-                this.textureView = new TextureView(this.getContext());
-                this.textureView.setLayoutParams(EngineView.childViewLayoutParams);
-                this.textureView.setSurfaceTextureListener(this);
-                this.textureView.setOpaque(false);
-                this.addView(this.textureView);
+                this.surfaceView.setZOrderOnTop(true);
             }
-        } else {
-            if (this.surfaceView == null) {
-                this.surfaceView = new SurfaceView(this.getContext());
-                this.surfaceView.setLayoutParams(EngineView.childViewLayoutParams);
-                this.surfaceView.getHolder().addCallback(this);
-                if (isTopMost) {
-                    this.surfaceView.setZOrderOnTop(true);
-                }
-                this.addView(this.surfaceView);
-            }
+            surfaceHolder.addCallback(this);
+            this.addView(this.surfaceView);
         }
 
         this.isTransparent = isTransparent;
