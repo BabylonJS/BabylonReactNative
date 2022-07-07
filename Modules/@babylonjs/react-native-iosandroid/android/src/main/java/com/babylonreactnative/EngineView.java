@@ -28,9 +28,10 @@ import java.io.ByteArrayOutputStream;
 public final class EngineView extends FrameLayout implements SurfaceHolder.Callback, TextureView.SurfaceTextureListener, View.OnTouchListener {
     private static final FrameLayout.LayoutParams childViewLayoutParams = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
     private SurfaceView surfaceView = null;
-    private SurfaceView xrSurfaceView;
     private Surface transparentSurface = null;
-    private TextureView transparentTextureView;
+    private TextureView transparentTextureView = null;
+
+    private SurfaceView xrSurfaceView;
     private boolean isTransparent = false;
     private boolean isTopMost = false;
     private final EventDispatcher reactEventDispatcher;
