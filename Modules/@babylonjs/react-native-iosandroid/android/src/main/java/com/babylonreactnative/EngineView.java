@@ -80,7 +80,7 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
         setIsTransparentAndTopMost(isTransparent, this.topMost);
     }
 
-    public void setIsTransparentAndTopMost(Boolean isTransparent, Boolean topMost) {
+    private void setIsTransparentAndTopMost(Boolean isTransparent, Boolean topMost) {
         if (this.surfaceView != null) {
             this.surfaceView.setVisibility(View.GONE);
             this.surfaceView = null;
