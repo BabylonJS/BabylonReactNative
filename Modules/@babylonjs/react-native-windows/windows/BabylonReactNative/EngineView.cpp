@@ -188,7 +188,7 @@ namespace winrt::BabylonReactNative::implementation {
             {
                 auto value = propertyValue.AsUInt8();
                 BabylonNative::UpdateMSAA(value);
-            } else if (propertyName == "topMost")
+            } else if (propertyName == "isTopMost")
             {
                 // todo: implementation
             }

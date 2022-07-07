@@ -32,14 +32,14 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
     private Surface transparentSurface = null;
     private TextureView textureView;
     private boolean isTransparent = false;
-    private boolean topMost = false;
+    private boolean isTopMost = false;
     private final EventDispatcher reactEventDispatcher;
     private Runnable renderRunnable;
 
     public EngineView(ReactContext reactContext) {
         super(reactContext);
 
-        this.setIsTransparentAndTopMost(false, false);
+        this.setIsTransparentAndIsTopMost(false, false);
 
         this.xrSurfaceView = new SurfaceView(reactContext);
         this.xrSurfaceView.setLayoutParams(childViewLayoutParams);
@@ -71,16 +71,16 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
         BabylonNativeInterop.updateMSAA(value);
     }
 
-    public void setTopMost(Boolean topMost) {
-        setIsTransparentAndTopMost(this.isTransparent, topMost);
+    public void setIsTopMost(Boolean isTopMost) {
+        setIsTransparentAndIsTopMost(this.isTransparent, isTopMost);
     }
     // ------------------------------------
     // TextureView related
     public void setIsTransparent(Boolean isTransparent) {
-        setIsTransparentAndTopMost(isTransparent, this.topMost);
+        setIsTransparentAndIsTopMost(isTransparent, this.isTopMost);
     }
 
-    private void setIsTransparentAndTopMost(Boolean isTransparent, Boolean topMost) {
+    private void setIsTransparentAndIsTopMost(Boolean isTransparent, Boolean isTopMost) {
         if (this.surfaceView != null) {
             this.surfaceView.setVisibility(View.GONE);
             this.surfaceView = null;
@@ -90,7 +90,7 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
             this.textureView = null;
         }
         if (isTransparent) {
-            if (topMost) {
+            if (isTopMost) {
                 this.surfaceView = new SurfaceView(this.getContext());
                 this.surfaceView.setLayoutParams(EngineView.childViewLayoutParams);
                 SurfaceHolder surfaceHolder = this.surfaceView.getHolder();
@@ -112,7 +112,7 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
                 this.surfaceView = new SurfaceView(this.getContext());
                 this.surfaceView.setLayoutParams(EngineView.childViewLayoutParams);
                 this.surfaceView.getHolder().addCallback(this);
-                if (topMost) {
+                if (isTopMost) {
                     this.surfaceView.setZOrderOnTop(true);
                 }
                 this.addView(this.surfaceView);
@@ -120,7 +120,7 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
         }
 
         this.isTransparent = isTransparent;
-        this.topMost = topMost;
+        this.isTopMost = isTopMost;
 
         // xr view needs to be on top of views that might be created after it.
         if (this.xrSurfaceView != null) {
