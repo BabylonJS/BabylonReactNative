@@ -82,6 +82,10 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
     }
 
     private void setIsTransparentAndIsTopMost(Boolean isTransparent, Boolean isTopMost) {
+        if (this.isTransparent == isTransparent && this.isTopMost == isTopMost &&
+                (this.surfaceView != null || this.transparentTextureView != null)) {
+            return;
+        }
         if (this.surfaceView != null) {
             this.surfaceView.setVisibility(View.GONE);
             this.surfaceView = null;
@@ -103,7 +107,7 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
             if (isTransparent) {
                 surfaceHolder.setFormat(PixelFormat.TRANSPARENT);
             }
-            if (isTopMost || isTransparent) {
+            if (isTopMost) {
                 // ZOrder is not dynamic before Android 11. Recreate the surfaceView and set order before adding to the parent
                 // https://developer.android.com/reference/android/view/SurfaceView#setZOrderOnTop(boolean)
                 this.surfaceView.setZOrderOnTop(true);
