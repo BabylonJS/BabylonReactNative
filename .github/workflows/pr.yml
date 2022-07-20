@@ -175,7 +175,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: 'Assembled'
-          path: Package/Assembled/babylonjs-react-native-0.0.${GITHUB_SHA::8}.tgz
+          path: Package/Assembled/*.tgz
 #        env:
 #          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #
