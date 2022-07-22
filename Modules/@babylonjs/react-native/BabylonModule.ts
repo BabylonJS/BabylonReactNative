@@ -22,9 +22,7 @@ export async function ensureInitialized(): Promise<boolean> {
             // This does the first stage of Babylon Native initialization, including creating the BabylonNative JSI object.
             await BabylonModule.initialize();
             return true;
-        } catch {
-            throw Error('[ERROR] Could not find "BabylonModule" in NativeModules!');
-        }
+        } catch {}
     }
 }
 
