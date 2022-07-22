@@ -12,7 +12,7 @@ const BabylonModule: {
     resetView(): Promise<void>;
 } = NativeModules.BabylonModule;
 
-export async function ensureInitialized() {
+export async function ensureInitialized(): Promise<boolean | undefined> {
     if (isRemoteDebuggingEnabled) {
         // When remote debugging is enabled, JavaScript runs on the debugging host machine, not on the device where the app is running.
         // JSI (which Babylon Native uses heavily) can not work in this mode. In the future, this debugging mode will be phased out as it is incompatible with TurboModules for the same reason.
