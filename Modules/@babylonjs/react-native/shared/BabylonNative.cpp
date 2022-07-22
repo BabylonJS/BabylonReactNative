@@ -91,6 +91,7 @@ namespace BabylonNative
                 g_graphics->UpdateSize(width, height);
             }
             g_graphics->UpdateMSAA(mMSAAValue);
+            g_graphics->UpdateAlphaPremultiplied(mAlphaPremultiplied);
 
             g_graphics->EnableRendering();
             m_isRenderingEnabled = true;
@@ -116,6 +117,15 @@ namespace BabylonNative
             if (g_graphics)
             {
                 g_graphics->UpdateMSAA(value);
+            }
+        }
+
+        void UpdateAlphaPremultiplied(bool enabled)
+        {
+            mAlphaPremultiplied = enabled;
+            if (g_graphics)
+            {
+                g_graphics->UpdateAlphaPremultiplied(enabled);
             }
         }
 
@@ -238,6 +248,7 @@ namespace BabylonNative
 
         std::shared_ptr<bool> m_isXRActive{};
         uint8_t mMSAAValue{};
+        bool mAlphaPremultiplied{};
     };
 
     namespace
@@ -283,6 +294,18 @@ namespace BabylonNative
         else
         {
             throw std::runtime_error{ "UpdateMSAA must not be called before Initialize." };
+        }
+    }
+
+    void UpdateAlphaPremultiplied(bool enabled)
+    {
+        if (auto nativeModule{ g_nativeModule.lock() })
+        {
+            nativeModule->UpdateAlphaPremultiplied(enabled);
+        }
+        else
+        {
+            throw std::runtime_error{ "UpdateAlphaPremultiplied must not be called before Initialize." };
         }
     }
 
