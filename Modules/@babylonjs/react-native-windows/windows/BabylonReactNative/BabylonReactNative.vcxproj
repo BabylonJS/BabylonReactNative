@@ -254,7 +254,7 @@
         JsRuntime.lib;
         MachineIndependent.lib;
         napi.lib;
-        NativeCamera.lib
+        NativeCamera.lib;
         NativeCapture.lib;
         NativeEngine.lib;
         NativeInput.lib;
