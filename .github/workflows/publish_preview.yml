@@ -26,6 +26,12 @@ jobs:
       react-native-version: 0.65
       release-version: ${{ github.event.inputs.release_version }}
 
+  build-android-ios-069:
+    uses: ./.github/workflows/ios_android.yml
+    with:
+      react-native-version: 0.69
+      release-version: ${{ github.event.inputs.release_version }}
+
   build-windows-064:
     uses: ./.github/workflows/windows.yml
     with:
@@ -36,6 +42,12 @@ jobs:
     uses: ./.github/workflows/windows.yml
     with:
       react-native-version: 0.65
+      release-version: ${{ github.event.inputs.release_version }}
+
+  build-windows-069:
+    uses: ./.github/workflows/windows.yml
+    with:
+      react-native-version: 0.69
       release-version: ${{ github.event.inputs.release_version }}
 
   build-typescript:
@@ -67,6 +79,11 @@ jobs:
         with:
           name: 'Assembled-iOSAndroid0.65'
           path: Package/Assembled-iOSAndroid0.65
+      - name: Download Assembled-iOSAndroid 0.69 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-iOSAndroid0.69'
+          path: Package/Assembled-iOSAndroid0.69
       - name: Download Assembled-Windows 0.64 Folder
         uses: actions/download-artifact@v2
         with:
@@ -77,6 +94,11 @@ jobs:
         with:
           name: 'Assembled-Windows0.65'
           path: Package/Assembled-Windows0.65
+      - name: Download Assembled-Windows 0.69 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-Windows0.69'
+          path: Package/Assembled-Windows0.69
       - name: Display structure of downloaded Assembled and Assembled-Windows folders
         run: ls -R
       - name: Setup Node.js
