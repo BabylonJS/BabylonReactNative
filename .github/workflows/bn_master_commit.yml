@@ -20,10 +20,6 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v1.8
         with:
           cmake-version: '3.19.6' # See https://gitlab.kitware.com/cmake/cmake/-/issues/22021
-      - name: Uninstall SDK cmake
-        run: |
-          ls ~/Library/Android/sdk/cmake
-          rm -rf ~/Library/Android/sdk/cmake/3.22.1
       - name: Setup Ninja
         run: brew install ninja
       - name: NPM Install (Playground)
