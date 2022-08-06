@@ -7,21 +7,21 @@ jobs:
   build-android-ios-064:
     uses: ./.github/workflows/ios_android.yml
     with:
-      java-version: 8
+      java-version: '8'
       react-native-version: 0.64
       release-version: ${GITHUB_REF/refs\/tags\//}
 
   build-android-ios-065:
     uses: ./.github/workflows/ios_android.yml
     with:
-      java-version: 8
+      java-version: '8'
       react-native-version: 0.65
       release-version: ${GITHUB_REF/refs\/tags\//}
       
   build-android-ios-069:
     uses: ./.github/workflows/ios_android.yml
     with:
-      java-version: 11
+      java-version: '11'
       react-native-version: 0.69
       release-version: ${GITHUB_REF/refs\/tags\//}
 
