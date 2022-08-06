@@ -59,7 +59,7 @@ jobs:
       release-version: ${{ github.event.inputs.release_version }}
 
   package:
-    needs: [build-typescript, build-android-ios-064, build-android-ios-065, build-windows-064, build-windows-065]
+    needs: [build-typescript, build-android-ios-064, build-android-ios-065, build-android-ios-069 build-windows-064, build-windows-065, build-windows-069]
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
@@ -132,6 +132,13 @@ jobs:
         working-directory: ./Package/Assembled-iOSAndroid0.65
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Version & Publish Package @babylonjs/react-native-iosandroid-0-69
+        run: |
+          npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
+          npm publish --access public --tag ${{ github.event.inputs.NPM_tag }}
+        working-directory: ./Package/Assembled-iOSAndroid0.69
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Version & Publish Package @babylonjs/react-native-windows-0-64
         run: |
@@ -145,5 +152,12 @@ jobs:
           npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
           npm publish --access public --tag ${{ github.event.inputs.NPM_tag }}
         working-directory: ./Package/Assembled-Windows0.65
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Version & Publish Package @babylonjs/react-native-windows-0-69
+        run: |
+          npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
+          npm publish --access public --tag ${{ github.event.inputs.NPM_tag }}
+        working-directory: ./Package/Assembled-Windows0.69
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
