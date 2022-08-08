@@ -112,7 +112,7 @@ For Hermes, add these lines in `android/app/proguard-rules.pro` :
 -keep class com.facebook.jni.** { *; }
 ```
 
-You may also need to update `android/build.gradle` to downgrade the default Gradle version, build tools, and remove some react-native installed gradle tasks:
+You may also need to update `android/build.gradle` to downgrade the default Gradle version, build tools, and remove some react-native installed gradle tasks, the final result will look something like this:
 ```
     ext {
         buildToolsVersion = "30.0.2"
