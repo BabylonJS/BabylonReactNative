@@ -56,8 +56,8 @@ async function requestCameraPermissionAsync() : Promise<void> {
 // 1. React Native does not provide a way to hook into the permissions request result (at least on Android).
 // 2. If it is done on the native side, then we need one implementation per platform.
 {
-    const originalInitializeSessionAsync: (...args: any[]) => Promise<any> = WebXRSessionManager.prototype.initializeSessionAsync;
-    WebXRSessionManager.prototype.initializeSessionAsync = async function (...args: any[]): Promise<any> {
+    const originalInitializeSessionAsync = WebXRSessionManager.prototype.initializeSessionAsync;
+    WebXRSessionManager.prototype.initializeSessionAsync = async function (...args: Parameters<typeof originalInitializeSessionAsync>): ReturnType<typeof originalInitializeSessionAsync> {
         if (Platform.OS === "windows")
         {
             // Launching into immersive mode on Windows HMDs doesn't require a runtime permission check.
@@ -75,8 +75,8 @@ async function requestCameraPermissionAsync() : Promise<void> {
 // 1. React Native does not provide a way to hook into the permissions request result (at least on Android).
 // 2. If it is done on the native side, then we need one implementation per platform.
 {
-    const originalCreateFromWebCamAsync: (...args: any[]) => Promise<any> = VideoTexture.CreateFromWebCamAsync;
-    VideoTexture.CreateFromWebCamAsync = async function (...args: any[]): Promise<any> {
+    const originalCreateFromWebCamAsync = VideoTexture.CreateFromWebCamAsync;
+    VideoTexture.CreateFromWebCamAsync = async function (...args: Parameters<typeof originalCreateFromWebCamAsync>): ReturnType<typeof originalCreateFromWebCamAsync> {
         await requestCameraPermissionAsync();
 
         return originalCreateFromWebCamAsync.apply(this, args);
