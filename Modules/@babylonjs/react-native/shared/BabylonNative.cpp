@@ -94,7 +94,6 @@ namespace BabylonNative
             g_graphics->UpdateAlphaPremultiplied(mAlphaPremultiplied);
 
             g_graphics->EnableRendering();
-            m_isRenderingEnabled = true;
 
             std::call_once(m_isGraphicsInitialized, [this]()
             {
@@ -105,10 +104,15 @@ namespace BabylonNative
                 });
             });
 
-            m_jsDispatcher([this]()
+            if (!m_isRenderingEnabled)
             {
-                m_resolveInitPromise();
-            });
+                m_jsDispatcher([this]()
+                    {
+                        m_resolveInitPromise();
+                        CreateInitPromise();
+                    });
+            }
+            m_isRenderingEnabled = true;
         }
 
         void UpdateMSAA(uint8_t value)
@@ -144,18 +148,13 @@ namespace BabylonNative
 
         void ResetView()
         {
+            m_isRenderingEnabled = false;
+
             if (g_graphics)
             {
                 g_nativeCanvas->FlushGraphicResources();
                 g_graphics->DisableRendering();
-
-                m_jsDispatcher([this]()
-                {
-                    CreateInitPromise();
-                });
             }
-
-            m_isRenderingEnabled = false;
         }
 
         void SetMouseButtonState(uint32_t buttonId, bool isDown, int32_t x, int32_t y)

@@ -126,7 +126,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
       setSnapshotData('data:image/jpeg;base64,' + await engineViewCallbacks.takeSnapshot());
     }
   }, [engineViewCallbacks]);
-
+  // @refresh reset
   return (
     <>
       <View style={props.style}>
