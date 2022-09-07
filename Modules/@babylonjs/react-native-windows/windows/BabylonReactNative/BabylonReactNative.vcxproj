@@ -15,7 +15,7 @@
     <AppContainerApplication>true</AppContainerApplication>
     <ApplicationType>Windows Store</ApplicationType>
     <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
-    <WindowsTargetPlatformVersion Condition=" '$(WindowsTargetPlatformVersion)' == '' ">10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition=" '$(WindowsTargetPlatformVersion)' == '' ">10.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -343,9 +343,8 @@
     <Error Condition="!Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', $(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.props'))" />
     <Error Condition="!Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.targets'))" />
   </Target>
-  <Target Name="BuildBabylonNativeStaticLibs" BeforeTargets="PrepareForBuild"
-          Condition="'$(BabylonNativeBuildDir)' != ''">
-    <Message Text="Building BabylonNative static libs for $(Platform) $(Configuration)"/>
-    <Exec Command="$(ProjectDir)\..\scripts\Build.bat -Platform $(Platform) -Configuration $(Configuration)"/>
+  <Target Name="BuildBabylonNativeStaticLibs" BeforeTargets="PrepareForBuild" Condition="'$(BabylonNativeBuildDir)' != ''">
+    <Message Text="Building BabylonNative static libs for $(Platform) $(Configuration)" />
+    <Exec Command="$(ProjectDir)\..\scripts\Build.bat -Platform $(Platform) -Configuration $(Configuration)" />
   </Target>
 </Project>
