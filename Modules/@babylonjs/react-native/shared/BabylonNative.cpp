@@ -147,13 +147,13 @@ namespace BabylonNative
 
         void ResetView()
         {
-            m_isRenderingEnabled = false;
-
             if (g_graphics)
             {
                 g_nativeCanvas->FlushGraphicResources();
                 g_graphics->DisableRendering();
             }
+
+            m_isRenderingEnabled = false;
         }
 
         void SetMouseButtonState(uint32_t buttonId, bool isDown, int32_t x, int32_t y)
@@ -231,8 +231,7 @@ namespace BabylonNative
             );
         }
 
-        private:
-
+    private:
         jsi::Value m_initPromise{};
         std::function<void()> m_resolveInitPromise{};
 
