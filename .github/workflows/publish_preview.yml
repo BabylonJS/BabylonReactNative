@@ -59,7 +59,7 @@ jobs:
       release-version: ${{ github.event.inputs.release_version }}
 
   package:
-    needs: [build-typescript, build-android-ios-064, build-android-ios-065, build-android-ios-069 build-windows-064, build-windows-065, build-windows-069]
+    needs: [build-typescript, build-android-ios-064, build-android-ios-065, build-android-ios-069, build-windows-064, build-windows-065, build-windows-069]
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
