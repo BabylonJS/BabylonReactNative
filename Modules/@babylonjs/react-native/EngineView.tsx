@@ -104,11 +104,9 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
         }
     }, [props.onInitialized]);
 
-    
+    // reset when view is disposed only
     useEffect(() => {
-        console.log("/// mounted");
         return () => {
-            console.log("/// unmounted");
             reset();
         }
     }, []);
