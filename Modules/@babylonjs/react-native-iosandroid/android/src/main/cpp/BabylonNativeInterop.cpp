@@ -87,6 +87,11 @@ extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInter
     BabylonNative::ResetView();
 }
 
+extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_createInitPromise(JNIEnv* env, jclass obj)
+{
+    BabylonNative::CreateInitPromise();
+}
+
 extern "C" JNIEXPORT void JNICALL Java_com_babylonreactnative_BabylonNativeInterop_00024BabylonNative_updateXRView(JNIEnv* env, jclass obj, jobject surface)
 {
     ANativeWindow* window{};

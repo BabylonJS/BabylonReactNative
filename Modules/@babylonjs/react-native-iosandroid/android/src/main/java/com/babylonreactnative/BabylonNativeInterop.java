@@ -25,6 +25,7 @@ public final class BabylonNativeInterop {
         public static native void updateView(Surface surface);
         public static native void renderView();
         public static native void resetView();
+        public static native void createInitPromise();
         public static native void updateXRView(Surface surface);
         public static native void updateMSAA(int value);
         public static native boolean isXRActive();
@@ -84,6 +85,10 @@ public final class BabylonNativeInterop {
 
     public static void updateView(Surface surface) {
         BabylonNative.updateView(surface);
+    }
+
+    public static void createInitPromise() {
+        BabylonNative.createInitPromise();
     }
 
     public static void renderView() {
