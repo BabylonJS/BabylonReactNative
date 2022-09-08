@@ -109,7 +109,6 @@ namespace BabylonNative
                 m_jsDispatcher([this]()
                     {
                         m_resolveInitPromise();
-                        CreateInitPromise();
                     });
             }
             m_isRenderingEnabled = true;
@@ -215,7 +214,6 @@ namespace BabylonNative
             return {};
         }
 
-    private:
         void CreateInitPromise()
         {
             jsi::Runtime& jsiRuntime{static_cast<napi_env>(m_env)->rt};
@@ -232,6 +230,8 @@ namespace BabylonNative
                 })
             );
         }
+
+        private:
 
         jsi::Value m_initPromise{};
         std::function<void()> m_resolveInitPromise{};
@@ -328,6 +328,18 @@ namespace BabylonNative
         }
     }
 
+    void CreateInitPromise()
+    {
+        // Because checking state of promise will happen before the view is reset. So, windowPtr might still be non null but already removed by the system.
+        if (auto nativeModule{ g_nativeModule.lock() })
+        {
+            nativeModule->CreateInitPromise();
+        }
+        else
+        {
+            throw std::runtime_error{ "DisableRendering must not be called before Initialize." };
+        }
+    }
     void SetMouseButtonState(uint32_t buttonId, bool isDown, int32_t x, int32_t y)
     {
         if (auto nativeModule{ g_nativeModule.lock() })

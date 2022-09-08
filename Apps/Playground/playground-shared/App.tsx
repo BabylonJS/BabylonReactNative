@@ -127,7 +127,6 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
     }
   }, [engineViewCallbacks]);
 
-  // @refresh reset
   return (
     <>
       <View style={props.style}>
