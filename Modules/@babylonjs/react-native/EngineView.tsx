@@ -4,6 +4,7 @@ import { Camera, SceneInstrumentation } from '@babylonjs/core';
 import { ReactNativeEngine } from './ReactNativeEngine';
 import { useModuleInitializer, useRenderLoop } from './NativeEngineHook';
 import { NativeEngineViewProps, NativeEngineView } from './NativeEngineView';
+import { reset } from './BabylonModule';
 
 export interface EngineViewProps extends ViewProps {
     camera?: Camera;
@@ -102,6 +103,13 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
             });
         }
     }, [props.onInitialized]);
+
+    // reset when view is disposed only
+    useEffect(() => {
+        return () => {
+            reset();
+        }
+    }, []);
 
     // Handle snapshot data returned.
     const snapshotDataReturnedHandler = useCallback((event: SyntheticEvent) => {

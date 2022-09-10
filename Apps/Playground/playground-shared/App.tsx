@@ -107,7 +107,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
             setTrackingState(newTrackingState);
           });
 
-          // TODO: Figure out why getFrontPosition stopped working
+          // TODO: Figure out why getFrontPosition stopped working.
           //box.position = (scene.activeCamera as TargetCamera).getFrontPosition(2);
           const cameraRay = scene.activeCamera!.getForwardRay(1);
           rootNode.position = cameraRay.origin.add(cameraRay.direction.scale(cameraRay.length));
