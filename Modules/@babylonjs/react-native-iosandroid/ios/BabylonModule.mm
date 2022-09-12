@@ -26,6 +26,7 @@ RCT_EXPORT_METHOD(initialize:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseR
 }
 
 RCT_EXPORT_METHOD(resetView:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
+    [BabylonNativeInterop createInitPromise];
     dispatch_async(dispatch_get_main_queue(), ^{
         [BabylonNativeInterop resetView];
         resolve([NSNull null]);
