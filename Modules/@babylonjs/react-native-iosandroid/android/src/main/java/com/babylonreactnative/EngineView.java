@@ -108,7 +108,7 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
                 surfaceHolder.setFormat(PixelFormat.TRANSPARENT);
             }
             if (isTopMost) {
-                // setZOrderMediaOverlay  is not dynamic before Android 11. Recreate the surfaceView and set order before adding to the parent
+                // setZOrderMediaOverlay is not dynamic before Android 11. Recreate the surfaceView and set order before adding to the parent
                 // https://developer.android.com/reference/android/view/SurfaceView#setZOrderMediaOverlay(boolean)
                 this.surfaceView.setZOrderMediaOverlay(true);
             }
