@@ -191,9 +191,6 @@ namespace winrt::BabylonReactNative::implementation {
             } else if (propertyName == "isTopMost")
             {
                 // todo: implementation
-            } else if (propertyName == "isOverlay")
-            {
-                // todo: implementation
             }
         }
     }

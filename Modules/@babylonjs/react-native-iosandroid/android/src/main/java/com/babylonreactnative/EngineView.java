@@ -34,14 +34,13 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
     private SurfaceView xrSurfaceView;
     private boolean isTransparent = false;
     private boolean isTopMost = false;
-    private boolean isOverlay = false;
     private final EventDispatcher reactEventDispatcher;
     private Runnable renderRunnable;
 
     public EngineView(ReactContext reactContext) {
         super(reactContext);
 
-        this.setViewFlags(false, false, false);
+        this.setIsTransparentAndIsTopMost(false, false);
 
         this.xrSurfaceView = new SurfaceView(reactContext);
         this.xrSurfaceView.setLayoutParams(childViewLayoutParams);
@@ -74,20 +73,16 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
     }
 
     public void setIsTopMost(Boolean isTopMost) {
-        setViewFlags(this.isTransparent, isTopMost, this.isOverlay);
-    }
-
-    public void setIsOverlay(Boolean isOverlay) {
-        setViewFlags(this.isTransparent, this.isTopMost, isOverlay);
+        setIsTransparentAndIsTopMost(this.isTransparent, isTopMost);
     }
     // ------------------------------------
     // TextureView related
     public void setIsTransparent(Boolean isTransparent) {
-        setViewFlags(isTransparent, this.isTopMost, this.isOverlay);
+        setIsTransparentAndIsTopMost(isTransparent, this.isTopMost);
     }
 
-    private void setViewFlags(Boolean isTransparent, Boolean isTopMost, Boolean isOverlay) {
-        if (this.isTransparent == isTransparent && this.isTopMost == isTopMost && this.isOverlay == isOverlay &&
+    private void setIsTransparentAndIsTopMost(Boolean isTransparent, Boolean isTopMost) {
+        if (this.isTransparent == isTransparent && this.isTopMost == isTopMost &&
                 (this.surfaceView != null || this.transparentTextureView != null)) {
             return;
         }
@@ -99,7 +94,7 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
             this.transparentTextureView.setVisibility(View.GONE);
             this.transparentTextureView = null;
         }
-        if (isTransparent && !isTopMost && !isOverlay) {
+        if (isTransparent && !isTopMost) {
             this.transparentTextureView = new TextureView(this.getContext());
             this.transparentTextureView.setLayoutParams(EngineView.childViewLayoutParams);
             this.transparentTextureView.setSurfaceTextureListener(this);
@@ -112,12 +107,10 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
             if (isTransparent) {
                 surfaceHolder.setFormat(PixelFormat.TRANSPARENT);
             }
-            if (isOverlay) {
+            if (isTopMost) {
+                // setZOrderMediaOverlay  is not dynamic before Android 11. Recreate the surfaceView and set order before adding to the parent
+                // https://developer.android.com/reference/android/view/SurfaceView#setZOrderMediaOverlay(boolean)
                 this.surfaceView.setZOrderMediaOverlay(true);
-            } else if (isTopMost) {
-                // ZOrder is not dynamic before Android 11. Recreate the surfaceView and set order before adding to the parent
-                // https://developer.android.com/reference/android/view/SurfaceView#setZOrderOnTop(boolean)
-                this.surfaceView.setZOrderOnTop(true);
             }
             surfaceHolder.addCallback(this);
             this.addView(this.surfaceView);
@@ -125,7 +118,6 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
 
         this.isTransparent = isTransparent;
         this.isTopMost = isTopMost;
-        this.isOverlay = isOverlay;
 
         // xr view needs to be on top of views that might be created after it.
         if (this.xrSurfaceView != null) {

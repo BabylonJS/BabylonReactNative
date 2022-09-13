@@ -38,11 +38,6 @@ public final class EngineViewManager extends SimpleViewManager<EngineView> {
         view.setIsTopMost(isTopMost);
     }
 
-    @ReactProp(name = "isOverlay")
-    public void setIsOverlay(EngineView view, Boolean isOverlay) {
-        view.setIsOverlay(isOverlay);
-    }
-
     @NonNull
     @Override
     protected EngineView createViewInstance(@NonNull ThemedReactContext reactContext) {

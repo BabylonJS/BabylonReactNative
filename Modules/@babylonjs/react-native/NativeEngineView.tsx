@@ -7,7 +7,6 @@ export interface NativeEngineViewProps extends ViewProps {
     isTransparent: boolean;
     antiAliasing: number;
     isTopMost: boolean;
-    isOverlay: boolean;
     onSnapshotDataReturned?: (event: SyntheticEvent) => void;
 }
 
