@@ -10,6 +10,7 @@ export interface EngineViewProps extends ViewProps {
     displayFrameRate?: boolean;
     isTransparent?: boolean;
     isTopMost?: boolean;
+    isOverlay?: boolean;
     antiAliasing?: 0 | 1 | 2 | 4 | 8 | 16;
     onInitialized?: (view: EngineViewCallbacks) => void;
 }
@@ -31,6 +32,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
     const isTransparent = props.isTransparent ?? false;
     const antiAliasing = props.antiAliasing ?? 0;
     const isTopMost = props.isTopMost ?? false;
+    const isOverlay = props.isOverlay ?? false;
 
     const initialized = useModuleInitializer();
 
@@ -116,7 +118,7 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
     if (initialized !== false) {
         return (
             <View style={[{ flex: 1 }, props.style, { overflow: "hidden" }]}>
-                { initialized && <NativeEngineView ref={engineViewRef} style={{ flex: 1 }} onSnapshotDataReturned={snapshotDataReturnedHandler} isTransparent={isTransparent} antiAliasing={antiAliasing} isTopMost={isTopMost}/> }
+                { initialized && <NativeEngineView ref={engineViewRef} style={{ flex: 1 }} onSnapshotDataReturned={snapshotDataReturnedHandler} isTransparent={isTransparent} antiAliasing={antiAliasing} isTopMost={isTopMost} isOverlay={isOverlay}/> }
                 { sceneStats !== undefined &&
                 <View style={{ backgroundColor: '#00000040', opacity: 1, position: 'absolute', right: 0, left: 0, top: 0, flexDirection: 'row-reverse' }}>
                     <Text style={{ color: 'yellow', alignSelf: 'flex-end', margin: 3, fontVariant: ['tabular-nums'] }}>FPS: {sceneStats.frameRate.toFixed(0)}</Text>

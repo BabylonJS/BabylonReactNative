@@ -97,6 +97,14 @@ e.g.
 <EngineView style={{flex: 1}} camera={camera} isTopMost={true} />
 ```
 
+`isOverlay` is a flag that allows to place the view on top of any other view but behind the Window. When enabled, this allows a huge performance improvement on Android with Transparency over other surfaceviews. This flag has no influence on Windows or iOS.
+
+e.g.
+
+```tsx
+<EngineView style={{flex: 1}} camera={camera} isTransparent={true} isOVerlay={true} />
+```
+
 To configure anti-aliasing, a property called `antiAliasing` can be changed to a value of 0 or 1 (disable anti-aliasing, default), 2, 4, 8 or 16 (anti-aliasing samples).
 
 e.g.

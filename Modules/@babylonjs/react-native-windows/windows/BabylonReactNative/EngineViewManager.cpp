@@ -39,6 +39,7 @@ namespace winrt::BabylonReactNative::implementation {
         nativeProps.Insert(L"isTransparent", ViewManagerPropertyType::Boolean);
         nativeProps.Insert(L"antiAliasing", ViewManagerPropertyType::Number);
         nativeProps.Insert(L"isTopMost", ViewManagerPropertyType::Boolean);
+        nativeProps.Insert(L"isOverlay", ViewManagerPropertyType::Boolean);
 
         return nativeProps.GetView();
     }
