@@ -149,7 +149,7 @@ def configureReactNativePom(def pom) {
 
 task extractHeaders {
     doLast {
-        configurations.extractLibs.files.each { file ->
+        configurations.extractHeaders.files.each { file ->
             copy {
                 from zipTree(file)
                 into "$extractedLibDir/" + file.name
