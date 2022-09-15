@@ -33,10 +33,9 @@ buildscript {
     if (project == rootProject) {
         repositories {
             google()
-            jcenter()
         }
         dependencies {
-            classpath 'com.android.tools.build:gradle:3.4.1'
+            classpath 'com.android.tools.build:gradle:7.2.2'
         }
     }
 }
@@ -71,7 +70,7 @@ if (REACT_VERSION >= 64) {
 
 repositories {
     google()
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
