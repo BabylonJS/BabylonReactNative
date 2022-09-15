@@ -80,6 +80,8 @@ jobs:
       - name: Gulp
         run: npx gulp
         working-directory: ./Package
+        env:
+          JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
 
   build-windows:
     runs-on: windows-2019

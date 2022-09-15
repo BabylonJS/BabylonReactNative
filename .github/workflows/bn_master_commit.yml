@@ -37,6 +37,8 @@ jobs:
       - name: Gulp (Android)
         run: npx gulp buildAndroid
         working-directory: ./Package
+        env:
+          JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
 
   build-iOS:
     name: Build iOS - BabylonNative ${{ github.event.client_payload.sha }}
