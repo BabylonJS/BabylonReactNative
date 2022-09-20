@@ -68,6 +68,7 @@ target_link_libraries(BabylonNative
     log
     -lz
     arcana
+    fbjni
     jsi
     turbomodulejsijni
     AndroidExtensions

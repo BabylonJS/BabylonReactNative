@@ -9,6 +9,10 @@ on:
       release-version:
         required: true
         type: string
+      java-version:
+        required: false
+        type: string
+        default: '8'
 
 jobs:
   Build:
@@ -22,6 +26,11 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v1.8
         with:
           cmake-version: '3.19.6' # See https://gitlab.kitware.com/cmake/cmake/-/issues/22021
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: ${{ inputs.java-version }}        
       - name: Setup Ninja
         run: brew install ninja
       - name: NPM Install (Playground)
@@ -36,8 +45,6 @@ jobs:
       - name: Gulp
         run: npx gulp --reactNative ${{ inputs.react-native-version }} --releaseVersion ${{ inputs.release-version }}
         working-directory: ./Package
-        env:
-          JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
       - name: Upload Assembled iOS Android Folder
         uses: actions/upload-artifact@v2
         with:
