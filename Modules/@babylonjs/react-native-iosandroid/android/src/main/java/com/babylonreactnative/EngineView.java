@@ -33,14 +33,14 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
 
     private SurfaceView xrSurfaceView;
     private boolean isTransparent = false;
-    private boolean isTopMost = false;
+    private String viewMode = "";
     private final EventDispatcher reactEventDispatcher;
     private Runnable renderRunnable;
 
     public EngineView(ReactContext reactContext) {
         super(reactContext);
 
-        this.setIsTransparentAndIsTopMost(false, false);
+        this.setIsTransparentAndViewMode(false, "");
 
         this.xrSurfaceView = new SurfaceView(reactContext);
         this.xrSurfaceView.setLayoutParams(childViewLayoutParams);
@@ -72,17 +72,18 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
         BabylonNativeInterop.updateMSAA(value);
     }
 
-    public void setIsTopMost(Boolean isTopMost) {
-        setIsTransparentAndIsTopMost(this.isTransparent, isTopMost);
-    }
     // ------------------------------------
-    // TextureView related
-    public void setIsTransparent(Boolean isTransparent) {
-        setIsTransparentAndIsTopMost(isTransparent, this.isTopMost);
+    
+    public void setAndroidView(String viewMode) {
+        setIsTransparentAndViewMode(this.isTransparent, viewMode);
     }
 
-    private void setIsTransparentAndIsTopMost(Boolean isTransparent, Boolean isTopMost) {
-        if (this.isTransparent == isTransparent && this.isTopMost == isTopMost &&
+    public void setIsTransparent(Boolean isTransparent) {
+        setIsTransparentAndViewMode(isTransparent, this.viewMode);
+    }
+
+    private void setIsTransparentAndViewMode(Boolean isTransparent, String viewMode) {
+        if (this.isTransparent == isTransparent && this.viewMode.equals(viewMode) &&
                 (this.surfaceView != null || this.transparentTextureView != null)) {
             return;
         }
@@ -94,30 +95,37 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
             this.transparentTextureView.setVisibility(View.GONE);
             this.transparentTextureView = null;
         }
-        if (isTransparent && !isTopMost) {
+
+        //if (isTransparent) {
+        if (viewMode.equals("TextureView")) {
             this.transparentTextureView = new TextureView(this.getContext());
             this.transparentTextureView.setLayoutParams(EngineView.childViewLayoutParams);
             this.transparentTextureView.setSurfaceTextureListener(this);
-            this.transparentTextureView.setOpaque(false);
+            this.transparentTextureView.setOpaque(isTransparent);
             this.addView(this.transparentTextureView);
         } else {
             this.surfaceView = new SurfaceView(this.getContext());
             this.surfaceView.setLayoutParams(EngineView.childViewLayoutParams);
             SurfaceHolder surfaceHolder = this.surfaceView.getHolder();
+
             if (isTransparent) {
+                // transparent and viewMode equals "SurfaceView" will give an opaque SurfaceView
                 surfaceHolder.setFormat(PixelFormat.TRANSPARENT);
             }
-            if (isTopMost) {
-                // setZOrderMediaOverlay is not dynamic before Android 11. Recreate the surfaceView and set order before adding to the parent
-                // https://developer.android.com/reference/android/view/SurfaceView#setZOrderMediaOverlay(boolean)
+            if ((viewMode.equals("") && isTransparent) || viewMode.equals("SurfaceViewZTopMost"))
+            {
+                this.surfaceView.setZOrderOnTop(true);
+            } else if (viewMode.equals("SurfaceViewZMediaOverlay"))
+            {
                 this.surfaceView.setZOrderMediaOverlay(true);
             }
+
             surfaceHolder.addCallback(this);
             this.addView(this.surfaceView);
         }
 
         this.isTransparent = isTransparent;
-        this.isTopMost = isTopMost;
+        this.viewMode = viewMode;
 
         // xr view needs to be on top of views that might be created after it.
         if (this.xrSurfaceView != null) {

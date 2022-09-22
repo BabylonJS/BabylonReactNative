@@ -89,14 +89,6 @@ e.g.
 ```tsx
 <EngineView style={{flex: 1}} camera={camera} isTransparent={true} />
 ```
-`isTopMost` is a flag that allows to place the view on top of any other view. When enabled, this allows a huge performance improvement on Android with Transparency on.
-
-e.g.
-
-```tsx
-<EngineView style={{flex: 1}} camera={camera} isTopMost={true} />
-```
-
 To configure anti-aliasing, a property called `antiAliasing` can be changed to a value of 0 or 1 (disable anti-aliasing, default), 2, 4, 8 or 16 (anti-aliasing samples).
 
 e.g.
@@ -106,3 +98,19 @@ e.g.
 ```
 
 Note: Currently only one `EngineView` can be active at any given time. Multi-view will be supported in a future release.
+
+On Android, specific `androidView` property can help set the type of the view used for rendering. Depending on user needs and performance, refer to this table:
+
+| Transparent | androidView value        | Description |
+| ----------- | ------------------------ | ----------- |
+| False       | TextureView              | Opaque TextureView
+| False       | SurfaceView              | Simple surfaceView (default when no `androidView` set with Transparency Off)
+| False       | SurfaceViewZTopMost      | SurfaceView with ZTopMost set to true. https://developer.android.com/reference/android/view/SurfaceView#setZOrderOnTop(boolean)
+| False       | SurfaceViewZMediaOverlay | SurfaceView with ZMediaOverlay set to true. https://developer.android.com/reference/android/view/SurfaceView#setZOrderMediaOverlay(boolean)
+| True        | TextureView              | Transparent TextureView, less performant than transparent SurfaceViews
+| True        | SurfaceView              | SurfaceView will stay opaque
+| True        | SurfaceViewZTopMost      | SurfaceView with ZTopMost set to true. (default when no `androidView` set with Transparency On) Transparent but top most.
+| True        | SurfaceViewZMediaOverlay | SurfaceView with ZMediaOverlay set to true. Only Transparent ontop of other SurfaceViews
+
+More infos on TextureView Vs SurfaceView performance here:
+https://developer.android.com/reference/android/view/TextureView
