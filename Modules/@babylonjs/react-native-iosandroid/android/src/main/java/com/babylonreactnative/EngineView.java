@@ -33,14 +33,14 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
 
     private SurfaceView xrSurfaceView;
     private boolean isTransparent = false;
-    private String viewMode = "";
+    private String androidView = "";
     private final EventDispatcher reactEventDispatcher;
     private Runnable renderRunnable;
 
     public EngineView(ReactContext reactContext) {
         super(reactContext);
 
-        this.setIsTransparentAndViewMode(false, "");
+        this.setIsTransparentAndAndroidView(false, "");
 
         this.xrSurfaceView = new SurfaceView(reactContext);
         this.xrSurfaceView.setLayoutParams(childViewLayoutParams);
@@ -74,16 +74,16 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
 
     // ------------------------------------
     
-    public void setAndroidView(String viewMode) {
-        setIsTransparentAndViewMode(this.isTransparent, viewMode);
+    public void setAndroidView(String androidView) {
+        setIsTransparentAndAndroidView(this.isTransparent, androidView);
     }
 
     public void setIsTransparent(Boolean isTransparent) {
-        setIsTransparentAndViewMode(isTransparent, this.viewMode);
+        setIsTransparentAndAndroidView(isTransparent, this.androidView);
     }
 
-    private void setIsTransparentAndViewMode(Boolean isTransparent, String viewMode) {
-        if (this.isTransparent == isTransparent && this.viewMode.equals(viewMode) &&
+    private void setIsTransparentAndAndroidView(Boolean isTransparent, String androidView) {
+        if (this.isTransparent == isTransparent && this.androidView.equals(androidView) &&
                 (this.surfaceView != null || this.transparentTextureView != null)) {
             return;
         }
@@ -97,7 +97,7 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
         }
 
         //if (isTransparent) {
-        if (viewMode.equals("TextureView")) {
+        if (androidView.equals("TextureView")) {
             this.transparentTextureView = new TextureView(this.getContext());
             this.transparentTextureView.setLayoutParams(EngineView.childViewLayoutParams);
             this.transparentTextureView.setSurfaceTextureListener(this);
@@ -109,14 +109,12 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
             SurfaceHolder surfaceHolder = this.surfaceView.getHolder();
 
             if (isTransparent) {
-                // transparent and viewMode equals "SurfaceView" will give an opaque SurfaceView
+                // transparent and androidView equals "SurfaceView" will give an opaque SurfaceView
                 surfaceHolder.setFormat(PixelFormat.TRANSPARENT);
             }
-            if ((viewMode.equals("") && isTransparent) || viewMode.equals("SurfaceViewZTopMost"))
-            {
+            if ((androidView.equals("") && isTransparent) || androidView.equals("SurfaceViewZTopMost")) {
                 this.surfaceView.setZOrderOnTop(true);
-            } else if (viewMode.equals("SurfaceViewZMediaOverlay"))
-            {
+            } else if (androidView.equals("SurfaceViewZMediaOverlay")) {
                 this.surfaceView.setZOrderMediaOverlay(true);
             }
 
@@ -125,7 +123,7 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
         }
 
         this.isTransparent = isTransparent;
-        this.viewMode = viewMode;
+        this.androidView = androidView;
 
         // xr view needs to be on top of views that might be created after it.
         if (this.xrSurfaceView != null) {
