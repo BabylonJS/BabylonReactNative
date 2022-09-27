@@ -99,7 +99,7 @@ e.g.
 
 Note: Currently only one `EngineView` can be active at any given time. Multi-view will be supported in a future release.
 
-On Android, specific `androidView` property can help set the type of the view used for rendering. Depending on user needs and performance, refer to this table:
+The Android specific `androidView` property can help set the type of the view used for rendering. Depending on user needs and performance, refer to the table below. [`TextureView`](https://developer.android.com/reference/android/view/TextureView) can be inserted anywhere in the view hierarchy, but is less efficient. [`SurfaceView`](https://developer.android.com/reference/android/view/SurfaceView) can only be full above or fully below the rest of the UI, but is more efficient.
 
 | Transparent | androidView value        | Description |
 | ----------- | ------------------------ | ----------- |
