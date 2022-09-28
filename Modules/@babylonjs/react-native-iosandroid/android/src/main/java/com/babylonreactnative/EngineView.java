@@ -96,7 +96,6 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
             this.transparentTextureView = null;
         }
 
-        //if (isTransparent) {
         if (androidView.equals("TextureView")) {
             this.transparentTextureView = new TextureView(this.getContext());
             this.transparentTextureView.setLayoutParams(EngineView.childViewLayoutParams);
