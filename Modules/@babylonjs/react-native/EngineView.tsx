@@ -4,7 +4,6 @@ import { Camera, SceneInstrumentation } from '@babylonjs/core';
 import { ReactNativeEngine } from './ReactNativeEngine';
 import { useModuleInitializer, useRenderLoop } from './NativeEngineHook';
 import { NativeEngineViewProps, NativeEngineView } from './NativeEngineView';
-import { reset } from './BabylonModule';
 
 export interface EngineViewProps extends ViewProps {
     camera?: Camera;
