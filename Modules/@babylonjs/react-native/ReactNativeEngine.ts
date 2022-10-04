@@ -35,6 +35,8 @@ export class ReactNativeEngine extends NativeEngine {
         if (!this.isDisposed) {
             super.dispose();
 
+            reset();
+
             this._isDisposed = true;
         }
     }

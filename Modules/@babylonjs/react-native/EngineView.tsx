@@ -104,13 +104,6 @@ export const EngineView: FunctionComponent<EngineViewProps> = (props: EngineView
         }
     }, [props.onInitialized]);
 
-    // reset when view is disposed only
-    useEffect(() => {
-        return () => {
-            reset();
-        }
-    }, []);
-
     // Handle snapshot data returned.
     const snapshotDataReturnedHandler = useCallback((event: SyntheticEvent) => {
         // The nativeEvent is a DOMEvent which doesn't have a typescript definition. Cast it to an Event object with a data property.
