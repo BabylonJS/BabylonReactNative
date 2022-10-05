@@ -94,6 +94,7 @@ namespace BabylonNative
             g_graphics->UpdateAlphaPremultiplied(mAlphaPremultiplied);
 
             g_graphics->EnableRendering();
+            m_isRenderingEnabled = true;
 
             std::call_once(m_isGraphicsInitialized, [this]()
             {
@@ -104,14 +105,10 @@ namespace BabylonNative
                 });
             });
 
-            if (!m_isRenderingEnabled)
+            m_jsDispatcher([this]()
             {
-                m_jsDispatcher([this]()
-                    {
-                        m_resolveInitPromise();
-                    });
-            }
-            m_isRenderingEnabled = true;
+                m_resolveInitPromise();
+            });
         }
 
         void UpdateMSAA(uint8_t value)
