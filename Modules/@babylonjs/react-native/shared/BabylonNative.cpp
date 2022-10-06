@@ -75,26 +75,28 @@ namespace BabylonNative
 
         void UpdateView(WindowType window, size_t width, size_t height)
         {
-            Babylon::Graphics::WindowConfiguration windowConfig{};
-            windowConfig.Window = window;
-            windowConfig.Width = width;
-            windowConfig.Height = height;
+            m_windowConfig.Window = window;
+            m_windowConfig.Width = width;
+            m_windowConfig.Height = height;
+            UpdateGraphicsConfiguration();
+        }
 
+        void UpdateGraphicsConfiguration()
+        {
             if (!g_graphics)
             {
-                g_graphics = Babylon::Graphics::Device::Create(windowConfig);
+                g_graphics = Babylon::Graphics::Device::Create(m_windowConfig);
                 g_update = std::make_unique<Babylon::Graphics::DeviceUpdate>(g_graphics->GetUpdate("update"));
             }
             else
             {
-                g_graphics->UpdateWindow(windowConfig);
-                g_graphics->UpdateSize(width, height);
+                g_graphics->UpdateWindow(m_windowConfig);
+                g_graphics->UpdateSize(m_windowConfig.Width, m_windowConfig.Height);
             }
             g_graphics->UpdateMSAA(mMSAAValue);
             g_graphics->UpdateAlphaPremultiplied(mAlphaPremultiplied);
 
             g_graphics->EnableRendering();
-            m_isRenderingEnabled = true;
 
             std::call_once(m_isGraphicsInitialized, [this]()
             {
@@ -105,10 +107,15 @@ namespace BabylonNative
                 });
             });
 
-            m_jsDispatcher([this]()
+            if (!m_isRenderingEnabled)
             {
-                m_resolveInitPromise();
-            });
+                m_jsDispatcher([this]()
+                {
+                    m_resolveInitPromise();
+                });
+            }
+            m_isRenderingEnabled = true;
+            m_resetDone = false;
         }
 
         void UpdateMSAA(uint8_t value)
@@ -131,6 +138,13 @@ namespace BabylonNative
 
         void RenderView()
         {
+            // m_resetDone becomes true when a resetView call has been performed and no UpdateView has been performed.
+            // This happens with a fast refresh when the view is not unmounted and it's still available for rendering.
+            // UpdateView will set back m_resetDone to false in case the view is unmounted/mounted with Engine.Dispose for example.
+            if (m_resetDone)
+            {
+                UpdateGraphicsConfiguration();
+            }
             // If rendering has not been explicitly enabled, or has been explicitly disabled, then don't try to render.
             // Otherwise rendering can be implicitly enabled, which may not be desirable (e.g. after the engine is disposed).
             if (g_graphics && m_isRenderingEnabled)
@@ -148,6 +162,7 @@ namespace BabylonNative
             {
                 g_nativeCanvas->FlushGraphicResources();
                 g_graphics->DisableRendering();
+                m_resetDone = true;
             }
 
             m_isRenderingEnabled = false;
@@ -247,6 +262,9 @@ namespace BabylonNative
         std::once_flag m_isGraphicsInitialized{};
         Babylon::Plugins::NativeInput* m_nativeInput{};
         std::optional<Babylon::Plugins::NativeXr> m_nativeXr{};
+
+        Babylon::Graphics::WindowConfiguration m_windowConfig{};
+        bool m_resetDone{};
 
         std::shared_ptr<bool> m_isXRActive{};
         uint8_t mMSAAValue{};
