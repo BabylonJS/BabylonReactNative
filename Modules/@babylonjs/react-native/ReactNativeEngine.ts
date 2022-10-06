@@ -6,6 +6,7 @@ import { NativeEngine } from '@babylonjs/core';
 declare const BabylonNative: {
     readonly initializationPromise: Promise<void>;
     reset: () => void;
+    resetInitializationPromise: () => void;
 };
 
 export class ReactNativeEngine extends NativeEngine {
@@ -35,6 +36,7 @@ export class ReactNativeEngine extends NativeEngine {
         if (!this.isDisposed) {
             super.dispose();
 
+            BabylonNative.resetInitializationPromise();
             reset();
 
             this._isDisposed = true;

@@ -29,7 +29,6 @@ public final class BabylonModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void resetView(Promise promise) {
-        BabylonNativeInterop.createInitPromise();
         this.getReactApplicationContext().runOnUiQueueThread(() -> {
             BabylonNativeInterop.resetView();
             promise.resolve(null);

@@ -8,7 +8,6 @@
 + (void)updateView:(MTKView*)mtkView;
 + (void)updateMSAA:(NSNumber*)value;
 + (void)renderView;
-+ (void)createInitPromise;
 + (void)resetView;
 + (void)updateXRView:(MTKView*)mtkView;
 + (bool)isXRActive;

@@ -33,7 +33,6 @@ void BabylonModule::CustomInitialize(const winrt::Microsoft::ReactNative::ReactP
 REACT_METHOD(ResetView, L"resetView");
 void BabylonModule::ResetView(const winrt::Microsoft::ReactNative::ReactPromise<bool>& result) noexcept
 {
-    BabylonNative::CreateInitPromise();
     _reactContext.UIDispatcher().Post([result]() {
         BabylonNative::ResetView();
         result.Resolve(true);

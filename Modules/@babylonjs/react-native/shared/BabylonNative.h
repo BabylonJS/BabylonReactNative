@@ -32,7 +32,6 @@ namespace BabylonNative
     void UpdateAlphaPremultiplied(bool enabled);
 
     void RenderView();
-    void CreateInitPromise();
     void ResetView();
     void SetMouseButtonState(uint32_t buttonId, bool isDown, int32_t x, int32_t y);
     void SetMousePosition(int32_t x, int32_t y);

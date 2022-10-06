@@ -71,10 +71,6 @@ static NSMutableArray* activeTouches = [NSMutableArray new];
     BabylonNative::RenderView();
 }
 
-+ (void)createInitPromise {
-    BabylonNative::CreateInitPromise();
-}
-
 + (void)resetView {
     BabylonNative::ResetView();
 }
