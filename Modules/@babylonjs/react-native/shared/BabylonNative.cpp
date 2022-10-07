@@ -115,7 +115,7 @@ namespace BabylonNative
                 });
             }
             m_isRenderingEnabled = true;
-            m_resetDone = false;
+            m_pendingReset = false;
         }
 
         void UpdateMSAA(uint8_t value)
@@ -138,10 +138,12 @@ namespace BabylonNative
 
         void RenderView()
         {
-            // m_resetDone becomes true when a resetView call has been performed and no UpdateView has been performed.
+            // m_pendingReset becomes true when a resetView call has been performed and no UpdateView has been performed.
             // This happens with a fast refresh when the view is not unmounted and it's still available for rendering.
-            // UpdateView will set back m_resetDone to false in case the view is unmounted/mounted with Engine.Dispose for example.
-            if (m_resetDone)
+            // UpdateView will set back m_pendingReset to false in case the view is unmounted/mounted with Engine.Dispose for example.
+            // With fast refresh, we have to do that work on the UI/render thread, and UpdateView is not called in that case, 
+            // so RenderView is pretty much the only option. Specifically, it must be done on the UI/render thread and so RenderView is the only hook we have.
+            if (m_pendingReset)
             {
                 UpdateGraphicsConfiguration();
             }
@@ -162,7 +164,7 @@ namespace BabylonNative
             {
                 g_nativeCanvas->FlushGraphicResources();
                 g_graphics->DisableRendering();
-                m_resetDone = true;
+                m_pendingReset = true;
             }
 
             m_isRenderingEnabled = false;
@@ -264,7 +266,7 @@ namespace BabylonNative
         std::optional<Babylon::Plugins::NativeXr> m_nativeXr{};
 
         Babylon::Graphics::WindowConfiguration m_windowConfig{};
-        bool m_resetDone{};
+        bool m_pendingReset{};
 
         std::shared_ptr<bool> m_isXRActive{};
         uint8_t mMSAAValue{};
