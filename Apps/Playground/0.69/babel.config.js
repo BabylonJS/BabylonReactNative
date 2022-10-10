@@ -3,4 +3,6 @@ module.exports = {
     'module:metro-react-native-babel-preset',
     ['@babel/preset-typescript', {allowDeclareFields: true}],
   ],
+  plugins: 
+    ["@babel/plugin-proposal-logical-assignment-operators"],
 };

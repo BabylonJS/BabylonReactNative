@@ -16,10 +16,10 @@
   "dependencies": {
     "@babylonjs/core": "5.27.0",
     "@babylonjs/loaders": "5.27.0",
+    "@babylonjs/playground-shared": "file:../playground-shared",
     "@babylonjs/react-native": "file:../../../Modules/@babylonjs/react-native",
     "@babylonjs/react-native-iosandroid": "file:../../../Modules/@babylonjs/react-native-iosandroid",
     "@babylonjs/react-native-windows": "file:../../../Modules/@babylonjs/react-native-windows",
-    "@babylonjs/playground-shared": "file:../playground-shared",
     "@react-native-community/slider": "^4.2.0",
     "logkitty": "^0.7.1",
     "react": "17.0.1",
@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@babel/plugin-proposal-logical-assignment-operators": "^7.18.9",
     "@babel/runtime": "^7.12.5",
     "@react-native-community/cli": "^5.0.0",
     "@react-native-community/eslint-config": "^2.0.0",
