@@ -39,10 +39,9 @@ function useAppState(): string {
         const removeListener = appStateListener?.["remove"] as undefined | Function;
 
         return () => {
-            if (removeListener) {
+            if (!!removeListener) {
                 removeListener();
-            }
-            else {
+            } else {
                 AppState.removeEventListener("change", onAppStateChanged);
             }
         };
