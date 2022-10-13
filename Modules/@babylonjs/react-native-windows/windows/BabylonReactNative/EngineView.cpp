@@ -19,6 +19,13 @@ namespace winrt::BabylonReactNative::implementation {
 
         _revokerData.SizeChangedRevoker = SizeChanged(winrt::auto_revoke, { this, &EngineView::OnSizeChanged });
 
+        // Stop rendering when SwapChainPanel is unloaded
+        _revokerData.UnloadedEventToken = Unloaded(winrt::auto_revoke, [ref = get_weak()](auto const&, auto const&) {
+            if (auto self = ref.get()) {
+                self->_revokerData.RenderingRevoker.revoke();
+            }
+        });
+
         WorkItemHandler workItemHandler([weakThis{ this->get_weak() }](IAsyncAction const& /* action */)
         {
             if (auto trueThis = weakThis.get())
