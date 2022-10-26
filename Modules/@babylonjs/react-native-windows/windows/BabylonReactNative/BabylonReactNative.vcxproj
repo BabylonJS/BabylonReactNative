@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!-- Note: CppWinRT NuGet dependency should be resolved for the solution not the individual project -->
-  <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.props')" />
+  <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.props')" />
   <PropertyGroup Label="Globals">
     <CppWinRTOptimized>true</CppWinRTOptimized>
     <CppWinRTRootNamespaceAutoMerge>true</CppWinRTRootNamespaceAutoMerge>
@@ -11,11 +11,11 @@
     <ProjectName>BabylonReactNative</ProjectName>
     <RootNamespace>BabylonReactNative</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
-    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <MinimumVisualStudioVersion>16.0</MinimumVisualStudioVersion>
     <AppContainerApplication>true</AppContainerApplication>
     <ApplicationType>Windows Store</ApplicationType>
     <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
-    <WindowsTargetPlatformVersion Condition=" '$(WindowsTargetPlatformVersion)' == '' ">10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition=" '$(WindowsTargetPlatformVersion)' == '' ">10.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -28,8 +28,9 @@
     <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(ProjectDir)..\..\..\..\..\Apps\Playground\Playground\node_modules\react-native-windows\package.json')">$(ProjectDir)\..\..\..\..\..\Apps\Playground\Playground\node_modules\react-native-windows\</ReactNativeWindowsDir>
   </PropertyGroup>
   <PropertyGroup Label="BabylonReactNativeProps">
+    <BabylonNativeIOSAndroidProjDir Condition="'$(BabylonReactNativeDir)' == '' And Exists('$(ProjectDir)\..\..\..\react-native-iosandroid')">$(ProjectDir)..\..\..\react-native-iosandroid\</BabylonNativeIOSAndroidProjDir>
     <BabylonReactNativeDir Condition="'$(BabylonReactNativeDir)' == '' And Exists('$(ProjectDir)\..\..\..\react-native')">$(ProjectDir)..\..\..\react-native\</BabylonReactNativeDir>
-    <BabylonNativeDir Condition="Exists('$(BabylonReactNativeDir)submodules\BabylonNative')">$(BabylonReactNativeDir)Build\</BabylonNativeDir>
+    <BabylonNativeDir Condition="Exists('$(BabylonReactNativeDir)Build')">$(BabylonReactNativeDir)Build\</BabylonNativeDir>
     <BabylonNativeBuildDir Condition="'$(Platform)'=='x64' And '$(BabylonNativeDir)' != ''">$(BabylonNativeDir)uwp_x64\</BabylonNativeBuildDir>
     <BabylonNativeBuildDir Condition="'$(Platform)'=='Win32' And '$(BabylonNativeDir)' != ''">$(BabylonNativeDir)uwp_x86\</BabylonNativeBuildDir>
     <BabylonNativeBuildDir Condition="'$(Platform)'=='ARM' And '$(BabylonNativeDir)' != ''">$(BabylonNativeDir)uwp_arm\</BabylonNativeBuildDir>
@@ -75,7 +76,7 @@
   </ItemGroup>
   <PropertyGroup Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <PlatformToolset Condition="'$(VisualStudioVersion)' == '15.0'">v141</PlatformToolset>
     <PlatformToolset Condition="'$(VisualStudioVersion)' == '16.0'">v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -139,6 +140,7 @@
         $(BabylonNativeBuildDir)BabylonNative\Dependencies\UrlLib\$(Configuration);
         $(BabylonNativeBuildDir)BabylonNative\Dependencies\xr\$(Configuration);
         $(BabylonNativeBuildDir)BabylonNative\Dependencies\xr\Dependencies\OpenXR-SDK\src\loader\$(Configuration);
+        $(BabylonNativeBuildDir)BabylonNative\Plugins\NativeCamera\$(Configuration);
         $(BabylonNativeBuildDir)BabylonNative\Plugins\NativeCapture\$(Configuration);
         $(BabylonNativeBuildDir)BabylonNative\Plugins\NativeEngine\$(Configuration);
         $(BabylonNativeBuildDir)BabylonNative\Plugins\NativeInput\$(Configuration);
@@ -164,6 +166,7 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <!-- Include project headers when building in the repo -->
       <AdditionalIncludeDirectories Condition="Exists('$(BabylonReactNativeDir)shared')">$(BabylonReactNativeDir)shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="Exists('$(BabylonNativeIOSAndroidProjDir)shared')">$(BabylonNativeIOSAndroidProjDir)shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -189,6 +192,7 @@
         JsRuntime.lib;
         MachineIndependentd.lib;
         napi.lib;
+        NativeCamera.lib;
         NativeCapture.lib;
         NativeEngine.lib;
         NativeInput.lib;
@@ -222,6 +226,7 @@
     <ClCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories Condition="Exists('$(BabylonReactNativeDir)shared')">$(BabylonReactNativeDir)shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="Exists('$(BabylonNativeIOSAndroidProjDir)shared')">$(BabylonNativeIOSAndroidProjDir)shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -249,6 +254,7 @@
         JsRuntime.lib;
         MachineIndependent.lib;
         napi.lib;
+        NativeCamera.lib;
         NativeCapture.lib;
         NativeEngine.lib;
         NativeInput.lib;
@@ -328,18 +334,17 @@
     <Error Condition="!Exists('$(BabylonNativeBuildDir)') And !Exists('$(BabylonNativeLibsDir)')" Text="$(ErrorText)" />
   </Target>
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.targets')" />
+    <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', $(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.props'))" />
-    <Error Condition="!Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.201201.7\build\native\Microsoft.Windows.CppWinRT.targets'))" />
+    <Error Condition="!Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', $(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.props'))" />
+    <Error Condition="!Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.targets'))" />
   </Target>
-  <Target Name="BuildBabylonNativeStaticLibs" BeforeTargets="PrepareForBuild"
-          Condition="'$(BabylonNativeBuildDir)' != ''">
-    <Message Text="Building BabylonNative static libs for $(Platform) $(Configuration)"/>
-    <Exec Command="$(ProjectDir)\..\scripts\Build.bat -Platform $(Platform) -Configuration $(Configuration)"/>
+  <Target Name="BuildBabylonNativeStaticLibs" BeforeTargets="PrepareForBuild" Condition="'$(BabylonNativeBuildDir)' != ''">
+    <Message Text="Building BabylonNative static libs for $(Platform) $(Configuration)" />
+    <Exec Command="$(ProjectDir)\..\scripts\Build.bat -Platform $(Platform) -Configuration $(Configuration)" />
   </Target>
 </Project>

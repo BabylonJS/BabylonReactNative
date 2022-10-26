@@ -1,10 +1,18 @@
 cmake_minimum_required(VERSION 3.13.2)
 project(ReactNativeBabylon)
-include(${CMAKE_CURRENT_SOURCE_DIR}/../../Apps/Playground/Playground/node_modules/@babylonjs/react-native/ios/CMakeLists.txt)
+include(${CMAKE_CURRENT_SOURCE_DIR}/../../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/ios/CMakeLists.txt)
 
 set(PACKAGED_LIBS
     astc-codec
     astc
+    etc1
+    etc2
+    nvtt
+    squish
+    pvrtc
+    iqa
+    edtaa3
+    tinyexr
     bgfx
     bimg
     bx
@@ -17,6 +25,7 @@ set(PACKAGED_LIBS
     OSDependent
     MachineIndependent
     napi
+    NativeCamera
     NativeCapture
     NativeEngine
     NativeInput

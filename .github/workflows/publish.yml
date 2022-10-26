@@ -3,94 +3,50 @@ on:
   release:
     types: [published]
 
-
 jobs:
-  select-react-native-version:
-    runs-on: macos-latest
-    outputs:
-      version: ${{ steps.stepVersion.outputs.version }}
-    steps:
-      - uses: actions-ecosystem/action-regex-match@v2
-        id: regex-match
-        with:
-          text: ${{ github.event.release.name }}
-          regex: '^(\d+\.)?(\d+)'
-      - name: Release infos
-        run: |
-          echo "- Tag ${GITHUB_REF/refs\/tags\//}"
-          echo "- Name: ${{ github.event.release.name }}"
-          echo "- Description: ${{ github.event.release.body }}"
-      - id: stepVersion
-        run: echo "::set-output name=version::${{ steps.regex-match.outputs.match }}"
-  build-android-ios:
-    runs-on: macos-latest
-    needs: select-react-native-version
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
-        with:
-          submodules: 'recursive'
-      - name: Setup CMake
-        uses: jwlawson/actions-setup-cmake@v1.8
-        with:
-          cmake-version: '3.19.6' # See https://gitlab.kitware.com/cmake/cmake/-/issues/22021
-      - name: Setup Ninja
-        run: brew install ninja
-      - name: NPM Install (Playground)
-        run: npm install
-        working-directory: ./Apps/Playground
-      - name: Select React Native Version ${{ needs.select-react-native-version.outputs.version }}
-        run: npm run select --reactNative ${{ needs.select-react-native-version.outputs.version }}
-        working-directory: ./Apps/Playground
-      - name: NPM Install (Binary Package)
-        run: npm install
-        working-directory: ./Package
-      - name: Gulp
-        run: npx gulp --reactNative ${{ needs.select-react-native-version.outputs.version }}
-        working-directory: ./Package
-      - name: Upload Assembled Folder
-        uses: actions/upload-artifact@v2
-        with:
-          name: 'Assembled'
-          path: Package/Assembled
+  build-android-ios-064:
+    uses: ./.github/workflows/ios_android.yml
+    with:
+      react-native-version: 0.64
+      release-version: ${GITHUB_REF/refs\/tags\//}
 
-  build-windows:
-    runs-on: windows-2019
-    needs: select-react-native-version
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
-        with:
-          submodules: 'true'
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.0.2
-      - name: Setup NuGet
-        uses: nuget/setup-nuget@v1
-        with:
-          nuget-version: '5.x'
-      - name: NPM Install (Playground)
-        run: npm install
-        working-directory: ./Apps/Playground
-      - name: NPM Install (React Native ${{ needs.select-react-native-version.outputs.version }})
-        run: npm run select --reactNative ${{ needs.select-react-native-version.outputs.version }}
-        working-directory: ./Apps/Playground
-      - name: NPM Install (Binary Package)
-        run: npm install
-        working-directory: ./Package
-      - name: Git (Windows)
-        run: npx gulp initializeSubmodulesWindowsAgent --reactNative ${{ needs.select-react-native-version.outputs.version }}
-        working-directory: ./Package
-      - name: Gulp (Windows)
-        run: npx gulp buildUWPPublish
-        working-directory: ./Package
-      - name: Upload Assembled-Windows Folder
-        uses: actions/upload-artifact@v2
-        with:
-          name: 'Assembled-Windows'
-          path: Package/Assembled-Windows
+  build-android-ios-065:
+    uses: ./.github/workflows/ios_android.yml
+    with:
+      react-native-version: 0.65
+      release-version: ${GITHUB_REF/refs\/tags\//}
+      
+  build-android-ios-069:
+    uses: ./.github/workflows/ios_android.yml
+    with:
+      react-native-version: 0.69
+      release-version: ${GITHUB_REF/refs\/tags\//}
+
+  build-windows-064:
+    uses: ./.github/workflows/windows.yml
+    with:
+      react-native-version: 0.64
+      release-version: ${GITHUB_REF/refs\/tags\//}
+
+  build-windows-065:
+    uses: ./.github/workflows/windows.yml
+    with:
+      react-native-version: 0.65
+      release-version: ${GITHUB_REF/refs\/tags\//}
+
+  build-windows-069:
+    uses: ./.github/workflows/windows.yml
+    with:
+      react-native-version: 0.69
+      release-version: ${GITHUB_REF/refs\/tags\//}
+
+  build-typescript:
+    uses: ./.github/workflows/typescript.yml
+    with:
+      release-version: ${GITHUB_REF/refs\/tags\//}
 
   package:
-    needs: [select-react-native-version, build-android-ios, build-windows]
+    needs: [build-typescript, build-android-ios-064, build-android-ios-065, build-android-ios-069, build-windows-064, build-windows-065, build-windows-069]
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
@@ -103,11 +59,36 @@ jobs:
         with:
           name: 'Assembled'
           path: Package/Assembled
-      - name: Download Assembled-Windows Folder
+      - name: Download Assembled-iOSAndroid 0.64 Folder
         uses: actions/download-artifact@v2
         with:
-          name: 'Assembled-Windows'
-          path: Package/Assembled-Windows
+          name: 'Assembled-iOSAndroid0.64'
+          path: Package/Assembled-iOSAndroid0.64
+      - name: Download Assembled-iOSAndroid 0.65 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-iOSAndroid0.65'
+          path: Package/Assembled-iOSAndroid0.65
+      - name: Download Assembled-iOSAndroid 0.69 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-iOSAndroid0.69'
+          path: Package/Assembled-iOSAndroid0.69
+      - name: Download Assembled-Windows 0.64 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-Windows0.64'
+          path: Package/Assembled-Windows0.64
+      - name: Download Assembled-Windows 0.65 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-Windows0.65'
+          path: Package/Assembled-Windows0.65
+      - name: Download Assembled-Windows 0.69 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-Windows0.69'
+          path: Package/Assembled-Windows0.69
       - name: Display structure of downloaded Assembled and Assembled-Windows folders
         run: ls -R
       - name: Setup Node.js
@@ -123,10 +104,47 @@ jobs:
         working-directory: ./Package/Assembled
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Version & Publish Package @babylonjs/react-native-windows
+
+      - name: Version & Publish Package @babylonjs/react-native-iosandroid-0-64
         run: |
           npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
           npm publish --access public
-        working-directory: ./Package/Assembled-Windows
+        working-directory: ./Package/Assembled-iOSAndroid0.64
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Version & Publish Package @babylonjs/react-native-iosandroid-0-65
+        run: |
+          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
+          npm publish --access public
+        working-directory: ./Package/Assembled-iOSAndroid0.65
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Version & Publish Package @babylonjs/react-native-iosandroid-0-69
+        run: |
+          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
+          npm publish --access public
+        working-directory: ./Package/Assembled-iOSAndroid0.69
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Version & Publish Package @babylonjs/react-native-windows-0-64
+        run: |
+          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
+          npm publish --access public
+        working-directory: ./Package/Assembled-Windows0.64
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Version & Publish Package @babylonjs/react-native-windows-0-65
+        run: |
+          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
+          npm publish --access public
+        working-directory: ./Package/Assembled-Windows0.65
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Version & Publish Package @babylonjs/react-native-windows-0-69
+        run: |
+          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
+          npm publish --access public
+        working-directory: ./Package/Assembled-Windows0.69
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
