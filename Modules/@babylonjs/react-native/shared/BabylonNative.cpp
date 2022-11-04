@@ -153,7 +153,7 @@ namespace BabylonNative
             }
         }
 
-        void newEngine()
+        void Initialize()
         {
             m_newEngine = true;
         }
@@ -288,7 +288,7 @@ namespace BabylonNative
         }
         if (auto nativeModule{ g_nativeModule.lock() })
         {
-            nativeModule->newEngine();
+            nativeModule->Initialize();
         }
     }
 
