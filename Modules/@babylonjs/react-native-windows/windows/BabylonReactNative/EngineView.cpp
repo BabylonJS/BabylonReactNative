@@ -40,11 +40,24 @@ namespace winrt::BabylonReactNative::implementation {
         // TODO: move to std::thread compared to consuming ThreadPool resources once engine lifecycle bugs are addressed and EngineView's destructor can be successfully invoked.
         _inputLoopWorker = ThreadPool::RunAsync(workItemHandler, WorkItemPriority::High, WorkItemOptions::TimeSliced);
 
-        _revokerData.RenderingRevoker = CompositionTarget::Rendering(winrt::auto_revoke, [weakThis{ this->get_weak() }](auto const&, auto const&)
-        {
-            if (auto trueThis = weakThis.get())
-            {
-                trueThis->OnRendering();
+        _revokerData.LoadedEventToken = Loaded(winrt::auto_revoke, [this, ref = get_weak()](auto const&, auto const&) {
+                if (auto self = ref.get())
+                {
+                    self->_revokerData.RenderingRevoker = CompositionTarget::Rendering(
+                        winrt::auto_revoke,
+                        [weakThis{self->get_weak()}](auto const&, auto const&)
+                        {
+                            if (auto trueThis = weakThis.get())
+                            {
+                                trueThis->OnRendering();
+                            }
+                        });
+                }
+        });
+
+        _revokerData.UnloadedEventToken = Unloaded(winrt::auto_revoke, [ref = get_weak()](auto const&, auto const&) {
+            if (auto self = ref.get()) {
+                self->_revokerData.RenderingRevoker.revoke();
             }
         });
     }
@@ -64,8 +77,8 @@ namespace winrt::BabylonReactNative::implementation {
         const auto properties = point.Properties();
         const auto deviceType = point.PointerDevice().PointerDeviceType();
         const auto position = point.Position();
-        const uint32_t x = position.X < 0 ? 0 : static_cast<uint32_t>(position.X);
-        const uint32_t y = position.Y < 0 ? 0 : static_cast<uint32_t>(position.Y);
+        const int32_t x = static_cast<int32_t>(position.X);
+        const int32_t y = static_cast<int32_t>(position.Y);
         const auto pointerId = point.PointerId();
 
         if (!_inputSource.HasCapture())
@@ -106,8 +119,8 @@ namespace winrt::BabylonReactNative::implementation {
         const auto point = args.CurrentPoint();
         const auto deviceType = point.PointerDevice().PointerDeviceType();
         const auto position = point.Position();
-        const uint32_t x = position.X < 0 ? 0 : static_cast<uint32_t>(position.X);
-        const uint32_t y = position.Y < 0 ? 0 : static_cast<uint32_t>(position.Y);
+        const int32_t x = static_cast<int32_t>(position.X);
+        const int32_t y = static_cast<int32_t>(position.Y);
 
         if (deviceType == PointerDeviceType::Mouse)
         {
@@ -126,8 +139,8 @@ namespace winrt::BabylonReactNative::implementation {
         const auto properties = point.Properties();
         const auto deviceType = point.PointerDevice().PointerDeviceType();
         const auto position = point.Position();
-        const uint32_t x = position.X < 0 ? 0 : static_cast<uint32_t>(position.X);
-        const uint32_t y = position.Y < 0 ? 0 : static_cast<uint32_t>(position.Y);
+        const int32_t x = static_cast<int32_t>(position.X);
+        const int32_t y = static_cast<int32_t>(position.Y);
         const auto pointerId = point.PointerId();
 
         _pressedPointers.erase(pointerId);
@@ -183,7 +196,11 @@ namespace winrt::BabylonReactNative::implementation {
             if (propertyName == "isTransparent")
             {
                 bool isTransparent = propertyValue.AsBoolean();
-                this->CompositeMode(isTransparent ? ElementCompositeMode::MinBlend : ElementCompositeMode::Inherit);
+                BabylonNative::UpdateAlphaPremultiplied(isTransparent);
+            } else if (propertyName == "antiAliasing")
+            {
+                auto value = propertyValue.AsUInt8();
+                BabylonNative::UpdateMSAA(value);
             }
         }
     }

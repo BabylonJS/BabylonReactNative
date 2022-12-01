@@ -32,6 +32,8 @@ jobs:
       - name: Gulp (Android)
         run: npx gulp buildAndroid
         working-directory: ./Package
+        env:
+          JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
 
   build-iOS:
     runs-on: macos-latest
@@ -78,6 +80,8 @@ jobs:
       - name: Gulp
         run: npx gulp
         working-directory: ./Package
+        env:
+          JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
 
   build-windows:
     runs-on: windows-2019
@@ -120,3 +124,93 @@ jobs:
       - name: Gulp Build ${{ matrix.platform }} ${{ matrix.config }} Playground (Windows)
         run: npx gulp buildUWPPlayground${{ matrix.platform }}${{ matrix.config }}
         working-directory: ./Package
+
+# Test packages
+  build-android-ios-065:
+    uses: ./.github/workflows/ios_android.yml
+    with:
+      react-native-version: 0.65
+      release-version: 0.0.${GITHUB_SHA::8}
+
+  build-android-ios-069:
+    uses: ./.github/workflows/ios_android.yml
+    with:
+      react-native-version: 0.69
+      release-version: 0.0.${GITHUB_SHA::8}
+
+  build-windows-065:
+    uses: ./.github/workflows/windows.yml
+    with:
+      react-native-version: 0.65
+      release-version: 0.0.${GITHUB_SHA::8}
+
+  build-windows-069:
+    uses: ./.github/workflows/windows.yml
+    with:
+      react-native-version: 0.69
+      release-version: 0.0.${GITHUB_SHA::8}
+
+  build-typescript:
+    uses: ./.github/workflows/typescript.yml
+    with:
+      release-version: 0.0.${GITHUB_SHA::8}
+
+#  package:
+#    needs: [build-typescript, build-android-ios-065, build-windows-065]
+#    runs-on: ubuntu-latest
+#    steps:
+## Download artifacts    
+#      - name: Download Assembled Folder
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: 'Assembled'
+#          path: Package/Assembled
+#      - name: Download Assembled-iOSAndroid 0.65 Folder
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: 'Assembled-iOSAndroid0.65'
+#          path: Package/Assembled-iOSAndroid0.65
+#      - name: Download Assembled-Windows 0.65 Folder
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: 'Assembled-Windows0.65'
+#          path: Package/Assembled-Windows0.65
+## Set up node js
+#      - name: Setup Node.js
+#        uses: actions/setup-node@v2.1.2
+#        with:
+#          node-version: '12.x'
+#          registry-url: 'https://npm.pkg.github.com'
+## Publish
+#      - name: Version & Publish Package @babylonjs/react-native
+#        run: |
+#          npm version --no-git-tag-version 0.0.0-${GITHUB_SHA::8}
+#          npm publish --access public --verbose
+#        working-directory: ./Package/Assembled
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Version & Publish Package @babylonjs/react-native-iosandroid-0-65
+#        run: |
+#          npm version --no-git-tag-version 0.0.0-${GITHUB_SHA::8}
+#          npm publish
+#        working-directory: ./Package/Assembled-iOSAndroid0.65
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#      - name: Version & Publish Package @babylonjs/react-native-windows-0-65
+#        run: |
+#          npm version --no-git-tag-version 0.0.0-${GITHUB_SHA::8}
+#          npm publish
+#        working-directory: ./Package/Assembled-Windows0.65
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+## Add PR comment with packages version
+#      - name: Add SHORT_SHA env property with commit short sha
+#        run: echo "SHORT_SHA=`echo ${GITHUB_SHA::8}`" >> $GITHUB_ENV
+#      - name: Comment PR
+#        uses: thollander/actions-comment-pull-request@v1
+#        with:
+#          message: |
+#            Package available on https://npm.pkg.github.com registry. Packages version is 0.0.0-${{ env.SHORT_SHA }} . Packages list : https://github.com/BabylonJS/BabylonReactNative/packages
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

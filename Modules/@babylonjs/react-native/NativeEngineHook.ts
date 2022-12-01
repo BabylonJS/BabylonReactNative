@@ -9,9 +9,18 @@ export function useModuleInitializer(): boolean | undefined {
     const [initialized, setInitialized] = useState<boolean>();
 
     useEffect(() => {
+        const abortController = new AbortController();
         (async () => {
-            setInitialized(await ensureInitialized());
+            const isInitialized = await ensureInitialized();
+
+            if (!abortController.signal.aborted) {
+                setInitialized(isInitialized);
+            }
         })();
+
+        return () => {
+            abortController.abort();
+        }
     }, []);
 
     return initialized;
@@ -25,11 +34,18 @@ function useAppState(): string {
             setAppState(appState);
         };
 
-        AppState.addEventListener("change", onAppStateChanged);
+        const appStateListener = AppState.addEventListener("change", onAppStateChanged);
+
+        // Asserting the type to prevent TS type errors on older RN versions
+        const removeListener = appStateListener?.["remove"] as undefined | Function;
 
         return () => {
-            AppState.removeEventListener("change", onAppStateChanged);
-        }
+            if (!!removeListener) {
+                removeListener();
+            } else {
+                AppState.removeEventListener("change", onAppStateChanged);
+            }
+        };
     }, []);
 
     return appState;

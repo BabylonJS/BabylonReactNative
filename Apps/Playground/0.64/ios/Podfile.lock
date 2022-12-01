@@ -256,7 +256,7 @@ PODS:
   - React-jsinspector (0.64.1)
   - react-native-babylon (0.0.1):
     - React
-  - react-native-slider (4.0.0-rc.3):
+  - react-native-slider (4.2.3):
     - React-Core
   - React-perflogger (0.64.1)
   - React-RCTActionSheet (0.64.1):
@@ -366,7 +366,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
-  - "react-native-babylon (from `../../../../Modules/@babylonjs/react-native`)"
+  - "react-native-babylon (from `../../../../Modules/@babylonjs/react-native-iosandroid`)"
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -432,7 +432,7 @@ EXTERNAL SOURCES:
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-babylon:
-    :path: "../../../../Modules/@babylonjs/react-native"
+    :path: "../../../../Modules/@babylonjs/react-native-iosandroid"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
   React-perflogger:
@@ -469,7 +469,7 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: 7b423f9e248eae65987838148c36eec1dbfe0b53
-  FBReactNativeSpec: 4306a04f6bbd042a5f1fb7e885c366da7257689d
+  FBReactNativeSpec: bac127a452d4bf9a618ecca4bb6137bf50a020e1
   Flipper: d3da1aa199aad94455ae725e9f3aa43f3ec17021
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
   Flipper-Folly: 755929a4f851b2fb2c347d533a23f191b008554c
@@ -492,8 +492,8 @@ SPEC CHECKSUMS:
   React-jsi: 5de8204706bd872b78ea646aee5d2561ca1214b6
   React-jsiexecutor: 124e8f99992490d0d13e0649d950d3e1aae06fe9
   React-jsinspector: 500a59626037be5b3b3d89c5151bc3baa9abf1a9
-  react-native-babylon: 018c7aab746addac3f3549cd95bb78ca81e824f3
-  react-native-slider: ae891b9fca8c9b4a99691f6d45731f0ef2bb1866
+  react-native-babylon: 4792aa2ed72286bdce4103136c5499fa76e4287d
+  react-native-slider: 98b724cd3e44c3454a6d0724e796d4e9c52189ce
   React-perflogger: aad6d4b4a267936b3667260d1f649b6f6069a675
   React-RCTActionSheet: fc376be462c9c8d6ad82c0905442fd77f82a9d2a
   React-RCTAnimation: ba0a1c3a2738be224a08092fa7f1b444ab77d309
@@ -512,4 +512,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 6b5a8feda09816950d2c787ef58c08eea3c22840
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.3
