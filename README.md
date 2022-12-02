@@ -54,7 +54,7 @@ npm run select 0.64
 ```
 Selecting the React Native install will also install all NPM packages and its dependencies for the Playground sample/test app.
 
-> :warning: Windows UWP Playground deployment implies running `npm run select` command with Administrator rights because of symlinks. Otherwise, a build error will popup when trying to run the Playground.
+> :warning: When setting up the Playground app for UWP, the `npm run select` command must be run with Administrator rights, because of the symbolic links. Not doing so will result in a build error will popup when trying to run the Playground.
 
 This will also automatically do the following to prepare your repo for development:
 
