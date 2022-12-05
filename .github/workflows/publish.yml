@@ -2,12 +2,12 @@ name: Publish Package
 on:
   release:
     types: [published]
-  inputs:
-    windows-sdk-version:
-      description: 'Windows SDK Version'
-      required: true 
-      type: string
-      default: 10.0.20348.0
+    inputs:
+      windows-sdk-version:
+        description: 'Windows SDK Version'
+        required: true 
+        type: string
+        default: 10.0.20348.0
 
 jobs:
   build-android-ios-064:
