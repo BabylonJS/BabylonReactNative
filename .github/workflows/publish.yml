@@ -2,6 +2,12 @@ name: Publish Package
 on:
   release:
     types: [published]
+  inputs:
+    windows-sdk-version:
+      description: 'Windows SDK Version'
+      required: true 
+      type: string
+      default: 10.0.20348.0
 
 jobs:
   build-android-ios-064:
@@ -27,18 +33,21 @@ jobs:
     with:
       react-native-version: 0.64
       release-version: ${GITHUB_REF/refs\/tags\//}
+      windows-sdk-version: ${{ github.event.inputs.windows-sdk-version }}
 
   build-windows-065:
     uses: ./.github/workflows/windows.yml
     with:
       react-native-version: 0.65
       release-version: ${GITHUB_REF/refs\/tags\//}
+      windows-sdk-version: ${{ github.event.inputs.windows-sdk-version }}
 
   build-windows-069:
     uses: ./.github/workflows/windows.yml
     with:
       react-native-version: 0.69
       release-version: ${GITHUB_REF/refs\/tags\//}
+      windows-sdk-version: ${{ github.event.inputs.windows-sdk-version }}
 
   build-typescript:
     uses: ./.github/workflows/typescript.yml

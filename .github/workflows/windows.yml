@@ -9,6 +9,9 @@ on:
       release-version:
         required: true
         type: string
+      windows-sdk-version:
+        required: true
+        type: string
 
 jobs:
   Build:
@@ -37,7 +40,7 @@ jobs:
         run: npx gulp initializeSubmodulesWindowsAgent --reactNative ${{ inputs.react-native-version }} --releaseVersion ${{ inputs.release-version }}
         working-directory: ./Package
       - name: Gulp (Windows)
-        run: npx gulp buildUWPPublish
+        run: npx gulp buildUWPPublish -WindowsSDKVersion ${{ inputs.windows-sdk-version }}
         working-directory: ./Package
       - name: Upload Assembled-Windows Folder
         uses: actions/upload-artifact@v2
