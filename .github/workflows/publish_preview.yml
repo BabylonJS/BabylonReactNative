@@ -17,19 +17,19 @@ jobs:
   build-android-ios-064:
     uses: ./.github/workflows/ios_android.yml
     with:
-      react-native-version: 0.64
+      react-native-version: '0.64'
       release-version: ${{ github.event.inputs.release_version }}
 
   build-android-ios-065:
     uses: ./.github/workflows/ios_android.yml
     with:
-      react-native-version: 0.65
+      react-native-version: '0.65'
       release-version: ${{ github.event.inputs.release_version }}
 
   build-android-ios-069:
     uses: ./.github/workflows/ios_android.yml
     with:
-      react-native-version: 0.69
+      react-native-version: '0.69'
       release-version: ${{ github.event.inputs.release_version }}
 
   build-android-ios-070:
@@ -41,19 +41,19 @@ jobs:
   build-windows-064:
     uses: ./.github/workflows/windows.yml
     with:
-      react-native-version: 0.64
+      react-native-version: '0.64'
       release-version: ${{ github.event.inputs.release_version }}
 
   build-windows-065:
     uses: ./.github/workflows/windows.yml
     with:
-      react-native-version: 0.65
+      react-native-version: '0.65'
       release-version: ${{ github.event.inputs.release_version }}
 
   build-windows-069:
     uses: ./.github/workflows/windows.yml
     with:
-      react-native-version: 0.69
+      react-native-version: '0.69'
       release-version: ${{ github.event.inputs.release_version }}
 
   build-windows-070:

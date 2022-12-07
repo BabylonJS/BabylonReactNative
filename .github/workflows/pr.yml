@@ -129,13 +129,13 @@ jobs:
   build-android-ios-065:
     uses: ./.github/workflows/ios_android.yml
     with:
-      react-native-version: 0.65
+      react-native-version: '0.65'
       release-version: 0.0.${GITHUB_SHA::8}
 
   build-android-ios-069:
     uses: ./.github/workflows/ios_android.yml
     with:
-      react-native-version: 0.69
+      react-native-version: '0.69'
       release-version: 0.0.${GITHUB_SHA::8}
 
   build-android-ios-070:
@@ -147,13 +147,13 @@ jobs:
   build-windows-065:
     uses: ./.github/workflows/windows.yml
     with:
-      react-native-version: 0.65
+      react-native-version: '0.65'
       release-version: 0.0.${GITHUB_SHA::8}
 
   build-windows-069:
     uses: ./.github/workflows/windows.yml
     with:
-      react-native-version: 0.69
+      react-native-version: '0.69'
       release-version: 0.0.${GITHUB_SHA::8}
 
   build-windows-070:
