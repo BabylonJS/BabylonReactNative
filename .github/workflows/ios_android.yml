@@ -10,7 +10,6 @@ on:
         required: true
         type: string
       xcode-version:
-        required: true
         type: string
         default: '13.4.1'
 
@@ -28,7 +27,6 @@ jobs:
           cmake-version: '3.19.6' # See https://gitlab.kitware.com/cmake/cmake/-/issues/22021
       - name: Setup Ninja
         run: brew install ninja
-
       - name: 'Select XCode ${{ inputs.xcode-version }}'
         run: sudo xcode-select --switch /Applications/Xcode_${{ inputs.xcode-version }}.app/Contents/Developer
       - name: NPM Install (Playground)
