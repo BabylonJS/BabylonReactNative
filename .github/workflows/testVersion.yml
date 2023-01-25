@@ -27,7 +27,7 @@ jobs:
         npm install @babylonjs/react-native
         npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Version }}
         cd android
-        ./gradlew Playground:assembleRelease --stacktrace --info
+        ./gradlew app:assembleRelease --stacktrace --info
     - name: Upload Assembled
       uses: actions/upload-artifact@v2
       with:
