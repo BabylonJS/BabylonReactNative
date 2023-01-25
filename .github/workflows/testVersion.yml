@@ -1,4 +1,4 @@
-name: Publish Package For Preview
+name: Test RN/BRN Version
 on:
   workflow_dispatch:
     inputs:
