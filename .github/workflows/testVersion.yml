@@ -20,7 +20,7 @@ jobs:
     steps:
     - name: Generate PG
       run: |
-        npx react-native init Playground --version ${{ github.event.inputs.RN_Version }} --template react-native-template-typescript
+        npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
         cd Playground
         npm install @babylonjs/core
         npm install @babylonjs/loaders
