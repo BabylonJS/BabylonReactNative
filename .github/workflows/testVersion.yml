@@ -20,7 +20,6 @@ jobs:
     steps:
     - name: Generate PG
       run: |
-#        brew install ruby@2.7
         npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
         cd Playground
         npm install @babylonjs/core
@@ -28,7 +27,6 @@ jobs:
         npm install @babylonjs/react-native
         @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Version }}
         npm build android
-#        npm build ios
     - name: Upload Assembled
       uses: actions/upload-artifact@v2
       with:
