@@ -25,7 +25,7 @@ jobs:
         npm install @babylonjs/core
         npm install @babylonjs/loaders
         npm install @babylonjs/react-native
-        @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Version }}
+        npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Version }}
         npm build android
     - name: Upload Assembled
       uses: actions/upload-artifact@v2
