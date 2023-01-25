@@ -32,4 +32,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: 'Assembled'
-        path: Playground
+        path: Playground/android/app/build/outputs/apk/release/app-release.apk
