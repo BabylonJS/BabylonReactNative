@@ -1,0 +1,35 @@
+name: Publish Package For Preview
+on:
+  workflow_dispatch:
+    inputs:
+      RN_Version:
+        description: 'ReactNative Version'
+        required: true 
+        type: string
+        default: '0.69.0'
+      BRN_Version:
+        description: 'Babylon ReactNative Version'
+        required: true 
+        type: string
+        default: '0-69'
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - name: Generate PG
+      run: |
+        npx react-native init Playground --version ${{ github.event.inputs.RN_Version }} --template react-native-template-typescript
+        cd Playground
+        npm install @babylonjs/core
+        npm install @babylonjs/loaders
+        npm install @babylonjs/react-native
+        @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Version }}
+        npm build android
+        npm build ios
+    - name: Upload Assembled
+      uses: actions/upload-artifact@v2
+      with:
+        name: 'Assembled'
+        path: Playground
