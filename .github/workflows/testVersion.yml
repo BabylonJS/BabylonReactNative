@@ -18,7 +18,8 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-      - name: Generate PG Windows
+    - name: Generate PG Windows
+      run: |
         npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
         cd Playground
         npm install @babylonjs/core
@@ -36,7 +37,6 @@ jobs:
 
   build-android:
     runs-on: ubuntu-latest
-
     steps:
     - name: Generate PG Android
       run: |
@@ -62,5 +62,5 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Gather 
-      run: |
-        ls -l -a
+        run: |
+          ls -l -a
