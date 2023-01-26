@@ -14,11 +14,31 @@ on:
         default: '0-69'
 
 jobs:
-  build:
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Generate PG Windows
+        npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
+        cd Playground
+        npm install @babylonjs/core
+        npm install @babylonjs/loaders
+        npm install @babylonjs/react-native
+        npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Version }}
+        npx react-native-windows-init --overwrite
+        msbuild.exe /p:Configuration="Release" /p:Platform="x64" /m "./windows/Playground.sln"
+
+    - name: Upload UWP x64
+      uses: actions/upload-artifact@v2
+      with:
+        name: 'WindowsUWPx64'
+        path: Playground/windows
+
+  build-android:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Generate PG
+    - name: Generate PG Android
       run: |
         npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
         cd Playground
@@ -26,10 +46,21 @@ jobs:
         npm install @babylonjs/loaders
         npm install @babylonjs/react-native
         npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Version }}
+        npx react-native-windows-init --overwrite
+        msbuild.exe /p:Configuration="Release" /p:Platform="x64" /m "./Playground.sln"
         cd android
         ./gradlew app:assembleRelease --stacktrace --info
-    - name: Upload Assembled
+
+    - name: Upload APK
       uses: actions/upload-artifact@v2
       with:
-        name: 'Assembled'
+        name: 'AndroidAPK'
         path: Playground/android/app/build/outputs/apk/release/app-release.apk
+
+  package:
+    needs: [build-windows, build-android]
+    runs-on: macos-latest
+    steps:
+      - name: Gather 
+      run: |
+        ls -l -a
