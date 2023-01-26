@@ -16,11 +16,11 @@ on:
 jobs:
 
   build-windows:
-    runs-on: windows-2019
+    runs-on: windows-latest
     steps:
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
-    - name: Generate PG Windows
+    - name: Build Playground Windows x64
       run: |
         npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
         cd Playground
@@ -29,6 +29,7 @@ jobs:
         npm install @babylonjs/react-native
         npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Version }}
         npx react-native-windows-init --overwrite
+        msbuild.exe /r "./windows/Playground.sln"
         msbuild.exe /p:Configuration="Release" /p:Platform="x64" /m "./windows/Playground.sln"
 
     - name: Upload UWP x64
@@ -40,7 +41,7 @@ jobs:
   build-android:
     runs-on: ubuntu-latest
     steps:
-    - name: Generate PG Android
+    - name: Build Playground Android
       run: |
         npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
         cd Playground
