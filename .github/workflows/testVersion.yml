@@ -36,7 +36,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: 'WindowsUWPx64'
-        path: Playground/windows
+        path: Playground/windows/x64/Release/Playground
 
   build-android:
     runs-on: ubuntu-latest
