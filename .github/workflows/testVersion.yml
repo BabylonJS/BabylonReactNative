@@ -18,6 +18,8 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
     - name: Generate PG Windows
       run: |
         npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
@@ -46,8 +48,6 @@ jobs:
         npm install @babylonjs/loaders
         npm install @babylonjs/react-native
         npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Version }}
-        npx react-native-windows-init --overwrite
-        msbuild.exe /p:Configuration="Release" /p:Platform="x64" /m "./Playground.sln"
         cd android
         ./gradlew app:assembleRelease --stacktrace --info
 
