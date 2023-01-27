@@ -82,9 +82,6 @@ jobs:
         echo Wait for emulator
         adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do echo "."; sleep 1; done; input keyevent 82'
         adb devices
-
-    - name: Install & Run .APK
-      run: |
         adb install -t ./app-release.apk
         echo APK installation done.
         adb wait-for-device shell am start -n com.playground/com.playground.MainActivity
