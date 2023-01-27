@@ -87,11 +87,11 @@ jobs:
       run: |
         adb install -t ./app-release.apk
         echo APK installation done.
-        adb wait-for-device shell 'am start -n com.playground/com.playground.MainActivity'
+        adb wait-for-device shell am start -n com.playground/com.playground.MainActivity
         echo Activity started.
-        adb wait-for-device shell 'pidof com.playground'
+        adb wait-for-device shell pidof com.playground
         echo Activity PID
-        adb wait-for-device shell 'while [[ -z $(pidof com.playground | tr -d "\r") ]]; do echo "."; sleep 1; done; input keyevent 82'
+        adb wait-for-device shell while [[ -z $(pidof com.playground | tr -d "\r") ]]; do echo "."; sleep 1; done; input keyevent 82
         echo Activity is running. Waiting 10s.
         sleep 10
         echo Checking it's still alive
