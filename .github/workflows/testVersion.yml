@@ -92,7 +92,7 @@ jobs:
         # wait a bit more
         sleep 10
         # check it's still alive
-        if [[ -z "$(pidof com.playground | tr -d '\r')" ]]; then echo "com.playground is not running."; exit(1); fi
+        if [[ -z "$(pidof com.playground | tr -d '\r')" ]]; then echo "com.playground is not running."; exit 1; fi
 
   package:
     #needs: [build-windows, build-android]
