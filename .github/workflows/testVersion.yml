@@ -70,10 +70,10 @@ jobs:
     - name: Install Android Emulator
       run: |
         echo Install Android image
-        echo "y" | sdkmanager --install "system-images;android-27;default;x86_64"
-        echo "y" | sdkmanager --licenses
+        echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-27;default;x86_64"
+        echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --licenses
         echo Create AVD
-        avdmanager create avd -n Pixel_API_27 -d pixel -k "system-images;android-27;default;x86_64"
+        $ANDROID_HOME/tools/bin/avdmanager create avd -n Pixel_API_27 -d pixel -k "system-images;android-27;default;x86_64"
 
     - name: Start emulator
       run: |
@@ -87,8 +87,12 @@ jobs:
       run: |
         adb install -t ./app-release.apk
         adb shell am start -n com.playground/com.playground.MainActivity
-        sleep 2
-        adb shell pidof com.playground.MainActivity
+        # wait not ready
+        adb wait-for-device shell 'while [[ -z $(pidof com.playground | tr -d '\r') ]]; do echo "."; sleep 1; done; input keyevent 82'
+        # wait a bit more
+        sleep 10
+        # check it's still alive
+        if [[ -z "$(pidof com.playground | tr -d '\r')" ]]; then echo "com.playground is not running."; exit(1); fi
 
   package:
     #needs: [build-windows, build-android]
