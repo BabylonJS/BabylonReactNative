@@ -86,14 +86,17 @@ jobs:
     - name: Install & Run .APK
       run: |
         adb install -t ./app-release.apk
+        echo APK installation done.
         adb shell am start -n com.playground/com.playground.MainActivity
-        # wait not ready
+        echo Activity started.
         adb shell "pidof com.playground"
+        echo Activity PID
         adb shell "while [[ -z $(pidof com.playground | tr -d '\r') ]]; do echo '.''; sleep 1; done; input keyevent 82"
-        # wait a bit more
+        echo Activity is running. Waiting 10s.
         sleep 10
-        # check it's still alive
+        echo Checking it's still alive
         if [[ -z "$(pidof com.playground | tr -d '\r')" ]]; then echo "com.playground is not running."; exit 1; fi
+        echo Checks done.
 
   package:
     #needs: [build-windows, build-android]
