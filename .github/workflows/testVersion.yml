@@ -74,7 +74,7 @@ jobs:
         $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do echo "."; sleep 1; done; input keyevent 82'
         $ANDROID_HOME/platform-tools/adb devices
 
-    -name: Install & Run .APK
+    - name: Install & Run .APK
       run: |
         adb install -t Playground/android/app/build/outputs/apk/release/app-release.apk
         adb shell am start -n com.playground/com.playground.MainActivity
