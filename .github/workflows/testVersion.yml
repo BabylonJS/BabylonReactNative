@@ -39,7 +39,7 @@ jobs:
         path: Playground/windows/x64/Release/Playground
 
   build-android:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
     - name: Build Playground Android
       run: |
