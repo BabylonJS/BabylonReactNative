@@ -70,23 +70,25 @@ jobs:
     - name: Install Android Emulator
       run: |
         echo Install Android image
-        echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-27;default;x86_64"
-        echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+        echo "y" | sdkmanager --install "system-images;android-27;default;x86_64"
+        echo "y" | sdkmanager --licenses
         echo Create AVD
-        $ANDROID_HOME/tools/bin/avdmanager create avd -n Pixel_API_27 -d pixel -k "system-images;android-27;default;x86_64"
+        avdmanager create avd -n Pixel_API_27 -d pixel -k "system-images;android-27;default;x86_64"
 
     - name: Start emulator
       run: |
         echo Start emulator
         nohup $ANDROID_HOME/emulator/emulator -avd Pixel_API_27 -gpu host -no-audio -no-boot-anim -camera-back none -camera-front none -qemu -m 2048 2>&1 &
         echo Wait for emulator
-        $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do echo "."; sleep 1; done; input keyevent 82'
-        $ANDROID_HOME/platform-tools/adb devices
+        adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do echo "."; sleep 1; done; input keyevent 82'
+        adb devices
 
     - name: Install & Run .APK
       run: |
         adb install -t ./app-release.apk
         adb shell am start -n com.playground/com.playground.MainActivity
+        sleep 2
+        adb shell pidof com.playground.MainActivity
 
   package:
     #needs: [build-windows, build-android]
