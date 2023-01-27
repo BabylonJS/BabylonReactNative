@@ -88,7 +88,8 @@ jobs:
         adb install -t ./app-release.apk
         adb shell am start -n com.playground/com.playground.MainActivity
         # wait not ready
-        adb wait-for-device shell 'while [[ -z $(pidof com.playground | tr -d '\r') ]]; do echo "."; sleep 1; done; input keyevent 82'
+        adb shell "pidof com.playground"
+        adb shell "while [[ -z $(pidof com.playground | tr -d '\r') ]]; do echo '.''; sleep 1; done; input keyevent 82"
         # wait a bit more
         sleep 10
         # check it's still alive
