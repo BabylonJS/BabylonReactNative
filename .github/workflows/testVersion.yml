@@ -85,7 +85,7 @@ jobs:
 
     - name: Install & Run .APK
       run: |
-        adb install -t Playground/android/app/build/outputs/apk/release/app-release.apk
+        adb install -t ./app-release.apk
         adb shell am start -n com.playground/com.playground.MainActivity
 
   package:
