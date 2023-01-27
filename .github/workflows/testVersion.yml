@@ -39,7 +39,7 @@ jobs:
 #        path: Playground/windows/x64/Release/Playground
 
   build-android:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
     - name: Build Playground Android
       run: |
@@ -58,6 +58,15 @@ jobs:
         name: 'AndroidAPK'
         path: Playground/android/app/build/outputs/apk/release/app-release.apk
 
+  test-android:
+    needs: [build-android]
+    runs-on: macos-latest
+    steps:
+    - name: Download APK
+      uses: actions/download-artifact@v2
+      with:
+        name: 'AndroidAPK'
+        path: ./
     - name: Install Android Emulator
       run: |
         echo Install Android image
@@ -81,7 +90,7 @@ jobs:
 
   package:
     #needs: [build-windows, build-android]
-    needs: [build-android]
+    needs: [test-android]
     runs-on: macos-latest
     steps:
       - name: Gather 
