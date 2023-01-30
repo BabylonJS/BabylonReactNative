@@ -7,37 +7,49 @@ jobs:
   build-android-ios-064:
     uses: ./.github/workflows/ios_android.yml
     with:
-      react-native-version: 0.64
+      react-native-version: '0.64'
       release-version: ${GITHUB_REF/refs\/tags\//}
 
   build-android-ios-065:
     uses: ./.github/workflows/ios_android.yml
     with:
-      react-native-version: 0.65
+      react-native-version: '0.65'
       release-version: ${GITHUB_REF/refs\/tags\//}
       
   build-android-ios-069:
     uses: ./.github/workflows/ios_android.yml
     with:
-      react-native-version: 0.69
+      react-native-version: '0.69'
+      release-version: ${GITHUB_REF/refs\/tags\//}
+
+  build-android-ios-070:
+    uses: ./.github/workflows/ios_android.yml
+    with:
+      react-native-version: '0.70'
       release-version: ${GITHUB_REF/refs\/tags\//}
 
   build-windows-064:
     uses: ./.github/workflows/windows.yml
     with:
-      react-native-version: 0.64
+      react-native-version: '0.64'
       release-version: ${GITHUB_REF/refs\/tags\//}
 
   build-windows-065:
     uses: ./.github/workflows/windows.yml
     with:
-      react-native-version: 0.65
+      react-native-version: '0.65'
       release-version: ${GITHUB_REF/refs\/tags\//}
 
   build-windows-069:
     uses: ./.github/workflows/windows.yml
     with:
-      react-native-version: 0.69
+      react-native-version: '0.69'
+      release-version: ${GITHUB_REF/refs\/tags\//}
+
+  build-windows-070:
+    uses: ./.github/workflows/windows.yml
+    with:
+      react-native-version: '0.70'
       release-version: ${GITHUB_REF/refs\/tags\//}
 
   build-typescript:
@@ -46,7 +58,7 @@ jobs:
       release-version: ${GITHUB_REF/refs\/tags\//}
 
   package:
-    needs: [build-typescript, build-android-ios-064, build-android-ios-065, build-android-ios-069, build-windows-064, build-windows-065, build-windows-069]
+    needs: [build-typescript, build-android-ios-064, build-android-ios-065, build-android-ios-069, build-android-ios-070, build-windows-064, build-windows-065, build-windows-069, build-windows-070]
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
@@ -74,6 +86,11 @@ jobs:
         with:
           name: 'Assembled-iOSAndroid0.69'
           path: Package/Assembled-iOSAndroid0.69
+      - name: Download Assembled-iOSAndroid 0.70 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-iOSAndroid0.70'
+          path: Package/Assembled-iOSAndroid0.70
       - name: Download Assembled-Windows 0.64 Folder
         uses: actions/download-artifact@v2
         with:
@@ -89,6 +106,11 @@ jobs:
         with:
           name: 'Assembled-Windows0.69'
           path: Package/Assembled-Windows0.69
+      - name: Download Assembled-Windows 0.70 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-Windows0.70'
+          path: Package/Assembled-Windows0.70
       - name: Display structure of downloaded Assembled and Assembled-Windows folders
         run: ls -R
       - name: Setup Node.js
@@ -126,6 +148,13 @@ jobs:
         working-directory: ./Package/Assembled-iOSAndroid0.69
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Version & Publish Package @babylonjs/react-native-iosandroid-0-70
+        run: |
+          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
+          npm publish --access public
+        working-directory: ./Package/Assembled-iOSAndroid0.70
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Version & Publish Package @babylonjs/react-native-windows-0-64
         run: |
@@ -146,5 +175,12 @@ jobs:
           npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
           npm publish --access public
         working-directory: ./Package/Assembled-Windows0.69
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Version & Publish Package @babylonjs/react-native-windows-0-70
+        run: |
+          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
+          npm publish --access public
+        working-directory: ./Package/Assembled-Windows0.70
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
