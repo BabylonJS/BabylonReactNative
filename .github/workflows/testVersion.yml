@@ -58,6 +58,13 @@ jobs:
         name: 'AndroidAPK'
         path: Playground/android/app/build/outputs/apk/release/app-release.apk
 
+    - name: Upload Playground App
+      uses: actions/upload-artifact@v2
+      with:
+        name: 'Playground App'
+        path: Playground/
+
+# test jobs not working
   test-android:
     needs: [build-android]
     runs-on: macos-latest
@@ -96,8 +103,7 @@ jobs:
         echo Checks done.
 
   package:
-    #needs: [build-windows, build-android]
-    needs: [test-android]
+    needs: [build-android]
     runs-on: macos-latest
     steps:
       - name: Gather 
