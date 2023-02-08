@@ -48,7 +48,7 @@ jobs:
     - name: Build Playground Android
       run: |
         npm uninstall -g react-native-cli @react-native-community/cli
-        npx react-native init Playground --version "${{ github.event.inputs.RN_Version }}" --verbose --template react-native-template-typescript
+        npx react-native init Playground --verbose --template react-native-template-typescript@${{ github.event.inputs.RN_Version }}
         cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
         cd Playground
         npm install @babylonjs/core
