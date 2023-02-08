@@ -6,7 +6,7 @@ on:
         description: 'ReactNative Version'
         required: true 
         type: string
-        default: '0.70.7'
+        default: '0.71.2'
       BRN_Version:
         description: 'Babylon ReactNative Version'
         required: true 
@@ -40,7 +40,8 @@ jobs:
 
 #        
 # 
-# npx react-native init Playground --version "${{ github.event.inputs.RN_Version }}" --verbose --template react-native-template-typescript
+#  --template react-native-template-typescript
+# npx react-native init Playground --template react-native-template-typescript@6.12.10
 
   build-android:
     runs-on: ubuntu-latest
@@ -50,7 +51,7 @@ jobs:
     - name: Build Playground Android
       run: |
         npm uninstall -g react-native-cli @react-native-community/cli
-        npx react-native init Playground --template react-native-template-typescript@6.12.10
+        npx react-native init Playground --version "${{ github.event.inputs.RN_Version }}" --verbose
         cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
         cd Playground
         npm install @babylonjs/core
