@@ -65,11 +65,11 @@ jobs:
         name: 'AndroidAPK'
         path: Playground/android/app/build/outputs/apk/release/app-release.apk
 
-    - name: Upload Playground App
-      uses: actions/upload-artifact@v2
-      with:
-        name: 'Playground App'
-        path: Playground/
+#    - name: Upload Playground App
+#      uses: actions/upload-artifact@v2
+#      with:
+#        name: 'Playground App'
+#        path: Playground/
 
 # test jobs not working
 # test-android:
