@@ -39,7 +39,7 @@ jobs:
 #        path: Playground/windows/x64/Release/Playground
 
 #        
-# cp Apps/Playground/playground-shared/* ./Playground/
+# 
   build-android:
     runs-on: ubuntu-latest
     steps:
@@ -48,6 +48,7 @@ jobs:
     - name: Build Playground Android
       run: |
         npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
+        cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
         cd Playground
         ls -R
         npm install @babylonjs/core
