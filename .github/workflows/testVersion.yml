@@ -41,6 +41,11 @@ jobs:
   build-android:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v2.3.3
+    - name: Update App scripts
+      run: |
+        cp Apps/Playground/playground-shared/* ./Playground/
     - name: Build Playground Android
       run: |
         npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
@@ -49,6 +54,7 @@ jobs:
         npm install @babylonjs/loaders
         npm install @babylonjs/react-native
         npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Version }}
+        npm install @react-native-community/slider
         cd android
         ./gradlew app:assembleRelease --stacktrace --info
 
@@ -58,11 +64,11 @@ jobs:
         name: 'AndroidAPK'
         path: Playground/android/app/build/outputs/apk/release/app-release.apk
 
-    - name: Upload Playground App
-      uses: actions/upload-artifact@v2
-      with:
-        name: 'Playground App'
-        path: Playground/
+#   - name: Upload Playground App
+#     uses: actions/upload-artifact@v2
+#     with:
+#       name: 'Playground App'
+#       path: Playground/
 
 # test jobs not working
 # test-android:
