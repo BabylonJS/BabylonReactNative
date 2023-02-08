@@ -43,12 +43,10 @@ jobs:
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v2.3.3
-    - name: Update App scripts
-      run: |
-        cp Apps/Playground/playground-shared/* ./Playground/
     - name: Build Playground Android
       run: |
         npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
+        cp Apps/Playground/playground-shared/* ./Playground/
         cd Playground
         npm install @babylonjs/core
         npm install @babylonjs/loaders
