@@ -38,6 +38,8 @@ jobs:
 #        name: 'WindowsUWPx64'
 #        path: Playground/windows/x64/Release/Playground
 
+#        npm install @react-native-community/slider
+
   build-android:
     runs-on: ubuntu-latest
     steps:
@@ -48,11 +50,11 @@ jobs:
         npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
         cp Apps/Playground/playground-shared/* ./Playground/
         cd Playground
+        ls -R
         npm install @babylonjs/core
         npm install @babylonjs/loaders
         npm install @babylonjs/react-native
         npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Version }}
-        npm install @react-native-community/slider
         cd android
         ./gradlew app:assembleRelease --stacktrace --info
 
