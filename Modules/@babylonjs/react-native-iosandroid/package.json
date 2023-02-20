@@ -28,7 +28,7 @@
     "semver": "^7.3.2"
   },
   "peerDependencies": {
-    "@babylonjs/react-native": "version",
+    "@babylonjs/react-native": "^0.0.1",
     "react": ">=16.13.1",
     "react-native": ">=0.63.1",
     "react-native-permissions": "^3.0.0"
