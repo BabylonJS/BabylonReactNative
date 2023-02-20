@@ -4,7 +4,7 @@ on:
     branches:
       - master
 env:
-  BRN_Version: 0.64
+  BRN_Version: 0.70
 
 jobs:
   build-android:
