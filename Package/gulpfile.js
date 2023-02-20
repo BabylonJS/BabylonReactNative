@@ -584,10 +584,25 @@ const patchPackageVersion = async () => {
 
     if (versionIndex != -1) {
       const version = process.argv[versionIndex + 1];
-      if (version == '0.64' || version == '0.65' || version == '0.69' || version == '0.70') {
+      if (version == '0.64' || version == '0.65' || version == '0.69' || version == '0.70' || version == '0.71') {
         console.log(chalk.black.bgCyan(`Updating Package.json for React Native ${version}.`));
-        let peerDep = (version == '0.64') ? '>=0.63.1 <0.65.0' : (version == '0.65') ? '>=0.65.0 < 0.69.0' : (version == '0.69') ? '>=0.69.0 < 0.70.0' : '>=0.70.0';
-        let packageNamePostfix = (version == '0.64') ? '-0-64' : (version == '0.65') ? '-0-65' : (version == '0.69') ? '-0-69' : '-0-70';
+
+        // default 0.64
+        let peerDep = '>=0.63.1 <0.65.0';
+        let packageNamePostfix = '-0-64';
+        if (version == '0.65') {
+          peerDep = '>=0.65.0 < 0.69.0';
+          packageNamePostfix = '-0-65';
+        } else if (version == '0.69') {
+          peerDep = '>=0.69.0 < 0.70.0';
+          packageNamePostfix = '-0-69';
+        } else if (version == '0.70') {
+          peerDep = '>=0.70.0 < 0.71.0';
+          packageNamePostfix = '-0-70';
+        } else if (version == '0.71') {
+          peerDep = '>=0.71.0';
+          packageNamePostfix = '-0-71';
+        }
 
         packageJsoniOSAndroid["name"] = "@babylonjs/react-native-iosandroid" + packageNamePostfix;
         packageJsonWindows["name"] = "@babylonjs/react-native-windows" + packageNamePostfix;

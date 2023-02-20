@@ -28,6 +28,12 @@ jobs:
       react-native-version: '0.70'
       release-version: ${GITHUB_REF/refs\/tags\//}
 
+  build-android-ios-071:
+    uses: ./.github/workflows/ios_android.yml
+    with:
+      react-native-version: '0.71'
+      release-version: ${GITHUB_REF/refs\/tags\//}
+
   build-windows-064:
     uses: ./.github/workflows/windows.yml
     with:
@@ -52,13 +58,19 @@ jobs:
       react-native-version: '0.70'
       release-version: ${GITHUB_REF/refs\/tags\//}
 
+  build-windows-071:
+    uses: ./.github/workflows/windows.yml
+    with:
+      react-native-version: '0.71'
+      release-version: ${GITHUB_REF/refs\/tags\//}
+
   build-typescript:
     uses: ./.github/workflows/typescript.yml
     with:
       release-version: ${GITHUB_REF/refs\/tags\//}
 
   package:
-    needs: [build-typescript, build-android-ios-064, build-android-ios-065, build-android-ios-069, build-android-ios-070, build-windows-064, build-windows-065, build-windows-069, build-windows-070]
+    needs: [build-typescript, build-android-ios-064, build-android-ios-065, build-android-ios-069, build-android-ios-070, build-android-ios-071, build-windows-064, build-windows-065, build-windows-069, build-windows-070, build-windows-071]
     runs-on: macos-latest
     steps:
       - name: Checkout Repo

@@ -144,6 +144,12 @@ jobs:
       react-native-version: '0.70'
       release-version: 0.0.${GITHUB_SHA::8}
 
+  build-android-ios-071:
+    uses: ./.github/workflows/ios_android.yml
+    with:
+      react-native-version: '0.71'
+      release-version: 0.0.${GITHUB_SHA::8}
+
   build-windows-065:
     uses: ./.github/workflows/windows.yml
     with:
@@ -160,6 +166,12 @@ jobs:
     uses: ./.github/workflows/windows.yml
     with:
       react-native-version: '0.70'
+      release-version: 0.0.${GITHUB_SHA::8}
+
+  build-windows-071:
+    uses: ./.github/workflows/windows.yml
+    with:
+      react-native-version: '0.71'
       release-version: 0.0.${GITHUB_SHA::8}
 
   build-typescript:
