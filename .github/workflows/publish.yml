@@ -103,6 +103,11 @@ jobs:
         with:
           name: 'Assembled-iOSAndroid0.70'
           path: Package/Assembled-iOSAndroid0.70
+      - name: Download Assembled-iOSAndroid 0.71 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-iOSAndroid0.71'
+          path: Package/Assembled-iOSAndroid0.71
       - name: Download Assembled-Windows 0.64 Folder
         uses: actions/download-artifact@v2
         with:
@@ -123,6 +128,11 @@ jobs:
         with:
           name: 'Assembled-Windows0.70'
           path: Package/Assembled-Windows0.70
+      - name: Download Assembled-Windows 0.71 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-Windows0.71'
+          path: Package/Assembled-Windows0.71
       - name: Display structure of downloaded Assembled and Assembled-Windows folders
         run: ls -R
       - name: Setup Node.js
@@ -167,6 +177,13 @@ jobs:
         working-directory: ./Package/Assembled-iOSAndroid0.70
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Version & Publish Package @babylonjs/react-native-iosandroid-0-71
+        run: |
+          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
+          npm publish --access public
+        working-directory: ./Package/Assembled-iOSAndroid0.71
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Version & Publish Package @babylonjs/react-native-windows-0-64
         run: |
@@ -194,5 +211,12 @@ jobs:
           npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
           npm publish --access public
         working-directory: ./Package/Assembled-Windows0.70
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Version & Publish Package @babylonjs/react-native-windows-0-71
+        run: |
+          npm version --no-git-tag-version ${GITHUB_REF/refs\/tags\//}
+          npm publish --access public
+        working-directory: ./Package/Assembled-Windows0.71
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
