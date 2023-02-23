@@ -50,7 +50,7 @@ set_target_properties(fbjni PROPERTIES
 list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR_CMAKE}/ReactCommon/callinvoker")
 set(TURBOMODULE_DIR "${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/jni/react/turbomodule/")
 if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
-    add_subdirectory(${TURBOMODULE_DIR})
+    add_subdirectory(${TURBOMODULE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/turbomodule)
 else()
     list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni")
     add_library(turbomodulejsijni SHARED ${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni/ReactCommon/CallInvokerHolder.cpp)
