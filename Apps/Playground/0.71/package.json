@@ -19,10 +19,10 @@
     "@babylonjs/react-native-iosandroid": "file:../../../Modules/@babylonjs/react-native-iosandroid",
     "@babylonjs/react-native-windows": "file:../../../Modules/@babylonjs/react-native-windows",
     "@babylonjs/playground-shared": "file:../playground-shared",
-    "@react-native-community/slider": "^4.0.0-rc.3",
+    "@react-native-community/slider": "^4.2.2",
     "react": "18.2.0",
     "react-native": "0.71.0",
-    "react-native-permissions": "^3.0.0",
+    "react-native-permissions": "^3.6.1",
     "react-native-windows": "0.71.1"
   },
   "devDependencies": {
