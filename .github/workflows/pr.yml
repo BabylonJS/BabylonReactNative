@@ -96,10 +96,10 @@ jobs:
           submodules: 'true'
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.0.2
-      - name: Setup Node 14
+      - name: Setup Node 16
         uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
       - name: Setup NuGet
         uses: nuget/setup-nuget@v1
         with:
@@ -148,12 +148,12 @@ jobs:
 #      react-native-version: '0.70'
 #      release-version: 0.0.${GITHUB_SHA::8}
 #
-#  build-android-ios-071:
-#    uses: ./.github/workflows/ios_android.yml
-#    with:
-#      react-native-version: '0.71'
-#      release-version: 0.0.${GITHUB_SHA::8}
-#
+  build-android-ios-071:
+    uses: ./.github/workflows/ios_android.yml
+    with:
+      react-native-version: '0.71'
+      release-version: 0.0.${GITHUB_SHA::8}
+
 #  build-windows-065:
 #    uses: ./.github/workflows/windows.yml
 #    with:
