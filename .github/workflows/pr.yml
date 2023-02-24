@@ -4,7 +4,7 @@ on:
     branches:
       - master
 env:
-  BRN_Version: '0.65'
+  BRN_Version: '0.64'
 
 jobs:
   build-android:
@@ -96,10 +96,10 @@ jobs:
           submodules: 'true'
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.0.2
-      - name: Setup Node 16
+      - name: Setup Node 14
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 14
       - name: Setup NuGet
         uses: nuget/setup-nuget@v1
         with:
