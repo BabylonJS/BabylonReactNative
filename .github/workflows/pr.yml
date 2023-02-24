@@ -4,7 +4,7 @@ on:
     branches:
       - master
 env:
-  BRN_Version: '0.64'
+  BRN_Version: '0.69'
 
 jobs:
   build-android:
@@ -35,25 +35,25 @@ jobs:
         env:
           JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
 
-#  build-iOS:
-#    runs-on: macos-latest
-#    steps:
-#      - name: Checkout Repo
-#        uses: actions/checkout@v2.3.3
-#        with:
-#          submodules: 'recursive'
-#      - name: NPM Install (Playground)
-#        run: npm install
-#        working-directory: ./Apps/Playground
-#      - name: NPM Install (React Native ${{ env.BRN_Version }})
-#        run: npm run select --reactNative ${{ env.BRN_Version }}
-#        working-directory: ./Apps/Playground
-#      - name: NPM Install (Binary Package)
-#        run: npm install
-#        working-directory: ./Package
-#      - name: Gulp (iOS)
-#        run: npx gulp buildIOS
-#        working-directory: ./Package
+  build-iOS:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+        with:
+          submodules: 'recursive'
+      - name: NPM Install (Playground)
+        run: npm install
+        working-directory: ./Apps/Playground
+      - name: NPM Install (React Native ${{ env.BRN_Version }})
+        run: npm run select --reactNative ${{ env.BRN_Version }}
+        working-directory: ./Apps/Playground
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Gulp (iOS)
+        run: npx gulp buildIOS
+        working-directory: ./Package
 
   test-publish-android-ios:
     runs-on: macos-latest
@@ -130,56 +130,55 @@ jobs:
         working-directory: ./Package
 
 # Test packages
-#  build-android-ios-065:
-#    uses: ./.github/workflows/ios_android.yml
-#    with:
-#      react-native-version: '0.65'
-#      release-version: 0.0.${GITHUB_SHA::8}
-#
-#  build-android-ios-069:
-#    uses: ./.github/workflows/ios_android.yml
-#    with:
-#      react-native-version: '0.69'
-#      release-version: 0.0.${GITHUB_SHA::8}
-#
-#  build-android-ios-070:
-#    uses: ./.github/workflows/ios_android.yml
-#    with:
-#      react-native-version: '0.70'
-#      release-version: 0.0.${GITHUB_SHA::8}
-#
+  build-android-ios-065:
+    uses: ./.github/workflows/ios_android.yml
+    with:
+      react-native-version: '0.65'
+      release-version: 0.0.${GITHUB_SHA::8}
+
+  build-android-ios-069:
+    uses: ./.github/workflows/ios_android.yml
+    with:
+      react-native-version: '0.69'
+      release-version: 0.0.${GITHUB_SHA::8}
+
+  build-android-ios-070:
+    uses: ./.github/workflows/ios_android.yml
+    with:
+      react-native-version: '0.70'
+      release-version: 0.0.${GITHUB_SHA::8}
+
   build-android-ios-071:
     uses: ./.github/workflows/ios_android.yml
     with:
       react-native-version: '0.71'
       release-version: 0.0.${GITHUB_SHA::8}
 
-#  build-windows-065:
-#    uses: ./.github/workflows/windows.yml
-#    with:
-#      react-native-version: '0.65'
-#      release-version: 0.0.${GITHUB_SHA::8}
-#
-#  build-windows-069:
-#    uses: ./.github/workflows/windows.yml
-#    with:
-#      react-native-version: '0.69'
-#      release-version: 0.0.${GITHUB_SHA::8}
-#
-#  build-windows-070:
-#    uses: ./.github/workflows/windows.yml
-#    with:
-#      react-native-version: '0.70'
-#      release-version: 0.0.${GITHUB_SHA::8}
-#
+  build-windows-065:
+    uses: ./.github/workflows/windows.yml
+    with:
+      react-native-version: '0.65'
+      release-version: 0.0.${GITHUB_SHA::8}
+
+  build-windows-069:
+    uses: ./.github/workflows/windows.yml
+    with:
+      react-native-version: '0.69'
+      release-version: 0.0.${GITHUB_SHA::8}
+
+  build-windows-070:
+    uses: ./.github/workflows/windows.yml
+    with:
+      react-native-version: '0.70'
+      release-version: 0.0.${GITHUB_SHA::8}
+
   build-windows-071:
     uses: ./.github/workflows/windows.yml
     with:
       react-native-version: '0.71'
       release-version: 0.0.${GITHUB_SHA::8}
-#
-#  build-typescript:
-#    uses: ./.github/workflows/typescript.yml
-#    with:
-#      release-version: 0.0.${GITHUB_SHA::8}
-#
+
+  build-typescript:
+    uses: ./.github/workflows/typescript.yml
+    with:
+      release-version: 0.0.${GITHUB_SHA::8}
