@@ -55,6 +55,8 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
     list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR_CMAKE}/ReactCommon/react/nativemodule/core")
     list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR_CMAKE}/ReactCommon/react/nativemodule/core/platform/android")
     list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR_CMAKE}/ReactCommon/reactperflogger")
+    list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/jni/react/reactperflogger")
+    list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/jni")
     list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR_CMAKE}/ReactCommon")
     target_include_directories(callinvokerholder PUBLIC "${REACTNATIVE_DIR_CMAKE}/ReactCommon/callinvoker")
 else()
@@ -79,6 +81,7 @@ target_link_libraries(BabylonNative
     arcana
     jsi
     turbomodulejsijni
+    folly_runtime
     AndroidExtensions
     Graphics
     JsRuntime
