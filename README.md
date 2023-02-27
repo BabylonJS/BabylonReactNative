@@ -223,6 +223,18 @@ This will create a symbolic link in your `node_modules` directory to the `@babyl
 
 For iOS the XCode project needs to be generated with `CMake` as described [above](#ios) and added to your `xcworkspace`.
 
+## Supported React-Native
+
+The React-native 
+In-between versions not in this list (like 0.66, 0.67, ...) use the previous React-Native version (0.65 in that case)
+
+| React-Native version | BabylonReactNative versions |
+|---|---|
+| 0.64 | 1.4.0, 1.4.1, 1.4.2, 1.4.3, 1.4.4, 1.5.0, 1.5.1 |
+| 0.65 | 1.4.0, 1.4.1, 1.4.2, 1.4.3, 1.4.4, 1.5.0, 1.5.1 |
+| 0.69 | 1.4.0, 1.4.1, 1.4.2, 1.4.3, 1.4.4, 1.5.0, 1.5.1 |
+| 0.70 | 1.5.0, 1.5.1 |
+
 ## Supported Babylon.js versions
 
 Depending on the BabylonReactNative NPM package version, some Babylon.js NPM dependency version may or may not be compatible. Here is a compatibility list that has been tested:
