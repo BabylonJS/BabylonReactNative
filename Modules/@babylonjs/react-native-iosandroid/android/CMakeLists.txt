@@ -51,6 +51,7 @@ list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR_CMAKE}/ReactCommon/callinvok
 set(TURBOMODULE_DIR "${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/jni/react/turbomodule/")
 if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
     add_subdirectory(${TURBOMODULE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/turbomodule)
+    add_subdirectory("${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/jni" "${CMAKE_CURRENT_BINARY_DIR}/jni")
     list(APPEND TURBOMODULE_INC_DIRS "${TURBOMODULE_DIR}")
     list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR_CMAKE}/ReactCommon/react/nativemodule/core")
     list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR_CMAKE}/ReactCommon/react/nativemodule/core/platform/android")
