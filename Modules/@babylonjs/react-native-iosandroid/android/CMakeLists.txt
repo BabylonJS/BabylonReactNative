@@ -51,12 +51,16 @@ list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR_CMAKE}/ReactCommon/callinvok
 set(TURBOMODULE_DIR "${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/jni/react/turbomodule/")
 if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
     add_subdirectory(${TURBOMODULE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/turbomodule)
+    #add_subdirectory("${REACTNATIVE_DIR_CMAKE}/ReactCommon/callinvoker" ${CMAKE_CURRENT_BINARY_DIR}/callinvoker)
+    #add_subdirectory("${REACTNATIVE_DIR_CMAKE}/ReactCommon/react/nativemodule/core" ${CMAKE_CURRENT_BINARY_DIR}/nativemodule_core)
+    list(APPEND TURBOMODULE_INC_DIRS "${TURBOMODULE_DIR}")
+    list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR_CMAKE}/ReactCommon/react/nativemodule/core")
 else()
     list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni")
     add_library(turbomodulejsijni SHARED ${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni/ReactCommon/CallInvokerHolder.cpp)
-    target_include_directories(turbomodulejsijni PUBLIC "${TURBOMODULE_INC_DIRS}")
     target_link_libraries(turbomodulejsijni fbjni)
 endif()
+target_include_directories(turbomodulejsijni PUBLIC "${TURBOMODULE_INC_DIRS}")
 
 add_library(BabylonNative SHARED
     src/main/cpp/BabylonNativeInterop.cpp
