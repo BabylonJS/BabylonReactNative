@@ -23,7 +23,7 @@ React Native applications targeting [JavaScriptCore on iOS](https://reactnative.
 
 ### Other
 
-Babylon React Native relies heavily on newer React Native constructs including JSI to get the performance characteristics required for real time rendering. JSI allows for direct synchronous communication between native code and JavaScript code, but is incompatible with "remote debugging." If you need to debug your JavaScript code that uses Babylon React Native, you should enable Hermes and use "direct debugging" (e.g. chrome://inspect or edge://inspect). See the [React Native documentation](https://reactnative.dev/docs/hermes) for more info.
+Babylon React Native relies heavily on newer React Native constructs including JSI to get the performance characteristics required for real time rendering. JSI allows for direct synchronous communication between native code and JavaScript code, but is incompatible with remote debugging." If you need to debug your JavaScript code that uses Babylon React Native, you should enable Hermes and use "direct debugging" (e.g. chrome://inspect or edge://inspect). See the [React Native documentation](https://reactnative.dev/docs/hermes) for more info.
 
 ## Usage
 
@@ -222,6 +222,20 @@ pod install
 This will create a symbolic link in your `node_modules` directory to the `@babylonjs/react-native` source directory. However, this also requires a custom `metro.config.js` as the Metro bundler does not support symbolic links by default. See the [GitHub issue](https://github.com/react-native-community/cli/issues/1238#issue-673055870) on this for a solution.
 
 For iOS the XCode project needs to be generated with `CMake` as described [above](#ios) and added to your `xcworkspace`.
+
+## Supported Babylon.js versions
+
+Depending on the BabylonReactNative NPM package version, some Babylon.js NPM dependency version may or may not be compatible. Here is a compatibility list that has been tested:
+
+| BabylonReactNative version | Babylon.js versions |
+|---|---|
+| 1.4.0  | 5.27.1 |
+| 1.4.1  | 5.32.2, 5.33.0, 5.33.1, 5.33.2, 5.34.0, 5.35.0 |
+| 1.4.2  | 5.35.1, 5.36.0, 5.37.0, 5.38.0, 5.39.0, 5.42.0, 5.42.1 |
+| 1.4.3  | 5.42.2, 5.43.0, 5.43.1, 5.43.2, 5.44.0, 5.45.0, 5.45.1, 5.45.2, 5.46.0, 5.47.0 |
+| 1.4.4  | 5.42.2, 5.43.0, 5.43.1, 5.43.2, 5.44.0, 5.45.0, 5.45.1, 5.45.2, 5.46.0, 5.47.0 |
+| 1.5.0  | 5.42.2, 5.43.0, 5.43.1, 5.43.2, 5.44.0, 5.45.0, 5.45.1, 5.45.2, 5.46.0, 5.47.0 |
+| 1.5.1  | 5.42.2, 5.43.0, 5.43.1, 5.43.2, 5.44.0, 5.45.0, 5.45.1, 5.45.2, 5.46.0, 5.47.0 |
 
 ## Security
 
