@@ -171,12 +171,12 @@ jobs:
 #    with:
 #      react-native-version: '0.70'
 #      release-version: 0.0.${GITHUB_SHA::8}
-
-  build-windows-071:
-    uses: ./.github/workflows/windows.yml
-    with:
-      react-native-version: '0.71'
-      release-version: 0.0.${GITHUB_SHA::8}
+#
+#  build-windows-071:
+#    uses: ./.github/workflows/windows.yml
+#    with:
+#      react-native-version: '0.71'
+#      release-version: 0.0.${GITHUB_SHA::8}
 
   build-typescript:
     uses: ./.github/workflows/typescript.yml
