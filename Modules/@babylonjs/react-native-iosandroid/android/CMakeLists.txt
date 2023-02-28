@@ -82,7 +82,6 @@ target_link_libraries(BabylonNative
     arcana
     jsi
     turbomodulejsijni
-    folly_runtime
     AndroidExtensions
     Graphics
     JsRuntime
