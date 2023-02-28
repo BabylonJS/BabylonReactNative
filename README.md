@@ -244,13 +244,13 @@ Here are the package names for Android/iOS and Windows:
 | 0.70 | [@babylonjs/react-native-iosandroid-0-70](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-70) | [@babylonjs/react-native-windows-0-70](https://www.npmjs.com/package/@babylonjs/react-native-windows-0-70) |
 | 0.71 | **NEW PACKAGE REQUIRED. RELEASE PENDING.** | **NEW PACKAGE REQUIRED. RELEASE PENDING.** |
 
-Also, [@babylonjs/react-native](https://www.npmjs.com/package/@babylonjs/react-native) is a needed dependency.
+Also, [@babylonjs/react-native](https://www.npmjs.com/package/@babylonjs/react-native) is a needed dependency for all platforms.
 
 ## Supported Babylon.js Versions
 
 Depending on the Babylon React Native NPM package version, some Babylon.js NPM dependency versions may or may not be compatible. Here is a compatibility list that has been tested:
 
-| Babylon React Native | Babylon.js (@babylonjs/core) |
+| Babylon React Native | Babylon.js `(@babylonjs/core)` |
 |---|---|
 | 1.4.0  | 5.27.1 |
 | 1.4.1  | 5.32.2, 5.33.0, 5.33.1, 5.33.2, 5.34.0, 5.35.0 |
