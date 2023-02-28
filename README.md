@@ -243,7 +243,7 @@ Babylon React Native NPM Package naming convention is
 
 XX corresponds to the React Native version. `@babylonjs/react-native-windows-0-64` corresponds to React Native 0.64.
 
-## Supported Babylon.js versions
+## Supported Babylon.js Versions
 
 Depending on the Babylon React Native NPM package version, some Babylon.js NPM dependency versions may or may not be compatible. Here is a compatibility list that has been tested:
 
