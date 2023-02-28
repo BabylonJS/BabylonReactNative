@@ -238,10 +238,10 @@ Here are the package names for Android/iOS and Windows:
 
 | React Native | Android/iOS Package | Windows Package |
 |---|---|---|
-| 0.64 | [@babylonjs/react-native-iosandroid-0-64](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-64) | [@babylonjs/react-native-windows-0-64](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-64) |
-| 0.65 -> 0.68 | [@babylonjs/react-native-iosandroid-0-65](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-65) | [@babylonjs/react-native-windows-0-65](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-65) |
-| 0.69 | [@babylonjs/react-native-iosandroid-0-69](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-69) | [@babylonjs/react-native-windows-0-69](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-69) |
-| 0.70 | [@babylonjs/react-native-iosandroid-0-70](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-70) | [@babylonjs/react-native-windows-0-70](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-70) |
+| 0.64 | [@babylonjs/react-native-iosandroid-0-64](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-64) | [@babylonjs/react-native-windows-0-64](https://www.npmjs.com/package/@babylonjs/react-native-windows-0-64) |
+| 0.65 -> 0.68 | [@babylonjs/react-native-iosandroid-0-65](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-65) | [@babylonjs/react-native-windows-0-65](https://www.npmjs.com/package/@babylonjs/react-native-windows-0-65) |
+| 0.69 | [@babylonjs/react-native-iosandroid-0-69](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-69) | [@babylonjs/react-native-windows-0-69](https://www.npmjs.com/package/@babylonjs/react-native-windows-0-69) |
+| 0.70 | [@babylonjs/react-native-iosandroid-0-70](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-70) | [@babylonjs/react-native-windows-0-70](https://www.npmjs.com/package/@babylonjs/react-native-windows-0-70) |
 | 0.71 | **NEW PACKAGE REQUIRED. RELEASE PENDING.** | **NEW PACKAGE REQUIRED. RELEASE PENDING.** |
 
 Also, [@babylonjs/react-native](https://www.npmjs.com/package/@babylonjs/react-native) is a needed dependency.
