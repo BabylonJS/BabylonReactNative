@@ -238,7 +238,7 @@ When using a React Native version in between the versions listed, use the previo
 
 Depending on the BabylonReactNative NPM package version, some Babylon.js NPM dependency version may or may not be compatible. Here is a compatibility list that has been tested:
 
-| BabylonReactNative version | Babylon.js versions |
+| Babylon React Native | Babylon.js |
 |---|---|
 | 1.4.0  | 5.27.1 |
 | 1.4.1  | 5.32.2, 5.33.0, 5.33.1, 5.33.2, 5.34.0, 5.35.0 |
