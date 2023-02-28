@@ -1,5 +1,5 @@
 {
-  "name": "@babylonjs/react-native-iosandroid",
+  "name": "@babylonjs/react-native-iosandroid-0-71",
   "title": "React Native Babylon for iOS and Android",
   "version": "0.0.1",
   "description": "Babylon Native integration into React Native",
@@ -28,7 +28,7 @@
     "semver": "^7.3.2"
   },
   "peerDependencies": {
-    "@babylonjs/react-native": "^0.0.1",
+    "@babylonjs/react-native": "version",
     "react": ">=16.13.1",
     "react-native": ">=0.63.1",
     "react-native-permissions": "^3.0.0"

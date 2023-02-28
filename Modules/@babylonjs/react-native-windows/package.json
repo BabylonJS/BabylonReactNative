@@ -1,5 +1,5 @@
 {
-  "name": "@babylonjs/react-native-windows",
+  "name": "@babylonjs/react-native-windows-0-71",
   "title": "React Native Windows Babylon",
   "version": "0.0.1",
   "description": "Babylon Native integration into React Native Windows",
@@ -25,7 +25,7 @@
   "readmeFilename": "README.md",
   "peerDependencies": {
     "@babylonjs/core": "5.42.2",
-    "@babylonjs/react-native": "^0.0.1",
+    "@babylonjs/react-native": "version",
     "react": ">=17.0.1",
     "react-native": ">=0.64.0",
     "react-native-permissions": "^3.0.0",
