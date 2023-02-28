@@ -234,6 +234,15 @@ When using a React Native version in between the versions listed, use the previo
 | 0.69 | 1.4.0, 1.4.1, 1.4.2, 1.4.3, 1.4.4, 1.5.0, 1.5.1 |
 | 0.70 | 1.5.0, 1.5.1 |
 
+3 NPM Packages are available: 1 mandatory for Windows or Android/iOS, 1 for Windows and 1 for Android/iOS.
+
+Babylon React Native NPM Package naming convention is 
+- `@babylonjs/react-native` for the base package
+- `@babylonjs/react-native-windows-0-XX` for Windows
+- `@babylonjs/react-native-iosandroid-0-XX` for iOS/Android
+
+XX corresponds to the React Native version. `@babylonjs/react-native-windows-0-64` corresponds to React Native 0.64.
+
 ## Supported Babylon.js versions
 
 Depending on the Babylon React Native NPM package version, some Babylon.js NPM dependency versions may or may not be compatible. Here is a compatibility list that has been tested:
