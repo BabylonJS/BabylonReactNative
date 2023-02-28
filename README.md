@@ -223,7 +223,7 @@ This will create a symbolic link in your `node_modules` directory to the `@babyl
 
 For iOS the XCode project needs to be generated with `CMake` as described [above](#ios) and added to your `xcworkspace`.
 
-## Supported React-Native
+## Supported Versions
 
 The React-native 
 In-between versions not in this list (like 0.66, 0.67, ...) use the previous React-Native version (0.65 in that case)
