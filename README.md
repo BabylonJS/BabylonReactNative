@@ -225,8 +225,7 @@ For iOS the XCode project needs to be generated with `CMake` as described [above
 
 ## Supported Versions
 
-The React-native 
-In-between versions not in this list (like 0.66, 0.67, ...) use the previous React-Native version (0.65 in that case)
+When using a React Native version in between the versions listed, use the previous React Native version. For example, React Native version 0.66 or 0.67 should use Babylon React Native versions that correspond to 0.65.
 
 | React Native | Babylon React Native |
 |---|---|
