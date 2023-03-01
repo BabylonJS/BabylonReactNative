@@ -248,7 +248,7 @@ Also, [@babylonjs/react-native](https://www.npmjs.com/package/@babylonjs/react-n
 
 Depending on the Babylon React Native NPM package version, some Babylon.js NPM dependency versions may or may not be compatible. Here is a compatibility list that has been tested:
 
-| Babylon React Native | Babylon.js `(@babylonjs/core)` |
+| Babylon React Native | Babylon.js ([@babylonjs/core](https://www.npmjs.com/package/@babylonjs/core), [@babylonjs/loaders](https://www.npmjs.com/package/@babylonjs/loaders), ...) |
 |---|---|
 | 1.4.0  | 5.27.1 |
 | 1.4.1  | 5.32.2, 5.33.0, 5.33.1, 5.33.2, 5.34.0, 5.35.0 |
