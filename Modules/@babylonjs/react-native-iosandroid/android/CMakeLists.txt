@@ -47,6 +47,9 @@ set_target_properties(fbjni PROPERTIES
     IMPORTED_LOCATION ${FBJNI_LIBPATH}/${ANDROID_ABI}/libfbjni.so
     INTERFACE_INCLUDE_DIRECTORIES ${FBJNI_INCPATH})
 
+add_library(BabylonNative SHARED
+    src/main/cpp/BabylonNativeInterop.cpp
+    ${SHARED_SOURCES})
 
 # Define a minimal version of libturbomodulejsijni.so that includes CallInvokerHolder.cpp.
 # This is the only part of the TurboModule system we need for now. Eventually when TurboModule
@@ -71,10 +74,6 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
     if(CMAKE_HOST_WIN32)
             string(REPLACE "\\" "/" BUILD_DIR ${BUILD_DIR})
     endif()
-
-    add_library(BabylonNative SHARED
-        src/main/cpp/BabylonNativeInterop.cpp
-        ${SHARED_SOURCES})
 
     target_include_directories(BabylonNative
         PUBLIC
