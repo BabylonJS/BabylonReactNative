@@ -25,7 +25,7 @@ apply plugin: 'com.android.library'
 def extractedLibDir = "${buildDir}/lib"
 
 def reactProperties = new Properties()
-file("$projectDir/../../../react-native/ReactAndroid/gradle.properties").withInputStream { reactProperties.load(it) }
+reactProperties.load(new FileInputStream("$projectDir/../../../react-native/ReactAndroid/gradle.properties"))
 def REACT_VERSION = reactProperties.getProperty("VERSION_NAME").split("\\.")[1].toInteger()
 
 def cpp_distribution = (REACT_VERSION >= 71) ? "c++_shared" : "c++_static";
