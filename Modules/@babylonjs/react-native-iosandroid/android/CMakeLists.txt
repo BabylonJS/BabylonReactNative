@@ -51,12 +51,10 @@ add_library(BabylonNative SHARED
     src/main/cpp/BabylonNativeInterop.cpp
     ${SHARED_SOURCES})
 
-# Define a minimal version of libturbomodulejsijni.so that includes CallInvokerHolder.cpp.
-# This is the only part of the TurboModule system we need for now. Eventually when TurboModule
-# support ships with React Native, we'll need to strip this back out.
-list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR_CMAKE}/ReactCommon/callinvoker")
+
 set(TURBOMODULE_DIR "${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/jni/react/turbomodule/")
 if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
+   # >= React Native 0.71 with prefabs
    include(${REACTNATIVE_DIR_CMAKE}/ReactAndroid/cmake-utils/folly-flags.cmake)
 
     # We configured the REACT_COMMON_DIR variable as it's commonly used to reference
@@ -174,8 +172,15 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
     target_include_directories(BabylonNative PRIVATE ${SHARED_INCLUDES})
 
 else()
+    # <= React Native 0.70
+    # Define a minimal version of libturbomodulejsijni.so that includes CallInvokerHolder.cpp.
+    # This is the only part of the TurboModule system we need for now. Eventually when TurboModule
+    # support ships with React Native, we'll need to strip this back out.
+
+    list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR_CMAKE}/ReactCommon/callinvoker")
     list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni")
     add_library(turbomodulejsijni SHARED ${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni/ReactCommon/CallInvokerHolder.cpp)
+    target_include_directories(turbomodulejsijni PUBLIC "${TURBOMODULE_INC_DIRS}")
     target_link_libraries(turbomodulejsijni fbjni)
 
     target_include_directories(BabylonNative PRIVATE ${SHARED_INCLUDES})
