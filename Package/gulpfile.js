@@ -472,7 +472,7 @@ const validateAssembled = async () => {
 }
 
 const validateAssemblediOSAndroid = async () => {
-  const expectediosandroid = [
+  let expectediosandroid = [
     'Assembled-iOSAndroid/android',
     'Assembled-iOSAndroid/android/build.gradle',
     'Assembled-iOSAndroid/android/include',
@@ -557,6 +557,70 @@ const validateAssemblediOSAndroid = async () => {
     'Assembled-iOSAndroid/README.md',
   ];
 
+  // more files expected to be release for React Native >= 0.71
+  const versionIndex = process.argv.indexOf('--reactNative');
+  if (versionIndex != -1) {
+    if (process.argv[versionIndex + 1] == '0.71') {
+      const expectediosandroid071 = [
+          'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libfabricjni.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libfolly_runtime.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libglog.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libjsi.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libreact_codegen_rncore.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libreact_debug.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libreact_nativemodule_core.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libreact_newarchdefaults.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libreact_render_componentregistry.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libreact_render_core.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libreact_render_debug.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libreact_render_graphics.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libreact_render_imagemanager.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libreact_render_mapbuffer.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/librrc_image.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/librrc_view.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libruntimeexecutor.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libyoga.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libfabricjni.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libfolly_runtime.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libglog.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libjsi.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libreact_codegen_rncore.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libreact_debug.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libreact_nativemodule_core.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libreact_newarchdefaults.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libreact_render_componentregistry.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libreact_render_core.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libreact_render_debug.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libreact_render_graphics.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libreact_render_imagemanager.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libreact_render_mapbuffer.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/librrc_image.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/librrc_view.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libruntimeexecutor.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libyoga.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libfabricjni.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libfolly_runtime.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libglog.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libjsi.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libreact_codegen_rncore.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libreact_debug.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libreact_nativemodule_core.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libreact_newarchdefaults.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libreact_render_componentregistry.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libreact_render_core.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libreact_render_debug.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libreact_render_graphics.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libreact_render_imagemanager.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libreact_render_mapbuffer.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/librrc_image.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/librrc_view.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libruntimeexecutor.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libyoga.so'
+        ];
+
+        expectediosandroid = expectediosandroid.concat(expectediosandroid071);
+    } 
+  }
   const actualiosandroid = glob.sync('Assembled-iOSAndroid/**/*');
   checkDirectory(actualiosandroid, expectediosandroid, 'Assembled-iOSAndroid');
 }
