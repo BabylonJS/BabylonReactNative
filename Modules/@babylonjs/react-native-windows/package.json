@@ -1,5 +1,5 @@
 {
-  "name": "@babylonjs/react-native-windows-0-71",
+  "name": "@babylonjs/react-native-windows",
   "title": "React Native Windows Babylon",
   "version": "0.0.1",
   "description": "Babylon Native integration into React Native Windows",
