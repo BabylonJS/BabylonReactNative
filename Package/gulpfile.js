@@ -493,15 +493,12 @@ const validateAssemblediOSAndroid = async () => {
     'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a',
     'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libBabylonNative.so',
     'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libturbomodulejsijni.so',
-    'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libc++_shared.so',
     'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a',
     'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libBabylonNative.so',
     'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libturbomodulejsijni.so',
-    'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libc++_shared.so',
     'Assembled-iOSAndroid/android/src/main/jniLibs/x86',
     'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libBabylonNative.so',
     'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libturbomodulejsijni.so',
-    'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libc++_shared.so',
     'Assembled-iOSAndroid/ios',
     'Assembled-iOSAndroid/ios/BabylonModule.mm',
     'Assembled-iOSAndroid/ios/BabylonNativeInterop.h',
@@ -580,6 +577,7 @@ const validateAssemblediOSAndroid = async () => {
           'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/librrc_view.so',
           'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libruntimeexecutor.so',
           'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libyoga.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libc++_shared.so',
           'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libfabricjni.so',
           'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libfolly_runtime.so',
           'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libglog.so',
@@ -598,6 +596,7 @@ const validateAssemblediOSAndroid = async () => {
           'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/librrc_view.so',
           'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libruntimeexecutor.so',
           'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libyoga.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libc++_shared.so',
           'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libfabricjni.so',
           'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libfolly_runtime.so',
           'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libglog.so',
@@ -615,7 +614,8 @@ const validateAssemblediOSAndroid = async () => {
           'Assembled-iOSAndroid/android/src/main/jniLibs/x86/librrc_image.so',
           'Assembled-iOSAndroid/android/src/main/jniLibs/x86/librrc_view.so',
           'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libruntimeexecutor.so',
-          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libyoga.so'
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libyoga.so',
+          'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libc++_shared.so'
         ];
 
         expectediosandroid = expectediosandroid.concat(expectediosandroid071);
