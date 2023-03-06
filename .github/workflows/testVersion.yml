@@ -6,35 +6,40 @@ on:
         description: 'ReactNative Version'
         required: true 
         type: string
-        default: '0.71.2'
+        default: '0.71.0'
       BRN_Version:
-        description: 'Babylon ReactNative Version'
+        description: 'BRN package version'
         required: true 
         type: string
-        default: '0-70'
+        default: '1.5.2-preview'
+      BRN_Postfix:
+        description: 'BRN package postfix'
+        required: true 
+        type: string
+        default: '0-71'
 
 jobs:
 
-  build-windows:
-    runs-on: windows-2019
-    steps:
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.1
-    - name: Build Playground Windows x64
-      run: |
-        npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
-        cd Playground
-        npm install @babylonjs/core
-        npm install @babylonjs/loaders
-        npm install @babylonjs/react-native
-        npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Version }}
-        npx react-native-windows-init --overwrite
-
-    - name: Upload UWP x64
-      uses: actions/upload-artifact@v2
-      with:
-        name: 'PG'
-        path: Playground
+#  build-windows:
+#    runs-on: windows-2019
+#    steps:
+#    - name: Add msbuild to PATH
+#      uses: microsoft/setup-msbuild@v1.1
+#    - name: Build Playground Windows x64
+#      run: |
+#        npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
+#        cd Playground
+#        npm install @babylonjs/core
+#        npm install @babylonjs/loaders
+#        npm install @babylonjs/react-native
+#        npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
+#        npx react-native-windows-init --overwrite
+#
+#    - name: Upload UWP x64
+#      uses: actions/upload-artifact@v2
+#      with:
+#        name: 'PG'
+#        path: Playground
 
 #        
 # 
