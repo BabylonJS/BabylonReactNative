@@ -63,8 +63,8 @@ jobs:
         cd Playground
         npm install @babylonjs/core
         npm install @babylonjs/loaders
-        npm install @babylonjs/react-native
-        npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Version }}
+        npm install @babylonjs/react-native@${{ github.event.inputs.BRN_Version }}
+        npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
         npm install @react-native-community/slider
         cd android
         ./gradlew app:assembleRelease --stacktrace --info
