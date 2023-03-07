@@ -38,7 +38,6 @@ Pod::Spec.new do |s|
                 'OSDependent',
                 'MachineIndependent',
                 'napi',
-                'NativeCamera',
                 'NativeCapture',
                 'NativeEngine',
                 'NativeInput',

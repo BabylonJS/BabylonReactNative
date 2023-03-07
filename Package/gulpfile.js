@@ -519,7 +519,6 @@ const validateAssemblediOSAndroid = async () => {
     'Assembled-iOSAndroid/ios/libs/libJsRuntime.a',
     'Assembled-iOSAndroid/ios/libs/libMachineIndependent.a',
     'Assembled-iOSAndroid/ios/libs/libnapi.a',
-    'Assembled-iOSAndroid/ios/libs/libNativeCamera.a',
     'Assembled-iOSAndroid/ios/libs/libNativeCapture.a',
     'Assembled-iOSAndroid/ios/libs/libNativeEngine.a',
     'Assembled-iOSAndroid/ios/libs/libNativeInput.a',
