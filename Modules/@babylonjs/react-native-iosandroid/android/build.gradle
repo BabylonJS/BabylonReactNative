@@ -36,7 +36,7 @@ if ( propertiesFile.isFile() ) {
 def cpp_distribution = (REACT_VERSION >= 71) ? "c++_shared" : "c++_static";
 
 if (REACT_VERSION >= 71) {
-    DEFAULT_NDK_VERSION = '25.2.9519653'
+    DEFAULT_NDK_VERSION = '23.1.7779620'
 }
 
 buildscript {
