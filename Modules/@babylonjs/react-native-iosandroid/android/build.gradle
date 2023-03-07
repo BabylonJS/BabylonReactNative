@@ -35,6 +35,10 @@ if ( propertiesFile.isFile() ) {
 
 def cpp_distribution = (REACT_VERSION >= 71) ? "c++_shared" : "c++_static";
 
+if (REACT_VERSION >= 71) {
+    DEFAULT_NDK_VERSION = '25.2.9519653'
+}
+
 buildscript {
     // The Android Gradle plugin is only required when opening the android folder stand-alone.
     // This avoids unnecessary downloads and potential conflicts when the library is included as a
