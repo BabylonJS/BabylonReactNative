@@ -73,7 +73,7 @@ jobs:
         name: 'AndroidAPK'
         path: Playground/android/app/build/outputs/apk/release/app-release.apk
 
-build-ios:
+  build-ios:
     runs-on: macos-latest
     steps:
     - name: Checkout Repo
@@ -103,7 +103,7 @@ build-ios:
       with:
         name: 'iOSApp'
         path: Playground/ios/build
-
+ 
 # test jobs not working
 # test-android:
 #   needs: [build-android]
