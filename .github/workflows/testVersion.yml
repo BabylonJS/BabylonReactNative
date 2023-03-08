@@ -38,8 +38,8 @@ jobs:
         npm install @react-native-community/slider@4.0.0-rc.3
         npm install react-native-permissions@3.0.0
         npx react-native-windows-init --overwrite
-        npx react-native autolink-windows
         msbuild.exe /r "./windows/Playground.sln"
+        npx react-native autolink-windows
         msbuild.exe /p:Configuration="Release" /p:Platform="x64" /m "./windows/Playground.sln"
 
     - name: Upload UWP x64
@@ -83,6 +83,7 @@ jobs:
         git clone https://github.com/leetal/ios-cmake.git
     - name: Build Playground iOS
       run: |
+        brew install cocoapods
         npm uninstall -g react-native-cli @react-native-community/cli
         npx react-native init Playground --version "${{ github.event.inputs.RN_Version }}" --verbose
         cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
