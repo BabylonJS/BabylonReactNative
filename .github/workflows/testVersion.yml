@@ -73,6 +73,37 @@ jobs:
         name: 'AndroidAPK'
         path: Playground/android/app/build/outputs/apk/release/app-release.apk
 
+build-ios:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v2.3.3
+    - name: Clone iOS Toolchain
+      run: |
+        git clone https://github.com/leetal/ios-cmake.git
+    - name: Build Playground iOS
+      run: |
+        npm uninstall -g react-native-cli @react-native-community/cli
+        npx react-native init Playground --version "${{ github.event.inputs.RN_Version }}" --verbose
+        cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
+        cd Playground
+        npm install @babylonjs/core
+        npm install @babylonjs/loaders
+        npm install @babylonjs/react-native@${{ github.event.inputs.BRN_Version }}
+        npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
+        npm install @react-native-community/slider
+        mkdir ios/build
+        cd ios/build
+        cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../../ios-cmake/ios.toolchain.cmake -DPLATFORM=OS64COMBINED -DENABLE_ARC=0 -DENABLE_BITCODE=1 -DDEPLOYMENT_TARGET=12 -DENABLE_PCH=OFF ..
+        xcodebuild -sdk iphoneos -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO
+        xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO
+
+    - name: Upload iOS App
+      uses: actions/upload-artifact@v2
+      with:
+        name: 'iOSApp'
+        path: Playground/ios/build
+
 # test jobs not working
 # test-android:
 #   needs: [build-android]
