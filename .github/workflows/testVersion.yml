@@ -86,16 +86,19 @@ jobs:
         brew install node
         brew install watchman
         npm uninstall -g react-native-cli @react-native-community/cli
-        npx react-native init Playground --version "${{ github.event.inputs.RN_Version }}" --verbose
+        npx react-native init Playground --version "${{ github.event.inputs.RN_Version }}" --verbose --skip-install
         cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
         cd Playground
+        yarn install
         npm install @babylonjs/core
         npm install @babylonjs/loaders
         npm install @babylonjs/react-native@${{ github.event.inputs.BRN_Version }}
         npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
         npm install @react-native-community/slider
-        mkdir ios/build
-        cd ios/build
+        cd ios
+        pod install
+        mkdir build
+        cd build
         cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../../ios-cmake/ios.toolchain.cmake -DPLATFORM=OS64COMBINED -DENABLE_ARC=0 -DENABLE_BITCODE=1 -DDEPLOYMENT_TARGET=12 -DENABLE_PCH=OFF ..
         xcodebuild -sdk iphoneos -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO
         xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO
