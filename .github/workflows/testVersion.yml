@@ -11,7 +11,7 @@ on:
         description: 'BRN package version'
         required: true 
         type: string
-        default: '1.5.2-preview'
+        default: '1.5.3-preview'
       BRN_Postfix:
         description: 'BRN package postfix'
         required: true 
@@ -19,30 +19,29 @@ on:
         default: '0-71'
 
 jobs:
+  build-windows:
+    runs-on: windows-2019
+    steps:
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+    - name: Build Playground Windows x64
+      run: |
+        npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
+        cd Playground
+        npm install @babylonjs/core
+        npm install @babylonjs/loaders
+        npm install @babylonjs/react-native
+        npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
+        npx react-native-windows-init --overwrite
+        msbuild.exe /p:Configuration="Release" /p:Platform="x64" /m "./windows/Playground.sln"
 
-#  build-windows:
-#    runs-on: windows-2019
-#    steps:
-#    - name: Add msbuild to PATH
-#      uses: microsoft/setup-msbuild@v1.1
-#    - name: Build Playground Windows x64
-#      run: |
-#        npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
-#        cd Playground
-#        npm install @babylonjs/core
-#        npm install @babylonjs/loaders
-#        npm install @babylonjs/react-native
-#        npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
-#        npx react-native-windows-init --overwrite
-#
-#    - name: Upload UWP x64
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: 'PG'
-#        path: Playground
-
-#        
-# 
+    - name: Upload UWP x64
+      uses: actions/upload-artifact@v2
+      with:
+        name: 'PG'
+        path: Playground
+        
+ 
 #  --template react-native-template-typescript
 # npx react-native init Playground --template react-native-template-typescript@6.12.10
 
@@ -74,12 +73,6 @@ jobs:
       with:
         name: 'AndroidAPK'
         path: Playground/android/app/build/outputs/apk/release/app-release.apk
-
-#    - name: Upload Playground App
-#      uses: actions/upload-artifact@v2
-#      with:
-#        name: 'Playground App'
-#        path: Playground/
 
 # test jobs not working
 # test-android:
@@ -118,11 +111,3 @@ jobs:
 #       echo Checking it's still alive
 #       if [[ -z "$(pidof com.playground | tr -d '\r')" ]]; then echo "com.playground is not running."; exit 1; fi
 #       echo Checks done.
-
-  package:
-    needs: [build-android]
-    runs-on: macos-latest
-    steps:
-      - name: Gather 
-        run: |
-          ls -l -a
