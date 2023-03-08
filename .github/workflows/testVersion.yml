@@ -38,6 +38,7 @@ jobs:
         npm install @react-native-community/slider@4.0.0-rc.3
         npm install react-native-permissions@3.0.0
         npx react-native-windows-init --overwrite
+        npx react-native autolink-windows
         msbuild.exe /r "./windows/Playground.sln"
         msbuild.exe /p:Configuration="Release" /p:Platform="x64" /m "./windows/Playground.sln"
 
