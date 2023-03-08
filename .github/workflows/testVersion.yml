@@ -83,7 +83,8 @@ jobs:
         git clone https://github.com/leetal/ios-cmake.git
     - name: Build Playground iOS
       run: |
-        brew install cocoapods
+        brew install node
+        brew install watchman
         npm uninstall -g react-native-cli @react-native-community/cli
         npx react-native init Playground --version "${{ github.event.inputs.RN_Version }}" --verbose
         cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
