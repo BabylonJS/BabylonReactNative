@@ -22,6 +22,8 @@ jobs:
   build-windows:
     runs-on: windows-2019
     steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v2.3.3
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
     - name: Build Playground Windows x64
