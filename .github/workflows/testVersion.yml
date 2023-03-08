@@ -27,6 +27,7 @@ jobs:
     - name: Build Playground Windows x64
       run: |
         npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
+        cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
         cd Playground
         npm install @babylonjs/core
         npm install @babylonjs/loaders
@@ -39,8 +40,8 @@ jobs:
     - name: Upload UWP x64
       uses: actions/upload-artifact@v2
       with:
-        name: 'PG'
-        path: Playground
+        name: Upload appx
+        path: Playground/windows/AppPackages/Playground/Playground_1.0.0.0_x64_Test/Playground_1.0.0.0_x64.appx
 
   build-android:
     runs-on: ubuntu-latest
