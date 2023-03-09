@@ -31,15 +31,15 @@ jobs:
         npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
         cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
         cd Playground
+        npx react-native-windows-init --overwrite
         npm install @babylonjs/core
         npm install @babylonjs/loaders
         npm install @babylonjs/react-native@${{ github.event.inputs.BRN_Version }}
         npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
-        npm install @react-native-community/slider@4.0.0-rc.3
-        npm install react-native-permissions@3.0.0
-        npx react-native-windows-init --overwrite
-        msbuild.exe /r "./windows/Playground.sln"
+        npm install @react-native-community/slider
+        #npm install react-native-permissions@3.0.0
         npx react-native autolink-windows
+        msbuild.exe /r "./windows/Playground.sln"
         msbuild.exe /p:Configuration="Release" /p:Platform="x64" /m "./windows/Playground.sln"
 
     - name: Upload UWP x64
@@ -97,14 +97,14 @@ jobs:
         npm install @react-native-community/slider
         cd ios
         pod install
-        xcodebuild -sdk iphoneos -configuration Release -workspace Playground.xcworkspace -scheme Playground build CODE_SIGNING_ALLOWED=NO
-        xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -workspace Playground.xcworkspace -scheme Playground build CODE_SIGNING_ALLOWED=NO
+        #xcodebuild -sdk iphoneos -configuration Release -workspace Playground.xcworkspace -scheme Playground build CODE_SIGNING_ALLOWED=NO
+        xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -workspace Playground.xcworkspace -scheme Playground build CODE_SIGNING_ALLOWED=NO -archivePath ./playgroundSimulator.xcarchive archive
 
     - name: Upload iOS App
       uses: actions/upload-artifact@v2
       with:
         name: 'iOSApp'
-        path: Playground/ios/build
+        path: Playground/ios/playgroundSimulator.xcarchive
  
 # test jobs not working
 # test-android:
