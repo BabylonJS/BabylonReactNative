@@ -45,7 +45,7 @@ jobs:
     - name: Upload UWP x64
       uses: actions/upload-artifact@v2
       with:
-        name: Upload appx
+        name: 'WindowsAppx'
         path: Playground/windows/AppPackages/Playground/Playground_1.0.0.0_x64_Test/Playground_1.0.0.0_x64.appx
 
   build-android:
@@ -98,13 +98,23 @@ jobs:
         cd ios
         pod install
         #xcodebuild -sdk iphoneos -configuration Release -workspace Playground.xcworkspace -scheme Playground build CODE_SIGNING_ALLOWED=NO
-        xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -workspace Playground.xcworkspace -scheme Playground build CODE_SIGNING_ALLOWED=NO -archivePath ./playgroundSimulator.xcarchive archive
+        #xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -workspace Playground.xcworkspace -scheme Playground build CODE_SIGNING_ALLOWED=NO -archivePath ./playgroundSimulator.xcarchive archive
+
+    - uses: sparkfabrik/ios-build-action@v2.1.0
+      with:
+        upload-to-testflight: false
+        workspace-path: Playground/ios/Playground.xcworkspace
+        export-method: ad-hoc
+        configuration: Release
+        scheme: Playground
+        output-path: Playground/build-${{ github.sha }}.ipa
 
     - name: Upload iOS App
       uses: actions/upload-artifact@v2
       with:
         name: 'iOSApp'
-        path: Playground/ios/playgroundSimulator.xcarchive
+        path: Playground/build-${{ github.sha }}.ipa
+        #Playground/ios/playgroundSimulator.xcarchive
  
 # test jobs not working
 # test-android:
