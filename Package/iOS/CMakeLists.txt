@@ -30,6 +30,7 @@ set(PACKAGED_LIBS
     OSDependent
     MachineIndependent
     napi
+    NativeCamera
     NativeCapture
     NativeEngine
     NativeInput

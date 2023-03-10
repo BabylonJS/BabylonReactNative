@@ -135,6 +135,7 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
         AndroidExtensions
         Graphics
         JsRuntime
+        NativeCamera
         NativeCapture
         NativeEngine
         NativeInput
@@ -196,6 +197,7 @@ else()
         AndroidExtensions
         Graphics
         JsRuntime
+        NativeCamera
         NativeCapture
         NativeEngine
         NativeInput
