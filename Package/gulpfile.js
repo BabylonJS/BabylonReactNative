@@ -76,11 +76,15 @@ const buildIphoneOS = async () => {
   exec('xcodebuild -sdk iphoneos -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', 'iOS/Build');
 };
 
-const buildIphoneSimulator = async () => {
-  exec('xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', 'iOS/Build');
+const buildIphoneSimulatorX64 = async () => {
+  exec('xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', 'iOS/Build/SimulatorX64');
 };
 
-const buildIOS = gulp.series(makeXCodeProj, buildIphoneOS, buildIphoneSimulator);
+const buildIphoneSimulatorARM64 = async () => {
+  exec('xcodebuild -sdk iphonesimulator -arch arm64 -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', 'iOS/Build/SimulatorARM64');
+};
+
+const buildIOS = gulp.series(makeXCodeProj, buildIphoneOS, buildIphoneSimulatorX64, buildIphoneSimulatorARM64);
 
 const buildAndroid = async () => {
   exec('./gradlew babylonjs_react-native:assembleRelease --stacktrace --info', '../Apps/Playground/Playground/android');
@@ -271,6 +275,12 @@ const createIOSUniversalLibs = async () => {
   shelljs.mkdir('-p', 'Assembled-iOSAndroid/ios/libs');
   const libs = await readdirAsync('iOS/Build/Release-iphoneos');
   libs.map(lib => exec(`lipo -create iOS/Build/Release-iphoneos/${lib} iOS/Build/Release-iphonesimulator/${lib} -output Assembled-iOSAndroid/ios/libs/${lib}`));
+};
+
+const createIOSUniversalSimulatorLibs = async () => {
+  shelljs.mkdir('-p', 'Assembled-iOSAndroid/ios/libs');
+  const libs = await readdirAsync('iOS/Build/SimulatorX64/Release-iphonesimulator');
+  libs.map(lib => exec(`lipo -create iOS/Build/SimulatorX64/Release-iphonesimulator/${lib} iOS/Build/SimulatorARM64/Release-iphonesimulator/${lib} -output Assembled-iOSAndroid/ios/libs/simulator/${lib}`));
 };
 
 const copyAndroidFiles = async () => {
@@ -705,7 +715,7 @@ const patchPackageVersion = async () => {
 const copyFiles = gulp.parallel(copyIOSAndroidCommonFiles, copyIOSFiles, copyAndroidFiles);
 
 const buildTS = gulp.series(patchPackageVersion, copyCommonFiles, copySharedFiles, buildTypeScript, validateAssembled);
-const build = gulp.series(patchPackageVersion, buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validateAssemblediOSAndroid);
+const build = gulp.series(patchPackageVersion, buildIOS, buildAndroid, createIOSUniversalLibs, createIOSUniversalSimulatorLibs, copyFiles, validateAssemblediOSAndroid);
 const rebuild = gulp.series(clean, build);
 const pack = gulp.series(rebuild, createPackage);
 
@@ -715,6 +725,7 @@ exports.validateAssemblediOSAndroid = validateAssemblediOSAndroid;
 exports.buildIOS = buildIOS;
 exports.buildAndroid = buildAndroid;
 exports.createIOSUniversalLibs = createIOSUniversalLibs;
+exports.createIOSUniversalSimulatorLibs = createIOSUniversalSimulatorLibs;
 exports.copyFiles = copyFiles;
 
 exports.clean = clean;
