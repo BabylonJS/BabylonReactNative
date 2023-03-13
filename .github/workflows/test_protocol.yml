@@ -26,4 +26,4 @@ jobs:
       with:
           name: NPMCompatibility
           path: |
-            ./compatibility.json
+            ./Apps/TestProtocol/compatibility.json
