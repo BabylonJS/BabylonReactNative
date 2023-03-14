@@ -1,4 +1,4 @@
-name: Test BabylonNative Protocol compatibility
+name: Test BabylonNative Compatibility
 on:
   workflow_dispatch:
     inputs:
@@ -17,13 +17,13 @@ jobs:
       uses: actions/checkout@master
     - name: NPM Install
       run: npm install
-      working-directory: ./Apps/TestProtocol
+      working-directory: ./Apps/TestCompatibility
     - name: Run tests
       run: npm run testPackages ${{ github.event.inputs.NPM_Mask }}
-      working-directory: ./Apps/TestProtocol
+      working-directory: ./Apps/TestCompatibility
     - name: Upload Result 
       uses: actions/upload-artifact@v2
       with:
           name: NPMCompatibility
           path: |
-            ./Apps/TestProtocol/compatibility.json
+            ./Apps/TestCompatibility/compatibility.json
