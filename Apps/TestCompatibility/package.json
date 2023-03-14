@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "testPackages": "node testBNProtocol.js"
+    "testCompatibility": "node testBNCompatibility.js"
   },
   "dependencies": {
     "babylonjs": "^5.0.3",

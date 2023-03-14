@@ -1,6 +1,6 @@
-# Testing BabylonNative Protocol
+# Testing BabylonNative Compatibility
 
-`Apps/TestProtocol` is a semi-automated tool to test compatibility between BabylonReactNative (more specificaly BabylonNative)
+`Apps/TestCompatibility` is a semi-automated tool to test compatibility between BabylonReactNative (more specificaly BabylonNative)
 and Babylon.js NPM packages.
 It checkouts, build and run validation tests for every BabylonNative hash version from a list and every Babylon.js NPM package.
 NPM Package version must correspond to a mask provided to the script.
@@ -11,7 +11,7 @@ Testing takes time and multiple windows get opened and closed. This will make wo
 
 Clone BabylonReactNative repo then :
 ```
-cd Apps/TestProtocol
+cd Apps/TestCompatibility
 npm i
 npm run testPackages
 ```
@@ -22,7 +22,7 @@ Result is a JSON file named `compatibility.json`.
 
 Go to GitHub Action.
 
-![Preview](./Images/protocolTest.jpg)
+![Preview](./Images/compatibilityTest.jpg)
 
 Result is the same .JSON as earlier than can be download as an artifact
 
@@ -31,5 +31,5 @@ Result is the same .JSON as earlier than can be download as an artifact
 Resulting JSON is an array that contains a list of Babylon.js NPM versions compatible with the BabylonNative commit hash.
 There is a 1-1 link between a BabylonReactNative released version and a BabylonNative commit.
 
-Note: The script test is very restrictive. Any protocol version mismatch, a crash, a bad Validation test ,... will result in that specific version to not be compatible.
+Note: The script test is very restrictive. Any compatibility version mismatch, a crash, a bad Validation test ,... will result in that specific version to not be compatible.
 This means that a version marked as compatible is sure to run, at least, all the validation tests.
