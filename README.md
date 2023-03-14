@@ -231,6 +231,7 @@ For iOS the XCode project needs to be generated with `CMake` as described [above
 | 0.65 -> 0.68 | 1.4.0, 1.4.1, 1.4.2, 1.4.3, 1.4.4, 1.5.0, 1.5.1, 1.5.4-preview |
 | 0.69 | 1.4.0, 1.4.1, 1.4.2, 1.4.3, 1.4.4, 1.5.0, 1.5.1, 1.5.4-preview |
 | 0.70 | 1.5.0, 1.5.1, 1.5.4-preview |
+| 0.71 | 1.5.4-preview |
 
 Here are the package names for Android/iOS and Windows:
 
