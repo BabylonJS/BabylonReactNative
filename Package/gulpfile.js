@@ -381,7 +381,7 @@ const copyARM64ReleaseUWPFiles = () => {
 }
 
 const copyVCXProjUWPFiles = () => {
-  return gulp.src('../Modules/@babylonjs/react-native-windows/windows/BabylonReactNative/*.*')
+  return gulp.src('../Modules/@babylonjs/react-native-windows/windows/BabylonReactNative/*.*', '!*.pfx')
     .pipe(gulp.dest('Assembled-Windows/windows/BabylonReactNative'));
 }
 
@@ -499,6 +499,9 @@ const validateAssemblediOSAndroid = async () => {
     'Assembled-iOSAndroid/android/src/main/jniLibs/x86',
     'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libBabylonNative.so',
     'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libturbomodulejsijni.so',
+    'Assembled-iOSAndroid/android/src/main/jniLibs/x86_64',
+    'Assembled-iOSAndroid/android/src/main/jniLibs/x86_64/libBabylonNative.so',
+    'Assembled-iOSAndroid/android/src/main/jniLibs/x86_64/libturbomodulejsijni.so',
     'Assembled-iOSAndroid/ios',
     'Assembled-iOSAndroid/ios/BabylonModule.mm',
     'Assembled-iOSAndroid/ios/BabylonNativeInterop.h',
