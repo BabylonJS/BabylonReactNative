@@ -68,9 +68,11 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
         set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
     endif(CCACHE_FOUND)
 
-    set(BUILD_DIR ${PROJECT_BUILD_DIR})
-    if(CMAKE_HOST_WIN32)
-            string(REPLACE "\\" "/" BUILD_DIR ${BUILD_DIR})
+    if (NOT "${PROJECT_BUILD_DIR}" STREQUAL "")
+        set(BUILD_DIR ${PROJECT_BUILD_DIR})
+        if(CMAKE_HOST_WIN32)
+                string(REPLACE "\\" "/" BUILD_DIR ${BUILD_DIR})
+        endif()
     endif()
 
     target_include_directories(BabylonNative
