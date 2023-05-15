@@ -68,11 +68,10 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
         set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
     endif(CCACHE_FOUND)
 
-    if (NOT "${PROJECT_BUILD_DIR}" STREQUAL "")
-        set(BUILD_DIR ${PROJECT_BUILD_DIR})
-        if(CMAKE_HOST_WIN32)
-                string(REPLACE "\\" "/" BUILD_DIR ${BUILD_DIR})
-        endif()
+    set(BUILD_DIR ${PROJECT_BUILD_DIR})
+    # When building on Windows, PROJECT_BUILD_DIR might be empty. If it is, then the build breaks because of string replace
+    if(CMAKE_HOST_WIN32 AND NOT "${PROJECT_BUILD_DIR}" STREQUAL "")
+            string(REPLACE "\\" "/" BUILD_DIR ${BUILD_DIR})
     endif()
 
     target_include_directories(BabylonNative

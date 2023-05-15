@@ -102,28 +102,6 @@ android {
         versionName "1.0"
     }
 
-    packagingOptions {
-        pickFirst 'lib/*/libfabricjni.so'
-        pickFirst 'lib/*/libfolly_runtime.so'
-        pickFirst 'lib/*/libglog.so'
-        pickFirst 'lib/*/libjsi.so'
-        pickFirst 'lib/*/libreact_codegen_rncore.so'
-        pickFirst 'lib/*/libreact_debug.so'
-        pickFirst 'lib/*/libreact_nativemodule_core.so'
-        pickFirst 'lib/*/libreact_newarchdefaults.so'
-        pickFirst 'lib/*/libreact_render_componentregistry.so'
-        pickFirst 'lib/*/libreact_render_core.so'
-        pickFirst 'lib/*/libreact_render_debug.so'
-        pickFirst 'lib/*/libreact_render_graphics.so'
-        pickFirst 'lib/*/libreact_render_imagemanager.so'
-        pickFirst 'lib/*/libreact_render_imagemanager.so'
-        pickFirst 'lib/*/librrc_image.so'
-        pickFirst 'lib/*/librrc_view.so'
-        pickFirst 'lib/*/libruntimeexecutor.so'
-        pickFirst 'lib/*/libyoga.so'
-        pickFirst 'lib/*/libreact_render_mapbuffer.so'
-    }
-
     splits {
         abi {
             reset()
