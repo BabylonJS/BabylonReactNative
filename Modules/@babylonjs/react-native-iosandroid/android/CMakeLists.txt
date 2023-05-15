@@ -71,7 +71,7 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
     if (NOT "${PROJECT_BUILD_DIR}" STREQUAL "")
         set(BUILD_DIR ${PROJECT_BUILD_DIR})
         if(CMAKE_HOST_WIN32)
-                string(REPLACE "\\" "/" BUILD_DIR ${BUILD_DIR})
+            string(REPLACE "\\" "/" BUILD_DIR ${BUILD_DIR})
         endif()
     endif()
 
