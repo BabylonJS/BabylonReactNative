@@ -71,7 +71,7 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
     set(BUILD_DIR ${PROJECT_BUILD_DIR})
     # When building on Windows, PROJECT_BUILD_DIR might be empty. If it is, then the build breaks because of string replace
     if(CMAKE_HOST_WIN32 AND NOT "${PROJECT_BUILD_DIR}" STREQUAL "")
-            string(REPLACE "\\" "/" BUILD_DIR ${BUILD_DIR})
+        string(REPLACE "\\" "/" BUILD_DIR ${BUILD_DIR})
     endif()
 
     target_include_directories(BabylonNative
