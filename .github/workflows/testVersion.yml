@@ -27,92 +27,92 @@ jobs:
   build-windows:
     runs-on: windows-2019
     steps:
-    - name: Checkout Repo
-      uses: actions/checkout@v2.3.3
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.2
-    - name: Build Playground Windows x64
-      run: |
-        npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
-        cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
-        cd Playground
-        npx react-native-windows-init --overwrite
-        npm install @babylonjs/core@${{ github.event.inputs.BJS_Version }}
-        npm install @babylonjs/loaders@${{ github.event.inputs.BJS_Version }}
-        npm install @babylonjs/react-native@${{ github.event.inputs.BRN_Version }}
-        npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
-        npm install @react-native-community/slider
-# npm install react-native-permissions
-        npx react-native autolink-windows
-        msbuild.exe /r "./windows/Playground.sln"
-        msbuild.exe /p:Configuration="Release" /p:Platform="x64" /m "./windows/Playground.sln"
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.0.2
+      - name: Build Playground Windows x64
+        run: |
+          npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
+          cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
+          cd Playground
+          npx react-native-windows-init --overwrite
+          npm install @babylonjs/core@${{ github.event.inputs.BJS_Version }}
+          npm install @babylonjs/loaders@${{ github.event.inputs.BJS_Version }}
+          npm install @babylonjs/react-native@${{ github.event.inputs.BRN_Version }}
+          npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
+          npm install @react-native-community/slider
+  # npm install react-native-permissions
+          npx react-native autolink-windows
+          msbuild.exe /r "./windows/Playground.sln"
+          msbuild.exe /p:Configuration="Release" /p:Platform="x64" /m "./windows/Playground.sln"
 
-    - name: Upload UWP x64
-      uses: actions/upload-artifact@v2
-      with:
-        name: 'WindowsAppx'
-        path: Playground/windows/AppPackages/Playground/Playground_1.0.0.0_x64_Test/ #Playground_1.0.0.0_x64.appx
+      - name: Upload UWP x64
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'WindowsAppx'
+          path: Playground/windows/AppPackages/Playground/Playground_1.0.0.0_x64_Test/ #Playground_1.0.0.0_x64.appx
 
   build-android:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Repo
-      uses: actions/checkout@v2.3.3
-    - name: Build Playground Android
-      run: |
-        npm uninstall -g react-native-cli @react-native-community/cli
-        npx react-native init Playground --version "${{ github.event.inputs.RN_Version }}" --verbose
-        cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
-        cp Apps/Playground/0.71/android/app/src/main/AndroidManifest.xml ./Playground/android/app/src/main/
-        cd Playground
-        npm install @babylonjs/core@${{ github.event.inputs.BJS_Version }}
-        npm install @babylonjs/loaders@${{ github.event.inputs.BJS_Version }}
-        npm install @babylonjs/react-native@${{ github.event.inputs.BRN_Version }}
-        npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
-        npm install @react-native-community/slider
-        npm install react-native-permissions
-        cd android
-        ./gradlew app:assembleRelease --stacktrace --info
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+      - name: Build Playground Android
+        run: |
+          npm uninstall -g react-native-cli @react-native-community/cli
+          npx react-native init Playground --version "${{ github.event.inputs.RN_Version }}" --verbose
+          cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
+          cp Apps/Playground/0.71/android/app/src/main/AndroidManifest.xml ./Playground/android/app/src/main/
+          cd Playground
+          npm install @babylonjs/core@${{ github.event.inputs.BJS_Version }}
+          npm install @babylonjs/loaders@${{ github.event.inputs.BJS_Version }}
+          npm install @babylonjs/react-native@${{ github.event.inputs.BRN_Version }}
+          npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
+          npm install @react-native-community/slider
+          npm install react-native-permissions
+          cd android
+          ./gradlew app:assembleRelease --stacktrace --info
 
-    - name: Upload APK
-      uses: actions/upload-artifact@v2
-      with:
-        name: 'AndroidAPK'
-        path: Playground/android/app/build/outputs/apk/release/app-release.apk
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'AndroidAPK'
+          path: Playground/android/app/build/outputs/apk/release/app-release.apk
 
   build-ios:
     runs-on: macos-latest
     steps:
-    - name: Checkout Repo
-      uses: actions/checkout@v2.3.3
-    - name: Clone iOS Toolchain
-      run: |
-        git clone https://github.com/leetal/ios-cmake.git
-    - name: Build Playground iOS
-      run: |
-        brew install node
-        brew install watchman
-        npm uninstall -g react-native-cli @react-native-community/cli
-        npx react-native init Playground --version "${{ github.event.inputs.RN_Version }}" --verbose --skip-install
-        cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
-        cd Playground
-        yarn install
-        npm install @babylonjs/core@${{ github.event.inputs.BJS_Version }}
-        npm install @babylonjs/loaders@${{ github.event.inputs.BJS_Version }}
-        npm install @babylonjs/react-native@${{ github.event.inputs.BRN_Version }}
-        npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
-        npm install @react-native-community/slider
-        npm install react-native-permissions
-        cd ios
-        pod install
-        #xcodebuild -sdk iphoneos -configuration Release -workspace Playground.xcworkspace -scheme Playground build CODE_SIGNING_ALLOWED=NO
-        xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -workspace Playground.xcworkspace -scheme Playground build CODE_SIGNING_ALLOWED=NO -archivePath ./playgroundSimulator.xcarchive archive
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+      - name: Clone iOS Toolchain
+        run: |
+          git clone https://github.com/leetal/ios-cmake.git
+      - name: Build Playground iOS
+        run: |
+          brew install node
+          brew install watchman
+          npm uninstall -g react-native-cli @react-native-community/cli
+          npx react-native init Playground --version "${{ github.event.inputs.RN_Version }}" --verbose --skip-install
+          cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
+          cd Playground
+          yarn install
+          npm install @babylonjs/core@${{ github.event.inputs.BJS_Version }}
+          npm install @babylonjs/loaders@${{ github.event.inputs.BJS_Version }}
+          npm install @babylonjs/react-native@${{ github.event.inputs.BRN_Version }}
+          npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
+          npm install @react-native-community/slider
+          npm install react-native-permissions
+          cd ios
+          pod install
+          #xcodebuild -sdk iphoneos -configuration Release -workspace Playground.xcworkspace -scheme Playground build CODE_SIGNING_ALLOWED=NO
+          xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -workspace Playground.xcworkspace -scheme Playground build CODE_SIGNING_ALLOWED=NO -archivePath ./playgroundSimulator.xcarchive archive
 
-    - name: Upload iOS App
-      uses: actions/upload-artifact@v2
-      with:
-        name: 'iOSApp'
-        path: Playground/ios/playgroundSimulator.xcarchive
+      - name: Upload iOS App
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'iOSApp'
+          path: Playground/ios/playgroundSimulator.xcarchive
  
 # test jobs not working
 # test-android:
