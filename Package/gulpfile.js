@@ -291,18 +291,21 @@ const copyAndroidFiles = async () => {
   await new Promise(resolve => {
     const jnidir = '../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/build/intermediates/library_and_local_jars_jni/release/jni/**';
     gulp.src(`${jnidir}/libBabylonNative.so`)
-      .pipe(gulp.src(`${jnidir}/libturbomodulejsijni.so`))
       .pipe(gulp.dest('Assembled-iOSAndroid/android/src/main/jniLibs/'))
       .on('end', resolve);
   });
 
   // This is no longer found in the directory above because it is explicitly excluded because Playground has been updated to RN 0.64 which includes
   // the real implementation of libturbomodulejsijni.so, but we still need to support RN 0.63 consumers, so grab this one explicitly to include it in the package.
-  await new Promise(resolve => {
-    gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/build/intermediates/cmake/release/obj/**/libturbomodulejsijni.so')
-      .pipe(gulp.dest('Assembled-iOSAndroid/android/src/main/jniLibs/'))
-      .on('end', resolve);
-  });
+
+  const versionIndex = process.argv.indexOf('--reactNative');
+  if (versionIndex != -1 && process.argv[versionIndex + 1] != '0.71') {
+    await new Promise(resolve => {
+      gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/build/intermediates/cmake/release/obj/**/libturbomodulejsijni.so')
+        .pipe(gulp.dest('Assembled-iOSAndroid/android/src/main/jniLibs/'))
+        .on('end', resolve);
+    });
+  }
 };
 
 const createUWPDirectories = async () => {
