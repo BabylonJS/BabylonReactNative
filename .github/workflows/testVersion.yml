@@ -17,6 +17,11 @@ on:
         required: true 
         type: string
         default: '0-71'
+      BJS_Version:
+        description: 'Babylon.js version'
+        required: true 
+        type: string
+        default: '6.0'
 
 jobs:
   build-windows:
@@ -32,12 +37,12 @@ jobs:
         cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
         cd Playground
         npx react-native-windows-init --overwrite
-        npm install @babylonjs/core
-        npm install @babylonjs/loaders
+        npm install @babylonjs/core@${{ github.event.inputs.BJS_Version }}
+        npm install @babylonjs/loaders@${{ github.event.inputs.BJS_Version }}
         npm install @babylonjs/react-native@${{ github.event.inputs.BRN_Version }}
         npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
         npm install @react-native-community/slider
-        #npm install react-native-permissions@3.0.0
+# npm install react-native-permissions
         npx react-native autolink-windows
         msbuild.exe /r "./windows/Playground.sln"
         msbuild.exe /p:Configuration="Release" /p:Platform="x64" /m "./windows/Playground.sln"
@@ -46,7 +51,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: 'WindowsAppx'
-        path: Playground/windows/AppPackages/Playground/Playground_1.0.0.0_x64_Test/Playground_1.0.0.0_x64.appx
+        path: Playground/windows/AppPackages/Playground/Playground_1.0.0.0_x64_Test/ #Playground_1.0.0.0_x64.appx
 
   build-android:
     runs-on: ubuntu-latest
@@ -58,12 +63,14 @@ jobs:
         npm uninstall -g react-native-cli @react-native-community/cli
         npx react-native init Playground --version "${{ github.event.inputs.RN_Version }}" --verbose
         cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
+        cp Apps/Playground/0.71/android/app/src/main/AndroidManifest.xml ./Playground/android/app/src/main/
         cd Playground
-        npm install @babylonjs/core
-        npm install @babylonjs/loaders
+        npm install @babylonjs/core@${{ github.event.inputs.BJS_Version }}
+        npm install @babylonjs/loaders@${{ github.event.inputs.BJS_Version }}
         npm install @babylonjs/react-native@${{ github.event.inputs.BRN_Version }}
         npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
         npm install @react-native-community/slider
+        npm install react-native-permissions
         cd android
         ./gradlew app:assembleRelease --stacktrace --info
 
@@ -90,11 +97,12 @@ jobs:
         cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
         cd Playground
         yarn install
-        npm install @babylonjs/core
-        npm install @babylonjs/loaders
+        npm install @babylonjs/core@${{ github.event.inputs.BJS_Version }}
+        npm install @babylonjs/loaders@${{ github.event.inputs.BJS_Version }}
         npm install @babylonjs/react-native@${{ github.event.inputs.BRN_Version }}
         npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
         npm install @react-native-community/slider
+        npm install react-native-permissions
         cd ios
         pod install
         #xcodebuild -sdk iphoneos -configuration Release -workspace Playground.xcworkspace -scheme Playground build CODE_SIGNING_ALLOWED=NO
