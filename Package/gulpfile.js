@@ -497,16 +497,12 @@ const validateAssemblediOSAndroid = async () => {
     'Assembled-iOSAndroid/android/src/main/jniLibs',
     'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a',
     'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libBabylonNative.so',
-    'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libturbomodulejsijni.so',
     'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a',
     'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libBabylonNative.so',
-    'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libturbomodulejsijni.so',
     'Assembled-iOSAndroid/android/src/main/jniLibs/x86',
     'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libBabylonNative.so',
-    'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libturbomodulejsijni.so',
     'Assembled-iOSAndroid/android/src/main/jniLibs/x86_64',
     'Assembled-iOSAndroid/android/src/main/jniLibs/x86_64/libBabylonNative.so',
-    'Assembled-iOSAndroid/android/src/main/jniLibs/x86_64/libturbomodulejsijni.so',
     'Assembled-iOSAndroid/ios',
     'Assembled-iOSAndroid/ios/BabylonModule.mm',
     'Assembled-iOSAndroid/ios/BabylonNativeInterop.h',
@@ -562,6 +558,18 @@ const validateAssemblediOSAndroid = async () => {
     'Assembled-iOSAndroid/README.md',
   ];
 
+  const versionIndex = process.argv.indexOf('--reactNative');	
+  if (versionIndex != -1) {	
+    if (process.argv[versionIndex + 1] !== '0.71') {	
+      const expectediosandroidNot071 = [
+        'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libturbomodulejsijni.so',
+        'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libturbomodulejsijni.so',
+        'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libturbomodulejsijni.so',
+        'Assembled-iOSAndroid/android/src/main/jniLibs/x86_64/libturbomodulejsijni.so'
+      ];
+      expectediosandroid = expectediosandroid.concat(expectediosandroidNot071);
+    }
+  }
   const actualiosandroid = glob.sync('Assembled-iOSAndroid/**/*');
   checkDirectory(actualiosandroid, expectediosandroid, 'Assembled-iOSAndroid');
 }
