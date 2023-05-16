@@ -301,7 +301,7 @@ const copyAndroidFiles = async () => {
   const versionIndex = process.argv.indexOf('--reactNative');
   if (versionIndex != -1 && process.argv[versionIndex + 1] != '0.71') {
     await new Promise(resolve => {
-      gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/build/intermediates/cmake/release/obj/**/libturbomodulejsijni.so')
+      gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/build/intermediates/cmake/release/obj/{arm64-v8a,armeabi-v7a,x86}/libturbomodulejsijni.so')
         .pipe(gulp.dest('Assembled-iOSAndroid/android/src/main/jniLibs/'))
         .on('end', resolve);
     });
@@ -565,7 +565,6 @@ const validateAssemblediOSAndroid = async () => {
         'Assembled-iOSAndroid/android/src/main/jniLibs/arm64-v8a/libturbomodulejsijni.so',
         'Assembled-iOSAndroid/android/src/main/jniLibs/armeabi-v7a/libturbomodulejsijni.so',
         'Assembled-iOSAndroid/android/src/main/jniLibs/x86/libturbomodulejsijni.so',
-        'Assembled-iOSAndroid/android/src/main/jniLibs/x86_64/libturbomodulejsijni.so'
       ];
       expectediosandroid = expectediosandroid.concat(expectediosandroidNot071);
     }
