@@ -717,4 +717,5 @@ exports.packUWP = packUWP;
 exports.packUWPNoBuild = packUWPNoBuild;
 
 exports.initializeSubmodulesMostRecentBabylonNative = initializeSubmodulesMostRecentBabylonNative;
+
 exports.default = build;
