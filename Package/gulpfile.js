@@ -717,5 +717,4 @@ exports.packUWP = packUWP;
 exports.packUWPNoBuild = packUWPNoBuild;
 
 exports.initializeSubmodulesMostRecentBabylonNative = initializeSubmodulesMostRecentBabylonNative;
-exports.cps = copyVCXProjUWPFiles;
 exports.default = build;
