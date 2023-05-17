@@ -40,7 +40,7 @@ jobs:
           npm install @babylonjs/core@${{ github.event.inputs.BJS_Version }}
           npm install @babylonjs/loaders@${{ github.event.inputs.BJS_Version }}
           npm install @babylonjs/react-native@${{ github.event.inputs.BRN_Version }}
-          npm install @babylonjs/react-native-iosandroid-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
+          npm install @babylonjs/react-native-windows-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
           npm install @react-native-community/slider
           # npm install react-native-permissions
           npx react-native autolink-windows
