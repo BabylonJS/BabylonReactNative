@@ -2,7 +2,7 @@
 
 `Apps/TestCompatibility` is a semi-automated tool to test compatibility between BabylonReactNative (more specificaly BabylonNative)
 and Babylon.js NPM packages.
-It checkouts, build and run validation tests for every BabylonNative hash version from a list and every Babylon.js NPM package.
+It checks out, builds and runs validation tests for every BabylonNative hash version from a list and every Babylon.js NPM package.
 NPM Package version must correspond to a mask provided to the script.
 
 ## Testing localy
