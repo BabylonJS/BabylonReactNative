@@ -31,5 +31,5 @@ Result is the same .JSON as earlier than can be download as an artifact
 Resulting JSON is an array that contains a list of Babylon.js NPM versions compatible with the BabylonNative commit hash.
 There is a 1-1 link between a BabylonReactNative released version and a BabylonNative commit.
 
-Note: The script test is very restrictive. Any compatibility version mismatch, a crash, a bad Validation test ,... will result in that specific version to not be compatible.
+Note: The script test is very restrictive. Any compatibility version mismatch, a crash, a bad Validation test ,... will result in that specific version being incompatible.
 This means that a version marked as compatible is sure to run, at least, all the validation tests.
