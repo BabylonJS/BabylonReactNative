@@ -26,14 +26,11 @@ const filesToCopy = [
     {source:'babylonjs-materials', files:['babylonjs.materials.js', 'babylonjs.materials.js.map']}];
 
 const BRNVersions = [
-    {tag:'1.4.0', hash:'5859ffa'},
-    {tag:'1.4.1', hash:'70bb77a'},
-    {tag:'1.4.2', hash:'5990087'},
     {tag:'1.4.3', hash:'301ab90'},
     {tag:'1.4.4', hash:'75954f4'},
     {tag:'1.5.0', hash:'75954f4'},
     {tag:'1.5.1', hash:'a2cf1c7'},
-    {tag:'1.5.4-preview', hash:'409bc4b'}];
+    {tag:'1.6.0', hash:'409bc4b'}];
 
 function patchTestScript() {
     const filePath = `${exeFolder}/Scripts/validation_native.js`;
@@ -84,8 +81,15 @@ function checkoutAndBuildBN(tag, hash, callback) {
 
 function testPackages(tag, hash) {
     let compatiblePackageVersions = [];
+
+    let bjsMask = '5.*.*';
+    const [bjsVersion] = process.argv.slice(2);
+    if (bjsVersion != '') {
+        bjsMask = bjsVersion;
+    }
+
     console.log("Getting NPM versions ...");
-    execute("npm show babylonjs@5.*.* version --json", "./", (error, stdout, stderr) => {
+    execute(`npm show babylonjs@${bjsMask} version --json`, "./", (error, stdout, stderr) => {
         if (error) throw error;
     
         const versions = JSON.parse(stdout);
