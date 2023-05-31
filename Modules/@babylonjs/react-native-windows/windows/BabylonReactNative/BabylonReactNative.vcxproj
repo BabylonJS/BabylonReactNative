@@ -76,6 +76,8 @@
   </ItemGroup>
   <PropertyGroup Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset Condition="'$(BabylonReactNativeToolSet)'!=''">$(BabylonReactNativeToolSet)</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <GenerateManifest>false</GenerateManifest>
     <PreferredToolArchitecture>x64</PreferredToolArchitecture>
