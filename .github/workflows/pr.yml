@@ -4,7 +4,7 @@ on:
     branches:
       - master
 env:
-  BRN_Version: '0.64'
+  BRN_Version: '0.70'
 
 jobs:
   build-android:
@@ -21,7 +21,7 @@ jobs:
       - name: Setup CMake
         uses: jwlawson/actions-setup-cmake@v1.8
         with:
-          cmake-version: '3.19.6' # See https://gitlab.kitware.com/cmake/cmake/-/issues/22021
+          cmake-version: '3.26.3' # See https://gitlab.kitware.com/cmake/cmake/-/issues/22021
       - name: Setup Ninja
         run: brew install ninja
       - name: NPM Install (Playground)
@@ -77,7 +77,7 @@ jobs:
       - name: Setup CMake
         uses: jwlawson/actions-setup-cmake@v1.8
         with:
-          cmake-version: '3.19.6' # See https://gitlab.kitware.com/cmake/cmake/-/issues/22021
+          cmake-version: '3.26.3' # See https://gitlab.kitware.com/cmake/cmake/-/issues/22021
       - name: Setup Ninja
         run: brew install ninja
       - name: NPM Install (Playground)
