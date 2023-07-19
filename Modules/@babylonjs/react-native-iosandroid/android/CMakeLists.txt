@@ -196,7 +196,7 @@ else()
         jsi
         turbomodulejsijni
         AndroidExtensions
-        Graphics
+        GraphicsDevice
         JsRuntime
         NativeCamera
         NativeCapture
