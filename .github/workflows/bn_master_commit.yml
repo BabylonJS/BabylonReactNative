@@ -23,7 +23,7 @@ jobs:
       - name: Setup CMake
         uses: jwlawson/actions-setup-cmake@v1.8
         with:
-          cmake-version: '3.19.6' # See https://gitlab.kitware.com/cmake/cmake/-/issues/22021
+          cmake-version: '3.26.3'
       - name: Setup Ninja
         run: brew install ninja
       - name: NPM Install (Playground)
