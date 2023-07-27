@@ -1,0 +1,29 @@
+name: Test BabylonNative Compatibility
+on:
+  workflow_dispatch:
+    inputs:
+      NPM_Mask:
+        description: 'NPM versions mask'
+        required: true 
+        type: string
+        default: 5.*.*
+
+jobs:
+  build:
+    runs-on: windows-2019
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: NPM Install
+      run: npm install
+      working-directory: ./Apps/TestCompatibility
+    - name: Run tests
+      run: npm run testPackages ${{ github.event.inputs.NPM_Mask }}
+      working-directory: ./Apps/TestCompatibility
+    - name: Upload Result 
+      uses: actions/upload-artifact@v2
+      with:
+          name: NPMCompatibility
+          path: |
+            ./Apps/TestCompatibility/compatibility.json
