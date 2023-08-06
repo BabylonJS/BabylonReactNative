@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Component, ComponentType, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import { PERMISSIONS, check, request } from 'react-native-permissions';
 import { Engine, WebXRSessionManager, WebXRExperienceHelper, Color4, Tools, VideoTexture } from '@babylonjs/core';
@@ -6,6 +6,7 @@ import { ReactNativeEngine } from './ReactNativeEngine';
 import { ensureInitialized } from './BabylonModule';
 
 import * as base64 from 'base-64';
+import {Nullable} from "@babylonjs/core/types";
 
 // These are errors that are normally thrown by WebXR's requestSession, so we should throw the same errors under similar circumstances so app code can be written the same for browser or native.
 // https://developer.mozilla.org/en-US/docs/Web/API/XRSystem/requestSession
@@ -24,6 +25,8 @@ class DOMException {
 
 // Requests the camera permission and throws if the permission could not be granted
 async function requestCameraPermissionAsync() : Promise<void> {
+    if (Platform.OS === "macos") return;
+
     const cameraPermission = Platform.select({
         android: PERMISSIONS.ANDROID.CAMERA,
         ios: PERMISSIONS.IOS.CAMERA,
@@ -56,11 +59,10 @@ async function requestCameraPermissionAsync() : Promise<void> {
 // Override the WebXRSessionManager.initializeSessionAsync to insert a camera permissions request. It would be cleaner to do this directly in the native XR implementation, but there are a couple problems with that:
 // 1. React Native does not provide a way to hook into the permissions request result (at least on Android).
 // 2. If it is done on the native side, then we need one implementation per platform.
-{
+if (Platform.OS !== "macos") {
     const originalInitializeSessionAsync = WebXRSessionManager.prototype.initializeSessionAsync;
     WebXRSessionManager.prototype.initializeSessionAsync = async function (...args: Parameters<typeof originalInitializeSessionAsync>): ReturnType<typeof originalInitializeSessionAsync> {
-        if (Platform.OS === "windows")
-        {
+        if (Platform.OS === "windows") {
             // Launching into immersive mode on Windows HMDs doesn't require a runtime permission check.
             // The Spatial Perception capability should be enabled in the project's Package.appxmanifest.
             return originalInitializeSessionAsync.apply(this, args);
@@ -76,11 +78,10 @@ ensureInitialized().then(() => {
     // Override the navigator.mediaDevices.getUserMedia to insert a camera permissions request. It would be cleaner to do this directly in the NativeCamera implementation, but there are a couple problems with that:
     // 1. React Native does not provide a way to hook into the permissions request result (at least on Android).
     // 2. If it is done on the native side, then we need one implementation per platform.
-    {
+    if (Platform.OS !== "macos") {
         const originalGetUserMedia = navigator.mediaDevices.getUserMedia;
         navigator.mediaDevices.getUserMedia = async function (...args: Parameters<typeof originalGetUserMedia>): ReturnType<typeof originalGetUserMedia> {
             await requestCameraPermissionAsync();
-
             return originalGetUserMedia.apply(this, args);
         }
     }
@@ -227,4 +228,36 @@ export function useEngine(): Engine | undefined {
     }, []);
 
     return engine;
+}
+
+declare type WithEngineProps = {
+    abortController: Nullable<AbortController>,
+    engine: Nullable<Engine>
+};
+
+export function withEngine(MyComponent: ComponentType) {
+    return class EngineWrapper extends Component<null, WithEngineProps> {
+        constructor(props: null) {
+            super(props);
+            this.state = { abortController: new AbortController(), engine: undefined };
+        }
+
+        async componentDidMount() {
+            let newEngine;
+            if (this.state.abortController)
+                newEngine = await ReactNativeEngine.tryCreateAsync({ signal: this.state.abortController.signal });
+            this.setState({ engine: newEngine ?? undefined });
+        }
+
+        componentWillUnmount() {
+            this.state.abortController?.abort();
+            this.state.engine?.dispose();
+        }
+
+        render() {
+            return (
+                <MyComponent { ...this.props } engine={ this.state.engine } />
+            );
+        }
+    };
 }

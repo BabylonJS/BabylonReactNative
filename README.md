@@ -9,7 +9,7 @@ Babylon React Native brings the power and flexibility of [Babylon.js](https://gi
 
 ### Limitations
 
-1. Android and iOS only - support for Windows is experimental.
+1. Android and iOS only - support for Windows and macOS are experimental.
 1. Touch input only - mouse, keyboard, and controllers are not yet supported.
 1. Single view only - multiple views are not yet supported (only a single view can be displayed).
 

@@ -7,6 +7,11 @@ function iosCmake() {
   shelljs.exec('cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../submodules/BabylonNative/Dependencies/ios-cmake/ios.toolchain.cmake -DPLATFORM=OS64COMBINED -DENABLE_ARC=0 -DENABLE_BITCODE=1 -DDEPLOYMENT_TARGET=12 -DENABLE_PCH=OFF .', {cwd: 'node_modules/@babylonjs/react-native-iosandroid/ios'});
 }
 
+function macosCmake() {
+  console.log(chalk.black.bgCyan('Running CMake for macOS...'));
+  shelljs.exec('cmake -G Xcode', {cwd: 'node_modules/@babylonjs/react-native-macos/macos'});
+}
+
 function postInstall() {
   const version = shelljs.exec('npm --version', {silent: true});
 
@@ -18,9 +23,13 @@ function postInstall() {
 
   if (os.platform() === 'darwin') {
     iosCmake();
+    macosCmake();
 
     console.log(chalk.black.bgCyan('Installing iOS pods...'));
     shelljs.exec('pod install', {cwd: 'ios'});
+
+    console.log(chalk.black.bgCyan('Installing macOS pods...'));
+    shelljs.exec('pod install', {cwd: 'macos'});
   }
 }
 
@@ -31,6 +40,8 @@ if (command === 'postinstall') {
   postInstall();
 } else if (command === 'iosCMake') {
   iosCmake();
+} else if (command === 'macosCMake') {
+  macosCmake();
 } else {
   console.error(chalk.black.bgRedBright(`Unkown command: ${command}`));
   process.exit(1);

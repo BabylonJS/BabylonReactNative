@@ -1,3 +1,6 @@
 [submodule "Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative"]
 	path = Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative
 	url = https://github.com/BabylonJS/BabylonNative.git
+[submodule "Modules/@babylonjs/react-native-macos/submodules/BabylonNative"]
+	path = Modules/@babylonjs/react-native-macos/submodules/BabylonNative
+	url = https://github.com/BabylonJS/BabylonNative.git
