@@ -70,7 +70,7 @@ jobs:
       release-version: ${GITHUB_REF/refs\/tags\//}
 
   package:
-    needs: [build-typescript, build-android-ios-064, build-android-ios-065, build-android-ios-069, build-android-ios-070, build-android-ios-071, build-windows-064, build-windows-065, build-windows-069, build-windows-070, build-windows-071]
+    needs: [build-typescript, build-android-ios-071, build-windows-071]
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
