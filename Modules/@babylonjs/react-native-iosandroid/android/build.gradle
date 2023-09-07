@@ -81,7 +81,8 @@ android {
                         "-DARCORE_LIBPATH=${extractedLibDir}/core-1.22.0.aar/jni",
                         "-DFBJNI_INCPATH=${extractedLibDir}/fbjni-0.3.0-headers.jar/",
                         "-DFBJNI_LIBPATH=${extractedLibDir}/fbjni-0.3.0.aar/jni",
-                        "-DREACTNATIVE_DIR=${rootDir}/../node_modules/react-native/"
+                        "-DREACTNATIVE_DIR=${rootDir}/../node_modules/react-native/",
+                        "-DBASEKIT_BUILD=${BASEKIT_BUILD}"
             }
         }
         ndk {

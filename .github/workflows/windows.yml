@@ -48,3 +48,8 @@ jobs:
         with:
           name: 'Assembled-Windows${{ inputs.react-native-version }}'
           path: Package/Assembled-Windows
+      - name: Upload Assembled-BaseKit-Windows Folder
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'Assembled-BaseKit-Windows${{ inputs.react-native-version }}'
+          path: Package/Assembled-BaseKit-Windows
