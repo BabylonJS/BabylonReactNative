@@ -1,7 +1,3 @@
-if (${BASEKIT_BUILD})
-    add_definitions(-DBASEKIT_BUILD)
-endif()
-
 set(SHARED_INCLUDES
     "${CMAKE_CURRENT_LIST_DIR}")
 
