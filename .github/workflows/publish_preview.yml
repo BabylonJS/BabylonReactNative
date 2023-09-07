@@ -118,26 +118,26 @@ jobs:
         with:
           name: 'Assembled-iOSAndroid0.71'
           path: Package/Assembled-iOSAndroid0.71
-      - name: Download Assembled-Windows 0.64 Folder
-        uses: actions/download-artifact@v2
-        with:
-          name: 'Assembled-Windows0.64'
-          path: Package/Assembled-Windows0.64
-      - name: Download Assembled-Windows 0.65 Folder
-        uses: actions/download-artifact@v2
-        with:
-          name: 'Assembled-Windows0.65'
-          path: Package/Assembled-Windows0.65
-      - name: Download Assembled-Windows 0.69 Folder
-        uses: actions/download-artifact@v2
-        with:
-          name: 'Assembled-Windows0.69'
-          path: Package/Assembled-Windows0.69
-      - name: Download Assembled-Windows 0.70 Folder
-        uses: actions/download-artifact@v2
-        with:
-          name: 'Assembled-Windows0.70'
-          path: Package/Assembled-Windows0.70
+#      - name: Download Assembled-Windows 0.64 Folder
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: 'Assembled-Windows0.64'
+#          path: Package/Assembled-Windows0.64
+#      - name: Download Assembled-Windows 0.65 Folder
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: 'Assembled-Windows0.65'
+#          path: Package/Assembled-Windows0.65
+#      - name: Download Assembled-Windows 0.69 Folder
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: 'Assembled-Windows0.69'
+#          path: Package/Assembled-Windows0.69
+#      - name: Download Assembled-Windows 0.70 Folder
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: 'Assembled-Windows0.70'
+#          path: Package/Assembled-Windows0.70
       - name: Download Assembled-Windows 0.71 Folder
         uses: actions/download-artifact@v2
         with:
