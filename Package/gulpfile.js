@@ -282,7 +282,7 @@ const createIOSUniversalLibs = async () => {
 
 const copyAndroidFiles = async () => {
   await new Promise(resolve => {
-    gulp.src(`Android/${basekitPackagePath}build.gradle`)
+    gulp.src(`${basekitPackagePath}Android/build.gradle`)
       .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/src**/main/AndroidManifest.xml'))
       .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/src**/main/java/**/*'))
       .pipe(gulp.dest(`${assemblediOSAndroidDir}/android`))
