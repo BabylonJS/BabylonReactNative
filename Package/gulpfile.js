@@ -501,6 +501,7 @@ const validateAssemblediOSAndroid = async () => {
     `${assemblediOSAndroidDir}/android`,
     `${assemblediOSAndroidDir}/android/build.gradle`,
     `${assemblediOSAndroidDir}/android/include`,
+    `${assemblediOSAndroidDir}/android/include/IXrContextARCore.h`,
     `${assemblediOSAndroidDir}/android/src`,
     `${assemblediOSAndroidDir}/android/src/main`,
     `${assemblediOSAndroidDir}/android/src/main/AndroidManifest.xml`,
@@ -564,6 +565,9 @@ const validateAssemblediOSAndroid = async () => {
     `${assemblediOSAndroidDir}/ios/libs/libUrlLib.a`,
     `${assemblediOSAndroidDir}/ios/libs/libWindow.a`,
     `${assemblediOSAndroidDir}/ios/libs/libXMLHttpRequest.a`,
+    `${assemblediOSAndroidDir}/ios/libs/libNativeCamera.a`,
+    `${assemblediOSAndroidDir}/ios/libs/libxr.a`,
+    `${assemblediOSAndroidDir}/ios/include/IXrContextARKit.h`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/project.pbxproj`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace`,
@@ -573,15 +577,6 @@ const validateAssemblediOSAndroid = async () => {
     `${assemblediOSAndroidDir}/react-native-babylon.podspec`,
     `${assemblediOSAndroidDir}/README.md`,
   ];
-
-  if (!basekitBuild) {
-    expectediosandroid.push(
-      `${assemblediOSAndroidDir}/ios/libs/libNativeCamera.a`,
-      `${assemblediOSAndroidDir}/ios/libs/libxr.a`,
-      `${assemblediOSAndroidDir}/ios/include/IXrContextARKit.h`,
-      `${assemblediOSAndroidDir}/android/include/IXrContextARCore.h`,
-    );
-  }
 
   const versionIndex = process.argv.indexOf('--reactNative');	
   if (versionIndex != -1) {	
