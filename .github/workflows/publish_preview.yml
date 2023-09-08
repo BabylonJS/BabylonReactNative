@@ -14,29 +14,29 @@ on:
         default: preview
 
 jobs:
-#  build-android-ios-064:
-#    uses: ./.github/workflows/ios_android.yml
-#    with:
-#      react-native-version: '0.64'
-#      release-version: ${{ github.event.inputs.release_version }}
-#
-#  build-android-ios-065:
-#    uses: ./.github/workflows/ios_android.yml
-#    with:
-#      react-native-version: '0.65'
-#      release-version: ${{ github.event.inputs.release_version }}
-#
-#  build-android-ios-069:
-#    uses: ./.github/workflows/ios_android.yml
-#    with:
-#      react-native-version: '0.69'
-#      release-version: ${{ github.event.inputs.release_version }}
-#
-#  build-android-ios-070:
-#    uses: ./.github/workflows/ios_android.yml
-#    with:
-#      react-native-version: '0.70'
-#      release-version: ${{ github.event.inputs.release_version }}
+  build-android-ios-064:
+    uses: ./.github/workflows/ios_android.yml
+    with:
+      react-native-version: '0.64'
+      release-version: ${{ github.event.inputs.release_version }}
+
+  build-android-ios-065:
+    uses: ./.github/workflows/ios_android.yml
+    with:
+      react-native-version: '0.65'
+      release-version: ${{ github.event.inputs.release_version }}
+
+  build-android-ios-069:
+    uses: ./.github/workflows/ios_android.yml
+    with:
+      react-native-version: '0.69'
+      release-version: ${{ github.event.inputs.release_version }}
+
+  build-android-ios-070:
+    uses: ./.github/workflows/ios_android.yml
+    with:
+      react-native-version: '0.70'
+      release-version: ${{ github.event.inputs.release_version }}
 
   build-android-ios-071:
     uses: ./.github/workflows/ios_android.yml
@@ -44,29 +44,29 @@ jobs:
       react-native-version: '0.71'
       release-version: ${{ github.event.inputs.release_version }}
 
-#  build-windows-064:
-#    uses: ./.github/workflows/windows.yml
-#    with:
-#      react-native-version: '0.64'
-#      release-version: ${{ github.event.inputs.release_version }}
-#
-#  build-windows-065:
-#    uses: ./.github/workflows/windows.yml
-#    with:
-#      react-native-version: '0.65'
-#      release-version: ${{ github.event.inputs.release_version }}
-#
-#  build-windows-069:
-#    uses: ./.github/workflows/windows.yml
-#    with:
-#      react-native-version: '0.69'
-#      release-version: ${{ github.event.inputs.release_version }}
-#
-#  build-windows-070:
-#    uses: ./.github/workflows/windows.yml
-#    with:
-#      react-native-version: '0.70'
-#      release-version: ${{ github.event.inputs.release_version }}
+  build-windows-064:
+    uses: ./.github/workflows/windows.yml
+    with:
+      react-native-version: '0.64'
+      release-version: ${{ github.event.inputs.release_version }}
+
+  build-windows-065:
+    uses: ./.github/workflows/windows.yml
+    with:
+      react-native-version: '0.65'
+      release-version: ${{ github.event.inputs.release_version }}
+
+  build-windows-069:
+    uses: ./.github/workflows/windows.yml
+    with:
+      react-native-version: '0.69'
+      release-version: ${{ github.event.inputs.release_version }}
+
+  build-windows-070:
+    uses: ./.github/workflows/windows.yml
+    with:
+      react-native-version: '0.70'
+      release-version: ${{ github.event.inputs.release_version }}
 
   build-windows-071:
     uses: ./.github/workflows/windows.yml
@@ -93,88 +93,87 @@ jobs:
         with:
           name: 'Assembled'
           path: Package/Assembled
-#      - name: Download Assembled-iOSAndroid 0.64 Folder
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: 'Assembled-iOSAndroid0.64'
-#          path: Package/Assembled-iOSAndroid0.64
-#      - name: Download Assembled-iOSAndroid 0.65 Folder
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: 'Assembled-iOSAndroid0.65'
-#          path: Package/Assembled-iOSAndroid0.65
-#      - name: Download Assembled-iOSAndroid 0.69 Folder
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: 'Assembled-iOSAndroid0.69'
-#          path: Package/Assembled-iOSAndroid0.69
-#      - name: Download Assembled-iOSAndroid 0.70 Folder
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: 'Assembled-iOSAndroid0.70'
-#          path: Package/Assembled-iOSAndroid0.70
+      - name: Download Assembled-iOSAndroid 0.64 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-iOSAndroid0.64'
+          path: Package/Assembled-iOSAndroid0.64
+      - name: Download Assembled-iOSAndroid 0.65 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-iOSAndroid0.65'
+          path: Package/Assembled-iOSAndroid0.65
+      - name: Download Assembled-iOSAndroid 0.69 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-iOSAndroid0.69'
+          path: Package/Assembled-iOSAndroid0.69
+      - name: Download Assembled-iOSAndroid 0.70 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-iOSAndroid0.70'
+          path: Package/Assembled-iOSAndroid0.70
       - name: Download Assembled-iOSAndroid 0.71 Folder
         uses: actions/download-artifact@v2
         with:
           name: 'Assembled-iOSAndroid0.71'
           path: Package/Assembled-iOSAndroid0.71
-#      - name: Download Assembled-Windows 0.64 Folder
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: 'Assembled-Windows0.64'
-#          path: Package/Assembled-Windows0.64
-#      - name: Download Assembled-Windows 0.65 Folder
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: 'Assembled-Windows0.65'
-#          path: Package/Assembled-Windows0.65
-#      - name: Download Assembled-Windows 0.69 Folder
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: 'Assembled-Windows0.69'
-#          path: Package/Assembled-Windows0.69
-#      - name: Download Assembled-Windows 0.70 Folder
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: 'Assembled-Windows0.70'
-#          path: Package/Assembled-Windows0.70
+      - name: Download Assembled-Windows 0.64 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-Windows0.64'
+          path: Package/Assembled-Windows0.64
+      - name: Download Assembled-Windows 0.65 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-Windows0.65'
+          path: Package/Assembled-Windows0.65
+      - name: Download Assembled-Windows 0.69 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-Windows0.69'
+          path: Package/Assembled-Windows0.69
+      - name: Download Assembled-Windows 0.70 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-Windows0.70'
+          path: Package/Assembled-Windows0.70
       - name: Download Assembled-Windows 0.71 Folder
         uses: actions/download-artifact@v2
         with:
           name: 'Assembled-Windows0.71'
           path: Package/Assembled-Windows0.71
-
 #BaseKit
-#      - name: Download Assembled-BaseKit-iOSAndroid 0.69 Folder
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: 'Assembled-BaseKit-iOSAndroid0.69'
-#          path: Package/Assembled-BaseKit-iOSAndroid0.69
-#      - name: Download Assembled-BaseKit-iOSAndroid 0.70 Folder
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: 'Assembled-BaseKit-iOSAndroid0.70'
-#          path: Package/Assembled-BaseKit-iOSAndroid0.70
-#      - name: Download Assembled-BaseKit-iOSAndroid 0.71 Folder
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: 'Assembled-BaseKit-iOSAndroid0.71'
-#          path: Package/Assembled-BaseKit-iOSAndroid0.71
-#      - name: Download Assembled-BaseKit-Windows 0.69 Folder
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: 'Assembled-BaseKit-Windows0.69'
-#          path: Package/Assembled-BaseKit-Windows0.69
-#      - name: Download Assembled-BaseKit-Windows 0.70 Folder
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: 'Assembled-BaseKit-Windows0.70'
-#          path: Package/Assembled-BaseKit-Windows0.70
-#      - name: Download Assembled-BaseKit-Windows 0.71 Folder
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: 'Assembled-BaseKit-Windows0.71'
-#          path: Package/Assembled-BaseKit-Windows0.71
+      - name: Download Assembled-BaseKit-iOSAndroid 0.69 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-BaseKit-iOSAndroid0.69'
+          path: Package/Assembled-BaseKit-iOSAndroid0.69
+      - name: Download Assembled-BaseKit-iOSAndroid 0.70 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-BaseKit-iOSAndroid0.70'
+          path: Package/Assembled-BaseKit-iOSAndroid0.70
+      - name: Download Assembled-BaseKit-iOSAndroid 0.71 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-BaseKit-iOSAndroid0.71'
+          path: Package/Assembled-BaseKit-iOSAndroid0.71
+      - name: Download Assembled-BaseKit-Windows 0.69 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-BaseKit-Windows0.69'
+          path: Package/Assembled-BaseKit-Windows0.69
+      - name: Download Assembled-BaseKit-Windows 0.70 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-BaseKit-Windows0.70'
+          path: Package/Assembled-BaseKit-Windows0.70
+      - name: Download Assembled-BaseKit-Windows 0.71 Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: 'Assembled-BaseKit-Windows0.71'
+          path: Package/Assembled-BaseKit-Windows0.71
 
       - name: Display structure of downloaded Assembled and Assembled-Windows folders
         run: ls -R
@@ -265,7 +264,6 @@ jobs:
 #          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 #
 #BaseKit
-
 #      - name: Version & Publish Package @babylonjs/react-native-basekit-iosandroid-0-69
 #        run: |
 #          npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
