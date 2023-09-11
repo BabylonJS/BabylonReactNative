@@ -13,6 +13,7 @@ let assemblediOSAndroidDir = 'Assembled-iOSAndroid';
 let assembledWindowsDir = 'Assembled-Windows';
 let basekitBuild = false;
 let cmakeBasekitBuildDefinition = '';
+let basekitPackagePath = '';
 
 function exec(command, workingDirectory = '.', logCommand = true) {
   if (logCommand) {
@@ -252,7 +253,7 @@ const copySharedFiles = () => {
 const copyIOSAndroidCommonFiles = () => {
   return gulp.src('../Modules/@babylonjs/react-native-iosandroid/package.json')
     .pipe(gulp.src('../Modules/@babylonjs/react-native-iosandroid/README.md'))
-    .pipe(gulp.src('react-native-babylon.podspec'))
+    .pipe(gulp.src(`${basekitPackagePath}react-native-babylon.podspec`))
     .pipe(gulp.dest(`${assemblediOSAndroidDir}/`));
 };
 
@@ -281,7 +282,7 @@ const createIOSUniversalLibs = async () => {
 
 const copyAndroidFiles = async () => {
   await new Promise(resolve => {
-    gulp.src('Android/build.gradle')
+    gulp.src(`${basekitPackagePath}Android/build.gradle`)
       .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/src**/main/AndroidManifest.xml'))
       .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/src**/main/java/**/*'))
       .pipe(gulp.dest(`${assemblediOSAndroidDir}/android`))
@@ -610,6 +611,7 @@ const switchToBaseKit = async () => {
   assembledWindowsDir = 'Assembled-BaseKit-Windows';
   cmakeBasekitBuildDefinition = '-DBASEKIT_BUILD=1';
   basekitBuild = true;
+  basekitPackagePath = 'BaseKit/';
 }
 
 const patchPackageVersion = async () => {
@@ -650,6 +652,8 @@ const patchPackageVersion = async () => {
         {
           packageJsoniOSAndroid["name"] = "@babylonjs/react-native-iosandroid" + packageNamePostfix;
           packageJsonWindows["name"] = "@babylonjs/react-native-windows" + packageNamePostfix;
+          delete packageJsoniOSAndroid['peerDependencies']['react-native-permissions'];
+          delete packageJsonWindows['peerDependencies']['react-native-permissions'];
         } else {
           packageJsoniOSAndroid["name"] = "@babylonjs/react-native-basekit-iosandroid" + packageNamePostfix;
           packageJsonWindows["name"] = "@babylonjs/react-native-basekit-windows" + packageNamePostfix;
