@@ -35,20 +35,22 @@ jobs:
       release-version: ${GITHUB_REF/refs\/tags\//}
 
   build-windows-064:
-   uses: ./.github/workflows/windows.yml
-   with:
-     react-native-version: '0.64'
-     release-version: ${GITHUB_REF/refs\/tags\//}
+    uses: ./.github/workflows/windows.yml
+    with:
+      react-native-version: '0.64'
+      release-version: ${GITHUB_REF/refs\/tags\//}
   build-windows-065:
     uses: ./.github/workflows/windows.yml
     with:
       react-native-version: '0.65'
       release-version: ${GITHUB_REF/refs\/tags\//}
+
   build-windows-069:
     uses: ./.github/workflows/windows.yml
     with:
       react-native-version: '0.69'
       release-version: ${GITHUB_REF/refs\/tags\//}
+
   build-windows-070:
     uses: ./.github/workflows/windows.yml
     with:
