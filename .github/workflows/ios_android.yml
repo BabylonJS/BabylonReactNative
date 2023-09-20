@@ -52,3 +52,8 @@ jobs:
         with:
           name: 'Assembled-iOSAndroid${{ inputs.react-native-version }}'
           path: Package/Assembled-iOSAndroid
+      - name: Upload Assembled iOS Android BaseKit Folder
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'Assembled-BaseKit-iOSAndroid${{ inputs.react-native-version }}'
+          path: Package/Assembled-BaseKit-iOSAndroid
