@@ -58,6 +58,8 @@ add_library(BabylonNative SHARED
 
 if (${BASEKIT_BUILD})
     target_compile_definitions(BabylonNative PRIVATE BASEKIT_BUILD=1)
+else()
+    set(ADDITIONAL_LIBRARIES PRIVATE NativeXr NativeCamera)
 endif()
 
 set(TURBOMODULE_DIR "${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/jni/react/turbomodule/")
@@ -152,8 +154,7 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
         Window
         XMLHttpRequest
         Canvas
-        NativeXr
-        NativeCamera)
+        ${ADDITIONAL_LIBRARIES})
 
     # We use an interface target to propagate flags to all the generated targets
     # such as the folly flags or others.
@@ -214,6 +215,5 @@ else()
         Window
         XMLHttpRequest
         Canvas
-        NativeXr
-        NativeCamera)
+        ${ADDITIONAL_LIBRARIES})
 endif()

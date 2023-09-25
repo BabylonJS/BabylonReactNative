@@ -42,6 +42,8 @@ add_library(BabylonNative
 
 if (${BASEKIT_BUILD})
     target_compile_definitions(BabylonNative PRIVATE BASEKIT_BUILD=1)
+else()
+    set(ADDITIONAL_LIBRARIES PRIVATE NativeXr NativeCamera)
 endif()
 
 target_include_directories(BabylonNative PRIVATE ${SHARED_INCLUDES})
@@ -62,8 +64,7 @@ target_link_libraries(BabylonNative
     Window
     XMLHttpRequest
     Canvas
-    NativeXr
-    NativeCamera)
+    ${ADDITIONAL_LIBRARIES})
 
 # TODO: For some reason these don't work, so we specify these in the CMake command line args.
 set_target_properties(BabylonNative PROPERTIES
