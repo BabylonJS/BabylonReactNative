@@ -58,9 +58,14 @@ add_library(BabylonNative SHARED
 
 if (${BASEKIT_BUILD})
     target_compile_definitions(BabylonNative PRIVATE BASEKIT_BUILD)
+    message("Base build path A")
 else()
     set(ExtraKit "NativeXR" "NativeCamera")
+    message("Base build path B")
 endif()
+
+message("************************")
+message(${ExtraKit})
 
 set(TURBOMODULE_DIR "${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/jni/react/turbomodule/")
 if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
