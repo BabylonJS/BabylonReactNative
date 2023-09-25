@@ -32,14 +32,9 @@ add_library(BabylonNative
 
 if (${BASEKIT_BUILD})
     target_compile_definitions(BabylonNative PRIVATE BASEKIT_BUILD)
-    message("Base build path A")
 else()
     set(ExtraKit "NativeXr NativeCamera")
-    message("Base build path B")
 endif()
-
-message("************************")
-message(${ExtraKit})
 
 target_include_directories(BabylonNative PRIVATE ${SHARED_INCLUDES})
 
