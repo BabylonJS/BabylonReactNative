@@ -36,6 +36,11 @@ target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactCommon/js
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/src/")
 
 set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
+if (${BASEKIT_BUILD})
+    set(BABYLON_NATIVE_PLUGIN_NATIVEXR OFF CACHE BOOL "")
+    set(BABYLON_NATIVE_PLUGIN_NATIVECAMERA OFF CACHE BOOL "")
+endif()
+
 set(BABYLON_NATIVE_DIR "${CMAKE_CURRENT_LIST_DIR}/../submodules/BabylonNative")
 add_subdirectory(${BABYLON_NATIVE_DIR} ${BABYLON_NATIVE_DIR}/build/Android_${CMAKE_ANDROID_ARCH_ABI}/)
 
@@ -53,6 +58,8 @@ add_library(BabylonNative SHARED
 
 if (${BASEKIT_BUILD})
     target_compile_definitions(BabylonNative PRIVATE BASEKIT_BUILD)
+else()
+    set(ExtraKit NativeXR NativeCamera)
 endif()
 
 set(TURBOMODULE_DIR "${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/jni/react/turbomodule/")
@@ -139,16 +146,15 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
         AndroidExtensions
         GraphicsDevice
         JsRuntime
-        NativeCamera
         NativeCapture
         NativeEngine
         NativeInput
         NativeOptimizations
         NativeTracing
-        NativeXr
         Window
         XMLHttpRequest
-        Canvas)                               
+        Canvas
+        ${ExtraKit})
 
     # We use an interface target to propagate flags to all the generated targets
     # such as the folly flags or others.
@@ -201,14 +207,13 @@ else()
         AndroidExtensions
         GraphicsDevice
         JsRuntime
-        NativeCamera
         NativeCapture
         NativeEngine
         NativeInput
         NativeOptimizations
         NativeTracing
-        NativeXr
         Window
         XMLHttpRequest
-        Canvas)
+        Canvas
+        ${ExtraKit})
 endif()

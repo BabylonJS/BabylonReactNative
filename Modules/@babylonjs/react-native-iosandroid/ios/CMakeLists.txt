@@ -27,6 +27,10 @@ target_include_directories(reactnative INTERFACE ${REACTNATIVE_DIR}/ReactCommon/
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/")
 
 set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
+if (${BASEKIT_BUILD})
+    set(BABYLON_NATIVE_PLUGIN_NATIVEXR OFF CACHE BOOL "")
+    set(BABYLON_NATIVE_PLUGIN_NATIVECAMERA OFF CACHE BOOL "")
+endif()
 set(BABYLON_NATIVE_DIR "${CMAKE_CURRENT_LIST_DIR}/../submodules/BabylonNative")
 add_subdirectory(${BABYLON_NATIVE_DIR} ${BABYLON_NATIVE_DIR}/build/ios)
 
@@ -38,6 +42,8 @@ add_library(BabylonNative
 
 if (${BASEKIT_BUILD})
     target_compile_definitions(BabylonNative PRIVATE BASEKIT_BUILD)
+else()
+    set(ExtraKit NativeXR NativeCamera)
 endif()
 
 target_include_directories(BabylonNative PRIVATE ${SHARED_INCLUDES})
@@ -50,16 +56,15 @@ target_link_libraries(BabylonNative
     jsi
     reactnative
     JsRuntime
-    NativeCamera
     NativeCapture
     NativeEngine
     NativeInput
     NativeOptimizations
     NativeTracing
-    NativeXr
     Window
     XMLHttpRequest
-    Canvas)
+    Canvas
+    ${ExtraKit})
 
 # TODO: For some reason these don't work, so we specify these in the CMake command line args.
 set_target_properties(BabylonNative PROPERTIES
