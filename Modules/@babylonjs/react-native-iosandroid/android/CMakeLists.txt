@@ -159,7 +159,8 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
         Window
         XMLHttpRequest
         Canvas
-        ${ExtraKit})
+        NativeXR
+        NativeCamera)
 
     # We use an interface target to propagate flags to all the generated targets
     # such as the folly flags or others.
@@ -220,5 +221,6 @@ else()
         Window
         XMLHttpRequest
         Canvas
-        ${ExtraKit})
+        NativeXR
+        NativeCamera)
 endif()

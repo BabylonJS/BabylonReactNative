@@ -56,4 +56,5 @@ target_link_libraries(BabylonNative
     Window
     XMLHttpRequest
     Canvas
-    ${ExtraKit})
+    NativeXR
+    NativeCamera)
