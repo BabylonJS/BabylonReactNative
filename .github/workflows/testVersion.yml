@@ -114,6 +114,64 @@ jobs:
           name: 'iOSApp'
           path: Playground/ios/playgroundSimulator.xcarchive
  
+ 
+  build-android-basekit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+      - name: Build Playground Android
+        run: |
+          npm uninstall -g react-native-cli @react-native-community/cli
+          npx react-native init Playground --version "${{ github.event.inputs.RN_Version }}" --verbose
+          cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
+          cd Playground
+          npm install @babylonjs/core@${{ github.event.inputs.BJS_Version }}
+          npm install @babylonjs/loaders@${{ github.event.inputs.BJS_Version }}
+          npm install @babylonjs/react-native@${{ github.event.inputs.BRN_Version }}
+          npm install @babylonjs/react-native-basekit-iosandroid-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
+          npm install @react-native-community/slider
+          cd android
+          ./gradlew app:assembleRelease --stacktrace --info
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'AndroidBasekitAPK'
+          path: Playground/android/app/build/outputs/apk/release/app-release.apk
+
+  build-ios-basekit:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+      - name: Clone iOS Toolchain
+        run: |
+          git clone https://github.com/leetal/ios-cmake.git
+      - name: Build Playground iOS
+        run: |
+          brew install node
+          brew install watchman
+          npm uninstall -g react-native-cli @react-native-community/cli
+          npx react-native init Playground --version "${{ github.event.inputs.RN_Version }}" --verbose --skip-install
+          cp Apps/Playground/playground-shared/App.tsx ./Playground/App.tsx
+          cd Playground
+          yarn install
+          npm install @babylonjs/core@${{ github.event.inputs.BJS_Version }}
+          npm install @babylonjs/loaders@${{ github.event.inputs.BJS_Version }}
+          npm install @babylonjs/react-native@${{ github.event.inputs.BRN_Version }}
+          npm install @babylonjs/react-native-basekit-iosandroid-${{ github.event.inputs.BRN_Postfix }}@${{ github.event.inputs.BRN_Version }}
+          npm install @react-native-community/slider
+          cd ios
+          pod install
+          #xcodebuild -sdk iphoneos -configuration Release -workspace Playground.xcworkspace -scheme Playground build CODE_SIGNING_ALLOWED=NO
+          xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -workspace Playground.xcworkspace -scheme Playground build CODE_SIGNING_ALLOWED=NO -archivePath ./playgroundSimulator.xcarchive archive
+
+      - name: Upload iOS App
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'iOSBasekitApp'
+          path: Playground/ios/playgroundSimulator.xcarchive
 # test jobs not working
 # test-android:
 #   needs: [build-android]
