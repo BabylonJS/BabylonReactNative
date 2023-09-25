@@ -60,7 +60,7 @@ if (${BASEKIT_BUILD})
     target_compile_definitions(BabylonNative PRIVATE BASEKIT_BUILD)
     message("Base build path A")
 else()
-    set(ExtraKit "NativeXR" "NativeCamera")
+    set(ExtraKit "NativeXr NativeCamera")
     message("Base build path B")
 endif()
 
@@ -159,7 +159,7 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
         Window
         XMLHttpRequest
         Canvas
-        NativeXR
+        NativeXr
         NativeCamera)
 
     # We use an interface target to propagate flags to all the generated targets
@@ -221,6 +221,6 @@ else()
         Window
         XMLHttpRequest
         Canvas
-        NativeXR
+        NativeXr
         NativeCamera)
 endif()

@@ -34,7 +34,7 @@ if (${BASEKIT_BUILD})
     target_compile_definitions(BabylonNative PRIVATE BASEKIT_BUILD)
     message("Base build path A")
 else()
-    set(ExtraKit "NativeXR" "NativeCamera")
+    set(ExtraKit "NativeXr NativeCamera")
     message("Base build path B")
 endif()
 
@@ -56,5 +56,4 @@ target_link_libraries(BabylonNative
     Window
     XMLHttpRequest
     Canvas
-    NativeXR
-    NativeCamera)
+    ${ExtraKit})
