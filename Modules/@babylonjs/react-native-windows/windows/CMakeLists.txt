@@ -31,9 +31,7 @@ add_library(BabylonNative
     ${SHARED_SOURCES})
 
 if (${BASEKIT_BUILD})
-    target_compile_definitions(BabylonNative PRIVATE BASEKIT_BUILD)
-else()
-    set(ExtraKit "NativeXr NativeCamera")
+    target_compile_definitions(BabylonNative PRIVATE BASEKIT_BUILD=1)
 endif()
 
 target_include_directories(BabylonNative PRIVATE ${SHARED_INCLUDES})
@@ -51,4 +49,5 @@ target_link_libraries(BabylonNative
     Window
     XMLHttpRequest
     Canvas
-    ${ExtraKit})
+    NativeXr
+    NativeCamera)
