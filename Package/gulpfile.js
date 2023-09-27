@@ -75,7 +75,7 @@ const buildTypeScript = async () => {
 
 const makeXCodeProj = async () => {
   shelljs.mkdir('-p', 'iOS/Build');
-  exec(`cmake -G Xcode -DCMAKE_TOOLCHAIN_FILE=../../../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative/Dependencies/ios-cmake/ios.toolchain.cmake -DPLATFORM=OS64COMBINED -DENABLE_ARC=0 -DENABLE_BITCODE=1 -DDEPLOYMENT_TARGET=12 -DENABLE_PCH=OFF ${cmakeBasekitBuildDefinition} ..`, 'iOS/Build');
+  exec(`cmake -B Build -G Xcode -D IOS=ON ${cmakeBasekitBuildDefinition}`, 'iOS');
 };
 
 const buildIphoneOS = async () => {

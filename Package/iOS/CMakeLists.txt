@@ -6,6 +6,9 @@ project(ReactNativeBabylon)
 # https://stackoverflow.com/questions/73983452/xcode-14-xcode-13-incompatibility
 #add_compile_options("-fno-objc-msgsend-selector-stubs")
 
+set(CMAKE_XCODE_ATTRIBUTE_ARCHS "$(ARCHS_STANDARD)")
+set(CMAKE_XCODE_ATTRIBUTE_VALID_ARCHS "arm64 x86_64")
+
 include(${CMAKE_CURRENT_SOURCE_DIR}/../../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/ios/CMakeLists.txt)
 
 set(PACKAGED_LIBS
@@ -24,6 +27,7 @@ set(PACKAGED_LIBS
     Canvas
     GenericCodeGen
     glslang
+    glslang-default-resource-limits
     Graphics
     JsRuntime
     OGLCompiler
