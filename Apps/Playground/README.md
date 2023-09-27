@@ -60,7 +60,7 @@ Add BabylonReactNative in the Xcode workspace:
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:../node_modules/@babylonjs/react-native-iosandroid/ios/ReactNativeBabylon.xcodeproj">
+      location = "group:../../../../Build/iOS/ReactNativeBabylon.xcodeproj">
    </FileRef>
    ...
 ```
