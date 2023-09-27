@@ -10,8 +10,10 @@ function iosCMake() {
 function postInstall() {
   const version = shelljs.exec('npm --version', {silent: true});
 
-  console.log(chalk.black.bgCyan('Installing Playground Shared npm packages...'));
-  shelljs.exec('npm install', {cwd: '../playground-shared'});
+  // TODO: This makes development easier as it provides type info when editing App.tsx,
+  //       but it also somehow breaks the metro bundler (result in runtime errors).
+  // console.log(chalk.black.bgCyan('Installing Playground Shared npm packages...'));
+  // shelljs.exec('npm install', {cwd: '../playground-shared'});
 
   console.log(chalk.black.bgCyan('Installing Babylon React Native npm packages...'));
   shelljs.exec('npm install --legacy-peer-deps', {cwd: '../../../Modules/@babylonjs/react-native'});
