@@ -4,7 +4,7 @@ const chalk = require('chalk');
 
 function iosCMake() {
   console.log(chalk.black.bgCyan('Running CMake for iOS...'));
-  shelljs.exec('cmake -B ../../../../Build/iOS -G Xcode -D IOS=ON', {cwd: 'node_modules/@babylonjs/react-native-iosandroid/ios'});
+  shelljs.exec('cmake -B ../../../../Build/iOS -G Xcode', {cwd: 'node_modules/@babylonjs/react-native-iosandroid/ios'});
 }
 
 function postInstall() {
