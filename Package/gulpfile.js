@@ -75,7 +75,7 @@ const buildTypeScript = async () => {
 
 const makeXCodeProj = async () => {
   shelljs.mkdir('-p', 'iOS/Build');
-  exec(`cmake -B Build -G Xcode -D IOS=ON ${cmakeBasekitBuildDefinition}`, 'iOS');
+  exec(`cmake -B Build -G Xcode ${cmakeBasekitBuildDefinition}`, 'iOS');
 };
 
 const buildIphoneOS = async () => {

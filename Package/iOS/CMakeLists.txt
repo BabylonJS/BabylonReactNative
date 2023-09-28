@@ -1,13 +1,24 @@
 cmake_minimum_required(VERSION 3.13.2)
+
+include(FetchContent)
+
+FetchContent_Declare(ios-cmake
+    GIT_REPOSITORY https://github.com/leetal/ios-cmake.git
+    GIT_TAG 04d91f6675dabb3c97df346a32f6184b0a7ef845)
+
+FetchContent_MakeAvailable(ios-cmake)
+set(CMAKE_TOOLCHAIN_FILE "${ios-cmake_SOURCE_DIR}/ios.toolchain.cmake" CACHE PATH "")
+set(PLATFORM "OS64COMBINED" CACHE STRING "")
+set(DEPLOYMENT_TARGET "12" CACHE STRING "")
+set(ENABLE_ARC OFF CACHE STRING "Enables or disables ARC support.")
+set(ENABLE_PCH OFF CACHE STRING "Enables or disables precompiled headers.")
+
 project(ReactNativeBabylon)
 
 # Clang will by default emit objc_msgSend stubs in Xcode 14, which ld from earlier Xcodes doesn't understand.
 # We disable this by passing -fno-objc-msgsend-selector-stubs to clang.
 # https://stackoverflow.com/questions/73983452/xcode-14-xcode-13-incompatibility
 #add_compile_options("-fno-objc-msgsend-selector-stubs")
-
-set(CMAKE_XCODE_ATTRIBUTE_ARCHS "$(ARCHS_STANDARD)")
-set(CMAKE_XCODE_ATTRIBUTE_VALID_ARCHS "arm64 x86_64")
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/../../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/ios/CMakeLists.txt)
 
