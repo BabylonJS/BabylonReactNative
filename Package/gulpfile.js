@@ -539,6 +539,7 @@ const validateAssemblediOSAndroid = async () => {
     `${assemblediOSAndroidDir}/ios/libs/libCanvas.a`,
     `${assemblediOSAndroidDir}/ios/libs/libGenericCodeGen.a`,
     `${assemblediOSAndroidDir}/ios/libs/libglslang.a`,
+    `${assemblediOSAndroidDir}/ios/libs/libglslang-default-resource-limits.a`,
     `${assemblediOSAndroidDir}/ios/libs/libGraphics.a`,
     `${assemblediOSAndroidDir}/ios/libs/libJsRuntime.a`,
     `${assemblediOSAndroidDir}/ios/libs/libMachineIndependent.a`,
