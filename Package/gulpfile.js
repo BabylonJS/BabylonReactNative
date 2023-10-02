@@ -131,7 +131,7 @@ const initializeSubmodulesMostRecentBabylonNative = async () => {
 
 const makeUWPProjectPlatform = async (name, arch) => {
   shelljs.mkdir('-p', `./../Modules/@babylonjs/react-native/Build/uwp_${name}`);
-  exec(`cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -DCMAKE_UNITY_BUILD=true ${cmakeBasekitBuildDefinition} -A ${arch} ./../../../react-native-windows/windows`, `./../Modules/@babylonjs/react-native/Build/uwp_${name}`);
+  exec(`cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -DCMAKE_UNITY_BUILD=true ${cmakeBasekitBuildDefinition} -A ${arch} ./../../../react-native-windows/windows`, `./../Modules/@babylonjs/react-native/Build/uwp_${name}`);
 };
 
 const makeUWPProjectx86 = async () => makeUWPProjectPlatform('x86', 'Win32');
