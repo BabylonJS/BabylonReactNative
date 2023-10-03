@@ -186,6 +186,7 @@
         etc2.lib;
         GenericCodeGend.lib;
         glslangd.lib;
+		glslang-default-resource-limitsd.lib
         Graphics.lib;
         iqa.lib;
         jsi.lib;
@@ -247,6 +248,7 @@
         etc2.lib;
         GenericCodeGen.lib;
         glslang.lib;
+		glslang-default-resource-limits.lib
         Graphics.lib;
         iqa.lib;
         jsi.lib;
