@@ -148,11 +148,11 @@
         $(BabylonNativeBuildDir)BabylonNative\Polyfills\Canvas\$(Configuration);
         $(BabylonNativeBuildDir)jsi\$(Configuration);
         $(BabylonNativeBuildDir)$(Configuration);
-		$(BabylonNativeBuildDir)_deps\arcana-build\$(Configuration);
-		$(BabylonNativeBuildDir)_deps\jsruntimehost-build\Core\JsRuntime\$(Configuration);
-		$(BabylonNativeBuildDir)_deps\jsruntimehost-build\Core\Node-API-JSI\$(Configuration);
-		$(BabylonNativeBuildDir)_deps\jsruntimehost-build\Polyfills\XMLHttpRequest\$(Configuration);
-		$(BabylonNativeBuildDir)_deps\urllib-build\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\arcana-build\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\jsruntimehost-build\Core\JsRuntime\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\jsruntimehost-build\Core\Node-API-JSI\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\jsruntimehost-build\Polyfills\XMLHttpRequest\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\urllib-build\$(Configuration);
         %(AdditionalLibraryDirectories);
       </AdditionalLibraryDirectories>
       <!-- Library directories when building from npm package -->
@@ -186,7 +186,7 @@
         etc2.lib;
         GenericCodeGend.lib;
         glslangd.lib;
-		glslang-default-resource-limitsd.lib
+        glslang-default-resource-limitsd.lib;
         Graphics.lib;
         iqa.lib;
         jsi.lib;
@@ -248,7 +248,7 @@
         etc2.lib;
         GenericCodeGen.lib;
         glslang.lib;
-		glslang-default-resource-limits.lib
+        glslang-default-resource-limits.lib;
         Graphics.lib;
         iqa.lib;
         jsi.lib;
