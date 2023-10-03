@@ -100,7 +100,7 @@ jobs:
     strategy:
       matrix:
         platform: [x86, x64, ARM64]
-        config: [Debug, Release]
+        config: [Release]
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2.3.3
