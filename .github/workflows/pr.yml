@@ -102,6 +102,8 @@ jobs:
         platform: [x86, x64, ARM64]
         config: [Debug, Release]
     steps:
+      - name: Support longpaths
+        run: git config --system core.longpaths true
       - name: Checkout Repo
         uses: actions/checkout@v2.3.3
         with:
