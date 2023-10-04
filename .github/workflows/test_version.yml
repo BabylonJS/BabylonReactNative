@@ -31,6 +31,10 @@ jobs:
         uses: actions/checkout@v2.3.3
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.0.2
+      - name: Setup Node 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
       - name: Build Playground Windows x64
         run: |
           npx react-native init Playground --version ${{ github.event.inputs.RN_Version }}
@@ -58,6 +62,10 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2.3.3
+      - name: Setup Node 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
       - name: Build Playground Android
         run: |
           npm uninstall -g react-native-cli @react-native-community/cli
@@ -81,7 +89,7 @@ jobs:
           path: Playground/android/app/build/outputs/apk/release/app-release.apk
 
   build-ios:
-    runs-on: macos-latest
+    runs-on: macos-12
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2.3.3
@@ -120,6 +128,10 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2.3.3
+      - name: Setup Node 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
       - name: Build Playground Android
         run: |
           npm uninstall -g react-native-cli @react-native-community/cli
@@ -141,7 +153,7 @@ jobs:
           path: Playground/android/app/build/outputs/apk/release/app-release.apk
 
   build-ios-basekit:
-    runs-on: macos-latest
+    runs-on: macos-12
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2.3.3
