@@ -96,38 +96,38 @@ const buildAndroid = async () => {
 const initializeSubmodulesWindowsAgent = async () => {
   // windows build agents don't support the path lengths required for initializing arcore dependencies,
   // so we manually initialize the submodules we need here.
-  exec('git -c submodule."Dependencies/xr/Dependencies/arcore-android-sdk".update=none submodule update --init --recursive "./../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative');
+  //exec('git -c submodule."Dependencies/xr/Dependencies/arcore-android-sdk".update=none submodule update --init --recursive "./../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative');
 }
 
-const initializeSubmodulesMostRecentBabylonNative = async () => {
-  let shaFound = false;
-  const shaOptionIndex = process.argv.indexOf('--sha');
-  if (shaOptionIndex >= 0) {
-    const shaIndex = shaOptionIndex + 1;
-    if (process.argv.length > shaIndex) {
-      shaFound = true;
-      const sha = process.argv[shaIndex];
-      console.log("Using provided commit: " + sha);
-      exec('git submodule init ./../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative');
-      exec('git fetch origin ' + sha, './../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative');
-      exec('git checkout ' + sha, './../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative');
-    }
-  }
-
-  if (!shaFound) {
-    exec('git submodule init ./../Modules/@babylonjs/react-native/submodules/BabylonNative');
-    exec('git fetch origin master', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
-    exec('git checkout origin/master', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
-  }
-
-  if (process.argv.indexOf('--windows') >= 0) {
-    exec('git -c submodule."Dependencies/xr/Dependencies/arcore-android-sdk".update=none submodule update --init --recursive *', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
-  } else {
-    exec('git submodule update --init --recursive', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
-  }
-
-  exec('git status');
-}
+//const initializeSubmodulesMostRecentBabylonNative = async () => {
+//  let shaFound = false;
+//  const shaOptionIndex = process.argv.indexOf('--sha');
+//  if (shaOptionIndex >= 0) {
+//    const shaIndex = shaOptionIndex + 1;
+//    if (process.argv.length > shaIndex) {
+//      shaFound = true;
+//      const sha = process.argv[shaIndex];
+//      console.log("Using provided commit: " + sha);
+//      exec('git submodule init ./../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative');
+//      exec('git fetch origin ' + sha, './../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative');
+//      exec('git checkout ' + sha, './../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative');
+//    }
+//  }
+//
+//  if (!shaFound) {
+//    exec('git submodule init ./../Modules/@babylonjs/react-native/submodules/BabylonNative');
+//    exec('git fetch origin master', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
+//    exec('git checkout origin/master', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
+//  }
+//
+//  if (process.argv.indexOf('--windows') >= 0) {
+//    exec('git -c submodule."Dependencies/xr/Dependencies/arcore-android-sdk".update=none submodule update --init --recursive *', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
+//  } else {
+//    exec('git submodule update --init --recursive', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
+//  }
+//
+//  exec('git status');
+//}
 
 const makeUWPProjectPlatform = async (name, arch) => {
   shelljs.mkdir('-p', `./../Modules/@babylonjs/react-native/Build/uwp_${name}`);
@@ -747,6 +747,6 @@ exports.copyUWPFiles = copyUWPFiles;
 exports.packUWP = packUWP;
 exports.packUWPNoBuild = packUWPNoBuild;
 
-exports.initializeSubmodulesMostRecentBabylonNative = initializeSubmodulesMostRecentBabylonNative;
+//exports.initializeSubmodulesMostRecentBabylonNative = initializeSubmodulesMostRecentBabylonNative;
 
 exports.default = build;

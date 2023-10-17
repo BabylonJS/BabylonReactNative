@@ -18,10 +18,7 @@ set(REACTNATIVE_DIR_CMAKE "${CMAKE_CURRENT_LIST_DIR}/../../../../Apps/Playground
 add_subdirectory("${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi/jsi" ${CMAKE_CURRENT_BINARY_DIR}/jsi)
 target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi)
 
-set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
 set(BABYLON_NATIVE_USE_SWAPCHAINPANEL ON CACHE BOOL "")
-set(BABYLON_NATIVE_DIR "${BABYLON_REACT_NATIVE_IOSANDROID}/submodules/BabylonNative")
-add_subdirectory(${BABYLON_NATIVE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/BabylonNative EXCLUDE_FROM_ALL)
 # Disable Unity build for UrlLib because of conflict in header between windows.h and winrt
 set_property(TARGET UrlLib PROPERTY UNITY_BUILD false)
 

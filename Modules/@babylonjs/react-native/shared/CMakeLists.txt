@@ -1,3 +1,8 @@
+FetchContent_Declare(BabylonNative
+    GIT_REPOSITORY https://github.com/BabylonJS/BabylonNative.git
+    GIT_TAG b04555cac37a5a962bc94f59422208edc03b160a)
+FetchContent_MakeAvailable(BabylonNative)
+
 set(SHARED_INCLUDES
     "${CMAKE_CURRENT_LIST_DIR}")
 
