@@ -35,7 +35,8 @@ target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactCommon/js
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/src/")
 
-FetchContent_MakeAvailable(BabylonNative)
+set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
+add_subdirectory(${babylonnative_SOURCE_DIR} ${babylonnative_SOURCE_DIR}/build/Android_${CMAKE_ANDROID_ARCH_ABI}/)
 
 set(BABYLON_REACT_NATIVE_SHARED_DIR "${CMAKE_CURRENT_LIST_DIR}/../../react-native/shared")
 add_subdirectory(${BABYLON_REACT_NATIVE_SHARED_DIR} ${CMAKE_CURRENT_BINARY_DIR}/shared)
