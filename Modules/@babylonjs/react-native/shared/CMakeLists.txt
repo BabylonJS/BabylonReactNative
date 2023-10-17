@@ -2,7 +2,7 @@ include(FetchContent)
 
 FetchContent_Declare(BabylonNative
     GIT_REPOSITORY https://github.com/BabylonJS/BabylonNative.git
-    GIT_TAG b04555cac37a5a962bc94f59422208edc03b160a)
+    GIT_TAG 6ddb0cc1e87451edd7b12b35f524e9be319f3cfc)
 FetchContent_MakeAvailable(BabylonNative)
 
 set(SHARED_INCLUDES
