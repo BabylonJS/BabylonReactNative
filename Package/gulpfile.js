@@ -232,7 +232,7 @@ const copyIOSFiles = async () => {
   });
 
   await new Promise(resolve => {
-    gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative/Dependencies/xr/Source/ARKit/Include/*')
+    gulp.src('../Package/iOS/Build/_deps/babylonnative-src/Dependencies/xr/Source/ARKit/Include/*')
       .pipe(gulp.dest(`${assemblediOSAndroidDir}/ios/include`))
       .on('end', resolve);
   });
@@ -254,7 +254,7 @@ const copyAndroidFiles = async () => {
   });
 
   await new Promise(resolve => {
-    gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative/Dependencies/xr/Source/ARCore/Include/*')
+    gulp.src('../Package/iOS/Build/_deps/babylonnative-src/Dependencies/xr/Source/ARCore/Include/*')
       .pipe(gulp.dest(`${assemblediOSAndroidDir}/android/include`))
       .on('end', resolve);
   });
@@ -363,23 +363,23 @@ const copyVCXProjUWPFiles = () => {
 }
 
 const copyOpenXRInfoFiles = () => {
-  return gulp.src('../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative/Dependencies/xr/Dependencies/OpenXR-MixedReality/LICENSE')
-    .pipe(gulp.src('../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative/Dependencies/xr/Dependencies/OpenXR-MixedReality/README.md'))
+  return gulp.src('../Modules/@babylonjs/react-native/Build/uwp_x64/_deps/openxr-mixedreality-src/LICENSE')
+    .pipe(gulp.src('../Modules/@babylonjs/react-native/Build/uwp_x64/_deps/openxr-mixedreality-src/README.md'))
     .pipe(gulp.dest(`${assembledWindowsDir}/windows/OpenXR-MixedReality`));
 }
 
 const copyOpenXRPreviewHeaders = () => {
-  return gulp.src('../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative/Dependencies/xr/Dependencies/OpenXR-MixedReality/openxr_preview/include/openxr/*')
+  return gulp.src('../Modules/@babylonjs/react-native/Build/uwp_x64/_deps/openxr-mixedreality-src/openxr_preview/include/openxr/*')
     .pipe(gulp.dest(`${assembledWindowsDir}/windows/OpenXR-MixedReality/include/openxr`));
 }
 
 const copyOpenXRUtilityHeaders = () => {
-  return gulp.src('../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative/Dependencies/xr/Dependencies/OpenXR-MixedReality/shared/XrUtility/*')
+  return gulp.src('../Modules/@babylonjs/react-native/Build/uwp_x64/_deps/openxr-mixedreality-src/shared/XrUtility/*')
     .pipe(gulp.dest(`${assembledWindowsDir}/windows/OpenXR-MixedReality/include/XrUtility`));
 }
 
 const copyOpenXRHelperHeaders = () => {
-  return gulp.src('../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative/Dependencies/xr/Source/OpenXR/Include/*')
+  return gulp.src('../Modules/@babylonjs/react-native/Build/uwp_x64/_deps/babylonnative-src/Dependencies/xr/Source/OpenXR/Include/*')
     .pipe(gulp.src('../Modules/@babylonjs/react-native-windows/windows/include/*'))
     .pipe(gulp.dest(`${assembledWindowsDir}/windows/include`));
 }
