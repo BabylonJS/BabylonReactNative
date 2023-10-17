@@ -127,7 +127,6 @@ jobs:
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
-        working-directory: ./Package
       - name: Gulp Setup Project ${{ matrix.platform }} (Windows)
         run: npx gulp makeUWPProject${{ matrix.platform }}
         working-directory: ./Package
