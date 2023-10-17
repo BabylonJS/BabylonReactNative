@@ -8,8 +8,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(BABYLON_REACT_NATIVE_DIR "${CMAKE_CURRENT_LIST_DIR}/../../react-native")
 set(BABYLON_REACT_NATIVE_IOSANDROID "${CMAKE_CURRENT_LIST_DIR}/../../react-native-iosandroid")
 
-include(${BABYLON_REACT_NATIVE_DIR}/shared/CMakeLists.txt)
-
 # Configure Babylon Native to use JSI
 # Note: We should avoid installing node_modules in the Module\@babylonjs\react-native folder.
 # Installing react-native dependencies for both the Playground app and the @babylonjs\react-native package will generate a bad bundle/runtime errors.
@@ -21,6 +19,8 @@ target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactCommon/js
 set(BABYLON_NATIVE_USE_SWAPCHAINPANEL ON CACHE BOOL "")
 # Disable Unity build for UrlLib because of conflict in header between windows.h and winrt
 set_property(TARGET UrlLib PROPERTY UNITY_BUILD false)
+
+include(${BABYLON_REACT_NATIVE_DIR}/shared/CMakeLists.txt)
 
 add_library(BabylonNative
     ${SHARED_SOURCES})
