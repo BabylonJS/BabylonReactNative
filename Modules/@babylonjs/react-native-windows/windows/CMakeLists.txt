@@ -17,10 +17,9 @@ add_subdirectory("${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi/jsi" ${CMAKE_CURRENT_
 target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi)
 
 set(BABYLON_NATIVE_USE_SWAPCHAINPANEL ON CACHE BOOL "")
+include(${BABYLON_REACT_NATIVE_DIR}/shared/CMakeLists.txt)
 # Disable Unity build for UrlLib because of conflict in header between windows.h and winrt
 set_property(TARGET UrlLib PROPERTY UNITY_BUILD false)
-
-include(${BABYLON_REACT_NATIVE_DIR}/shared/CMakeLists.txt)
 
 add_library(BabylonNative
     ${SHARED_SOURCES})
