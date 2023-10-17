@@ -16,5 +16,3 @@ if (${BASEKIT_BUILD})
     set(BABYLON_NATIVE_PLUGIN_NATIVEXR OFF CACHE BOOL "")
     set(BABYLON_NATIVE_PLUGIN_NATIVECAMERA OFF CACHE BOOL "")
 endif()
-
-FetchContent_MakeAvailable(BabylonNative)

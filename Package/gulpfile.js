@@ -93,42 +93,6 @@ const buildAndroid = async () => {
   exec(`./gradlew babylonjs_react-native:assembleRelease --stacktrace --info ${basekitBuildProp}`, '../Apps/Playground/Playground/android');
 };
 
-const initializeSubmodulesWindowsAgent = async () => {
-  // windows build agents don't support the path lengths required for initializing arcore dependencies,
-  // so we manually initialize the submodules we need here.
-  //exec('git -c submodule."Dependencies/xr/Dependencies/arcore-android-sdk".update=none submodule update --init --recursive "./../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative');
-}
-
-//const initializeSubmodulesMostRecentBabylonNative = async () => {
-//  let shaFound = false;
-//  const shaOptionIndex = process.argv.indexOf('--sha');
-//  if (shaOptionIndex >= 0) {
-//    const shaIndex = shaOptionIndex + 1;
-//    if (process.argv.length > shaIndex) {
-//      shaFound = true;
-//      const sha = process.argv[shaIndex];
-//      console.log("Using provided commit: " + sha);
-//      exec('git submodule init ./../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative');
-//      exec('git fetch origin ' + sha, './../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative');
-//      exec('git checkout ' + sha, './../Modules/@babylonjs/react-native-iosandroid/submodules/BabylonNative');
-//    }
-//  }
-//
-//  if (!shaFound) {
-//    exec('git submodule init ./../Modules/@babylonjs/react-native/submodules/BabylonNative');
-//    exec('git fetch origin master', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
-//    exec('git checkout origin/master', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
-//  }
-//
-//  if (process.argv.indexOf('--windows') >= 0) {
-//    exec('git -c submodule."Dependencies/xr/Dependencies/arcore-android-sdk".update=none submodule update --init --recursive *', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
-//  } else {
-//    exec('git submodule update --init --recursive', './../Modules/@babylonjs/react-native/submodules/BabylonNative');
-//  }
-//
-//  exec('git status');
-//}
-
 const makeUWPProjectPlatform = async (name, arch) => {
   shelljs.mkdir('-p', `./../Modules/@babylonjs/react-native/Build/uwp_${name}`);
   exec(`cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -DCMAKE_UNITY_BUILD=true ${cmakeBasekitBuildDefinition} -A ${arch} ./../../../react-native-windows/windows`, `./../Modules/@babylonjs/react-native/Build/uwp_${name}`);
@@ -707,12 +671,11 @@ exports.buildAndroid = buildAndroid;
 exports.packAndroid = packAndroid;
 
 const copyPackageFilesUWP = gulp.series(copyUWPFiles);
-const buildUWPPublish = gulp.series(buildUWP, copyPackageFilesUWP, switchToBaseKit, patchPackageVersion, buildUWP, copyPackageFilesUWP);
+const buildUWPPublish = gulp.series(patchPackageVersion, buildUWP, copyPackageFilesUWP, switchToBaseKit, patchPackageVersion, buildUWP, copyPackageFilesUWP);
 const packUWP = gulp.series(clean, buildUWP, copyPackageFilesUWP, createPackage, createPackageUWP);
 const packUWPNoBuild = gulp.series(clean, copyPackageFilesUWP, createPackage, createPackageUWP);
 
 exports.buildTS = buildTS;
-exports.initializeSubmodulesWindowsAgent = gulp.series(patchPackageVersion, initializeSubmodulesWindowsAgent);
 exports.makeUWPProjectx86 = makeUWPProjectx86;
 exports.makeUWPProjectx64 = makeUWPProjectx64;
 exports.makeUWPProjectARM = makeUWPProjectARM;
@@ -746,7 +709,5 @@ exports.buildUWPPublish = buildUWPPublish;
 exports.copyUWPFiles = copyUWPFiles;
 exports.packUWP = packUWP;
 exports.packUWPNoBuild = packUWPNoBuild;
-
-//exports.initializeSubmodulesMostRecentBabylonNative = initializeSubmodulesMostRecentBabylonNative;
 
 exports.default = build;
