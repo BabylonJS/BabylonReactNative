@@ -127,17 +127,17 @@
       <!-- Library directories when building in repo -->
       <!-- Note: you can add BabylonNative component build folders here as needed -->
       <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">
-        $(BabylonNativeBuildDir)_deps\babylonnative-build\Core\Graphics\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\babylonnative-build\Dependencies\xr\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\babylonnative-build\Plugins\NativeCamera\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\babylonnative-build\Plugins\NativeCapture\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\babylonnative-build\Plugins\NativeEngine\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\babylonnative-build\Plugins\NativeInput\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\babylonnative-build\Plugins\NativeOptimizations\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\babylonnative-build\Plugins\NativeTracing\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\babylonnative-build\Plugins\NativeXr\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\babylonnative-build\Polyfills\Window\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\babylonnative-build\Polyfills\Canvas\$(Configuration);
+        $(BabylonNativeBuildDir)babylonnative\Core\Graphics\$(Configuration);
+        $(BabylonNativeBuildDir)babylonnative\Dependencies\xr\$(Configuration);
+        $(BabylonNativeBuildDir)babylonnative\Plugins\NativeCamera\$(Configuration);
+        $(BabylonNativeBuildDir)babylonnative\Plugins\NativeCapture\$(Configuration);
+        $(BabylonNativeBuildDir)babylonnative\Plugins\NativeEngine\$(Configuration);
+        $(BabylonNativeBuildDir)babylonnative\Plugins\NativeInput\$(Configuration);
+        $(BabylonNativeBuildDir)babylonnative\Plugins\NativeOptimizations\$(Configuration);
+        $(BabylonNativeBuildDir)babylonnative\Plugins\NativeTracing\$(Configuration);
+        $(BabylonNativeBuildDir)babylonnative\Plugins\NativeXr\$(Configuration);
+        $(BabylonNativeBuildDir)babylonnative\Polyfills\Window\$(Configuration);
+        $(BabylonNativeBuildDir)babylonnative\Polyfills\Canvas\$(Configuration);
         $(BabylonNativeBuildDir)jsi\$(Configuration);
         $(BabylonNativeBuildDir)$(Configuration);
         $(BabylonNativeBuildDir)_deps\arcana-build\$(Configuration);
