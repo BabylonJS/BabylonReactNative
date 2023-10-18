@@ -127,24 +127,24 @@
       <!-- Library directories when building in repo -->
       <!-- Note: you can add BabylonNative component build folders here as needed -->
       <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">
-        $(BabylonNativeBuildDir)_deps\Core\Graphics\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\Dependencies\bgfx.cmake\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\Dependencies\glslang\glslang\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\Dependencies\glslang\glslang\OSDependent\Windows\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\Dependencies\glslang\OGLCompilersDLL\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\Dependencies\glslang\SPIRV\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\Dependencies\SPIRV-Cross\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\Dependencies\xr\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\Dependencies\xr\Dependencies\OpenXR-SDK\src\loader\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\Plugins\NativeCamera\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\Plugins\NativeCapture\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\Plugins\NativeEngine\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\Plugins\NativeInput\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\Plugins\NativeOptimizations\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\Plugins\NativeTracing\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\Plugins\NativeXr\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\Polyfills\Window\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\Polyfills\Canvas\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\babylonnative-build\Core\Graphics\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\babylonnative-build\Dependencies\bgfx.cmake\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\babylonnative-build\Dependencies\glslang\glslang\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\babylonnative-build\Dependencies\glslang\glslang\OSDependent\Windows\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\babylonnative-build\Dependencies\glslang\OGLCompilersDLL\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\babylonnative-build\Dependencies\glslang\SPIRV\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\babylonnative-build\Dependencies\SPIRV-Cross\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\babylonnative-build\Dependencies\xr\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\babylonnative-build\Dependencies\xr\Dependencies\OpenXR-SDK\src\loader\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\babylonnative-build\Plugins\NativeCamera\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\babylonnative-build\Plugins\NativeCapture\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\babylonnative-build\Plugins\NativeEngine\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\babylonnative-build\Plugins\NativeInput\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\babylonnative-build\Plugins\NativeOptimizations\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\babylonnative-build\Plugins\NativeTracing\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\babylonnative-build\Plugins\NativeXr\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\babylonnative-build\Polyfills\Window\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\babylonnative-build\Polyfills\Canvas\$(Configuration);
         $(BabylonNativeBuildDir)jsi\$(Configuration);
         $(BabylonNativeBuildDir)$(Configuration);
         $(BabylonNativeBuildDir)_deps\arcana-build\$(Configuration);
