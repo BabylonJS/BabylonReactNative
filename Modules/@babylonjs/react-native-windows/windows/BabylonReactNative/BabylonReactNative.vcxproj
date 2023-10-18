@@ -128,14 +128,7 @@
       <!-- Note: you can add BabylonNative component build folders here as needed -->
       <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">
         $(BabylonNativeBuildDir)_deps\babylonnative-build\Core\Graphics\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\babylonnative-build\Dependencies\bgfx.cmake\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\babylonnative-build\Dependencies\glslang\glslang\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\babylonnative-build\Dependencies\glslang\glslang\OSDependent\Windows\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\babylonnative-build\Dependencies\glslang\OGLCompilersDLL\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\babylonnative-build\Dependencies\glslang\SPIRV\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\babylonnative-build\Dependencies\SPIRV-Cross\$(Configuration);
         $(BabylonNativeBuildDir)_deps\babylonnative-build\Dependencies\xr\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\babylonnative-build\Dependencies\xr\Dependencies\OpenXR-SDK\src\loader\$(Configuration);
         $(BabylonNativeBuildDir)_deps\babylonnative-build\Plugins\NativeCamera\$(Configuration);
         $(BabylonNativeBuildDir)_deps\babylonnative-build\Plugins\NativeCapture\$(Configuration);
         $(BabylonNativeBuildDir)_deps\babylonnative-build\Plugins\NativeEngine\$(Configuration);
@@ -152,6 +145,13 @@
         $(BabylonNativeBuildDir)_deps\jsruntimehost-build\Core\Node-API-JSI\$(Configuration);
         $(BabylonNativeBuildDir)_deps\jsruntimehost-build\Polyfills\XMLHttpRequest\$(Configuration);
         $(BabylonNativeBuildDir)_deps\urllib-build\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\bgfx-build\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\glslang-build\glslang\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\glslang-build\glslang\OSDependent\Windows\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\glslang-build\OGLCompilersDLL\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\glslang-build\SPIRV\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\spirv-cross-build\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\openxr-sdk-build\src\loader\$(Configuration);
         %(AdditionalLibraryDirectories);
       </AdditionalLibraryDirectories>
       <!-- Library directories when building from npm package -->
