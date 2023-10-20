@@ -20,8 +20,8 @@ jobs:
         id: compressreact-native
         with:
           command: c
-          cwd: ./
-          files: Package/react-native
+          cwd: Package/react-native/
+          files: .
           outPath: react-native.tar.gz
 
       - name: Download Assembled-BaseKit-iOSAndroid 0.69 Folder
@@ -34,8 +34,11 @@ jobs:
         id: compressiosandroid069
         with:
           command: c
-          cwd: ./
-          files: Package/iOSAndroid0.69
+          cwd: Package/iOSAndroid0.69/
+          files: |
+            android
+            ios
+            react-native-babylon.podspec
           outPath: iOSAndroid0.69.tar.gz
 
       - name: Download Assembled-BaseKit-iOSAndroid 0.70 Folder
@@ -48,8 +51,11 @@ jobs:
         id: compressiosandroid070
         with:
           command: c
-          cwd: ./
-          files: Package/iOSAndroid0.70
+          cwd: Package/iOSAndroid0.70/
+          files: |
+            android
+            ios
+            react-native-babylon.podspec
           outPath: iOSAndroid0.70.tar.gz
 
       - name: Download Assembled-BaseKit-iOSAndroid 0.71 Folder
@@ -62,8 +68,11 @@ jobs:
         id: compressiosandroid071
         with:
           command: c
-          cwd: ./
-          files: Package/iOSAndroid0.71
+          cwd: Package/iOSAndroid0.71/
+          files: |
+            android
+            ios
+            react-native-babylon.podspec
           outPath: iOSAndroid0.71.tar.gz
 
       - name: Download Assembled-BaseKit-Windows 0.69 Folder
@@ -76,8 +85,10 @@ jobs:
         id: compresswindows069
         with:
           command: c
-          cwd: ./
-          files: Package/Windows0.69
+          cwd: Package/Windows0.69/
+          files: |
+            windows
+            index.ts
           outPath: Windows0.69.tar.gz
 
       - name: Download Assembled-BaseKit-Windows 0.70 Folder
@@ -90,8 +101,10 @@ jobs:
         id: compresswindows070
         with:
           command: c
-          cwd: ./
-          files: Package/Windows0.70
+          cwd: Package/Windows0.70/
+          files: |
+            windows
+            index.ts
           outPath: Windows0.70.tar.gz
 
       - name: Download Assembled-BaseKit-Windows 0.71 Folder
@@ -104,8 +117,10 @@ jobs:
         id: compresswindows071
         with:
           command: c
-          cwd: ./
-          files: Package/Windows0.71
+          cwd: Package/Windows0.71/
+          files: |
+            windows
+            index.ts
           outPath: Windows0.71.tar.gz
 
       - name: Release
