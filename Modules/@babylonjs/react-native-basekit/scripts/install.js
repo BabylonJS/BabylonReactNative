@@ -2,6 +2,26 @@ const https = require('https');
 const zlib = require('zlib');
 const tar = require('tar');
 
+function getArgument(name) {
+  const flags = process.argv.slice(2), index = flags.lastIndexOf(name);
+
+  if (index === -1 || index + 1 >= flags.length) {
+    return null;
+  }
+
+  return flags[index + 1];
+}
+
+function getBinaryUrl(package, binaryFilename) {
+  var site = getArgument('--brn-binary-site') ||
+              process.env.BRN_BINARY_SITE  ||
+              process.env.npm_config_brn_binary_site ||
+              (package.nodeBabylonConfig && package.nodeBabylonConfig.binarySite) ||
+              'https://github.com/CedricGuillemet/BabylonReactNative-1/releases/download';
+
+  return [site, /*'v' +*/ package.version, binaryFilename].join('/');
+}
+
 const downloadAndExtract = (url) => {
   const options = {
     followRedirects: true, // Follow HTTP 3xx redirects
@@ -23,15 +43,16 @@ const downloadAndExtract = (url) => {
         })
         .on('error', (err) => {
           console.error('Error extracting the tar.gz file:', err);
+          process.exit(1);
         });
     } else {
       console.error('Failed to download the file. Status code:', response.statusCode);
-      // thow ?
+      process.exit(1);
     }
   })
   .on('error', (err) => {
     console.error('Error downloading the file:', err);
-    // thow ?
+    process.exit(1);
   });
 };
 
@@ -41,7 +62,7 @@ function Install() {
   const packageJson = require(packageJsonPath);
   if (!packageJson.version) {
     console.err("Babylon React Native version not found");
-    // throw
+    process.exit(1);
   }
   // get user project react-native version
   const projectPackageJsonPath = process.env.npm_config_local_prefix + '/package.json';
@@ -61,26 +82,27 @@ function Install() {
       reactNativePostfix = "0.69";
     } else {
       console.error("Unsupported react native version.");
-      // TODO: throw 
+      process.exit(1);
     }
     console.log(`Downloading Babylon React Native version ${reactNativePostfix} from Package version ${packageJson.version}.`);
 
-    const rootUrl = 'https://github.com/CedricGuillemet/BabylonReactNative-1/releases/download';
-    const reactNative = `${rootUrl}/${packageJson.version}/react-native.tar.gz`;
-    const reactNativeiOSAndroid = `${rootUrl}/${packageJson.version}/iOSAndroid${reactNativePostfix}.tar.gz`;
-    const reactNativeiOSWindows = `${rootUrl}/${packageJson.version}/Windows${reactNativePostfix}.tar.gz`;
+    const reactNative = getBinaryUrl(packageJson, 'react-native.tar.gz');
+    const reactNativeiOSAndroid = getBinaryUrl(packageJson, `iOSAndroid${reactNativePostfix}.tar.gz`);
 
     // Start the download and extraction process
     downloadAndExtract(reactNative);
     downloadAndExtract(reactNativeiOSAndroid);
+
+    // check and download Windows binary if react-native-windows is found in project package
     const reactNativeWindowsVersion = projectPackageJson.dependencies['react-native-windows'];
     if (reactNativeWindowsVersion) {
       console.log("react-native-windows detected.");
+      const reactNativeiOSWindows = getBinaryUrl(packageJson, `Windows${reactNativePostfix}.tar.gz`);
       downloadAndExtract(reactNativeiOSWindows);
     }
   } else {
-    console.warn("No react-native version found for BabylonReactNative.");
-    //throw here ?
+    console.error("No react-native version found for BabylonReactNative.");
+    process.exit(1);
   }
 }
 
