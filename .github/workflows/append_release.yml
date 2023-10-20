@@ -21,7 +21,38 @@ jobs:
         with:
           command: c
           cwd: Package/react-native/
-          files: .
+          files: | # all files except package.json and readme.md
+            BabylonModule.d.ts
+            BabylonModule.js
+            BabylonModule.js.map
+            EngineHook.d.ts
+            EngineHook.js
+            EngineHook.js.map
+            EngineView.d.ts
+            EngineView.js
+            EngineView.js.map
+            FontFace.d.ts
+            FontFace.js
+            FontFace.js.map
+            index.d.ts
+            index.js
+            index.js.map
+            NativeCapture.d.ts
+            NativeCapture.js
+            NativeCapture.js.map
+            NativeEngineHook.d.ts
+            NativeEngineHook.js
+            NativeEngineHook.js.map
+            NativeEngineView.d.ts
+            NativeEngineView.js
+            NativeEngineView.js.map
+            ReactNativeEngine.d.ts
+            ReactNativeEngine.js
+            ReactNativeEngine.js.map
+            shared
+            VersionValidation.d.ts
+            VersionValidation.js
+            VersionValidation.js.map
           outPath: react-native.tar.gz
 
       - name: Download Assembled-BaseKit-iOSAndroid 0.69 Folder

@@ -317,3 +317,11 @@ jobs:
         working-directory: ./Package/Assembled-BaseKit-Windows0.71
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+# ROOT Basekit package
+      - name: Version & Publish Package @babylonjs/react-native-basekit
+        run: |
+          npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
+          npm publish --access public --tag ${{ github.event.inputs.NPM_tag }} ${{ github.event.inputs.NPM_publish_arg }}
+        working-directory: ./Modules/@babylonjs/react-native-basekit
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
