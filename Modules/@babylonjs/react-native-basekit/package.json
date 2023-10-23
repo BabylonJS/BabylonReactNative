@@ -3,10 +3,10 @@
   "title": "React Native Babylon Basekit",
   "version": "0.0.1",
   "description": "Babylon Native integration into React Native",
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "install": "node scripts/install.js"
+    "postinstall": "node scripts/install.js"
   },
   "repository": {
     "type": "git",

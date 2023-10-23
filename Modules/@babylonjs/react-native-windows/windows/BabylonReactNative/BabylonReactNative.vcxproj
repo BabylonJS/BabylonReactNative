@@ -22,12 +22,15 @@
   <PropertyGroup Label="ReactNativeWindowsProps">
     <!-- First try and resolve react-native-windows package at a relative location when installing the @babylonjs/react-native package in your project -->
     <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(ProjectDir)..\..\..\..\..\node_modules\react-native-windows\package.json')">$(ProjectDir)\..\..\..\..\..\node_modules\react-native-windows\</ReactNativeWindowsDir>
+	<!-- Then try and resolve react-native-basekit  package at a relative location when installing the @babylonjs/react-native-basekit package in your project-->
+	<ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(ProjectDir)..\..\..\..\..\node_modules\react-native-basekit\package.json')">$(ProjectDir)\..\..\..\..\..\node_modules\react-native-basekit\</ReactNativeWindowsDir>
     <!-- Else try and resolve react-native-windows package in the Apps\Playground\node_modules folder relative to the BabylonNative.vcxproj location in the github repo -->
     <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(SolutionDir)..\node_modules\react-native-windows\package.json')">$(SolutionDir)\..\node_modules\react-native-windows\</ReactNativeWindowsDir>
     <!-- If all else failes, try and resolve react-native-windows package using the Playground app node_modules -->
     <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(ProjectDir)..\..\..\..\..\Apps\Playground\Playground\node_modules\react-native-windows\package.json')">$(ProjectDir)\..\..\..\..\..\Apps\Playground\Playground\node_modules\react-native-windows\</ReactNativeWindowsDir>
   </PropertyGroup>
   <PropertyGroup Label="BabylonReactNativeProps">
+	<BabylonNativeBasekitProjDir Condition="'$(BabylonReactNativeDir)' == '' And Exists('$(ProjectDir)\..\..\..\react-native-basekit')">$(ProjectDir)..\..\..\react-native-basekit\</BabylonNativeBasekitProjDir>
     <BabylonNativeIOSAndroidProjDir Condition="'$(BabylonReactNativeDir)' == '' And Exists('$(ProjectDir)\..\..\..\react-native-iosandroid')">$(ProjectDir)..\..\..\react-native-iosandroid\</BabylonNativeIOSAndroidProjDir>
     <BabylonReactNativeDir Condition="'$(BabylonReactNativeDir)' == '' And Exists('$(ProjectDir)\..\..\..\react-native')">$(ProjectDir)..\..\..\react-native\</BabylonReactNativeDir>
     <BabylonNativeDir Condition="Exists('$(BabylonReactNativeDir)Build')">$(BabylonReactNativeDir)Build\</BabylonNativeDir>
@@ -168,6 +171,7 @@
       <!-- Include project headers when building in the repo -->
       <AdditionalIncludeDirectories Condition="Exists('$(BabylonReactNativeDir)shared')">$(BabylonReactNativeDir)shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="Exists('$(BabylonNativeIOSAndroidProjDir)shared')">$(BabylonNativeIOSAndroidProjDir)shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+	  <AdditionalIncludeDirectories Condition="Exists('$(BabylonNativeBasekitProjDir)shared')">$(BabylonNativeBasekitProjDir)shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
