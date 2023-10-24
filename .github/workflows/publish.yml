@@ -152,17 +152,17 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: 'Assembled-BaseKit-Windows0.69'
-          path: Package/Assembled-Windows0.69
+          path: Package/Assembled-BaseKit-Windows0.69
       - name: Download Assembled-BaseKit-Windows 0.70 Folder
         uses: actions/download-artifact@v2
         with:
           name: 'Assembled-Windows0.70'
-          path: Package/Assembled-Windows0.70
+          path: Package/Assembled-BaseKit-Windows0.70
       - name: Download Assembled-BaseKit-Windows 0.71 Folder
         uses: actions/download-artifact@v2
         with:
           name: 'Assembled-BaseKit-Windows0.71'
-          path: Package/Assembled-Windows0.71
+          path: Package/Assembled-BaseKit-Windows0.71
 
       - name: Display structure of downloaded Assembled and Assembled-Windows folders
         run: ls -R
