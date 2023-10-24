@@ -158,7 +158,7 @@ jobs:
           outPath: Windows0.71.tar.gz
 
       - name: Preview Release
-        if: ${{ inputs.is-preview == 'true' }}
+        if: ${{ inputs.is-preview == true }}
         uses: softprops/action-gh-release@v1
         with:
           files: |
@@ -176,7 +176,7 @@ jobs:
           prerelease: true
 
       - name: Release
-        if: ${{ inputs.is-preview == 'false' }}
+        if: ${{ inputs.is-preview == false }}
         uses: softprops/action-gh-release@v1
         with:
           files: |
