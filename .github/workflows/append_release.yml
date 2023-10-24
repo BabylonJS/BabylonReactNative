@@ -157,25 +157,8 @@ jobs:
             index.ts
           outPath: Windows0.71.tar.gz
 
-#      - name: Release
-#        uses: softprops/action-gh-release@v1
-#        with:
-#          files: |
-#            react-native.tar.gz
-#            Windows0.69.tar.gz
-#            Windows0.70.tar.gz
-#            Windows0.71.tar.gz
-#            iOSAndroid0.69.tar.gz
-#            iOSAndroid0.70.tar.gz
-#            iOSAndroid0.71.tar.gz
-#          tag_name: ${{ inputs.release-name }}
-#          name: ${{ inputs.release-name }}
-#          body: "Release for ${{ inputs.release-name }}"
-#          draft: false
-#          prerelease: false
-#        if: ${{ inputs.is-preview }} == true
-
-      - name: Release
+      - name: Preview Release
+        if: ${{ inputs.is-preview == 'true' }}
         uses: softprops/action-gh-release@v1
         with:
           files: |
@@ -186,4 +169,22 @@ jobs:
             iOSAndroid0.69.tar.gz
             iOSAndroid0.70.tar.gz
             iOSAndroid0.71.tar.gz
-#        if: ${{ inputs.is-preview }} == false
+          tag_name: ${{ inputs.release-name }}
+          name: ${{ inputs.release-name }}
+          body: "Preview release for ${{ inputs.release-name }}"
+          draft: true
+          prerelease: true
+        if: ${{ inputs.is-preview }} == true
+
+      - name: Release
+        if: ${{ inputs.is-preview == 'false' }}
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            react-native.tar.gz
+            Windows0.69.tar.gz
+            Windows0.70.tar.gz
+            Windows0.71.tar.gz
+            iOSAndroid0.69.tar.gz
+            iOSAndroid0.70.tar.gz
+            iOSAndroid0.71.tar.gz
