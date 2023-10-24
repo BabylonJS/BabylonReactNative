@@ -73,6 +73,7 @@ jobs:
     uses: ./.github/workflows/append_release.yml
     with:
       release-name: ${GITHUB_REF/refs\/tags\//}
+      is-preview: false
 
   package:
     needs: [build-typescript, build-android-ios-064, build-android-ios-065, build-android-ios-069, build-android-ios-070, build-android-ios-071, build-windows-064, build-windows-065, build-windows-069, build-windows-070, build-windows-071]
@@ -158,17 +159,17 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: 'Assembled-BaseKit-Windows0.69'
-          path: Package/Assembled-Windows0.69
+          path: Package/Assembled-BaseKit-Windows0.69
       - name: Download Assembled-BaseKit-Windows 0.70 Folder
         uses: actions/download-artifact@v2
         with:
           name: 'Assembled-Windows0.70'
-          path: Package/Assembled-Windows0.70
+          path: Package/Assembled-BaseKit-Windows0.70
       - name: Download Assembled-BaseKit-Windows 0.71 Folder
         uses: actions/download-artifact@v2
         with:
           name: 'Assembled-BaseKit-Windows0.71'
-          path: Package/Assembled-Windows0.71
+          path: Package/Assembled-BaseKit-Windows0.71
 
       - name: Display structure of downloaded Assembled and Assembled-Windows folders
         run: ls -R

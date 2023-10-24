@@ -89,6 +89,7 @@ jobs:
     uses: ./.github/workflows/append_release.yml
     with:
       release-name: ${{ github.event.inputs.release_version }}
+      is-preview: true
 
   package:
     needs: [build-typescript, build-android-ios-064, build-android-ios-065, build-android-ios-069, build-android-ios-070, build-android-ios-071, build-windows-064, build-windows-065, build-windows-069, build-windows-070, build-windows-071]
