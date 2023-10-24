@@ -174,7 +174,6 @@ jobs:
           body: "Preview release for ${{ inputs.release-name }}"
           draft: true
           prerelease: true
-        if: ${{ inputs.is-preview }} == true
 
       - name: Release
         if: ${{ inputs.is-preview == 'false' }}
