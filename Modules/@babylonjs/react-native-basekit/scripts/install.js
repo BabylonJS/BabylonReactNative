@@ -1,6 +1,41 @@
 const https = require('https');
 const zlib = require('zlib');
 const tar = require('tar');
+const path = require('path');
+const fs = require('fs');
+
+function getCachePathCandidates() {
+  return [
+    process.env.npm_config_sass_binary_cache,
+    process.env.npm_config_cache,
+  ].filter(function(_) { return _; });
+}
+
+function getCached(package, binaryFilename) {
+  return [getCachePathCandidates(), 'BabylonReactNative', package.version, binaryFilename].join('/');
+}
+
+function useCachedFile(filePath) {
+  if (fs.existsSync(filePath)) {
+    console.log(`Using cached file ${filePath}`);
+    const gunzip = zlib.createGunzip();
+    const untar = tar.extract({ cwd: process.cwd() }); // Extract to the current working directory
+
+    const sourceStream = fs.createReadStream(filePath); 
+    sourceStream
+    .pipe(gunzip) // Decompress the .tar.gz file
+    .pipe(untar) // Extract the tar contents to the cwd
+    .on('error', (err) => {
+      console.error('Error extracting .tar.gz file:', err);
+      process.exit(1);
+    })
+    .on('end', () => {
+      console.log('Extraction completed successfully.');
+    });
+    return true;
+  }
+  return false;
+}
 
 function getArgument(name) {
   const flags = process.argv.slice(2), index = flags.lastIndexOf(name);
@@ -19,32 +54,49 @@ function getBinaryUrl(package, binaryFilename) {
               (package.nodeBabylonConfig && package.nodeBabylonConfig.binarySite) ||
               'https://github.com/CedricGuillemet/BabylonReactNative-1/releases/download';
 
-  return [site, /*'v' +*/ package.version, binaryFilename].join('/');
+  return [site, package.version, binaryFilename].join('/');
 }
 
-const downloadAndExtract = (url) => {
+const downloadExtractAndCache = (url, cachedFilePath) => {
   const options = {
     followRedirects: true, // Follow HTTP 3xx redirects
   };
 
   https.get(url, options, (response) => {
     if ([301, 302, 303, 307, 308].includes(response.statusCode)) {
-      // If the response is a redirect, recursively call downloadAndExtract with the new URL
-      downloadAndExtract(response.headers.location);
+      // If the response is a redirect, recursively call downloadExtractAndCache with the new URL
+      downloadExtractAndCache(response.headers.location, cachedFilePath);
     } else if (response.statusCode === 200) {
       const gunzip = zlib.createGunzip();
       const untar = tar.extract({ cwd: process.cwd() }); // Extract to the current working directory
 
-      response
-        .pipe(gunzip) // Unzip the response
-        .pipe(untar)  // Extract the tar file
-        .on('finish', () => {
-          //done
-        })
-        .on('error', (err) => {
-          console.error('Error extracting the tar.gz file:', err);
-          process.exit(1);
+      // create cache directory to store download file
+      try {
+        fs.mkdirSync(path.dirname(cachedFilePath), {recursive: true});
+      } catch (err) {
+        console.error('Unable to create directory for cache', err);
+        process.exit(1);
+      }
+
+      const chunks = [];
+      response.on('data', (chunk) =>{
+        chunks.push(chunk);
+      })
+      .on('end', (err) => {
+        const fileData = Buffer.concat(chunks);
+        fs.writeFile(cachedFilePath, fileData, (err) => {
+          if (err) {
+            console.error('Error writing BabylonReactNative cache file:', err);
+            process.exit(1);
+          }
         });
+      })
+      .pipe(gunzip) // Unzip the response
+      .pipe(untar)  // Extract the tar file
+      .on('error', (err) => {
+        console.error('Error extracting the tar.gz file:', err);
+        process.exit(1);
+      });
     } else {
       console.error('Failed to download the file. Status code:', response.statusCode);
       process.exit(1);
@@ -84,21 +136,34 @@ function Install() {
       console.error("Unsupported react native version.");
       process.exit(1);
     }
-    console.log(`Downloading Babylon React Native version ${reactNativePostfix} from Package version ${packageJson.version}.`);
+    console.log(`Using Babylon React Native version ${reactNativePostfix} from Package version ${packageJson.version}.`);
 
-    const reactNative = getBinaryUrl(packageJson, 'react-native.tar.gz');
-    const reactNativeiOSAndroid = getBinaryUrl(packageJson, `iOSAndroid${reactNativePostfix}.tar.gz`);
+    const jsArchive = 'react-native.tar.gz';
+    const iosAndroidArchive = `iOSAndroid${reactNativePostfix}.tar.gz`;
+    const windowsArchive = `Windows${reactNativePostfix}.tar.gz`;
 
-    // Start the download and extraction process
-    downloadAndExtract(reactNative);
-    downloadAndExtract(reactNativeiOSAndroid);
+    const jsArchiveCachedPath = getCached(packageJson, jsArchive);
+    const iosAndroidArchiveCachedPath = getCached(packageJson, iosAndroidArchive);
+    const windowsArchiveCachedPath = getCached(packageJson, windowsArchive);
+
+    if (!useCachedFile(jsArchiveCachedPath)) {
+      const reactNative = getBinaryUrl(packageJson, jsArchive);
+      downloadExtractAndCache(reactNative, jsArchiveCachedPath);
+    }
+
+    if (!useCachedFile(iosAndroidArchiveCachedPath)) {
+      const reactNativeiOSAndroid = getBinaryUrl(packageJson, iosAndroidArchive);
+      downloadExtractAndCache(reactNativeiOSAndroid, iosAndroidArchiveCachedPath);
+    }
 
     // check and download Windows binary if react-native-windows is found in project package
     const reactNativeWindowsVersion = projectPackageJson.dependencies['react-native-windows'];
     if (reactNativeWindowsVersion) {
       console.log("react-native-windows detected.");
-      const reactNativeiOSWindows = getBinaryUrl(packageJson, `Windows${reactNativePostfix}.tar.gz`);
-      downloadAndExtract(reactNativeiOSWindows);
+      if (!useCachedFile(windowsArchiveCachedPath)) {
+        const reactNativeiOSWindows = getBinaryUrl(packageJson, windowsArchive);
+        downloadExtractAndCache(reactNativeiOSWindows, windowsArchiveCachedPath);
+      }
     }
   } else {
     console.error("No react-native version found for BabylonReactNative.");
