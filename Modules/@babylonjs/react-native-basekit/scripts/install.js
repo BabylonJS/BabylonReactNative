@@ -163,12 +163,15 @@ function install() {
   ) {
     const reactNativeVersion = projectPackageJson.dependencies["react-native"];
     console.log(`Detected React Native version: ${reactNativeVersion}`);
+
+    const [_, packageMinor] = reactNativeVersion.split('.').map(Number);
+
     reactNativePostfix = "";
-    if (reactNativeVersion >= "0.71") {
+    if (packageMinor >= "71") {
       reactNativePostfix = "0.71";
-    } else if (reactNativeVersion >= "0.70") {
+    } else if (packageMinor >= "70") {
       reactNativePostfix = "0.70";
-    } else if (reactNativeVersion >= "0.69") {
+    } else if (packageMinor >= "69") {
       reactNativePostfix = "0.69";
     } else {
       console.error("Unsupported react native version.");
