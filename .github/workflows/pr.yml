@@ -127,9 +127,6 @@ jobs:
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
-      - name: Git (Windows)
-        run: npx gulp initializeSubmodulesWindowsAgent
-        working-directory: ./Package
       - name: Gulp Setup Project ${{ matrix.platform }} (Windows)
         run: npx gulp makeUWPProject${{ matrix.platform }}
         working-directory: ./Package

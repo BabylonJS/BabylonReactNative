@@ -37,9 +37,6 @@ jobs:
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
-      - name: Git (Windows)
-        run: npx gulp initializeSubmodulesWindowsAgent --reactNative ${{ inputs.react-native-version }} --releaseVersion ${{ inputs.release-version }}
-        working-directory: ./Package
       - name: Gulp (Windows)
         run: npx gulp buildUWPPublish --reactNative ${{ inputs.react-native-version }} --releaseVersion ${{ inputs.release-version }}
         working-directory: ./Package
