@@ -61,7 +61,7 @@ function getBinaryUrl(package, binaryFilename) {
     process.env.BRN_BINARY_SITE ||
     process.env.npm_config_brn_binary_site ||
     (package.nodeBabylonConfig && package.nodeBabylonConfig.binarySite) ||
-    "https://github.com/CedricGuillemet/BabylonReactNative-1/releases/download";
+    "https://github.com/BabylonJS/BabylonReactNative/releases/download";
 
   return [site, package.version, binaryFilename].join("/");
 }
