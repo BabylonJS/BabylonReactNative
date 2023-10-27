@@ -10,13 +10,12 @@ This package has several **peer dependencies**. If these dependencies are unmet,
 
 ### Installation Configuration
 
-Downloaded dependencies are cache by default in directory specifiec by `npm_config_cache`. It's possible to specify a new cache directory by setting `npm_config_babylon_binary_cache` environment variable.
+Downloaded dependencies are cached by default in directory specified by `npm_config_cache`. It's possible to specify a new cache directory by setting `npm_config_babylon_binary_cache` environment variable.
 
 Also, it's possible to set the source of these downloaded dependencies. By default, it's using main Github repo releases: `https://github.com/BabylonJS/BabylonReactNative/releases/download`.
 Other possibilities are:
-- By command argument for `npm install` : `--brn-binary-site=https://mysite.com/downloads`
-- By environment variable `export npm_config_brn_binary_site=https://mysite.com/downloads`
-- By configuration in package.json: `nodeBabylonConfig: { binarySite: 'https://mysite.com/downloads'}`
+- By command argument for `npm install --brn-binary-site https://mysite.com/downloads`
+- By environment variable. on MacOS/Linux: `export npm_config_brn_binary_site=https://mysite.com/downloads`
 
 These case location must respect same hierarchy as the main Github repo releases.
 

@@ -45,8 +45,8 @@ function useCachedFile(filePath) {
 }
 
 function getArgument(name) {
-  const flags = process.argv.slice(2),
-    index = flags.lastIndexOf(name);
+  const flags = process.argv.slice(2);
+  const index = flags.lastIndexOf(name);
 
   if (index === -1 || index + 1 >= flags.length) {
     return null;
@@ -56,11 +56,10 @@ function getArgument(name) {
 }
 
 function getBinaryUrl(package, binaryFilename) {
-  var site =
+  const site =
     getArgument("--brn-binary-site") ||
     process.env.BRN_BINARY_SITE ||
     process.env.npm_config_brn_binary_site ||
-    (package.nodeBabylonConfig && package.nodeBabylonConfig.binarySite) ||
     "https://github.com/BabylonJS/BabylonReactNative/releases/download";
 
   return [site, package.version, binaryFilename].join("/");
@@ -71,8 +70,7 @@ function downloadExtractAndCache(url, cachedFilePath, cb) {
     followRedirects: true, // Follow HTTP 3xx redirects
   };
 
-  https
-    .get(url, options, (response) => {
+  https.get(url, options, (response) => {
       if ([301, 302, 303, 307, 308].includes(response.statusCode)) {
         // If the response is a redirect, recursively call downloadExtractAndCache with the new URL
         downloadExtractAndCache(response.headers.location, cachedFilePath, cb);
@@ -87,7 +85,7 @@ function downloadExtractAndCache(url, cachedFilePath, cb) {
             fs.mkdirSync(dir, { recursive: true });
           }
         } catch (err) {
-          reject(err);
+          cb(err);
         }
 
         var file = fs.createWriteStream(cachedFilePath);
@@ -96,20 +94,20 @@ function downloadExtractAndCache(url, cachedFilePath, cb) {
           .pipe(gunzip) // Unzip the response
           .pipe(untar) // Extract the tar file
           .on("error", (err) => {
-            reject(err);
+            cb(err);
           });
         response.pipe(file);
         file.on("finish", () => {
           file.close((err) => {
             if (err) {
-              reject(err);
+              cb(err);
             } else {
               cb();
             }
           }); // close() is async, call cb after close completes.
         });
       } else {
-        reject(
+        cb(
           `Failed to download the file. Status code: ${response.statusCode}`
         );
       }
