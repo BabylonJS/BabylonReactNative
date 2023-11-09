@@ -204,6 +204,7 @@ const buildUWP = gulp.series(makeUWPProject, buildUWPProject);
 
 const copyCommonFiles = () => {
   return gulp.src('../Modules/@babylonjs/react-native/README.md')
+    .pipe(gulp.src('../cgmanifest.json'))
     .pipe(gulp.dest('Assembled'));
 };
 
