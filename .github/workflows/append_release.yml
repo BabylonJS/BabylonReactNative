@@ -18,45 +18,10 @@ jobs:
         with:
           name: 'Assembled'
           path: Package/react-native
+
       - name: Compress Package react-native
-        uses: a7ul/tar-action@v1.1.3
-        id: compressreact-native
-        with:
-          command: c
-          cwd: Package/react-native/
-          files: | # all files except package.json and readme.md
-            BabylonModule.d.ts
-            BabylonModule.js
-            BabylonModule.js.map
-            EngineHook.d.ts
-            EngineHook.js
-            EngineHook.js.map
-            EngineView.d.ts
-            EngineView.js
-            EngineView.js.map
-            FontFace.d.ts
-            FontFace.js
-            FontFace.js.map
-            index.d.ts
-            index.js
-            index.js.map
-            NativeCapture.d.ts
-            NativeCapture.js
-            NativeCapture.js.map
-            NativeEngineHook.d.ts
-            NativeEngineHook.js
-            NativeEngineHook.js.map
-            NativeEngineView.d.ts
-            NativeEngineView.js
-            NativeEngineView.js.map
-            ReactNativeEngine.d.ts
-            ReactNativeEngine.js
-            ReactNativeEngine.js.map
-            shared
-            VersionValidation.d.ts
-            VersionValidation.js
-            VersionValidation.js.map
-          outPath: react-native.tar.gz
+        run: |
+          tar --exclude='readme.md' --exclude='package.json' -czvf react-native.tar.gz -C Package/react-native/ .
 
       - name: Download Assembled-BaseKit-iOSAndroid 0.69 Folder
         uses: actions/download-artifact@v2
