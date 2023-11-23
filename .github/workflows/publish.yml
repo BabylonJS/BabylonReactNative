@@ -156,7 +156,7 @@ jobs:
       - name: Download Assembled-BaseKit-Windows 0.70 Folder
         uses: actions/download-artifact@v2
         with:
-          name: 'Assembled-Windows0.70'
+          name: 'Assembled-BaseKit-Windows0.70'
           path: Package/Assembled-BaseKit-Windows0.70
       - name: Download Assembled-BaseKit-Windows 0.71 Folder
         uses: actions/download-artifact@v2
