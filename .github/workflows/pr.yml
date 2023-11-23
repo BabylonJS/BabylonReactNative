@@ -33,6 +33,12 @@ jobs:
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          check-latest: true
       - name: Gulp (Android)
         run: npx gulp buildAndroid
         working-directory: ./Package
@@ -80,6 +86,12 @@ jobs:
           cmake-version: '3.26.3'
       - name: Setup Ninja
         run: brew install ninja
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          check-latest: true
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
