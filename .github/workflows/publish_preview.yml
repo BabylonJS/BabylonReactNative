@@ -84,6 +84,13 @@ jobs:
     with:
       release-version: ${{ github.event.inputs.release_version }}
 
+  append-release:
+    needs: [build-typescript, build-android-ios-069, build-android-ios-070, build-android-ios-071, build-windows-069, build-windows-070, build-windows-071]
+    uses: ./.github/workflows/append_release.yml
+    with:
+      release-name: ${{ github.event.inputs.release_version }}
+      is-preview: true
+
   package:
     needs: [build-typescript, build-android-ios-064, build-android-ios-065, build-android-ios-069, build-android-ios-070, build-android-ios-071, build-windows-064, build-windows-065, build-windows-069, build-windows-070, build-windows-071]
     runs-on: macos-latest
@@ -309,5 +316,13 @@ jobs:
           npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
           npm publish --access public --tag ${{ github.event.inputs.NPM_tag }} ${{ github.event.inputs.NPM_publish_arg }}
         working-directory: ./Package/Assembled-BaseKit-Windows0.71
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+# ROOT Basekit package
+      - name: Version & Publish Package @babylonjs/react-native-basekit
+        run: |
+          npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
+          npm publish --access public --tag ${{ github.event.inputs.NPM_tag }} ${{ github.event.inputs.NPM_publish_arg }}
+        working-directory: ./Modules/@babylonjs/react-native-basekit
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
