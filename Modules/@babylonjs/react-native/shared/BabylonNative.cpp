@@ -73,6 +73,12 @@ namespace BabylonNative
 
         ~ReactNativeModule() override
         {
+            if (g_graphicsDevice)
+            {
+                g_update->Finish();
+                g_graphicsDevice->FinishRenderingCurrentFrame();
+            }
+
             *m_isRunning = false;
             Napi::Detach(m_env);
         }
@@ -91,11 +97,20 @@ namespace BabylonNative
             {
                 g_graphicsDevice.emplace(m_graphicsConfig);
                 g_update.emplace(g_graphicsDevice->GetUpdate("update"));
+
+                g_graphicsDevice->StartRenderingCurrentFrame();
+                g_update->Start();
             }
             else
             {
+                g_update->Finish();
+                g_graphicsDevice->FinishRenderingCurrentFrame();
+
                 g_graphicsDevice->UpdateWindow(m_graphicsConfig.Window);
                 g_graphicsDevice->UpdateSize(m_graphicsConfig.Width, m_graphicsConfig.Height);
+
+                g_graphicsDevice->StartRenderingCurrentFrame();
+                g_update->Start();
             }
             g_graphicsDevice->UpdateMSAA(mMSAAValue);
             g_graphicsDevice->UpdateAlphaPremultiplied(mAlphaPremultiplied);
@@ -150,10 +165,10 @@ namespace BabylonNative
             // Otherwise rendering can be implicitly enabled, which may not be desirable (e.g. after the engine is disposed).
             if (g_graphicsDevice && m_isRenderingEnabled)
             {
-                g_graphicsDevice->StartRenderingCurrentFrame();
-                g_update->Start();
                 g_update->Finish();
                 g_graphicsDevice->FinishRenderingCurrentFrame();
+                g_graphicsDevice->StartRenderingCurrentFrame();
+                g_update->Start();
             }
         }
 
