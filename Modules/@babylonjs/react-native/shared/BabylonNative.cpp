@@ -103,8 +103,11 @@ namespace BabylonNative
             }
             else
             {
-                g_update->Finish();
-                g_graphicsDevice->FinishRenderingCurrentFrame();
+                if (m_isRenderingEnabled)
+                {
+                    g_update->Finish();
+                    g_graphicsDevice->FinishRenderingCurrentFrame();
+                }
 
                 g_graphicsDevice->UpdateWindow(m_graphicsConfig.Window);
                 g_graphicsDevice->UpdateSize(m_graphicsConfig.Width, m_graphicsConfig.Height);
@@ -181,6 +184,8 @@ namespace BabylonNative
         {
             if (g_graphicsDevice)
             {
+                g_update->Finish();
+                g_graphicsDevice->FinishRenderingCurrentFrame();
                 g_nativeCanvas->FlushGraphicResources();
                 g_graphicsDevice->DisableRendering();
             }
