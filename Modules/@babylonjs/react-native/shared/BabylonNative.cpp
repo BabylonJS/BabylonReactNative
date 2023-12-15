@@ -97,9 +97,6 @@ namespace BabylonNative
             {
                 g_graphicsDevice.emplace(m_graphicsConfig);
                 g_update.emplace(g_graphicsDevice->GetUpdate("update"));
-
-                g_graphicsDevice->StartRenderingCurrentFrame();
-                g_update->Start();
             }
             else
             {
@@ -111,14 +108,12 @@ namespace BabylonNative
 
                 g_graphicsDevice->UpdateWindow(m_graphicsConfig.Window);
                 g_graphicsDevice->UpdateSize(m_graphicsConfig.Width, m_graphicsConfig.Height);
-
-                g_graphicsDevice->StartRenderingCurrentFrame();
-                g_update->Start();
             }
             g_graphicsDevice->UpdateMSAA(mMSAAValue);
             g_graphicsDevice->UpdateAlphaPremultiplied(mAlphaPremultiplied);
 
-            g_graphicsDevice->EnableRendering();
+            g_graphicsDevice->StartRenderingCurrentFrame();
+            g_update->Start();
 
             std::call_once(m_isGraphicsInitialized, [this]()
             {
