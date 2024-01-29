@@ -19,18 +19,6 @@ on:
         default: --dry-run
 
 jobs:
-  build-android-ios-064:
-    uses: ./.github/workflows/ios_android.yml
-    with:
-      react-native-version: '0.64'
-      release-version: ${{ github.event.inputs.release_version }}
-
-  build-android-ios-065:
-    uses: ./.github/workflows/ios_android.yml
-    with:
-      react-native-version: '0.65'
-      release-version: ${{ github.event.inputs.release_version }}
-
   build-android-ios-069:
     uses: ./.github/workflows/ios_android.yml
     with:
@@ -47,18 +35,6 @@ jobs:
     uses: ./.github/workflows/ios_android.yml
     with:
       react-native-version: '0.71'
-      release-version: ${{ github.event.inputs.release_version }}
-
-  build-windows-064:
-    uses: ./.github/workflows/windows.yml
-    with:
-      react-native-version: '0.64'
-      release-version: ${{ github.event.inputs.release_version }}
-
-  build-windows-065:
-    uses: ./.github/workflows/windows.yml
-    with:
-      react-native-version: '0.65'
       release-version: ${{ github.event.inputs.release_version }}
 
   build-windows-069:
@@ -85,7 +61,7 @@ jobs:
       release-version: ${{ github.event.inputs.release_version }}
 
   package:
-    needs: [build-typescript, build-android-ios-064, build-android-ios-065, build-android-ios-069, build-android-ios-070, build-android-ios-071, build-windows-064, build-windows-065, build-windows-069, build-windows-070, build-windows-071]
+    needs: [build-typescript, build-android-ios-069, build-android-ios-070, build-android-ios-071, build-windows-069, build-windows-070, build-windows-071]
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
@@ -98,16 +74,6 @@ jobs:
         with:
           name: 'Assembled'
           path: Package/Assembled
-      - name: Download Assembled-iOSAndroid 0.64 Folder
-        uses: actions/download-artifact@v2
-        with:
-          name: 'Assembled-iOSAndroid0.64'
-          path: Package/Assembled-iOSAndroid0.64
-      - name: Download Assembled-iOSAndroid 0.65 Folder
-        uses: actions/download-artifact@v2
-        with:
-          name: 'Assembled-iOSAndroid0.65'
-          path: Package/Assembled-iOSAndroid0.65
       - name: Download Assembled-iOSAndroid 0.69 Folder
         uses: actions/download-artifact@v2
         with:
@@ -123,16 +89,6 @@ jobs:
         with:
           name: 'Assembled-iOSAndroid0.71'
           path: Package/Assembled-iOSAndroid0.71
-      - name: Download Assembled-Windows 0.64 Folder
-        uses: actions/download-artifact@v2
-        with:
-          name: 'Assembled-Windows0.64'
-          path: Package/Assembled-Windows0.64
-      - name: Download Assembled-Windows 0.65 Folder
-        uses: actions/download-artifact@v2
-        with:
-          name: 'Assembled-Windows0.65'
-          path: Package/Assembled-Windows0.65
       - name: Download Assembled-Windows 0.69 Folder
         uses: actions/download-artifact@v2
         with:
@@ -196,20 +152,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Version & Publish Package @babylonjs/react-native-iosandroid-0-64
-        run: |
-          npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
-          npm publish --access public --tag ${{ github.event.inputs.NPM_tag }} ${{ github.event.inputs.NPM_publish_arg }}
-        working-directory: ./Package/Assembled-iOSAndroid0.64
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Version & Publish Package @babylonjs/react-native-iosandroid-0-65
-        run: |
-          npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
-          npm publish --access public --tag ${{ github.event.inputs.NPM_tag }} ${{ github.event.inputs.NPM_publish_arg }}
-        working-directory: ./Package/Assembled-iOSAndroid0.65
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Version & Publish Package @babylonjs/react-native-iosandroid-0-69
         run: |
           npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
@@ -232,20 +174,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Version & Publish Package @babylonjs/react-native-windows-0-64
-        run: |
-          npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
-          npm publish --access public --tag ${{ github.event.inputs.NPM_tag }} ${{ github.event.inputs.NPM_publish_arg }}
-        working-directory: ./Package/Assembled-Windows0.64
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Version & Publish Package @babylonjs/react-native-windows-0-65
-        run: |
-          npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
-          npm publish --access public --tag ${{ github.event.inputs.NPM_tag }} ${{ github.event.inputs.NPM_publish_arg }}
-        working-directory: ./Package/Assembled-Windows0.65
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Version & Publish Package @babylonjs/react-native-windows-0-69
         run: |
           npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
