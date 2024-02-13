@@ -8,12 +8,35 @@ const shelljs = require('shelljs');
 const rename = require('gulp-rename');
 const glob = require('glob');
 const chalk = require('chalk');
+const marked = require('marked');
 
 let assemblediOSAndroidDir = 'Assembled-iOSAndroid';
 let assembledWindowsDir = 'Assembled-Windows';
 let basekitBuild = false;
 let cmakeBasekitBuildDefinition = '';
 let basekitPackagePath = '';
+
+
+const makeHTMLNotice = async () => {
+  fs.readFile('../README.md', 'utf8', (err, data) => {
+    if (err) {
+      console.error('Error reading file:', err);
+      return;
+    }
+
+    // Convert Markdown to HTML
+    const html = marked.parse(data);
+
+    // Write the HTML to a file
+    fs.writeFile('../NOTICE.html', html, 'utf8', err => {
+      if (err) {
+        console.error('Error writing file:', err);
+        return;
+      }
+      console.log('NOTICE Conversion complete!');
+    });
+});
+};
 
 function exec(command, workingDirectory = '.', logCommand = true) {
   if (logCommand) {
@@ -615,6 +638,8 @@ const buildIOSAndroid = gulp.series(patchPackageVersion, buildIOS, buildAndroid,
 const build = gulp.series(buildIOSAndroid, switchToBaseKit, buildIOSAndroid);
 const rebuild = gulp.series(clean, build);
 const pack = gulp.series(rebuild, createPackage);
+
+exports.buildNotice = makeHTMLNotice;
 
 exports.validateAssembled = validateAssembled;
 exports.validateAssemblediOSAndroid = validateAssemblediOSAndroid;
