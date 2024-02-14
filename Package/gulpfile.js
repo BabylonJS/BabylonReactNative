@@ -16,26 +16,15 @@ let basekitBuild = false;
 let cmakeBasekitBuildDefinition = '';
 let basekitPackagePath = '';
 
-
 const makeHTMLNotice = async () => {
-  fs.readFile('../README.md', 'utf8', (err, data) => {
-    if (err) {
-      console.error('Error reading file:', err);
-      return;
-    }
-
-    // Convert Markdown to HTML
-    const html = marked.parse(data);
-
-    // Write the HTML to a file
-    fs.writeFile('../NOTICE.html', html, 'utf8', err => {
-      if (err) {
-        console.error('Error writing file:', err);
-        return;
-      }
-      console.log('NOTICE Conversion complete!');
+  return fs.promises.readFile('../README.md', 'utf8').then(content =>{
+      const html = marked.parse(content);
+      return fs.promises.writeFile('../NOTICE.html', html, 'utf8').then(() => {
+        console.log(chalk.black.bgCyan(`NOTICE Conversion complete!`));
+      })
+    }).catch(reason =>{
+      console.error(chalk.white.bgRedBright(`Error generating notice : ${reason}`));
     });
-});
 };
 
 function exec(command, workingDirectory = '.', logCommand = true) {
@@ -639,7 +628,7 @@ const build = gulp.series(buildIOSAndroid, switchToBaseKit, buildIOSAndroid);
 const rebuild = gulp.series(clean, build);
 const pack = gulp.series(rebuild, createPackage);
 
-exports.buildNotice = makeHTMLNotice;
+exports.makeHTMLNotice = makeHTMLNotice;
 
 exports.validateAssembled = validateAssembled;
 exports.validateAssemblediOSAndroid = validateAssemblediOSAndroid;
