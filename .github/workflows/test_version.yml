@@ -71,12 +71,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ github.event.inputs.Node_Version }}
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          check-latest: true
       - name: Build Playground Android
         run: |
           npm uninstall -g react-native-cli @react-native-community/cli
@@ -143,12 +137,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ github.event.inputs.Node_Version }}
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          check-latest: true
       - name: Build Playground Android
         run: |
           npm uninstall -g react-native-cli @react-native-community/cli
