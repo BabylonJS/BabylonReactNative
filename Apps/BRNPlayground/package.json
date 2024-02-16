@@ -13,12 +13,20 @@
     "macos": "react-native run-macos --scheme BRNPlayground",
     "start": "react-native start",
     "test": "jest",
-    "windows": "react-native run-windows --sln windows/BRNPlayground.sln"
+    "windows": "react-native run-windows --sln windows/BRNPlayground.sln",
+    "postinstall": "node ./postinstall.js"
   },
   "dependencies": {
+    "@babylonjs/core": "6.14.0",
+    "@babylonjs/loaders": "6.14.0",
+    "@babylonjs/react-native": "file:../../Modules/@babylonjs/react-native",
+    "@babylonjs/react-native-iosandroid": "file:../../Modules/@babylonjs/react-native-iosandroid",
+    "@babylonjs/react-native-windows": "file:../../Modules/@babylonjs/react-native-windows",
+    "@react-native-community/slider": "^4.2.2",
     "react": "18.2.0",
     "react-native": "0.73.3",
     "react-native-macos": "^0.73.0",
+    "react-native-permissions": "^3.0.0",
     "react-native-windows": "^0.73.0"
   },
   "devDependencies": {

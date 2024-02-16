@@ -1,3 +1,5 @@
+const path = require("path");
+
 const { makeMetroConfig } = require("@rnx-kit/metro-config");
 module.exports = makeMetroConfig({
   transformer: {
@@ -8,4 +10,9 @@ module.exports = makeMetroConfig({
       },
     }),
   },
+  watchFolders: [
+    path.join(__dirname, "node_modules", "@babylonjs/react-native"),
+    path.join(__dirname, "node_modules", "@babylonjs/react-native-iosandroid"),
+    path.join(__dirname, "node_modules", "@babylonjs/react-native-windows"),
+  ],
 });
