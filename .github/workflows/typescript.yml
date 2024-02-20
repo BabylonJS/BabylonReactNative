@@ -22,7 +22,7 @@ jobs:
         run: npm install
         working-directory: ./Apps/Playground
       - name: Select React Native Version 
-        run: npm run select 0.64
+        run: npm run select 0.69
         working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install

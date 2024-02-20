@@ -5,7 +5,7 @@ on:
     types: [babylonnative-master-update]
 
 env:
-  BRN_Version: 0.64
+  BRN_Version: 0.69
 
 jobs:
   build-android:
