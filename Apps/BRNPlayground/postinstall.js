@@ -2,16 +2,21 @@ const os = require("os");
 const shelljs = require("shelljs");
 const chalk = require("chalk");
 
+function exec(cmd, options) {
+  const { code } = shelljs.exec(cmd, options);
+  if (code !== 0) {
+    shelljs.exit(code);
+  }
+}
+
 function iosCMake() {
   console.log(chalk.black.bgCyan("Running CMake for iOS..."));
-  shelljs.exec("cmake -B ../../Build/iOS -G Xcode", {
+  exec("cmake -B ../../Build/iOS -G Xcode", {
     cwd: "node_modules/@babylonjs/react-native-iosandroid/ios",
   });
 }
 
 function postInstall() {
-  const version = shelljs.exec("npm --version", { silent: true });
-
   // TODO: This makes development easier as it provides type info when editing App.tsx,
   //       but it also somehow breaks the metro bundler (result in runtime errors).
   // console.log(chalk.black.bgCyan('Installing Playground Shared npm packages...'));
@@ -20,7 +25,7 @@ function postInstall() {
   console.log(
     chalk.black.bgCyan("Installing Babylon React Native npm packages...")
   );
-  shelljs.exec("npm install --legacy-peer-deps", {
+  exec("npm install --legacy-peer-deps", {
     cwd: "../../Modules/@babylonjs/react-native",
   });
 
@@ -28,7 +33,7 @@ function postInstall() {
     iosCMake();
 
     console.log(chalk.black.bgCyan("Installing iOS pods..."));
-    shelljs.exec("pod install", { cwd: "ios" });
+    exec("pod install", { cwd: "ios" });
   }
 }
 
