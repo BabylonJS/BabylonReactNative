@@ -26,7 +26,7 @@ jobs:
         run: brew install ninja
       - name: NPM Install (Playground)
         run: npm install
-        working-directory: ./Apps/Playground
+        working-directory: ./Apps/BRNPlayground
 #      - name: NPM Install (React Native ${{ env.BRN_Version }})
 #        run: npm run select ${{ env.BRN_Version }}
 #        working-directory: ./Apps/Playground
@@ -58,7 +58,7 @@ jobs:
 #          node-version: 16
       - name: NPM Install (Playground)
         run: npm install
-        working-directory: ./Apps/Playground
+        working-directory: ./Apps/BRNPlayground
 #      - name: NPM Install (React Native ${{ env.BRN_Version }})
 #        run: npm run select --reactNative ${{ env.BRN_Version }}
 #        working-directory: ./Apps/Playground
