@@ -144,7 +144,7 @@ const buildUWPARM64Release = async () => {
 }
 
 const buildUWPx64DebugRNTA = async () => {
-  exec('MSBuild /p:Platform="x64" /p:Configuration"Release" /m ../Apps/BRNPlayground/windows/BRNPlayground.sln');
+  exec('MSBuild /p:Platform="x64" /p:Configuration="Release" /m ../Apps/BRNPlayground/windows/BRNPlayground.sln');
 }
 
 const buildUWPProject = gulp.parallel(
