@@ -14,7 +14,7 @@ include(${BABYLON_REACT_NATIVE_DIR}/shared/CMakeLists.txt)
 # Note: We should avoid installing node_modules in the Module\@babylonjs\react-native folder.
 # Installing react-native dependencies for both the Playground app and the @babylonjs\react-native package will generate a bad bundle/runtime errors.
 set(NAPI_JAVASCRIPT_ENGINE "JSI" CACHE STRING "")
-get_filename_component(REACTNATIVE_DIR_CMAKE "${CMAKE_CURRENT_LIST_DIR}/../../../../Apps/Playground/Playground/node_modules/react-native" ABSOLUTE)
+get_filename_component(REACTNATIVE_DIR_CMAKE "${CMAKE_CURRENT_LIST_DIR}/../../../../Apps/BRNPlayground/node_modules/react-native" ABSOLUTE)
 add_subdirectory("${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi/jsi" ${CMAKE_CURRENT_BINARY_DIR}/jsi)
 target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi)
 
