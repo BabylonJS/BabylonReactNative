@@ -143,6 +143,10 @@ const buildUWPARM64Release = async () => {
   exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\Build.bat -Platform ARM64 -Configuration Release');
 }
 
+const buildUWPx64DebugRNTA = async () => {
+  exec('MSBuild /p:Platform="x64" /p:Configuration"Release" /m ../Apps/BRNPlayground/windows/BRNPlayground.sln');
+}
+
 const buildUWPProject = gulp.parallel(
   buildUWPx86Debug,
   buildUWPx86Release,
@@ -681,3 +685,6 @@ exports.packUWP = packUWP;
 exports.packUWPNoBuild = packUWPNoBuild;
 
 exports.default = build;
+
+exports.buildUWPx64DebugRNTA = buildUWPx64DebugRNTA;
+
