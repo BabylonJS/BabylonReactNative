@@ -26,6 +26,7 @@
     <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(SolutionDir)..\node_modules\react-native-windows\package.json')">$(SolutionDir)\..\node_modules\react-native-windows\</ReactNativeWindowsDir>
     <!-- If all else failes, try and resolve react-native-windows package using the Playground app node_modules -->
     <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(ProjectDir)..\..\..\..\..\Apps\Playground\Playground\node_modules\react-native-windows\package.json')">$(ProjectDir)\..\..\..\..\..\Apps\Playground\Playground\node_modules\react-native-windows\</ReactNativeWindowsDir>
+    <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(ProjectDir)..\..\..\..\..\Apps\BRNPlayground\node_modules\react-native-windows\package.json')">$(ProjectDir)\..\..\..\..\..\Apps\BRNPlayground\node_modules\react-native-windows\</ReactNativeWindowsDir>
   </PropertyGroup>
   <PropertyGroup Label="BabylonReactNativeProps">
     <BabylonNativeIOSAndroidProjDir Condition="'$(BabylonReactNativeDir)' == '' And Exists('$(ProjectDir)\..\..\..\react-native-iosandroid')">$(ProjectDir)..\..\..\react-native-iosandroid\</BabylonNativeIOSAndroidProjDir>
