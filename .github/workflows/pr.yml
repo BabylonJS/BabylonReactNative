@@ -74,9 +74,14 @@ jobs:
 #        uses: nuget/setup-nuget@v1
 #        with:
 #          nuget-version: '5.x'
-      - name: NPM Install
+      - name: NPM Install RNTA
         run: npm install
         working-directory: ./Apps/BRNPlayground
+
+      - name: NPM Install Package
+        run: npm install
+        working-directory: ./Package
+
       - name: NPM Windows Project
         run: npx install-windows-test-app --use-nuget
         working-directory: ./Apps/BRNPlayground
