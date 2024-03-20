@@ -96,19 +96,19 @@ jobs:
 
       - name: CMake BabylonNative
         run: cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -DCMAKE_UNITY_BUILD=true -A 'x64' ./../../../react-native-windows/windows
-        working-directory: '@babylonjs/react-native/Build/uwp_x64'
+        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
 
       - name: Nuget restore
         run: nuget restore Playground.sln
-        working-directory: Apps/BRNPlayground/windows
+        working-directory: ./Apps/BRNPlayground/windows
         
       - name: Nuget restore
         run: MSBuild /t:Restore /m BRNPlayground.sln
-        working-directory: Apps/BRNPlayground/windows
+        working-directory: ./Apps/BRNPlayground/windows
         
       - name: Windows build
         run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m BRNPlayground.sln
-        working-directory: Apps/BRNPlayground/windows
+        working-directory: ./Apps/BRNPlayground/windows
 
 
 # Test packages
@@ -160,7 +160,7 @@ jobs:
 #      react-native-version: '0.71'
 #      release-version: 0.0.${GITHUB_SHA::8}
 
-  build-typescript:
-    uses: ./.github/workflows/typescript.yml
-    with:
-      release-version: 0.0.${GITHUB_SHA::8}
+#  build-typescript:
+#    uses: ./.github/workflows/typescript.yml
+#    with:
+#      release-version: 0.0.${GITHUB_SHA::8}
