@@ -146,7 +146,7 @@ const buildUWPARM64Release = async () => {
 const buildUWPx64DebugRNTA = async () => {
   shelljs.mkdir('-p', `./../Modules/@babylonjs/react-native/Build/uwp_x64`);
   exec(`cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -DCMAKE_UNITY_BUILD=true ${cmakeBasekitBuildDefinition} -A 'x64' ./../../../react-native-windows/windows`, `./../Modules/@babylonjs/react-native/Build/uwp_x64`);
-  exec('nuget restore Playground.sln', './../Apps/Playground/Playground/windows');
+  exec('nuget restore Playground.sln', './../Apps/BRNPlayground/windows');
   exec('MSBuild /t:Restore /m ../Apps/BRNPlayground/windows/BRNPlayground.sln');
   exec('MSBuild /p:Platform="x64" /p:Configuration="Release" /m ../Apps/BRNPlayground/windows/BRNPlayground.sln');
 }

@@ -86,9 +86,30 @@ jobs:
         run: npx install-windows-test-app --use-nuget
         working-directory: ./Apps/BRNPlayground
 
-      - name: Gulp build windows
-        run: npx gulp buildUWPx64DebugRNTA
-        working-directory: ./Package    
+#      - name: Gulp build windows
+#        run: npx gulp buildUWPx64DebugRNTA
+#        working-directory: ./Package    
+
+      - name: BabylonNative build directory
+        run: mkdir @babylonjs/react-native/Build/uwp_x64
+        working-directory: ./Modules    
+
+      - name: CMake BabylonNative
+        run: cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -DCMAKE_UNITY_BUILD=true -A 'x64' ./../../../react-native-windows/windows
+        working-directory: '@babylonjs/react-native/Build/uwp_x64'
+
+      - name: Nuget restore
+        run: nuget restore Playground.sln
+        working-directory: Apps/BRNPlayground/windows
+        
+      - name: Nuget restore
+        run: MSBuild /t:Restore /m BRNPlayground.sln
+        working-directory: Apps/BRNPlayground/windows
+        
+      - name: Windows build
+        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m BRNPlayground.sln
+        working-directory: Apps/BRNPlayground/windows
+
 
 # Test packages
 #  build-android-ios-065:
