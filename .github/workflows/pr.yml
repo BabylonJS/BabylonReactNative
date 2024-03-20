@@ -91,27 +91,27 @@ jobs:
 #        working-directory: ./Package    
 
       - name: BabylonNative build directory
-        run: mkdir @babylonjs/react-native/Build/uwp_x64
+        run: mkdir @babylonjs/react-native/Build/uwp_x86
         working-directory: ./Modules    
 
       - name: CMake BabylonNative
-        run: cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -DCMAKE_UNITY_BUILD=true -A 'x64' ./../../../react-native-windows/windows
-        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
+        run: cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -DCMAKE_UNITY_BUILD=true -A 'x86' ./../../../react-native-windows/windows
+        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x86
 
       - name: Nuget restore
         run: nuget restore BRNPlayground.sln
         working-directory: ./Apps/BRNPlayground/windows
         
       - name: Nuget restore
-        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /t:Restore /m BRNPlayground.sln
+        run: MSBuild /p:Platform="x86" /p:Configuration="Release" /t:Restore /m BRNPlayground.sln
         working-directory: ./Apps/BRNPlayground/windows
 
       - name: Windows build BN
-        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m ReactNativeBabylon.sln
-        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
+        run: MSBuild /p:Platform="x86" /p:Configuration="Release" /m ReactNativeBabylon.sln
+        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x86
         
       - name: Windows build BRN
-        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m BRNPlayground.sln
+        run: MSBuild /p:Platform="x86" /p:Configuration="Release" /m BRNPlayground.sln
         working-directory: ./Apps/BRNPlayground/windows
 
 
