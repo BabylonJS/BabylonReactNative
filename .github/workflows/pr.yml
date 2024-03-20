@@ -99,7 +99,7 @@ jobs:
         working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
 
       - name: Nuget restore
-        run: nuget restore Playground.sln
+        run: nuget restore BRNPlayground.sln
         working-directory: ./Apps/BRNPlayground/windows
         
       - name: Nuget restore
