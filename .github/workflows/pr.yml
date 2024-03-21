@@ -83,7 +83,7 @@ jobs:
         working-directory: ./Package
 
       - name: NPM Windows Project
-        run: npx install-windows-test-app --use-nuget
+        run: npx install-windows-test-app
         working-directory: ./Apps/BRNPlayground
 
 #      - name: Gulp build windows
