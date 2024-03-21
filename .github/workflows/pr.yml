@@ -82,13 +82,14 @@ jobs:
         run: npm install
         working-directory: ./Package
 
-      - name: NPM Windows Project
-        run: npx install-windows-test-app
-        working-directory: ./Apps/BRNPlayground
-
+        
       - name: PATCH RNPermissions vcxproj
         run: copy RNPermissions.vcxproj .\Apps\BRNPlayground\node_modules\react-native-permissions\windows\RNPermissions
         working-directory: ./
+
+      - name: NPM Windows Project
+        run: npx install-windows-test-app  --use-nuget
+        working-directory: ./Apps/BRNPlayground
 
 #      - name: Gulp build windows
 #        run: npx gulp buildUWPx64DebugRNTA
