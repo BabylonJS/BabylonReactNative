@@ -51,7 +51,17 @@ target_link_libraries(BabylonNative
     Canvas
     ${ADDITIONAL_LIBRARIES})
 
-set_target_properties(
-    BabylonNative PROPERTIES
-    VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.Cpp.Dependencies.props"
-  )
+set_target_properties(BabylonNative PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.Cpp.Dependencies.props")
+set_target_properties(arcana PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.Cpp.Dependencies.props")
+set_target_properties(GraphicsDevice PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.Cpp.Dependencies.props")
+set_target_properties(jsi PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.Cpp.Dependencies.props")
+set_target_properties(JsRuntime PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.Cpp.Dependencies.props")
+set_target_properties(NativeCapture PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.Cpp.Dependencies.props")
+set_target_properties(NativeEngine PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.Cpp.Dependencies.props")
+set_target_properties(NativeInput PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.Cpp.Dependencies.props")
+set_target_properties(NativeOptimizations PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.Cpp.Dependencies.props")
+set_target_properties(Window PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.Cpp.Dependencies.props")
+set_target_properties(XMLHttpRequest PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.Cpp.Dependencies.props")
+set_target_properties(Canvas PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.Cpp.Dependencies.props")
+set_target_properties(NativeXr PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.Cpp.Dependencies.props")
+set_target_properties(NativeCamera PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.Cpp.Dependencies.props")
