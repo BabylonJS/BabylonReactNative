@@ -82,9 +82,9 @@ jobs:
         run: npm install
         working-directory: ./Package
 
-      - name: Build bundle
-        run: npm run build:windows
-        working-directory: ./Apps/BRNPlayground
+#      - name: Build bundle
+#        run: npm run build:windows
+#        working-directory: ./Apps/BRNPlayground
         
       - name: PATCH RNPermissions vcxproj
         run: copy RNPermissions.vcxproj .\Apps\BRNPlayground\node_modules\react-native-permissions\windows\RNPermissions
