@@ -15,6 +15,7 @@ include(${BABYLON_REACT_NATIVE_DIR}/shared/CMakeLists.txt)
 # Installing react-native dependencies for both the Playground app and the @babylonjs\react-native package will generate a bad bundle/runtime errors.
 set(NAPI_JAVASCRIPT_ENGINE "JSI" CACHE STRING "")
 get_filename_component(REACTNATIVE_DIR_CMAKE "${CMAKE_CURRENT_LIST_DIR}/../../../../Apps/BRNPlayground/node_modules/react-native" ABSOLUTE)
+get_filename_component(REACTNATIVE_WINDOWS_DIR_CMAKE "${CMAKE_CURRENT_LIST_DIR}/../../../../Apps/BRNPlayground/node_modules/react-native-windows/PropertySheets/External" ABSOLUTE)
 add_subdirectory("${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi/jsi" ${CMAKE_CURRENT_BINARY_DIR}/jsi)
 target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi)
 
@@ -49,3 +50,8 @@ target_link_libraries(BabylonNative
     XMLHttpRequest
     Canvas
     ${ADDITIONAL_LIBRARIES})
+
+set_target_properties(
+    BabylonNative PROPERTIES
+    VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.Cpp.Dependencies.props"
+  )
