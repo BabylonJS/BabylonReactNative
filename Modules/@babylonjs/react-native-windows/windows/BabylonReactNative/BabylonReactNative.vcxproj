@@ -18,6 +18,7 @@
     <WindowsTargetPlatformVersion Condition=" '$(WindowsTargetPlatformVersion)' == '' ">10.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
   </PropertyGroup>
+  <Import Project="$(ProjectDir)\..\..\..\..\..\Apps\BRNPlayground\node_modules\react-native-windows\PropertySheets\External\Microsoft.ReactNative.Cpp.Dependencies.props" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="ReactNativeWindowsProps">
     <!-- First try and resolve react-native-windows package at a relative location when installing the @babylonjs/react-native package in your project -->
@@ -173,47 +174,7 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <!-- Debug Libraries -->
       <AdditionalDependencies>
-        arcana.lib;
-        astc-encoder.lib;
-        BabylonNative.lib;
-        bgfx.lib;
-        bimg.lib;
-        tinyexr.lib;
-        bx.lib;
-        Canvas.lib;
-        edtaa3.lib;
-        etc1.lib;
-        etc2.lib;
-        GenericCodeGend.lib;
-        glslangd.lib;
-        glslang-default-resource-limitsd.lib;
-        Graphics.lib;
-        iqa.lib;
-        jsi.lib;
-        JsRuntime.lib;
-        MachineIndependentd.lib;
-        napi.lib;
-        NativeCamera.lib;
-        NativeCapture.lib;
-        NativeEngine.lib;
-        NativeInput.lib;
-        NativeOptimizations.lib;
-        NativeTracing.lib;
-        NativeXr.lib;
-        nvtt.lib;
-        OGLCompilerd.lib;
-        openxr_loaderd.lib;
-        OSDependentd.lib;
-        pvrtc.lib;
-        spirv-cross-cored.lib;
-        spirv-cross-hlsld.lib;
-        SPIRVd.lib;
-        squish.lib;
-        UrlLib.lib;
-        Window.lib;
-        XMLHttpRequest.lib;
-        xr.lib;
-        WindowsApp.lib;
+       
         %(AdditionalDependencies);
       </AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
@@ -234,47 +195,7 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <!-- Release Libraries -->
       <AdditionalDependencies>
-        arcana.lib;
-        astc-encoder.lib;
-        BabylonNative.lib;
-        bgfx.lib;
-        bimg.lib;
-        tinyexr.lib;
-        bx.lib;
-        Canvas.lib;
-        edtaa3.lib;
-        etc1.lib;
-        etc2.lib;
-        GenericCodeGen.lib;
-        glslang.lib;
-        glslang-default-resource-limits.lib;
-        Graphics.lib;
-        iqa.lib;
-        jsi.lib;
-        JsRuntime.lib;
-        MachineIndependent.lib;
-        napi.lib;
-        NativeCamera.lib;
-        NativeCapture.lib;
-        NativeEngine.lib;
-        NativeInput.lib;
-        NativeOptimizations.lib;
-        NativeTracing.lib;
-        NativeXr.lib;
-        nvtt.lib;
-        OGLCompiler.lib;
-        openxr_loader.lib;
-        OSDependent.lib;
-        pvrtc.lib;
-        spirv-cross-core.lib;
-        spirv-cross-hlsl.lib;
-        SPIRV.lib;
-        squish.lib;
-        UrlLib.lib;
-        Window.lib;
-        XMLHttpRequest.lib;
-        xr.lib;
-        WindowsApp.lib;
+        
         %(AdditionalDependencies);
       </AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
