@@ -82,6 +82,9 @@ jobs:
         run: npm install
         working-directory: ./Package
 
+      - name: Build bundle
+        run: npm run build:windows
+        working-directory: ./Apps/BRNPlayground
         
       - name: PATCH RNPermissions vcxproj
         run: copy RNPermissions.vcxproj .\Apps\BRNPlayground\node_modules\react-native-permissions\windows\RNPermissions
@@ -91,6 +94,12 @@ jobs:
         run: copy packages.config .\Apps\BRNPlayground\node_modules\react-native-permissions\windows\RNPermissions
         working-directory: ./
 
+
+      - name: CMake BabylonNative
+        run: cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -DCMAKE_UNITY_BUILD=true -A 'x64' ../../../Modules/@babylonjs/react-native-windows/windows
+        working-directory: ./Apps/BRNPlayground/windows
+
+
       - name: NPM Windows Project
         run: npx install-windows-test-app
         working-directory: ./Apps/BRNPlayground
@@ -98,14 +107,6 @@ jobs:
 #      - name: Gulp build windows
 #        run: npx gulp buildUWPx64DebugRNTA
 #        working-directory: ./Package    
-
-      - name: BabylonNative build directory
-        run: mkdir @babylonjs/react-native/Build/uwp_x64
-        working-directory: ./Modules    
-
-      - name: CMake BabylonNative
-        run: cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -DCMAKE_UNITY_BUILD=true -A 'x64' ./../../../react-native-windows/windows
-        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
 
       - name: Nuget restore
         run: nuget restore BRNPlayground.sln
@@ -115,9 +116,9 @@ jobs:
         run: MSBuild /p:Platform="x64" /p:Configuration="Release" /t:Restore /m BRNPlayground.sln
         working-directory: ./Apps/BRNPlayground/windows
 
-      - name: Windows build BN
-        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m ReactNativeBabylon.sln
-        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
+#      - name: Windows build BN
+#        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m ReactNativeBabylon.sln
+#        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
         
       - name: Windows build BRN
         run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m BRNPlayground.sln
