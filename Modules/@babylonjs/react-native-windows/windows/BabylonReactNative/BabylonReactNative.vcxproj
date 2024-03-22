@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!-- Note: CppWinRT NuGet dependency should be resolved for the solution not the individual project -->
-  <!-- <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.210312.4\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.210312.4\build\native\Microsoft.Windows.CppWinRT.props')" /> -->
+  <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.211028.7\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.211028.7\build\native\Microsoft.Windows.CppWinRT.props')" /> -->
   <Import Project="$(SolutionDir)..\node_modules\react-native-windows\PropertySheets\External\Microsoft.ReactNative.Cpp.Dependencies.props" />
   <PropertyGroup Label="Globals">
     <CppWinRTOptimized>true</CppWinRTOptimized>
@@ -334,6 +334,6 @@
     <Error Condition="!Exists('$(BabylonNativeBuildDir)') And !Exists('$(BabylonNativeLibsDir)')" Text="$(ErrorText)" />
   </Target>
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.210312.4\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.210312.4\build\native\Microsoft.Windows.CppWinRT.targets')" />
+    <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.211028.7\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.211028.7\build\native\Microsoft.Windows.CppWinRT.targets')" />
   </ImportGroup>
 </Project>
