@@ -18,7 +18,7 @@
     <WindowsTargetPlatformVersion Condition=" '$(WindowsTargetPlatformVersion)' == '' ">10.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
   </PropertyGroup>
-  <Import Project="$(ProjectDir)\..\..\..\..\..\Apps\BRNPlayground\node_modules\react-native-windows\PropertySheets\External\Microsoft.ReactNative.Cpp.Dependencies.props" />
+  <Import Project="$(ProjectDir)..\..\..\..\..\Apps\BRNPlayground\node_modules\react-native-windows\PropertySheets\External\Microsoft.ReactNative.Cpp.Dependencies.props" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="ReactNativeWindowsProps">
     <!-- First try and resolve react-native-windows package at a relative location when installing the @babylonjs/react-native package in your project -->
