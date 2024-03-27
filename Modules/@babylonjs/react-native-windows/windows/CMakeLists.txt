@@ -14,8 +14,18 @@ include(${BABYLON_REACT_NATIVE_DIR}/shared/CMakeLists.txt)
 # Note: We should avoid installing node_modules in the Module\@babylonjs\react-native folder.
 # Installing react-native dependencies for both the Playground app and the @babylonjs\react-native package will generate a bad bundle/runtime errors.
 set(NAPI_JAVASCRIPT_ENGINE "JSI" CACHE STRING "")
-get_filename_component(REACTNATIVE_DIR_CMAKE "${CMAKE_CURRENT_LIST_DIR}/../../../../Apps/BRNPlayground/node_modules/react-native" ABSOLUTE)
-get_filename_component(REACTNATIVE_WINDOWS_DIR_CMAKE "${CMAKE_CURRENT_LIST_DIR}/../../../../Apps/BRNPlayground/node_modules/react-native-windows/PropertySheets/External" ABSOLUTE)
+
+set(PLAYGROUND_DIR "${CMAKE_CURRENT_LIST_DIR}/../../../../Apps/Playground/Playground")
+set(PLAYGROUND_RNTA_DIR "${CMAKE_CURRENT_LIST_DIR}/../../../../Apps/BRNPlayground")
+
+if(EXISTS "${PLAYGROUND_DIR}/node_modules/react-native/package.json")
+    get_filename_component(REACTNATIVE_DIR_CMAKE "${PLAYGROUND_DIR}/node_modules/react-native" ABSOLUTE)
+elseif(EXISTS "${PLAYGROUND_RNTA_DIR}/node_modules/react-native/package.json")
+    get_filename_component(REACTNATIVE_DIR_CMAKE "${PLAYGROUND_RNTA_DIR}/node_modules/react-native" ABSOLUTE)
+else()
+    message(FATAL_ERROR "No Playground available")
+endif()
+
 add_subdirectory("${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi/jsi" ${CMAKE_CURRENT_BINARY_DIR}/jsi)
 target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi)
 
@@ -51,17 +61,3 @@ target_link_libraries(BabylonNative
     Canvas
     ${ADDITIONAL_LIBRARIES})
 
-set_target_properties(BabylonNative PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.WindowsSdk.Default.props")
-set_target_properties(arcana PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.WindowsSdk.Default.props")
-set_target_properties(GraphicsDevice PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.WindowsSdk.Default.props")
-set_target_properties(jsi PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.WindowsSdk.Default.props")
-set_target_properties(JsRuntime PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.WindowsSdk.Default.props")
-set_target_properties(NativeCapture PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.WindowsSdk.Default.props")
-set_target_properties(NativeEngine PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.WindowsSdk.Default.props")
-set_target_properties(NativeInput PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.WindowsSdk.Default.props")
-set_target_properties(NativeOptimizations PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.WindowsSdk.Default.props")
-set_target_properties(Window PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.WindowsSdk.Default.props")
-set_target_properties(XMLHttpRequest PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.WindowsSdk.Default.props")
-set_target_properties(Canvas PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.WindowsSdk.Default.props")
-set_target_properties(NativeXr PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.WindowsSdk.Default.props")
-set_target_properties(NativeCamera PROPERTIES VS_PROJECT_IMPORT "${REACTNATIVE_WINDOWS_DIR_CMAKE}/Microsoft.ReactNative.WindowsSdk.Default.props")
