@@ -106,9 +106,9 @@ jobs:
         run: nuget restore BRNPlayground.sln
         working-directory: ./Apps/BRNPlayground/windows
         
-#      - name: Nuget restore
-#        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /t:Restore /m BRNPlayground.sln
-#        working-directory: ./Apps/BRNPlayground/windows
+      - name: Nuget restore
+        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /t:Restore /m BRNPlayground.sln
+        working-directory: ./Apps/BRNPlayground/windows
 
       - name: Windows build BN
         run: MSBuild /p:Platform="x64" /p:Configuration="Debug" /m ReactNativeBabylon.sln
