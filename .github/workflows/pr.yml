@@ -82,10 +82,14 @@ jobs:
         run: npm install
         working-directory: ./Package
 
-      - name: NPM Windows Project
+      - name: NPM Generate Windows Project
         run: npx install-windows-test-app
         working-directory: ./Apps/BRNPlayground
 
+      - name: Build Windows Bundle
+        run: npm run build:windows
+        working-directory: ./Apps/BRNPlayground
+        
 #      - name: Gulp build windows
 #        run: npx gulp buildUWPx64DebugRNTA
 #        working-directory: ./Package    
@@ -102,9 +106,9 @@ jobs:
         run: nuget restore BRNPlayground.sln
         working-directory: ./Apps/BRNPlayground/windows
         
-      - name: Nuget restore
-        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /t:Restore /m BRNPlayground.sln
-        working-directory: ./Apps/BRNPlayground/windows
+#      - name: Nuget restore
+#        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /t:Restore /m BRNPlayground.sln
+#        working-directory: ./Apps/BRNPlayground/windows
 
       - name: Windows build BN
         run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m ReactNativeBabylon.sln
