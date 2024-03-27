@@ -83,13 +83,13 @@ jobs:
         working-directory: ./Package
 
         
-      - name: PATCH RNPermissions vcxproj
-        run: copy RNPermissions.vcxproj .\Apps\BRNPlayground\node_modules\react-native-permissions\windows\RNPermissions
-        working-directory: ./
-        
-      - name: PATCH RNPermissions packages.config
-        run: copy packages.config .\Apps\BRNPlayground\node_modules\react-native-permissions\windows\RNPermissions
-        working-directory: ./
+#      - name: PATCH RNPermissions vcxproj
+#        run: copy RNPermissions.vcxproj .\Apps\BRNPlayground\node_modules\react-native-permissions\windows\RNPermissions
+#        working-directory: ./
+#        
+#      - name: PATCH RNPermissions packages.config
+#        run: copy packages.config .\Apps\BRNPlayground\node_modules\react-native-permissions\windows\RNPermissions
+#        working-directory: ./
 
       - name: NPM Windows Project
         run: npx install-windows-test-app
