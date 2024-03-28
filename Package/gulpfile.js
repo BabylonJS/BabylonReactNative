@@ -75,7 +75,12 @@ const buildTypeScript = async () => {
 
 const makeXCodeProj = async () => {
   shelljs.mkdir('-p', 'iOS/Build');
-  exec(`cmake -B Build -G Xcode ${cmakeBasekitBuildDefinition}`, 'iOS');
+  exec(`cmake -B Build -G Xcode ${cmakeBasekitBuildDefinition} -DBUILD_RNAPP_DIR=Playground/Playground`, 'iOS');
+};
+
+const makeXCodeProjRNTA = async () => {
+  shelljs.mkdir('-p', 'iOS/Build');
+  exec(`cmake -B Build -G Xcode ${cmakeBasekitBuildDefinition} -DBUILD_RNAPP_DIR=BRNPlayground`, 'iOS');
 };
 
 const buildIphoneOS = async () => {
@@ -87,10 +92,16 @@ const buildIphoneSimulator = async () => {
 };
 
 const buildIOS = gulp.series(makeXCodeProj, buildIphoneOS, buildIphoneSimulator);
+const buildIOSRNTA = gulp.series(makeXCodeProjRNTA, buildIphoneOS, buildIphoneSimulator);
 
 const buildAndroid = async () => {
   const basekitBuildProp = basekitBuild ? "-PBASEKIT_BUILD=1" : "";
   exec(`./gradlew babylonjs_react-native:assembleRelease --stacktrace --info ${basekitBuildProp}`, '../Apps/Playground/Playground/android');
+};
+
+const buildAndroidRNTA = async () => {
+  const basekitBuildProp = basekitBuild ? "-PBASEKIT_BUILD=1" : "";
+  exec(`./gradlew babylonjs_react-native:assembleRelease --stacktrace --info ${basekitBuildProp}`, '../Apps/BRNPlayground/android');
 };
 
 const makeUWPProjectPlatform = async (name, arch) => {
@@ -130,6 +141,14 @@ const buildUWPARM64Debug = async () => {
 
 const buildUWPARM64Release = async () => {
   exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\Build.bat -Platform ARM64 -Configuration Release');
+}
+
+const buildUWPx64DebugRNTA = async () => {
+  shelljs.mkdir('-p', `./../Modules/@babylonjs/react-native/Build/uwp_x64`);
+  exec(`cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -DCMAKE_UNITY_BUILD=true ${cmakeBasekitBuildDefinition} -A 'x64' ./../../../react-native-windows/windows`, `./../Modules/@babylonjs/react-native/Build/uwp_x64`);
+  exec('nuget restore Playground.sln', './../Apps/BRNPlayground/windows');
+  exec('MSBuild /t:Restore /m ../Apps/BRNPlayground/windows/BRNPlayground.sln');
+  exec('MSBuild /p:Platform="x64" /p:Configuration="Release" /m ../Apps/BRNPlayground/windows/BRNPlayground.sln');
 }
 
 const buildUWPProject = gulp.parallel(
@@ -620,7 +639,9 @@ exports.validateAssembled = validateAssembled;
 exports.validateAssemblediOSAndroid = validateAssemblediOSAndroid;
 
 exports.buildIOS = buildIOS;
+exports.buildIOSRNTA = buildIOSRNTA;
 exports.buildAndroid = buildAndroid;
+exports.buildAndroidRNTA = buildAndroidRNTA;
 exports.createIOSUniversalLibs = createIOSUniversalLibs;
 exports.copyFiles = copyFiles;
 
@@ -630,7 +651,6 @@ exports.rebuild = rebuild;
 exports.pack = pack;
 
 const packAndroid = gulp.series(clean, buildAndroid, copyFiles, createPackage, createPackageiOSAndroid);
-exports.buildAndroid = buildAndroid;
 exports.packAndroid = packAndroid;
 
 const copyPackageFilesUWP = gulp.series(copyUWPFiles);
@@ -669,3 +689,6 @@ exports.packUWP = packUWP;
 exports.packUWPNoBuild = packUWPNoBuild;
 
 exports.default = build;
+
+exports.buildUWPx64DebugRNTA = buildUWPx64DebugRNTA;
+
