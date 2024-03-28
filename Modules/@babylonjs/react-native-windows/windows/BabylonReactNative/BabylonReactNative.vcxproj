@@ -304,7 +304,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="BabylonReactNative.def" />
-    <None Include="packages.config" />
     <None Include="PropertySheet.props" />
     <Text Include="readme.txt">
       <DeploymentContent>false</DeploymentContent>
