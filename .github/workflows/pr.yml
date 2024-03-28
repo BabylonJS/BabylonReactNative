@@ -23,6 +23,11 @@ jobs:
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/BRNPlayground
+
+      - name: Build Windows Bundle
+        run: npm run build:android
+        working-directory: ./Apps/BRNPlayground
+
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
@@ -48,6 +53,11 @@ jobs:
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/BRNPlayground
+
+      - name: Build Windows Bundle
+        run: npm run build:ios
+        working-directory: ./Apps/BRNPlayground
+
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
@@ -78,9 +88,9 @@ jobs:
         run: npm install
         working-directory: ./Apps/BRNPlayground
 
-#      - name: Build Windows Bundle
-#        run: npm run build:windows
-#        working-directory: ./Apps/BRNPlayground
+      - name: Build Windows Bundle
+        run: npm run build:windows
+        working-directory: ./Apps/BRNPlayground
 
       - name: NPM Install Package
         run: npm install
