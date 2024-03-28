@@ -85,6 +85,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
+
+      - name: Install watchman
+        run: choco install watchman
+        working-directory: ./Apps/BRNPlayground
 #      - name: Setup NuGet
 #        uses: nuget/setup-nuget@v1
 #        with:
@@ -102,7 +106,7 @@ jobs:
         working-directory: ./Package
 
       - name: NPM Generate Windows Project
-        run: npx install-windows-test-app --use-nuget
+        run: npx install-windows-test-app
         working-directory: ./Apps/BRNPlayground
        
 #      - name: Gulp build windows
