@@ -48,7 +48,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: 'Android-artifact'
-          path: Apps/BRNPlayground/android
+          path: Apps/BRNPlayground
   
   build-iOS:
     runs-on: macos-latest
@@ -78,7 +78,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: 'ios-artifact'
-          path: Apps/BRNPlayground/ios
+          path: Apps/BRNPlayground/
 
   build-windows:
     runs-on: windows-2019
@@ -134,10 +134,6 @@ jobs:
       - name: Nuget restore
         run: nuget restore BRNPlayground.sln
         working-directory: ./Apps/BRNPlayground/windows
-        
-#      - name: Nuget restore
-#        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /t:Restore /m BRNPlayground.sln
-#        working-directory: ./Apps/BRNPlayground/windows
 
       - name: Windows build BN
         run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m ReactNativeBabylon.sln
@@ -151,7 +147,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: 'Windows-artifact'
-          path: Apps/BRNPlayground/windows
+          path: Apps/BRNPlayground/windows/AppPackages/ReactTestApp/ReactTestApp_1.0.0.0_x64_Test
 
 # Test packages
 #  build-android-ios-065:
