@@ -48,7 +48,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: 'Android-artifact'
-          path: Apps/BRNPlayground
+          path: Build
   
   build-iOS:
     runs-on: macos-latest
@@ -74,11 +74,11 @@ jobs:
       - name: Gulp (iOS)
         run: npx gulp buildIOSRNTA
         working-directory: ./Package
-      - name: Upload ios
-        uses: actions/upload-artifact@v2
-        with:
-          name: 'ios-artifact'
-          path: Apps/BRNPlayground/
+#      - name: Upload ios
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: 'ios-artifact'
+#          path: Apps/BRNPlayground/
 
   build-windows:
     runs-on: windows-2019
