@@ -4,7 +4,7 @@ on:
     branches:
       - master
 env:
-  BRN_Version: '0.64'
+  BRN_Version: '0.70'
 
 jobs:
   build-android:
@@ -14,10 +14,6 @@ jobs:
         uses: actions/checkout@v2.3.3
         with:
           submodules: 'recursive'
-      - name: Setup Node 16
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
       - name: Setup CMake
         uses: jwlawson/actions-setup-cmake@v1.8
         with:
@@ -33,12 +29,6 @@ jobs:
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          check-latest: true
       - name: Gulp (Android)
         run: npx gulp buildAndroid
         working-directory: ./Package
@@ -90,10 +80,6 @@ jobs:
         uses: actions/checkout@v2.3.3
         with:
           submodules: 'recursive'
-      - name: Setup Node 16
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
@@ -139,22 +125,12 @@ jobs:
         uses: actions/checkout@v2.3.3
         with:
           submodules: 'recursive'
-      - name: Setup Node 16
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
       - name: Setup CMake
         uses: jwlawson/actions-setup-cmake@v1.8
         with:
           cmake-version: '3.26.3'
       - name: Setup Ninja
         run: brew install ninja
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          check-latest: true
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
@@ -185,10 +161,6 @@ jobs:
           submodules: 'true'
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.0.2
-      - name: Setup Node 16
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
       - name: Setup NuGet
         uses: nuget/setup-nuget@v1
         with:

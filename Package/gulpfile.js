@@ -96,7 +96,7 @@ const buildIOSRNTA = gulp.series(makeXCodeProjRNTA, buildIphoneOS, buildIphoneSi
 
 const buildAndroid = async () => {
   const basekitBuildProp = basekitBuild ? "-PBASEKIT_BUILD=1" : "";
-  exec(`./gradlew babylonjs_react-native:assembleRelease --stacktrace --info ${basekitBuildProp}`, '../Apps/Playground/Playground/android');
+  exec(`./gradlew babylonjs_react-native:assembleRelease  --warning-mode=all --stacktrace --info ${basekitBuildProp}`, '../Apps/Playground/Playground/android');
 };
 
 const buildAndroidRNTA = async () => {
