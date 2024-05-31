@@ -22,7 +22,7 @@
     "@react-native-community/slider": "^4.0.0-rc.3",
     "react": "18.1.0",
     "react-native": "0.70.8",
-    "react-native-permissions": "^3.0.0",
+    "react-native-permissions": "^4.1.5",
     "react-native-windows": "0.70.7"
   },
   "devDependencies": {
