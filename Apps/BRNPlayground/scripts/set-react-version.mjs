@@ -21,15 +21,13 @@ import {
  * @typedef {import("./types.js").Manifest} Manifest
  */
 
-const VALID_TAGS = ["canary-macos", "canary-windows", "nightly"];
-
 /**
  * Returns whether specified string is a valid version number.
  * @param {string} v
  * @return {boolean}
  */
 function isValidVersion(v) {
-  return /^\d+\.\d+$/.test(v) || VALID_TAGS.includes(v);
+  return /^\d+\.\d+$/.test(v);
 }
 
 /**
@@ -136,55 +134,6 @@ function fetchPackageInfo(pkg, version) {
 }
 
 /**
- * Fetches the latest react-native-windows@canary information via NuGet.
- * @return {Promise<Manifest>}
- */
-function fetchReactNativeWindowsCanaryInfoViaNuGet() {
-  const rnwNuGetFeed =
-    "https://pkgs.dev.azure.com/ms/react-native/_packaging/react-native-public/nuget/v3/index.json";
-  return fetch(rnwNuGetFeed)
-    .then((res) => res.json())
-    .then(({ resources }) => {
-      if (!Array.isArray(resources)) {
-        throw new Error("Unexpected format returned by the services endpoint");
-      }
-
-      const service = resources.find((svc) =>
-        svc["@type"].startsWith("RegistrationsBaseUrl")
-      );
-      if (!service) {
-        throw new Error("Failed to find 'RegistrationsBaseUrl' resource");
-      }
-
-      return service["@id"];
-    })
-    .then((url) => fetch(url + "/Microsoft.ReactNative.Cxx/index.json"))
-    .then((res) => res.json())
-    .then(({ items }) => {
-      if (!Array.isArray(items)) {
-        throw new Error(
-          "Unexpected format returned by the 'RegistrationsBaseUrl' service"
-        );
-      }
-
-      for (const item of items) {
-        for (const pkg of item.items) {
-          const version = pkg.catalogEntry?.version;
-          if (typeof version === "string" && version.startsWith("0.0.0")) {
-            const m = version.match(/(0\.0\.0-[.0-9a-z]+)/);
-            if (m) {
-              return m[1];
-            }
-          }
-        }
-      }
-
-      throw new Error("Failed to find canary builds");
-    })
-    .then((version) => fetchPackageInfo("react-native-windows", version));
-}
-
-/**
  * Returns an object with common dependencies.
  * @param {string} v
  * @param {Manifest} manifest
@@ -258,78 +207,36 @@ async function resolveCommonDependencies(
  * @return {Promise<Record<string, string | undefined>>}
  */
 async function getProfile(v, coreOnly) {
+  // @ts-ignore
   const manifest = /** @type {Manifest} */ (readJSONFile("package.json"));
   /*const visionos = manifest.defaultPlatformPackages?.["visionos"];
   if (!visionos) {
     throw new Error("Missing platform package for visionOS");
   }*/
+  const versions = {
+    core: fetchPackageInfo("react-native", v),
+    macos: coreOnly
+      ? Promise.resolve({ version: undefined })
+      : fetchPackageInfo("react-native-macos", v),
+    /*visionos: coreOnly
+      ? Promise.resolve({ version: undefined })
+      : fetchPackageInfo(visionos, v),*/
+    windows: coreOnly
+      ? Promise.resolve({ version: undefined })
+      : fetchPackageInfo("react-native-windows", v),
+  };
+  const reactNative = await versions.core;
+  const commonDeps = await resolveCommonDependencies(v, reactNative);
 
-  switch (v) {
-    case "canary-macos": {
-      const info = await fetchPackageInfo("react-native-macos", "canary");
-      const coreVersion = inferReactNativeVersion(info);
-      const commonDeps = await resolveCommonDependencies(coreVersion, info);
-      return {
-        ...commonDeps,
-        "react-native": coreVersion,
-        "react-native-macos": "canary",
-        "react-native-windows": undefined,
-        //[visionos]: undefined,
-      };
-    }
-
-    case "canary-windows": {
-      const info = await fetchReactNativeWindowsCanaryInfoViaNuGet();
-      const coreVersion = info.peerDependencies?.["react-native"] || "nightly";
-      const commonDeps = await resolveCommonDependencies(coreVersion, info);
-      return {
-        ...commonDeps,
-        "react-native": coreVersion,
-        "react-native-macos": undefined,
-        "react-native-windows": info.version,
-        //[visionos]: undefined,
-      };
-    }
-
-    case "nightly": {
-      const info = await fetchPackageInfo("react-native", "nightly");
-      const commonDeps = await resolveCommonDependencies(v, info);
-      return {
-        ...commonDeps,
-        "react-native": "nightly",
-        "react-native-macos": undefined,
-        "react-native-windows": undefined,
-        //[visionos]: undefined,
-      };
-    }
-
-    default: {
-      const versions = {
-        core: fetchPackageInfo("react-native", v),
-        macos: coreOnly
-          ? Promise.resolve({ version: undefined })
-          : fetchPackageInfo("react-native-macos", v),
-        /*visionos: coreOnly
-          ? Promise.resolve({ version: undefined })
-          : fetchPackageInfo(visionos, v),*/
-        windows: coreOnly
-          ? Promise.resolve({ version: undefined })
-          : fetchPackageInfo("react-native-windows", v),
-      };
-      const reactNative = await versions.core;
-      const commonDeps = await resolveCommonDependencies(v, reactNative);
-
-      /** @type {(manifest: Manifest) => string | undefined} */
-      const getVersion = ({ version }) => version;
-      return {
-        ...commonDeps,
-        "react-native": reactNative.version,
-        "react-native-macos": await versions.macos.then(getVersion),
-        "react-native-windows": await versions.windows.then(getVersion),
-        //[visionos]: await versions.visionos.then(getVersion),
-      };
-    }
-  }
+  /** @type {(manifest: Manifest) => string | undefined} */
+  const getVersion = ({ version }) => version;
+  return {
+    ...commonDeps,
+    "react-native": reactNative.version,
+    "react-native-macos": await versions.macos.then(getVersion),
+    "react-native-windows": await versions.windows.then(getVersion),
+    //[visionos]: await versions.visionos.then(getVersion),
+  };
 }
 
 /**
@@ -391,14 +298,12 @@ const { [1]: script, [2]: version } = process.argv;
 if (isMain(import.meta.url)) {
   if (!isValidVersion(version)) {
     console.log(
-      `Usage: ${path.basename(script)} [<version number> | ${VALID_TAGS.join(" | ")}]`
+      `Usage: ${path.basename(script)} [<version number>]`
     );
     process.exitCode = 1;
   } else {
     setReactVersion(version, process.argv.includes("--core-only")).then(() => {
-      const numVersion = VALID_TAGS.includes(version)
-        ? Number.MAX_SAFE_INTEGER
-        : toVersionNumber(version);
+      const numVersion = toVersionNumber(version);
       if (numVersion >= v(0, 74, 0)) {
         disableJetifier();
       }
