@@ -632,8 +632,10 @@ exports.validateAssemblediOSAndroid = validateAssemblediOSAndroid;
 
 exports.buildIOS = buildIOS;
 exports.buildIOSRNTA = buildIOSRNTA;
+exports.buildiosRNTA = buildIOSRNTA; // lower case for CI matrix
 exports.buildAndroid = buildAndroid;
 exports.buildAndroidRNTA = buildAndroidRNTA;
+exports.buildandroidRNTA = buildAndroidRNTA; // lower case for CI matrix
 exports.createIOSUniversalLibs = createIOSUniversalLibs;
 exports.copyFiles = copyFiles;
 
