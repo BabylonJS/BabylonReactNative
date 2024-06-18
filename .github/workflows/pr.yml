@@ -24,14 +24,14 @@ jobs:
         run: brew install ninja
       - name: Setup Watchman
         run: brew install watchman
-      - name: Patch BRNPlayground for RN ${{ matrix.react-native-version }}
-        run: git apply rnta-${{ matrix.react-native-version }}.patch --allow-empty
-        working-directory: ./Apps
+      - name: Set React-Native version ${{ matrix.react-native-version }}
+        run: npm run set-react-version -- ${{ matrix.react-native-version }}
+        working-directory: ./Apps/BRNPlayground
       - name: NPM Install (BRNPlayground)
         run: npm install
         working-directory: ./Apps/BRNPlayground
 
-      - name: Build Windows Bundle
+      - name: Build Bundle
         run: npm run build:${{ matrix.platform }}
         working-directory: ./Apps/BRNPlayground
 
