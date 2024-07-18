@@ -73,6 +73,12 @@ namespace BabylonNative
 
         ~ReactNativeModule() override
         {
+            if (g_graphicsDevice)
+            {
+                g_update->Finish();
+                g_graphicsDevice->FinishRenderingCurrentFrame();
+            }
+
             *m_isRunning = false;
             Napi::Detach(m_env);
         }
@@ -94,13 +100,20 @@ namespace BabylonNative
             }
             else
             {
+                if (m_isRenderingEnabled)
+                {
+                    g_update->Finish();
+                    g_graphicsDevice->FinishRenderingCurrentFrame();
+                }
+
                 g_graphicsDevice->UpdateWindow(m_graphicsConfig.Window);
                 g_graphicsDevice->UpdateSize(m_graphicsConfig.Width, m_graphicsConfig.Height);
             }
             g_graphicsDevice->UpdateMSAA(mMSAAValue);
             g_graphicsDevice->UpdateAlphaPremultiplied(mAlphaPremultiplied);
 
-            g_graphicsDevice->EnableRendering();
+            g_graphicsDevice->StartRenderingCurrentFrame();
+            g_update->Start();
 
             std::call_once(m_isGraphicsInitialized, [this]()
             {
@@ -150,10 +163,10 @@ namespace BabylonNative
             // Otherwise rendering can be implicitly enabled, which may not be desirable (e.g. after the engine is disposed).
             if (g_graphicsDevice && m_isRenderingEnabled)
             {
-                g_graphicsDevice->StartRenderingCurrentFrame();
-                g_update->Start();
                 g_update->Finish();
                 g_graphicsDevice->FinishRenderingCurrentFrame();
+                g_graphicsDevice->StartRenderingCurrentFrame();
+                g_update->Start();
             }
         }
 
@@ -166,6 +179,8 @@ namespace BabylonNative
         {
             if (g_graphicsDevice)
             {
+                g_update->Finish();
+                g_graphicsDevice->FinishRenderingCurrentFrame();
                 g_nativeCanvas->FlushGraphicResources();
                 g_graphicsDevice->DisableRendering();
             }
