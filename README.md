@@ -73,7 +73,7 @@ After merging upstream changes in the future, you will need to either run `npm i
 
 ### **Configuring a Mac Dev Environment**
 
-**Required Tools:** [Android Studio](https://developer.android.com/studio/) (including NDK 21.4.7075529), [CMake](https://cmake.org/), [Ninja](https://ninja-build.org/), [JDK 13](https://www.oracle.com/java/technologies/javase-jdk13-downloads.html)
+**Required Tools:** [Android Studio](https://developer.android.com/studio/) (including NDK 24.0.8215888), [CMake](https://cmake.org/), [Ninja](https://ninja-build.org/), [JDK 13](https://www.oracle.com/java/technologies/javase-jdk13-downloads.html)
 
 - The `PATH` environment variable must include the path to adb (typically ~/Library/Android/sdk/platform-tools/).
 - The `PATH` environment variable must include the path to Ninja, or Ninja must be [installed via a package manager](https://github.com/ninja-build/ninja/wiki/Pre-built-Ninja-packages).
@@ -95,7 +95,7 @@ export JAVA_HOME=$(/usr/libexec/java_home -v 13)
 
 ### **Configuring a Windows Dev Environment**
 
-**Required Tools:** [Android Studio](https://developer.android.com/studio/) (including NDK 21.4.7075529), [CMake](https://cmake.org/), [Ninja](https://ninja-build.org/), [Visual Studio 2019](https://visualstudio.microsoft.com/vs/)
+**Required Tools:** [Android Studio](https://developer.android.com/studio/) (including NDK 24.0.8215888), [CMake](https://cmake.org/), [Ninja](https://ninja-build.org/), [Visual Studio 2019](https://visualstudio.microsoft.com/vs/)
 
 - The `PATH` environment variable must include the path to adb (typically %LOCALAPPDATA%/Android/sdk/platform-tools/).
 - The `PATH` environment variable must include the path to Ninja, or Ninja must be [installed via a package manager](https://github.com/ninja-build/ninja/wiki/Pre-built-Ninja-packages).  
@@ -104,7 +104,7 @@ export JAVA_HOME=$(/usr/libexec/java_home -v 13)
 
 ### **Configuring a Linux Dev Environment**
 
-**Required Tools:** [Android Studio](https://developer.android.com/studio/) (including NDK 21.4.7075529)
+**Required Tools:** [Android Studio](https://developer.android.com/studio/) (including NDK 24.0.8215888)
 
 With Ubuntu, you can install needed packages by this command:
 
