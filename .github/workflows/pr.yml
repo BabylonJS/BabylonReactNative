@@ -24,6 +24,20 @@ jobs:
           cmake-version: '3.26.3'
       - name: Setup Ninja
         run: brew install ninja
+            
+      - name: Free up disk space
+        shell: bash
+        run: |
+          df -h
+          xcrun simctl delete all
+          sudo rm -rf ~/Library/Developer/CoreSimulator/Caches/*
+          sudo rm -rf /Applications/Xcode_14.3.1.app
+          sudo rm -rf /Applications/Xcode_15.0.1.app
+          sudo rm -rf /Applications/Xcode_15.1.app
+          sudo rm -rf /Applications/Xcode_15.2.app
+          sudo rm -rf /Applications/Xcode_15.3.app
+          df -h
+
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
