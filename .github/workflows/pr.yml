@@ -26,9 +26,6 @@ jobs:
           cmake-version: '3.26.3'
       - name: Setup Ninja
         run: brew install ninja
-            
-      - name: Free up disk space
-        uses: ./.github/workflows/macos_freespace
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
