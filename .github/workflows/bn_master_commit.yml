@@ -12,12 +12,12 @@ jobs:
     name: Build Android - BabylonNative ${{ github.event.client_payload.sha }}
     runs-on: macos-latest
     steps:
-      - name: Free space
-        uses: ./.github/workflows/macos_freespace
       - name: Checkout Repo
         uses: actions/checkout@v2.3.3
         with:
           submodules: 'recursive'
+      - name: Free space
+        uses: ./.github/workflows/macos_freespace
       - name: Setup Node 16
         uses: actions/setup-node@v3
         with:
@@ -53,12 +53,12 @@ jobs:
     name: Build iOS - BabylonNative ${{ github.event.client_payload.sha }}
     runs-on: macos-latest
     steps:
-      - name: Free space
-        uses: ./.github/workflows/macos_freespace
       - name: Checkout Repo
         uses: actions/checkout@v2.3.3
         with:
           submodules: 'recursive'
+      - name: Free space
+        uses: ./.github/workflows/macos_freespace
       - name: Setup Node 16
         uses: actions/setup-node@v3
         with:
