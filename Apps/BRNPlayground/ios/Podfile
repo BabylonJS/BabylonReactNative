@@ -1,5 +1,17 @@
 require_relative '../node_modules/react-native-test-app/test_app'
+require_relative '../node_modules/react-native-permissions/scripts/setup'
+
 
 workspace 'BRNPlayground.xcworkspace'
 
-use_test_app!
+options = {
+  :bridgeless_enabled => true,
+  :fabric_enabled => true,
+  :hermes_enabled => true,
+}
+
+# react-native-permissions
+setup_permissions(['Camera'])
+
+use_test_app! options 
+

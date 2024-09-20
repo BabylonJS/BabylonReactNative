@@ -2,15 +2,25 @@
 
 #import <React/RCTBridgeModule.h>
 #import <ReactCommon/CallInvoker.h>
+#import <React/RCTInvalidating.h>
+
+#ifdef RCT_NEW_ARCH_ENABLED
+#import <BabylonModuleSpec/BabylonModuleSpec.h>
+#endif
 
 #import <Foundation/Foundation.h>
 
-@interface RCTBridge (RCTTurboModule)
+@interface RCTBridge (CallInvoker)
 - (std::shared_ptr<facebook::react::CallInvoker>)jsCallInvoker;
 @end
 
-@interface BabylonModule : NSObject <RCTBridgeModule>
+@interface BabylonModule : NSObject <RCTBridgeModule, RCTInvalidating>
 @end
+
+#ifdef RCT_NEW_ARCH_ENABLED
+@interface BabylonModule () <NativeBabylonModuleSpec>
+@end
+#endif // RCT_NEW_ARCH_ENABLED
 
 @implementation BabylonModule
 
@@ -31,5 +41,15 @@ RCT_EXPORT_METHOD(resetView:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRe
         resolve([NSNull null]);
     });
 }
+
+- (void)invalidate {
+    [BabylonNativeInterop invalidate];
+}
+
+#ifdef RCT_NEW_ARCH_ENABLED
+- (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:(const facebook::react::ObjCTurboModule::InitParams &)params {
+  return std::make_shared<facebook::react::NativeBabylonModuleSpecJSI>(params);
+}
+#endif // RCT_NEW_ARCH_ENABLED
 
 @end
