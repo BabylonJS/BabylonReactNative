@@ -19,18 +19,6 @@ on:
         default: --dry-run
 
 jobs:
-  build-android-ios-064:
-    uses: ./.github/workflows/ios_android.yml
-    with:
-      react-native-version: '0.64'
-      release-version: ${{ github.event.inputs.release_version }}
-
-  build-android-ios-065:
-    uses: ./.github/workflows/ios_android.yml
-    with:
-      react-native-version: '0.65'
-      release-version: ${{ github.event.inputs.release_version }}
-
   build-android-ios-069:
     uses: ./.github/workflows/ios_android.yml
     with:
@@ -47,18 +35,6 @@ jobs:
     uses: ./.github/workflows/ios_android.yml
     with:
       react-native-version: '0.71'
-      release-version: ${{ github.event.inputs.release_version }}
-
-  build-windows-064:
-    uses: ./.github/workflows/windows.yml
-    with:
-      react-native-version: '0.64'
-      release-version: ${{ github.event.inputs.release_version }}
-
-  build-windows-065:
-    uses: ./.github/workflows/windows.yml
-    with:
-      react-native-version: '0.65'
       release-version: ${{ github.event.inputs.release_version }}
 
   build-windows-069:
@@ -85,7 +61,7 @@ jobs:
       release-version: ${{ github.event.inputs.release_version }}
 
   package:
-    needs: [build-typescript, build-android-ios-064, build-android-ios-065, build-android-ios-069, build-android-ios-070, build-android-ios-071, build-windows-064, build-windows-065, build-windows-069, build-windows-070, build-windows-071]
+    needs: [build-typescript, build-android-ios-069, build-android-ios-070, build-android-ios-071, build-windows-069, build-windows-070, build-windows-071]
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
