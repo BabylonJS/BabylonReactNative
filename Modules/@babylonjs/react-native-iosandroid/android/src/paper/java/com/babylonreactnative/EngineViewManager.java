@@ -20,7 +20,7 @@ public final class EngineViewManager extends SimpleViewManager<EngineView> {
     @NonNull
     @Override
     public String getName() {
-        return "EngineView";
+        return "EngineViewNativeComponent";
     }
 
     @ReactProp(name = "isTransparent")

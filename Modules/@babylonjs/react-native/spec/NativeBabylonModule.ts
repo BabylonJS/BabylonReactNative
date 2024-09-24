@@ -6,4 +6,4 @@ export interface Spec extends TurboModule {
   resetView(): Promise<void>;
 }
 
-export default TurboModuleRegistry.get<Spec>("BabylonModule");
+export default TurboModuleRegistry.getEnforcing<Spec>("BabylonModule");

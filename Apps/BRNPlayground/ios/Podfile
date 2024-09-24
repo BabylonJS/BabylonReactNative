@@ -5,8 +5,6 @@ require_relative '../node_modules/react-native-permissions/scripts/setup'
 workspace 'BRNPlayground.xcworkspace'
 
 options = {
-  :bridgeless_enabled => true,
-  :fabric_enabled => true,
   :hermes_enabled => true,
 }
 

@@ -12,6 +12,8 @@ export interface NativeProps extends ViewProps {
   isTransparent?: WithDefault<boolean, false>;
   antiAliasing?: Int32;
   onSnapshotDataReturned?: DirectEventHandler<null>;
+  // Android only
+  androidView?: string;
 }
 
 type EngineViewViewType = HostComponent<NativeProps>;

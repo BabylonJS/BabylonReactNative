@@ -20,7 +20,15 @@ def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
 }
 
+def isNewArchitectureEnabled() {
+  return rootProject.hasProperty("newArchEnabled") &&  rootProject.getProperty("newArchEnabled") == "true"
+}
+
 apply plugin: 'com.android.library'
+
+if (isNewArchitectureEnabled()) {
+  apply plugin: 'com.facebook.react'
+}
 
 def rootBuildDir = "${rootProject.rootDir}/../../../../Build/Android"
 def extractedLibDir = "${rootBuildDir}/lib"
@@ -77,6 +85,8 @@ android {
     defaultConfig {
         minSdkVersion safeExtGet('minSdkVersion', DEFAULT_MIN_SDK_VERSION)
         targetSdkVersion safeExtGet('targetSdkVersion', DEFAULT_TARGET_SDK_VERSION)
+        buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+
         versionCode 1
         versionName "1.0"
         externalNativeBuild {
@@ -140,6 +150,19 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    sourceSets {
+        main {
+            if (isNewArchitectureEnabled()) {
+                java.srcDirs += [
+                    "src/fabric/java",
+                    "generated/jni",
+                    "generated/java",
+                ]
+            } else {
+                java.srcDirs += ["src/paper/java"]
+            }
+        }
+    }
 }
 
 repositories {
@@ -155,6 +178,14 @@ dependencies {
 
     extractHeaders 'com.facebook.fbjni:fbjni:0.3.0:headers'
     extractLibs 'com.facebook.fbjni:fbjni:0.3.0', 'com.google.ar:core:1.22.0'
+}
+
+if (isNewArchitectureEnabled()) {
+  react {
+    jsRootDir = file("../../react-native/spec")
+    libraryName = "BabylonModuleSpec"
+    codegenJavaPackageName = "com.babylonreactnative"
+  }
 }
 
 def configureReactNativePom(def pom) {
