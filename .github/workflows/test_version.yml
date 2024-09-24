@@ -57,7 +57,7 @@ jobs:
           msbuild.exe /p:Configuration="Release" /p:Platform="x64" /m "./windows/Playground.sln"
 
       - name: Upload UWP x64
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: 'WindowsAppx'
           path: Playground/windows/AppPackages/Playground/Playground_1.0.0.0_x64_Test/ #Playground_1.0.0.0_x64.appx
@@ -88,7 +88,7 @@ jobs:
           ./gradlew app:assembleRelease --stacktrace --info
 
       - name: Upload APK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: 'AndroidAPK'
           path: Playground/android/app/build/outputs/apk/release/app-release.apk
@@ -122,7 +122,7 @@ jobs:
           xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -workspace Playground.xcworkspace -scheme Playground build CODE_SIGNING_ALLOWED=NO -archivePath ./playgroundSimulator.xcarchive archive
 
       - name: Upload iOS App
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: 'iOSApp'
           path: Playground/ios/playgroundSimulator.xcarchive
@@ -152,7 +152,7 @@ jobs:
           ./gradlew app:assembleRelease --stacktrace --info
 
       - name: Upload APK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: 'AndroidBasekitAPK'
           path: Playground/android/app/build/outputs/apk/release/app-release.apk
@@ -185,7 +185,7 @@ jobs:
           xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -workspace Playground.xcworkspace -scheme Playground build CODE_SIGNING_ALLOWED=NO -archivePath ./playgroundSimulator.xcarchive archive
 
       - name: Upload iOS App
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: 'iOSBasekitApp'
           path: Playground/ios/playgroundSimulator.xcarchive
@@ -195,7 +195,7 @@ jobs:
 #   runs-on: macos-latest
 #   steps:
 #   - name: Download APK
-#     uses: actions/download-artifact@v2
+#     uses: actions/download-artifact@v4
 #     with:
 #       name: 'AndroidAPK'
 #       path: ./

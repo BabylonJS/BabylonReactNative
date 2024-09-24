@@ -27,7 +27,7 @@ jobs:
         run: npx gulp buildTS --releaseVersion ${{ inputs.release-version }}
         working-directory: ./Package
       - name: Upload Assembled Folder
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: 'Assembled'
           path: Package/Assembled
