@@ -3,8 +3,6 @@ on:
   pull_request:
     branches:
       - master
-env:
-  BRN_Version: '0.64'
 
 jobs:
   build-android-rnta:
@@ -12,7 +10,7 @@ jobs:
     strategy:
       matrix:
         platform: [ios, android]
-        react-native-version: ['0.69', '0.70', '0.71']
+        react-native-version: ['0.69', '0.70', '0.71', '0.74']
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2.3.3
@@ -24,6 +22,8 @@ jobs:
         run: brew install ninja
       - name: Setup Watchman
         run: brew install watchman
+      - name: Free space
+        uses: ./.github/workflows/macos_freespace
       - name: Set React-Native version ${{ matrix.react-native-version }}
         run: npm run set-react-version -- ${{ matrix.react-native-version }}
         working-directory: ./Apps/BRNPlayground

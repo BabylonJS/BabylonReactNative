@@ -29,6 +29,10 @@ Babylon React Native relies heavily on newer React Native constructs including J
 
 See the [package usage](Modules/@babylonjs/react-native/README.md) for installation instructions and/or the Playground app's [App.tsx](Apps/Playground/App.tsx) for example usage. You can also clone [this sample repo](https://github.com/BabylonJS/BabylonReactNativeSample) to quickly get started.
 
+## Frameworks (Expo, ...)
+
+Note: Official support for React Native frameworks, like Expo, is not provided by BabylonReactNative. While BabylonReactNative may work with these frameworks, we do not conduct testing, bug fixes, or feature development to ensure compatibility.
+
 ## Contributing
 
 This quick overview will help you get started developing in the Babylon React Native repository. We support development on Windows and MacOS, but assume the use of [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell) in the instructions below (unless otherwise noted).
@@ -91,7 +95,7 @@ export JAVA_HOME=$(/usr/libexec/java_home -v 13)
 
 ### **Configuring a Windows Dev Environment**
 
-**Required Tools:** [Android Studio](https://developer.android.com/studio/) (including NDK 21.4.7075529), [CMake](https://cmake.org/), [Ninja](https://ninja-build.org/), [Visual Studio 2019](https://visualstudio.microsoft.com/vs/)
+**Required Tools:** [Android Studio](https://developer.android.com/studio/) (including NDK 21.4.7075529), [CMake](https://cmake.org/), [Ninja](https://ninja-build.org/), [Visual Studio 2022](https://visualstudio.microsoft.com/vs/)
 
 - The `PATH` environment variable must include the path to adb (typically %LOCALAPPDATA%/Android/sdk/platform-tools/).
 - The `PATH` environment variable must include the path to Ninja, or Ninja must be [installed via a package manager](https://github.com/ninja-build/ninja/wiki/Pre-built-Ninja-packages).  
@@ -228,11 +232,11 @@ For iOS the XCode project needs to be generated with `CMake` as described [above
 
 | React Native | Babylon React Native |
 |---|---|
-| 0.64 | 1.4.0, 1.4.1, 1.4.2, 1.4.3, 1.4.4, 1.5.0, 1.5.1, 1.6.0, 1.6.1, 1.6.3, 1.8.1 |
-| 0.65 -> 0.68 | 1.4.0, 1.4.1, 1.4.2, 1.4.3, 1.4.4, 1.5.0, 1.5.1, 1.6.0, 1.6.1, 1.6.3, 1.8.1 |
-| 0.69 | 1.4.0, 1.4.1, 1.4.2, 1.4.3, 1.4.4, 1.5.0, 1.5.1, 1.6.0, 1.6.1, 1.6.3, 1.8.1 |
-| 0.70 | 1.5.0, 1.5.1, 1.6.0, 1.6.1, 1.6.3, 1.8.1 |
-| 0.71 -> 0.73 | 1.6.0, 1.6.1, 1.6.3, 1.8.1 |
+| 0.64 | 1.4.0, 1.4.1, 1.4.2, 1.4.3, 1.4.4, 1.5.0, 1.5.1, 1.6.0, 1.6.1, 1.6.3, 1.8.1, 1.8.2, 1.8.5 |
+| 0.65 -> 0.68 | 1.4.0, 1.4.1, 1.4.2, 1.4.3, 1.4.4, 1.5.0, 1.5.1, 1.6.0, 1.6.1, 1.6.3, 1.8.1, 1.8.2, 1.8.5 |
+| 0.69 | 1.4.0, 1.4.1, 1.4.2, 1.4.3, 1.4.4, 1.5.0, 1.5.1, 1.6.0, 1.6.1, 1.6.3, 1.8.1, 1.8.2, 1.8.5 |
+| 0.70 | 1.5.0, 1.5.1, 1.6.0, 1.6.1, 1.6.3, 1.8.1, 1.8.2, 1.8.5 |
+| 0.71 -> 0.73 | 1.6.0, 1.6.1, 1.6.3, 1.8.1, 1.8.2, 1.8.5 |
 
 Here are the package names for Android/iOS and Windows:
 
@@ -262,7 +266,7 @@ Depending on the Babylon React Native NPM package version, some Babylon.js NPM d
 | 1.6.0 | 5.42.2, 5.43.0, 5.43.1, 5.43.2, 5.44.0, 5.45.0, 5.45.1, 5.45.2, 5.46.0, 5.47.0, 5.48.0, 5.48.1, 5.49.1 |
 | 1.6.1 | 5.42.2, 5.43.0, 5.43.1, 5.43.2, 5.44.0, 5.45.0, 5.45.1, 5.45.2, 5.46.0, 5.47.0, 5.48.0, 5.48.1, 5.49.1 |
 | 1.6.3 | 5.53.1, 5.54.0, 5.55.0, 5.56.0, 5.57.0, 5.57.1, 6.0.0, 6.1.0, 6.2.0, 6.3.0, 6.3.1, 6.4.0, 6.4.1, 6.5.0, 6.5.1, 6.6.0, 6.6.1, 6.7.0, 6.8.1, 6.9.0, 6.11.2, 6.12.0, 6.12.1,6.12.2, 6.12.3, 6.14.0 |
-| 1.8.1 | 5.53.1, 5.54.0, 5.55.0, 5.56.0, 5.57.0, 5.57.1, 6.0.0, 6.1.0, 6.2.0, 6.3.0, 6.3.1, 6.4.0, 6.4.1, 6.5.0, 6.5.1, 6.6.0, 6.6.1, 6.7.0, 6.8.1, 6.9.0, 6.11.2, 6.12.0, 6.12.1,6.12.2, 6.12.3, 6.14.0 |
+| 1.8.1,1.8.2, 1.8.5 | 5.53.1, 5.54.0, 5.55.0, 5.56.0, 5.57.0, 5.57.1, 6.0.0, 6.1.0, 6.2.0, 6.3.0, 6.3.1, 6.4.0, 6.4.1, 6.5.0, 6.5.1, 6.6.0, 6.6.1, 6.7.0, 6.8.1, 6.9.0, 6.11.2, 6.12.0, 6.12.1,6.12.2, 6.12.3, 6.14.0 |
 
 ## Security
 

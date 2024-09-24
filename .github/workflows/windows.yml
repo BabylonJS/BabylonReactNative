@@ -41,12 +41,12 @@ jobs:
         run: npx gulp buildUWPPublish --reactNative ${{ inputs.react-native-version }} --releaseVersion ${{ inputs.release-version }}
         working-directory: ./Package
       - name: Upload Assembled-Windows Folder
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: 'Assembled-Windows${{ inputs.react-native-version }}'
           path: Package/Assembled-Windows
       - name: Upload Assembled-BaseKit-Windows Folder
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: 'Assembled-BaseKit-Windows${{ inputs.react-native-version }}'
           path: Package/Assembled-BaseKit-Windows
