@@ -125,7 +125,7 @@ jobs:
         run: npm install
         working-directory: ./Package
       - name: Download Assembled Folder
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: 'Assembled'
           path: Package/Assembled
@@ -153,7 +153,7 @@ jobs:
         run: npm install
         working-directory: ./Package
       - name: Download Assembled${{ matrix.basekit }}-iOSAndroid ${{ matrix.react-native-version }} Folder
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: 'Assembled${{ matrix.basekit }}-iOSAndroid${{ matrix.react-native-version }}'
           path: Package/Assembled
