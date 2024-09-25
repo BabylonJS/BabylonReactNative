@@ -155,7 +155,7 @@ jobs:
         working-directory: ./Apps/BRNPlayground
 
       - name: CMake BabylonNative
-        run: cmake -G "Visual Studio 16 2019" -B ./Build/uwp_${{ matrix.platform }} -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_UNITY_BUILD=true -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=10.0.19041.0 -A ${{ matrix.platform }} ./../react-native-windows/windows
+        run: cmake -G "Visual Studio 16 2019" -B ./Build/uwp_${{ matrix.platform }} -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_UNITY_BUILD=true -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=10.0.19041.0 -A ${{ matrix.platform == 'x86' && 'win32' || matrix.platform}} ./../react-native-windows/windows
         working-directory: ./Modules/@babylonjs/react-native
 
       - name: Nuget restore
