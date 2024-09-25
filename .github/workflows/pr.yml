@@ -112,6 +112,63 @@ jobs:
     with:
       release-version: 0.0.${GITHUB_SHA::8}
 
+  build-windows-rnta:
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        platform: [x86, x64, ARM64]
+        config: [Debug, Release]
+        react-native-version: ['0.73', '0.74']
+    steps:
+      - name: Support longpaths
+        run: git config --system core.longpaths true
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+        with:
+          submodules: 'true'
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+#      - name: Setup Node 20
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: 20
+      - name: Install watchman
+        run: choco install watchman
+        working-directory: ./Apps/BRNPlayground
+      - name: Set React-Native version ${{ matrix.react-native-version }}
+        run: npm run set-react-version -- ${{ matrix.react-native-version }}
+      - name: NPM Install RNTA
+        run: npm install
+        working-directory: ./Apps/BRNPlayground
+
+      - name: Build Windows Bundle
+        run: npm run build:windows
+        working-directory: ./Apps/BRNPlayground
+
+      - name: NPM Install Package
+        run: npm install
+        working-directory: ./Package
+
+      - name: NPM Generate Windows Project
+        run: npx install-windows-test-app
+        working-directory: ./Apps/BRNPlayground
+
+      - name: CMake BabylonNative
+        run: cmake -G "Visual Studio 16 2019" -B ./Modules/@babylonjs/react-native/Build/uwp_${{ matrix.platform }}${{ matrix.config }} -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_UNITY_BUILD=true -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=10.0.19041.0 -A ${{ matrix.platform }} ./../../../react-native-windows/windows
+        working-directory: ./
+
+      - name: Nuget restore
+        run: nuget restore BRNPlayground.sln
+        working-directory: ./Apps/BRNPlayground/windows
+
+      - name: Windows build BN ${{ matrix.platform }} ${{ matrix.config }}
+        run: MSBuild /p:Platform="${{ matrix.platform }}" /p:Configuration="${{ matrix.config }}" /m ReactNativeBabylon.sln
+        working-directory: ./Modules@babylonjs/react-native/Build/uwp_${{ matrix.platform }}${{ matrix.config }}
+        
+      - name: Windows build BRN ${{ matrix.config }}
+        run: MSBuild /p:Platform="${{ matrix.platform }}" /p:Configuration="${{ matrix.config }}" /m BRNPlayground.sln
+        working-directory: ./Apps/BRNPlayground/windows
+
   publish-react-native:
     needs: [build-typescript, build-upload-ios-android-rnta]
     runs-on: macos-latest
@@ -133,7 +190,7 @@ jobs:
         run: ls -R
       - name: Version & Publish Package @babylonjs/react-native
         run: |
-          npm version --no-git-tag-version 0.0.${GITHUB_SHA::8}
+          npm version --no-git-tag-version 10.0.0
           npm publish --access public --dry-run
         working-directory: ./Package/Assembled
         env:
@@ -161,7 +218,7 @@ jobs:
         run: ls -R
       - name: Version & Publish Package @babylonjs/react-native${{ matrix.basekit }}-iosandroid
         run: |
-          npm version --no-git-tag-version 0.0.${GITHUB_SHA::8}
+          npm version --no-git-tag-version 10.0.0
           npm publish --access public --dry-run
         working-directory: ./Package/Assembled
         env:
