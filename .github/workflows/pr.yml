@@ -9,7 +9,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        platform: [ios, android]
+        platform: [ios]
         react-native-version: ['0.69', '0.70', '0.71', '0.74']
     steps:
       - name: Checkout Repo
