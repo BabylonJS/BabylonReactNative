@@ -163,11 +163,11 @@ jobs:
         working-directory: ./Apps/BRNPlayground/windows
 
       - name: Windows build BN ${{ matrix.platform }} ${{ matrix.config }}
-        run: MSBuild /p:Platform="${{ matrix.platform }}" /p:Configuration="${{ matrix.config }}" /m ReactNativeBabylon.sln
+        run: MSBuild /p:Platform="${{ matrix.platform == 'x86' && 'win32' || matrix.platform}}" /p:Configuration="${{ matrix.config }}" /m ReactNativeBabylon.sln
         working-directory: ./Modules/@babylonjs/react-native/Build/uwp_${{ matrix.platform }}
         
       - name: Windows build BRN ${{ matrix.config }}
-        run: MSBuild /p:Platform="${{ matrix.platform }}" /p:Configuration="${{ matrix.config }}" /m BRNPlayground.sln
+        run: MSBuild /p:Platform="${{ matrix.platform == 'x86' && 'win32' || matrix.platform}}" /p:Configuration="${{ matrix.config }}" /m BRNPlayground.sln
         working-directory: ./Apps/BRNPlayground/windows
 
   publish-react-native:
