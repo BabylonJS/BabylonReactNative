@@ -154,9 +154,13 @@ jobs:
         run: npx install-windows-test-app
         working-directory: ./Apps/BRNPlayground
 
+      - name: BabylonNative build directory
+        run: mkdir @babylonjs/react-native/Build/uwp_${{ matrix.platform }}
+        working-directory: ./Modules
+
       - name: CMake BabylonNative
-        run: cmake -G "Visual Studio 16 2019" -B ./Build/uwp_${{ matrix.platform }} -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_UNITY_BUILD=true -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=10.0.19041.0 -A ${{ matrix.platform == 'x86' && 'win32' || matrix.platform}} ./../react-native-windows/windows
-        working-directory: ./Modules/@babylonjs/react-native
+        run: cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_UNITY_BUILD=true -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=10.0.19041.0 -A ${{ matrix.platform == 'x86' && 'win32' || matrix.platform}} ./../../../react-native-windows/windows
+        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_${{ matrix.platform }}
 
       - name: Nuget restore
         run: nuget restore BRNPlayground.sln
@@ -166,7 +170,7 @@ jobs:
         run: MSBuild /p:Platform="${{ matrix.platform == 'x86' && 'win32' || matrix.platform}}" /p:Configuration="${{ matrix.config }}" /m ReactNativeBabylon.sln
         working-directory: ./Modules/@babylonjs/react-native/Build/uwp_${{ matrix.platform }}
         
-      - name: Windows build BRN ${{ matrix.config }}
+      - name: Windows build BRN ${{ matrix.platform }} ${{ matrix.config }}
         run: MSBuild /p:Platform="${{ matrix.platform == 'x86' && 'win32' || matrix.platform}}" /p:Configuration="${{ matrix.config }}" /m BRNPlayground.sln
         working-directory: ./Apps/BRNPlayground/windows
 
