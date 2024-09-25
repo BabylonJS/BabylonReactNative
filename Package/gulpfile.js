@@ -14,6 +14,7 @@ let assembledWindowsDir = 'Assembled-Windows';
 let basekitBuild = false;
 let cmakeBasekitBuildDefinition = '';
 let basekitPackagePath = '';
+let playgroundDirectory = '../Apps/Playground/Playground/';
 
 function exec(command, workingDirectory = '.', logCommand = true) {
   if (logCommand) {
@@ -214,8 +215,8 @@ const copyIOSAndroidCommonFiles = () => {
 
 const copyIOSFiles = async () => {
   await new Promise(resolve => {
-    gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/ios/*.h')
-      .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/ios/*.mm'))
+    gulp.src(`${playgroundDirectory}/node_modules/@babylonjs/react-native-iosandroid/ios/*.h`)
+      .pipe(gulp.src(`${playgroundDirectory}/node_modules/@babylonjs/react-native-iosandroid/ios/*.mm`))
       // This xcodeproj is garbage that we don't need in the package, but `pod install` ignores the package if it doesn't contain at least one xcodeproj. 🤷🏼‍♂️
       .pipe(gulp.src('iOS/Build/ReactNativeBabylon.xcodeproj**/**/*'))
       .pipe(gulp.dest(`${assemblediOSAndroidDir}/ios`))
@@ -238,8 +239,8 @@ const createIOSUniversalLibs = async () => {
 const copyAndroidFiles = async () => {
   await new Promise(resolve => {
     gulp.src(`${basekitPackagePath}Android/build.gradle`)
-      .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/src**/main/AndroidManifest.xml'))
-      .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/src**/main/java/**/*'))
+      .pipe(gulp.src(`${playgroundDirectory}/node_modules/@babylonjs/react-native-iosandroid/android/src**/main/AndroidManifest.xml`))
+      .pipe(gulp.src(`${playgroundDirectory}/node_modules/@babylonjs/react-native-iosandroid/android/src**/main/java/**/*`))
       .pipe(gulp.dest(`${assemblediOSAndroidDir}/android`))
       .on('end', resolve);
   });
@@ -251,7 +252,7 @@ const copyAndroidFiles = async () => {
   });
 
   await new Promise(resolve => {
-    const jnidir = '../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/build/intermediates/library_and_local_jars_jni/release/jni/**';
+    const jnidir = `${playgroundDirectory}/node_modules/@babylonjs/react-native-iosandroid/android/build/intermediates/library_and_local_jars_jni/release/jni/**`;
     gulp.src(`${jnidir}/libBabylonNative.so`)
       .pipe(gulp.dest(`${assemblediOSAndroidDir}/android/src/main/jniLibs/`))
       .on('end', resolve);
@@ -263,7 +264,7 @@ const copyAndroidFiles = async () => {
   const versionIndex = process.argv.indexOf('--reactNative');
   if (versionIndex != -1 && process.argv[versionIndex + 1] != '0.71') {
     await new Promise(resolve => {
-      gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/build/intermediates/cmake/release/obj/{arm64-v8a,armeabi-v7a,x86}/libturbomodulejsijni.so')
+      gulp.src(`${playgroundDirectory}/node_modules/@babylonjs/react-native-iosandroid/android/build/intermediates/cmake/release/obj/{arm64-v8a,armeabi-v7a,x86}/libturbomodulejsijni.so`)
         .pipe(gulp.dest(`${assemblediOSAndroidDir}/android/src/main/jniLibs/`))
         .on('end', resolve);
     });
@@ -553,6 +554,10 @@ const switchToBaseKit = async () => {
   basekitPackagePath = 'BaseKit/';
 }
 
+const enableRNTA = async () => {
+  playgroundDirectory = '../Apps/BRNPlayground/';
+}
+
 const patchPackageVersion = async () => {
   const releaseVersionIndex = process.argv.indexOf('--releaseVersion');
   const versionIndex = process.argv.indexOf('--reactNative');
@@ -623,7 +628,10 @@ const copyFiles = gulp.parallel(copyIOSAndroidCommonFiles, copyIOSFiles, copyAnd
 
 const buildTS = gulp.series(patchPackageVersion, copyCommonFiles, copySharedFiles, buildTypeScript, validateAssembled);
 const buildIOSAndroid = gulp.series(patchPackageVersion, buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validateAssemblediOSAndroid);
+const buildIOSAndroidRNTA = gulp.series(patchPackageVersion, buildIOSRNTA, buildAndroidRNTA, createIOSUniversalLibs, copyFiles, validateAssemblediOSAndroid);
+
 const build = gulp.series(buildIOSAndroid, switchToBaseKit, buildIOSAndroid);
+const buildRNTA = gulp.series(enableRNTA, buildIOSAndroidRNTA, switchToBaseKit, buildIOSAndroidRNTA);
 const rebuild = gulp.series(clean, build);
 const pack = gulp.series(rebuild, createPackage);
 
@@ -641,6 +649,7 @@ exports.copyFiles = copyFiles;
 
 exports.clean = clean;
 exports.build = build;
+exports.buildRNTA = buildRNTA;
 exports.rebuild = rebuild;
 exports.pack = pack;
 
