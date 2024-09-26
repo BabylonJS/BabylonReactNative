@@ -542,6 +542,11 @@ const validateAssemblediOS = async () => {
   checkDirectory(actualios, expectedios, `${assemblediOSAndroidDir}`);
 }
 
+const validateAssemblediOSAndroid = async() => {
+  await validateAssembledAndroid();
+  await validateAssemblediOS();
+}
+
 const createPackage = async () => {
   exec('npm pack', 'Assembled');
 };
@@ -639,10 +644,8 @@ const copyFilesiOS = gulp.parallel(copyIOSAndroidCommonFiles, copyIOSFiles);
 
 const buildTS = gulp.series(patchPackageVersion, copyCommonFiles, copySharedFiles, buildTypeScript, validateAssembled);
 const buildIOSAndroid = gulp.series(patchPackageVersion, buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validateAssemblediOSAndroid);
-const buildIOSAndroidRNTA = gulp.series(patchPackageVersion, buildIOSRNTA, buildAndroidRNTA, createIOSUniversalLibs, copyFiles, validateAssemblediOSAndroid);
 
 const build = gulp.series(buildIOSAndroid, switchToBaseKit, buildIOSAndroid);
-const buildRNTA = gulp.series(enableRNTA, buildIOSAndroidRNTA, switchToBaseKit, buildIOSAndroidRNTA);
 
 
 const _buildAndroidRNTA = gulp.series(patchPackageVersion, buildAndroidRNTA, copyFilesAndroid, validateAssembledAndroid);
@@ -658,11 +661,7 @@ exports.validateAssembled = validateAssembled;
 exports.validateAssemblediOSAndroid = validateAssemblediOSAndroid;
 
 exports.buildIOS = buildIOS;
-exports.buildIOSRNTA = buildIOSRNTA;
-exports.buildiosRNTA = buildIOSRNTA; // lower case for CI matrix
 exports.buildAndroid = buildAndroid;
-exports.buildAndroidRNTA = buildAndroidRNTA;
-exports.buildandroidRNTA = buildAndroidRNTA; // lower case for CI matrix
 
 exports.buildRNTAandroid = buildRNTAandroid;
 exports.buildRNTAios = buildRNTAios;
@@ -672,7 +671,6 @@ exports.copyFiles = copyFiles;
 
 exports.clean = clean;
 exports.build = build;
-exports.buildRNTA = buildRNTA;
 exports.rebuild = rebuild;
 exports.pack = pack;
 
