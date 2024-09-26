@@ -96,12 +96,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: 'Assembled-${{ matrix.platform }}${{ matrix.react-native-version }}'
-          path: Package/Assembled-${{ matrix.platform }}
+          path: Package/Assembled-iOSAndroid
       - name: Upload Assembled ${{ matrix.platform }} BaseKit Folder
         uses: actions/upload-artifact@v4
         with:
           name: 'Assembled-BaseKit-${{ matrix.platform }}${{ matrix.react-native-version }}'
-          path: Package/Assembled-BaseKit-${{ matrix.platform }}
+          path: Package/Assembled-BaseKit-iOSAndroid
 
   build-typescript:
     uses: ./.github/workflows/typescript.yml
