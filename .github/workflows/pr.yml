@@ -50,7 +50,7 @@ jobs:
 #        env:
 #          JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
   
-  build-upload-android-ios-rnta:
+  android-ios-rnta:
     runs-on: macos-latest
     strategy:
       matrix:
@@ -108,7 +108,7 @@ jobs:
     with:
       release-version: 0.0.${GITHUB_SHA::8}
 
-  build-windows-rnta:
+  windows-rnta:
     runs-on: windows-2019
     strategy:
       matrix:
@@ -171,7 +171,7 @@ jobs:
         working-directory: ./Apps/BRNPlayground/windows
 
   publish-react-native:
-    needs: [build-typescript, build-upload-android-ios-rnta]
+    needs: [build-typescript, android-ios-rnta]
     runs-on: macos-latest
     strategy:
       matrix:
@@ -198,7 +198,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   publish-react-native-iosandroid:
-    needs: [build-typescript, build-upload-android-ios-rnta]
+    needs: [build-typescript, android-ios-rnta]
     runs-on: macos-latest
     strategy:
       matrix:

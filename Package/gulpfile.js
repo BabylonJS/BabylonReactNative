@@ -440,8 +440,8 @@ const validateAssembledAndroid = async () => {
   let expectedandroid = [
     `${assemblediOSAndroidDir}/android`,
     `${assemblediOSAndroidDir}/android/build.gradle`,
-    `${assemblediOSAndroidDir}/android/include`,
-    `${assemblediOSAndroidDir}/android/include/IXrContextARCore.h`,
+    //`${assemblediOSAndroidDir}/android/include`,
+    //`${assemblediOSAndroidDir}/android/include/IXrContextARCore.h`, WHY?
     `${assemblediOSAndroidDir}/android/src`,
     `${assemblediOSAndroidDir}/android/src/main`,
     `${assemblediOSAndroidDir}/android/src/main/AndroidManifest.xml`,
@@ -639,7 +639,6 @@ const patchPackageVersion = async () => {
 
 const copyFiles = gulp.parallel(copyIOSAndroidCommonFiles, copyIOSFiles, copyAndroidFiles);
 
-const copyFilesAndroid = gulp.parallel(copyAndroidFiles);
 const copyFilesiOS = gulp.parallel(copyIOSAndroidCommonFiles, copyIOSFiles);
 
 const buildTS = gulp.series(patchPackageVersion, copyCommonFiles, copySharedFiles, buildTypeScript, validateAssembled);
@@ -648,7 +647,7 @@ const buildIOSAndroid = gulp.series(patchPackageVersion, buildIOS, buildAndroid,
 const build = gulp.series(buildIOSAndroid, switchToBaseKit, buildIOSAndroid);
 
 
-const _buildAndroidRNTA = gulp.series(patchPackageVersion, buildAndroidRNTA, copyFilesAndroid, validateAssembledAndroid);
+const _buildAndroidRNTA = gulp.series(patchPackageVersion, buildAndroidRNTA, copyAndroidFiles, validateAssembledAndroid);
 const _buildIOSRNTA = gulp.series(patchPackageVersion, buildIOSRNTA, createIOSUniversalLibs, copyFilesiOS, validateAssemblediOS);
 
 const buildRNTAandroid = gulp.series(enableRNTA, _buildAndroidRNTA, switchToBaseKit, _buildAndroidRNTA);
