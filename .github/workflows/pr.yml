@@ -114,7 +114,7 @@ jobs:
       matrix:
         platform: [x64, ARM64]
         config: [Debug, Release]
-        react-native-version: ['0.73', '0.74']
+        react-native-version: [''] #['0.73', '0.74']
     steps:
       - name: Support longpaths
         run: git config --system core.longpaths true
@@ -131,9 +131,9 @@ jobs:
       - name: Install watchman
         run: choco install watchman
         working-directory: ./Apps/BRNPlayground
-      - name: Set React-Native version ${{ matrix.react-native-version }}
-        run: npm run set-react-version -- ${{ matrix.react-native-version }}
-        working-directory: ./Apps/BRNPlayground
+#      - name: Set React-Native version ${{ matrix.react-native-version }}
+#        run: npm run set-react-version -- ${{ matrix.react-native-version }}
+#        working-directory: ./Apps/BRNPlayground
       - name: NPM Install RNTA
         run: npm install
         working-directory: ./Apps/BRNPlayground
