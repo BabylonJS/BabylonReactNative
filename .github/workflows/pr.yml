@@ -112,7 +112,7 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-        platform: [x64, ARM64]
+        platform: [x86, x64, ARM64]
         config: [Debug, Release]
         react-native-version: ['0.73', '0.74']
     steps:
@@ -124,10 +124,10 @@ jobs:
           submodules: 'true'
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
-#      - name: Setup Node 20
-#        uses: actions/setup-node@v3
-#        with:
-#          node-version: 20
+      - name: Setup Node 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
       - name: Install watchman
         run: choco install watchman
         working-directory: ./Apps/BRNPlayground
