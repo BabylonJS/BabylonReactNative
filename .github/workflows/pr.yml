@@ -124,16 +124,16 @@ jobs:
           submodules: 'true'
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
-      - name: Setup Node 20
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
+#      - name: Setup Node 20
+#        uses: actions/setup-node@v3
+#        with:
+#          node-version: 20
       - name: Install watchman
         run: choco install watchman
         working-directory: ./Apps/BRNPlayground
-      - name: Set React-Native version ${{ matrix.react-native-version }}
-        run: npm run set-react-version -- ${{ matrix.react-native-version }}
-        working-directory: ./Apps/BRNPlayground
+#      - name: Set React-Native version ${{ matrix.react-native-version }}
+#        run: npm run set-react-version -- ${{ matrix.react-native-version }}
+#        working-directory: ./Apps/BRNPlayground
       - name: NPM Install RNTA
         run: npm install
         working-directory: ./Apps/BRNPlayground
