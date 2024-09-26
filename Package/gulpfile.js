@@ -436,8 +436,8 @@ const validateAssembled = async () => {
   checkDirectory(actual, expected, 'Assembled');
 }
 
-const validateAssemblediOSAndroid = async () => {
-  let expectediosandroid = [
+const validateAssembledAndroid = async () => {
+  let expectedandroid = [
     `${assemblediOSAndroidDir}/android`,
     `${assemblediOSAndroidDir}/android/build.gradle`,
     `${assemblediOSAndroidDir}/android/include`,
@@ -463,6 +463,25 @@ const validateAssemblediOSAndroid = async () => {
     `${assemblediOSAndroidDir}/android/src/main/jniLibs/x86/libBabylonNative.so`,
     `${assemblediOSAndroidDir}/android/src/main/jniLibs/x86_64`,
     `${assemblediOSAndroidDir}/android/src/main/jniLibs/x86_64/libBabylonNative.so`,
+  ];
+
+  const versionIndex = process.argv.indexOf('--reactNative');	
+  if (versionIndex != -1) {	
+    if (process.argv[versionIndex + 1] !== '0.71') {	
+      const expectedandroidNot071 = [
+        `${assemblediOSAndroidDir}/android/src/main/jniLibs/arm64-v8a/libturbomodulejsijni.so`,
+        `${assemblediOSAndroidDir}/android/src/main/jniLibs/armeabi-v7a/libturbomodulejsijni.so`,
+        `${assemblediOSAndroidDir}/android/src/main/jniLibs/x86/libturbomodulejsijni.so`,
+      ];
+      expectedandroid = expectedandroid.concat(expectedandroidNot071);
+    }
+  }
+  const actualandroid = glob.sync(`${assemblediOSAndroidDir}/**/*`);
+  checkDirectory(actualandroid, expectedandroid, `${assemblediOSAndroidDir}`);
+}
+
+const validateAssemblediOS = async () => {
+  let expectedios = [
     `${assemblediOSAndroidDir}/ios`,
     `${assemblediOSAndroidDir}/ios/BabylonModule.mm`,
     `${assemblediOSAndroidDir}/ios/BabylonNativeInterop.h`,
@@ -519,19 +538,8 @@ const validateAssemblediOSAndroid = async () => {
     `${assemblediOSAndroidDir}/NOTICE.html`,
   ];
 
-  const versionIndex = process.argv.indexOf('--reactNative');	
-  if (versionIndex != -1) {	
-    if (process.argv[versionIndex + 1] !== '0.71') {	
-      const expectediosandroidNot071 = [
-        `${assemblediOSAndroidDir}/android/src/main/jniLibs/arm64-v8a/libturbomodulejsijni.so`,
-        `${assemblediOSAndroidDir}/android/src/main/jniLibs/armeabi-v7a/libturbomodulejsijni.so`,
-        `${assemblediOSAndroidDir}/android/src/main/jniLibs/x86/libturbomodulejsijni.so`,
-      ];
-      expectediosandroid = expectediosandroid.concat(expectediosandroidNot071);
-    }
-  }
-  const actualiosandroid = glob.sync(`${assemblediOSAndroidDir}/**/*`);
-  checkDirectory(actualiosandroid, expectediosandroid, `${assemblediOSAndroidDir}`);
+  const actualios = glob.sync(`${assemblediOSAndroidDir}/**/*`);
+  checkDirectory(actualios, expectedios, `${assemblediOSAndroidDir}`);
 }
 
 const createPackage = async () => {
@@ -626,12 +634,23 @@ const patchPackageVersion = async () => {
 
 const copyFiles = gulp.parallel(copyIOSAndroidCommonFiles, copyIOSFiles, copyAndroidFiles);
 
+const copyFilesAndroid = gulp.parallel(copyAndroidFiles);
+const copyFilesiOS = gulp.parallel(copyIOSAndroidCommonFiles, copyIOSFiles);
+
 const buildTS = gulp.series(patchPackageVersion, copyCommonFiles, copySharedFiles, buildTypeScript, validateAssembled);
 const buildIOSAndroid = gulp.series(patchPackageVersion, buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validateAssemblediOSAndroid);
 const buildIOSAndroidRNTA = gulp.series(patchPackageVersion, buildIOSRNTA, buildAndroidRNTA, createIOSUniversalLibs, copyFiles, validateAssemblediOSAndroid);
 
 const build = gulp.series(buildIOSAndroid, switchToBaseKit, buildIOSAndroid);
 const buildRNTA = gulp.series(enableRNTA, buildIOSAndroidRNTA, switchToBaseKit, buildIOSAndroidRNTA);
+
+
+const _buildAndroidRNTA = gulp.series(patchPackageVersion, buildAndroidRNTA, copyFilesAndroid, validateAssembledAndroid);
+const _buildIOSRNTA = gulp.series(patchPackageVersion, buildIOSRNTA, createIOSUniversalLibs, copyFilesiOS, validateAssemblediOS);
+
+const buildRNTAandroid = gulp.series(enableRNTA, _buildAndroidRNTA, switchToBaseKit, _buildAndroidRNTA);
+const buildRNTAios = gulp.series(enableRNTA, _buildIOSRNTA, switchToBaseKit, _buildIOSRNTA);
+
 const rebuild = gulp.series(clean, build);
 const pack = gulp.series(rebuild, createPackage);
 
@@ -644,6 +663,10 @@ exports.buildiosRNTA = buildIOSRNTA; // lower case for CI matrix
 exports.buildAndroid = buildAndroid;
 exports.buildAndroidRNTA = buildAndroidRNTA;
 exports.buildandroidRNTA = buildAndroidRNTA; // lower case for CI matrix
+
+exports.buildRNTAandroid = buildRNTAandroid;
+exports.buildRNTAios = buildRNTAios;
+
 exports.createIOSUniversalLibs = createIOSUniversalLibs;
 exports.copyFiles = copyFiles;
 
