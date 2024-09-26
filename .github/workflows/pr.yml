@@ -50,70 +50,70 @@ jobs:
 #        env:
 #          JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
   
-  android-ios-rnta:
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        react-native-version: ['0.73', '0.74']
-        platform: ['android', 'ios']
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
-      - name: Setup CMake
-        uses: jwlawson/actions-setup-cmake@v1.8
-        with:
-          cmake-version: '3.26.3'
-      - name: Setup Ninja
-        run: brew install ninja
-      - name: Setup Watchman
-        run: brew install watchman
-#      - name: Free space
-#        uses: ./.github/workflows/macos_freespace
-      - name: Set React-Native version ${{ matrix.react-native-version }}
-        run: npm run set-react-version -- ${{ matrix.react-native-version }}
-        working-directory: ./Apps/BRNPlayground
-      - name: NPM Install (BRNPlayground)
-        run: npm install
-        working-directory: ./Apps/BRNPlayground
-      - name: Build Bundle ${{ matrix.platform }}
-        run: npm run build:${{ matrix.platform }}
-        working-directory: ./Apps/BRNPlayground
-      - name: NPM Install (Binary Package)
-        run: npm install
-        working-directory: ./Package
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          check-latest: true
-      - name: Gulp build ${{ matrix.platform }}
-        run: npx gulp buildRNTA${{ matrix.platform }}
-        working-directory: ./Package
-        env:
-          JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
-      - name: Upload Assembled ${{ matrix.platform }} Folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: 'Assembled-${{ matrix.platform }}${{ matrix.react-native-version }}'
-          path: Package/Assembled-iOSAndroid
-      - name: Upload Assembled ${{ matrix.platform }} BaseKit Folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: 'Assembled-BaseKit-${{ matrix.platform }}${{ matrix.react-native-version }}'
-          path: Package/Assembled-BaseKit-iOSAndroid
-
-  build-typescript:
-    uses: ./.github/workflows/typescript.yml
-    with:
-      release-version: 0.0.${GITHUB_SHA::8}
+#  android-ios-rnta:
+#    runs-on: macos-latest
+#    strategy:
+#      matrix:
+#        react-native-version: ['0.73', '0.74']
+#        platform: ['android', 'ios']
+#    steps:
+#      - name: Checkout Repo
+#        uses: actions/checkout@v2.3.3
+#      - name: Setup CMake
+#        uses: jwlawson/actions-setup-cmake@v1.8
+#        with:
+#          cmake-version: '3.26.3'
+#      - name: Setup Ninja
+#        run: brew install ninja
+#      - name: Setup Watchman
+#        run: brew install watchman
+##      - name: Free space
+##        uses: ./.github/workflows/macos_freespace
+#      - name: Set React-Native version ${{ matrix.react-native-version }}
+#        run: npm run set-react-version -- ${{ matrix.react-native-version }}
+#        working-directory: ./Apps/BRNPlayground
+#      - name: NPM Install (BRNPlayground)
+#        run: npm install
+#        working-directory: ./Apps/BRNPlayground
+#      - name: Build Bundle ${{ matrix.platform }}
+#        run: npm run build:${{ matrix.platform }}
+#        working-directory: ./Apps/BRNPlayground
+#      - name: NPM Install (Binary Package)
+#        run: npm install
+#        working-directory: ./Package
+#      - name: Setup Java
+#        uses: actions/setup-java@v3
+#        with:
+#          distribution: 'temurin'
+#          java-version: '17'
+#          check-latest: true
+#      - name: Gulp build ${{ matrix.platform }}
+#        run: npx gulp buildRNTA${{ matrix.platform }}
+#        working-directory: ./Package
+#        env:
+#          JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
+#      - name: Upload Assembled ${{ matrix.platform }} Folder
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: 'Assembled-${{ matrix.platform }}${{ matrix.react-native-version }}'
+#          path: Package/Assembled-iOSAndroid
+#      - name: Upload Assembled ${{ matrix.platform }} BaseKit Folder
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: 'Assembled-BaseKit-${{ matrix.platform }}${{ matrix.react-native-version }}'
+#          path: Package/Assembled-BaseKit-iOSAndroid
+#
+#  build-typescript:
+#    uses: ./.github/workflows/typescript.yml
+#    with:
+#      release-version: 0.0.${GITHUB_SHA::8}
 
   windows-rnta:
     runs-on: windows-2019
     strategy:
       matrix:
-        platform: [x64] #[x86, x64, ARM64]
-        config: [Release] #[Debug, Release]
+        platform: [x86, x64, ARM64]
+        config: [Debug, Release]
         react-native-version: ['0.73'] #['0.73', '0.74']
     steps:
       - name: Support longpaths
@@ -170,64 +170,64 @@ jobs:
         run: MSBuild /p:Platform="${{ matrix.platform == 'x86' && 'win32' || matrix.platform}}" /p:Configuration="${{ matrix.config }}" /m BRNPlayground.sln
         working-directory: ./Apps/BRNPlayground/windows
 
-  publish-react-native:
-    needs: [build-typescript, android-ios-rnta]
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        react-native-version: ['0.73', '0.74']
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
-      - name: NPM Install (Binary Package)
-        run: npm install
-        working-directory: ./Package
-      - name: Download Assembled Folder
-        uses: actions/download-artifact@v4
-        with:
-          name: 'Assembled'
-          path: Package/Assembled
-      - name: Display structure of downloaded Assembled and Assembled-Windows folders
-        run: ls -R
-      - name: Version & Publish Package @babylonjs/react-native
-        run: |
-          npm version --no-git-tag-version 10.0.0
-          npm publish --access public --dry-run
-        working-directory: ./Package/Assembled
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-  publish-react-native-iosandroid:
-    needs: [build-typescript, android-ios-rnta]
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        react-native-version: ['0.73', '0.74']
-        basekit: ['', '-BaseKit']
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
-      - name: NPM Install (Binary Package)
-        run: npm install
-        working-directory: ./Package
-      - name: Download Assembled${{ matrix.basekit }}-android ${{ matrix.react-native-version }} Folder
-        uses: actions/download-artifact@v4
-        with:
-          name: 'Assembled${{ matrix.basekit }}-android${{ matrix.react-native-version }}'
-          path: Package/Assembled
-          merge-multiple: true
-      - name: Download Assembled${{ matrix.basekit }}-ios ${{ matrix.react-native-version }} Folder
-        uses: actions/download-artifact@v4
-        with:
-          name: 'Assembled${{ matrix.basekit }}-ios${{ matrix.react-native-version }}'
-          path: Package/Assembled
-          merge-multiple: true
-      - name: Display structure of downloaded Assembled and Assembled-Windows folders
-        run: ls -R
-      - name: Version & Publish Package @babylonjs/react-native${{ matrix.basekit }}-iosandroid
-        run: |
-          npm version --no-git-tag-version 10.0.0
-          npm publish --access public --dry-run
-        working-directory: ./Package/Assembled
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+#  publish-react-native:
+#    needs: [build-typescript, android-ios-rnta]
+#    runs-on: macos-latest
+#    strategy:
+#      matrix:
+#        react-native-version: ['0.73', '0.74']
+#    steps:
+#      - name: Checkout Repo
+#        uses: actions/checkout@v2.3.3
+#      - name: NPM Install (Binary Package)
+#        run: npm install
+#        working-directory: ./Package
+#      - name: Download Assembled Folder
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: 'Assembled'
+#          path: Package/Assembled
+#      - name: Display structure of downloaded Assembled and Assembled-Windows folders
+#        run: ls -R
+#      - name: Version & Publish Package @babylonjs/react-native
+#        run: |
+#          npm version --no-git-tag-version 10.0.0
+#          npm publish --access public --dry-run
+#        working-directory: ./Package/Assembled
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+#
+#  publish-react-native-iosandroid:
+#    needs: [build-typescript, android-ios-rnta]
+#    runs-on: macos-latest
+#    strategy:
+#      matrix:
+#        react-native-version: ['0.73', '0.74']
+#        basekit: ['', '-BaseKit']
+#    steps:
+#      - name: Checkout Repo
+#        uses: actions/checkout@v2.3.3
+#      - name: NPM Install (Binary Package)
+#        run: npm install
+#        working-directory: ./Package
+#      - name: Download Assembled${{ matrix.basekit }}-android ${{ matrix.react-native-version }} Folder
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: 'Assembled${{ matrix.basekit }}-android${{ matrix.react-native-version }}'
+#          path: Package/Assembled
+#          merge-multiple: true
+#      - name: Download Assembled${{ matrix.basekit }}-ios ${{ matrix.react-native-version }} Folder
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: 'Assembled${{ matrix.basekit }}-ios${{ matrix.react-native-version }}'
+#          path: Package/Assembled
+#          merge-multiple: true
+#      - name: Display structure of downloaded Assembled and Assembled-Windows folders
+#        run: ls -R
+#      - name: Version & Publish Package @babylonjs/react-native${{ matrix.basekit }}-iosandroid
+#        run: |
+#          npm version --no-git-tag-version 10.0.0
+#          npm publish --access public --dry-run
+#        working-directory: ./Package/Assembled
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
