@@ -114,7 +114,8 @@ jobs:
       matrix:
         platform: [x64, ARM64]
         config: [Debug, Release]
-        react-native-version: [''] #['0.73', '0.74']
+        react-native-version: ['0.73', '0.74']
+        basekit: ['', 'BaseKit']
     steps:
       - name: Support longpaths
         run: git config --system core.longpaths true
@@ -155,7 +156,7 @@ jobs:
         working-directory: ./Modules
 
       - name: CMake BabylonNative
-        run: cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_UNITY_BUILD=true -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=10.0.19041.0 -A ${{ matrix.platform == 'x86' && 'win32' || matrix.platform}} ./../../../react-native-windows/windows
+        run: cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_UNITY_BUILD=true -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=10.0.19041.0 -A ${{ matrix.platform == 'x86' && 'win32' || matrix.platform}} -D ${{ matrix.basekit == 'BaseKit' && '-DBASEKIT_BUILD=1' || matrix.basekit}} ./../../../react-native-windows/windows
         working-directory: ./Modules/@babylonjs/react-native/Build/uwp_${{ matrix.platform }}
 
       - name: Nuget restore
@@ -169,6 +170,15 @@ jobs:
       - name: Windows build BRN ${{ matrix.platform }} ${{ matrix.config }}
         run: MSBuild /p:Platform="${{ matrix.platform == 'x86' && 'win32' || matrix.platform}}" /p:Configuration="${{ matrix.config }}" /m BRNPlayground.sln
         working-directory: ./Apps/BRNPlayground/windows
+
+      - name: Gulp build ${{ matrix.platform }}
+        run: npx gulp package${{ matrix.platform }}${{ matrix.config }}${{ matrix.basekit }}RNTA
+        working-directory: ./Package
+      - name: Upload Assembled ${{ matrix.platform }} Folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'Assembled-${{ matrix.basekit }}-Windows${{ matrix.react-native-version }}'
+          path: Package/Assembled-${{ matrix.basekit }}-Windows${{ matrix.react-native-version }}
 
 #  publish-react-native:
 #    needs: [build-typescript, android-ios-rnta]
@@ -197,7 +207,7 @@ jobs:
 #        env:
 #          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 #
-#  publish-react-native-iosandroid:
+#  publish-android-ios:
 #    needs: [build-typescript, android-ios-rnta]
 #    runs-on: macos-latest
 #    strategy:

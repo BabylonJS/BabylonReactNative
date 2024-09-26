@@ -362,6 +362,38 @@ const copyOpenXRHelperHeaders = () => {
     .pipe(gulp.dest(`${assembledWindowsDir}/windows/include`));
 }
 
+const copyx64DebugRNTAFiles = gulp.series(
+  createUWPDirectories,
+  gulp.parallel(
+    copyCommonFilesUWP,
+    copyx64DebugUWPFiles,
+    copyVCXProjUWPFiles,
+    copyOpenXRInfoFiles,
+    copyOpenXRPreviewHeaders,
+    copyOpenXRUtilityHeaders,
+    copyOpenXRHelperHeaders));
+
+const copyx64DebugBaseKitRNTAFiles = gulp.series(
+  createUWPDirectories,
+  gulp.parallel(
+    copyCommonFilesUWP,
+    copyx64DebugUWPFiles,
+    copyVCXProjUWPFiles));
+
+const copyx64ReleaseRNTAFiles = gulp.series(createUWPDirectories, copyx64ReleaseUWPFiles);
+const copyx64ReleaseBaseKitRNTAFiles = gulp.series(createUWPDirectories, copyx64ReleaseUWPFiles);
+
+
+const copyARM64DebugRNTAFiles = gulp.series(createUWPDirectories, copyARM64DebugUWPFiles);
+const copyARM64DebugBaseKitRNTAFiles = gulp.series(createUWPDirectories, copyARM64DebugUWPFiles);
+const copyARM64ReleaseRNTAFiles = gulp.series(createUWPDirectories, copyARM64ReleaseUWPFiles);
+const copyARM64ReleaseBaseKitRNTAFiles = gulp.series(createUWPDirectories, copyARM64DebugUWPFiles);
+
+const copyx86DebugRNTAFiles = gulp.series(createUWPDirectories, copyx86DebugUWPFiles);
+const copyx86DebugBaseKitRNTAFiles = gulp.series(createUWPDirectories, copyx86DebugUWPFiles);
+const copyx86ReleaseRNTAFiles = gulp.series(createUWPDirectories, copyx86ReleaseUWPFiles);
+const copyx86ReleaseBaseKitRNTAFiles = gulp.series(createUWPDirectories, copyx86DebugUWPFiles);
+
 const copyUWPFiles = gulp.series(
   createUWPDirectories,
   basekitBuild ? 
@@ -681,6 +713,36 @@ const buildUWPPublish = gulp.series(patchPackageVersion, buildUWP, copyPackageFi
 const packUWP = gulp.series(clean, buildUWP, copyPackageFilesUWP, createPackage, createPackageUWP);
 const packUWPNoBuild = gulp.series(clean, copyPackageFilesUWP, createPackage, createPackageUWP);
 
+const packagex86DebugRNTA = gulp.series(patchPackageVersion, copyx86DebugRNTAFiles);
+const packagex86DebugBaseKitRNTA = gulp.series(patchPackageVersion, copyx86DebugBaseKitRNTAFiles);
+const packagex86ReleaseRNTA = gulp.series(patchPackageVersion, copyx86ReleaseRNTAFiles);
+const packagex86ReleaseBaseKitRNTA = gulp.series(patchPackageVersion, copyx86ReleaseBaseKitRNTAFiles);
+
+const packagex64DebugRNTA = gulp.series(patchPackageVersion, copyx64DebugRNTAFiles);
+const packagex64DebugBaseKitRNTA = gulp.series(patchPackageVersion, copyx64DebugBaseKitRNTAFiles);
+const packagex64ReleaseRNTA = gulp.series(patchPackageVersion, copyx64ReleaseRNTAFiles);
+const packagex64ReleaseBaseKitRNTA = gulp.series(patchPackageVersion, copyx64ReleaseBaseKitRNTAFiles);
+
+const packageARM64DebugRNTA = gulp.series(patchPackageVersion, copyARM64DebugRNTAFiles);
+const packageARM64DebugBaseKitRNTA = gulp.series(patchPackageVersion, copyARM64DebugBaseKitRNTAFiles);
+const packageARM64ReleaseRNTA = gulp.series(patchPackageVersion, copyARM64ReleaseRNTAFiles);
+const packageARM64ReleaseBaseKitRNTA = gulp.series(patchPackageVersion, copyARM64ReleaseBaseKitRNTAFiles);
+
+exports.packagex86DebugRNTA = packagex86DebugRNTA;
+exports.packagex86DebugBaseKitRNTA = packagex86DebugBaseKitRNTA;
+exports.packagex86ReleaseRNTA = packagex86ReleaseRNTA;
+exports.packagex86ReleaseBaseKitRNTA = packagex86ReleaseBaseKitRNTA;
+
+exports.packagex64DebugRNTA = packagex64DebugRNTA;
+exports.packagex64DebugBaseKitRNTA = packagex64DebugBaseKitRNTA;
+exports.packagex64ReleaseRNTA = packagex64ReleaseRNTA;
+exports.packagex64ReleaseBaseKitRNTA = packagex64ReleaseBaseKitRNTA;
+
+exports.packageARM64DebugRNTA = packageARM64DebugRNTA;
+exports.packageARM64DebugBaseKitRNTA = packageARM64DebugBaseKitRNTA;
+exports.packageARM64ReleaseRNTA = packageARM64ReleaseRNTA;
+exports.packageARM64ReleaseBaseKitRNTA = packageARM64ReleaseBaseKitRNTA;
+
 exports.buildTS = buildTS;
 exports.makeUWPProjectx86 = makeUWPProjectx86;
 exports.makeUWPProjectx64 = makeUWPProjectx64;
@@ -703,6 +765,7 @@ exports.buildUWPPlaygroundx64Release = buildUWPPlaygroundx64Release;
 exports.buildUWPPlaygroundARM64Debug = buildUWPPlaygroundARM64Debug;
 exports.buildUWPPlaygroundARM64Release = buildUWPPlaygroundARM64Release;
 exports.buildUWPPlayground = buildUWPPlayground;
+exports.packageUWPRNTA = packageUWPRNTA;
 
 exports.buildUWP = buildUWP;
 exports.buildUWPPublish = buildUWPPublish;
