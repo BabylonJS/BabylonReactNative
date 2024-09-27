@@ -92,6 +92,8 @@ jobs:
         working-directory: ./Package
         env:
           JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
+      - name: Display structure
+        run: ls -R
       - name: Upload Assembled ${{ matrix.platform }} Folder
         uses: actions/upload-artifact@v4
         with:
@@ -107,13 +109,13 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ matrix.platform == 'android' }}
         with:
-          name: 'AndroidAPK'
+          name: 'AndroidAPK${{ matrix.react-native-version }}'
           path: Apps/BRNPlayground/android/app/build/outputs/apk/release/app-release.apk          
       - name: Upload iOS App
         uses: actions/upload-artifact@v4
         if: ${{ matrix.platform == 'ios' }}
         with:
-          name: 'iOSApp'
+          name: 'iOSApp${{ matrix.react-native-version }}'
           path: Apps/BRNPlayground/ios/playgroundSimulator.xcarchive
 
   build-typescript:
@@ -187,6 +189,8 @@ jobs:
       - name: Gulp build ${{ matrix.platform }}
         run: npx gulp package${{ matrix.platform }}${{ matrix.config }}${{ matrix.basekit == '-BaseKit' && 'BaseKit' || matrix.basekit}}RNTA
         working-directory: ./Package
+      - name: Display structure
+        run: ls -R
       - name: Upload Assembled ${{ matrix.platform }} Folder
         uses: actions/upload-artifact@v4
         with:
