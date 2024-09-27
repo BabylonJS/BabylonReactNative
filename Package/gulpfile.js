@@ -765,7 +765,6 @@ exports.buildUWPPlaygroundx64Release = buildUWPPlaygroundx64Release;
 exports.buildUWPPlaygroundARM64Debug = buildUWPPlaygroundARM64Debug;
 exports.buildUWPPlaygroundARM64Release = buildUWPPlaygroundARM64Release;
 exports.buildUWPPlayground = buildUWPPlayground;
-exports.packageUWPRNTA = packageUWPRNTA;
 
 exports.buildUWP = buildUWP;
 exports.buildUWPPublish = buildUWPPublish;
