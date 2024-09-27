@@ -110,13 +110,13 @@ jobs:
         if: ${{ matrix.platform == 'android' }}
         with:
           name: 'AndroidAPK${{ matrix.react-native-version }}'
-          path: Apps/BRNPlayground/android/app/build/outputs/apk/release/app-release.apk          
+          path: Apps/BRNPlayground/android/
       - name: Upload iOS App
         uses: actions/upload-artifact@v4
         if: ${{ matrix.platform == 'ios' }}
         with:
           name: 'iOSApp${{ matrix.react-native-version }}'
-          path: Apps/BRNPlayground/ios/playgroundSimulator.xcarchive
+          path: Apps/BRNPlayground/ios/
 
   build-typescript:
     uses: ./.github/workflows/typescript.yml
@@ -195,7 +195,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: 'Assembled${{ matrix.basekit }}-Windows${{ matrix.react-native-version }}-${{ matrix.platform }}${{ matrix.config }}'
-          path: Package/Assembled${{ matrix.basekit }}-Windows${{ matrix.react-native-version }}
+          path: Package/Assembled${{ matrix.basekit }}-Windows
 
   publish-react-native:
     needs: [build-typescript, android-ios-rnta, windows-rnta]
