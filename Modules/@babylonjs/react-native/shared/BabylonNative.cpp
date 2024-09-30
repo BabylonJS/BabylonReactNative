@@ -2,10 +2,20 @@
 
 #include <Babylon/Graphics/Device.h>
 #include <Babylon/JsRuntime.h>
+
 #ifndef BASEKIT_BUILD
 #include <Babylon/Plugins/NativeCamera.h>
 #include <Babylon/Plugins/NativeXr.h>
+
+#ifdef WIN32
+#pragma comment(lib, "NativeCamera.lib")
+#pragma comment(lib, "NativeXr.lib")
+#pragma comment(lib, "xr.lib")
+#pragma comment(lib, "openxr_loaderd.lib")
 #endif
+
+#endif
+
 #include <Babylon/Plugins/NativeCapture.h>
 #include <Babylon/Plugins/NativeEngine.h>
 #include <Babylon/Plugins/NativeInput.h>

@@ -193,16 +193,13 @@
         JsRuntime.lib;
         MachineIndependentd.lib;
         napi.lib;
-        NativeCamera.lib;
         NativeCapture.lib;
         NativeEngine.lib;
         NativeInput.lib;
         NativeOptimizations.lib;
         NativeTracing.lib;
-        NativeXr.lib;
         nvtt.lib;
         OGLCompilerd.lib;
-        openxr_loaderd.lib;
         OSDependentd.lib;
         pvrtc.lib;
         spirv-cross-cored.lib;
@@ -212,7 +209,6 @@
         UrlLib.lib;
         Window.lib;
         XMLHttpRequest.lib;
-        xr.lib;
         WindowsApp.lib;
         %(AdditionalDependencies);
       </AdditionalDependencies>

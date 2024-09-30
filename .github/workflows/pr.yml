@@ -39,7 +39,7 @@ jobs:
 #        run: npm install
 #        working-directory: ./Package
 #      - name: Setup Java
-#        uses: actions/setup-java@v3
+#        uses: actions/setup-java@v4.4.0
 #        with:
 #          distribution: 'temurin'
 #          java-version: '17'
@@ -82,7 +82,7 @@ jobs:
         run: npm install
         working-directory: ./Package
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4.4.0
         with:
           distribution: 'temurin'
           java-version: '17'
@@ -110,7 +110,7 @@ jobs:
         if: ${{ matrix.platform == 'android' }}
         with:
           name: 'AndroidAPK${{ matrix.react-native-version }}'
-          path: Apps/BRNPlayground/
+          path: Apps/BRNPlayground/android/
       - name: Upload iOS App
         uses: actions/upload-artifact@v4
         if: ${{ matrix.platform == 'ios' }}
@@ -127,10 +127,10 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-        platform: [x64, ARM64]
+        platform: [x86, x64, ARM64]
         config: [Debug, Release]
         react-native-version: ['0.73', '0.74']
-        basekit: [''] # ['', '-BaseKit']
+        basekit: ['', '-BaseKit']
     steps:
       - name: Support longpaths
         run: git config --system core.longpaths true
@@ -171,7 +171,7 @@ jobs:
         working-directory: ./Modules
 
       - name: CMake BabylonNative
-        run: cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_UNITY_BUILD=true -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=10.0.19041.0 -A ${{ matrix.platform == 'x86' && 'win32' || matrix.platform}} ${{ matrix.basekit == 'BaseKit' && '-DBASEKIT_BUILD=1' || matrix.basekit}} ./../../../react-native-windows/windows
+        run: cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_UNITY_BUILD=true -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=10.0.19041.0 -A ${{ matrix.platform == 'x86' && 'win32' || matrix.platform}} ${{ matrix.basekit == '-BaseKit' && '-DBASEKIT_BUILD=1' || matrix.basekit}} ./../../../react-native-windows/windows
         working-directory: ./Modules/@babylonjs/react-native/Build/uwp_${{ matrix.platform }}
 
       - name: Nuget restore
@@ -183,7 +183,7 @@ jobs:
         working-directory: ./Modules/@babylonjs/react-native/Build/uwp_${{ matrix.platform }}
         
       - name: Windows build BRN ${{ matrix.platform }} ${{ matrix.config }}
-        run: MSBuild /p:Platform="${{ matrix.platform == 'x86' && 'win32' || matrix.platform}}" /p:Configuration="${{ matrix.config }}" /m BRNPlayground.sln
+        run: MSBuild /p:Platform="${{ matrix.platform == 'x86' && 'win32' || matrix.platform}}" /p:Configuration="${{ matrix.config }}" ${{ matrix.basekit == '-BaseKit' && '/p:BASEKIT_BUILD=1' || matrix.basekit}} /m BRNPlayground.sln
         working-directory: ./Apps/BRNPlayground/windows
 
       - name: Gulp build ${{ matrix.platform }}
