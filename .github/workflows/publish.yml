@@ -73,7 +73,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
+        uses: actions/checkout@v4.2.0
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package

@@ -13,9 +13,9 @@ jobs:
 #        react-native-version: ['0.73', '0.74']
 #    steps:
 #      - name: Checkout Repo
-#        uses: actions/checkout@v2.3.3
+#        uses: actions/checkout@v4.2.0
 #      - name: Setup CMake
-#        uses: jwlawson/actions-setup-cmake@v1.8
+#        uses: jwlawson/actions-setup-cmake@v2.0.2
 #        with:
 #          cmake-version: '3.26.3'
 #      - name: Setup Ninja
@@ -58,9 +58,9 @@ jobs:
         platform: ['android', 'ios']
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
+        uses: actions/checkout@v4.2.0
       - name: Setup CMake
-        uses: jwlawson/actions-setup-cmake@v1.8
+        uses: jwlawson/actions-setup-cmake@v2.0.2
         with:
           cmake-version: '3.26.3'
       - name: Setup Ninja
@@ -110,7 +110,7 @@ jobs:
         if: ${{ matrix.platform == 'android' }}
         with:
           name: 'AndroidAPK${{ matrix.react-native-version }}'
-          path: Apps/BRNPlayground/android/
+          path: Apps/BRNPlayground/
       - name: Upload iOS App
         uses: actions/upload-artifact@v4
         if: ${{ matrix.platform == 'ios' }}
@@ -135,13 +135,13 @@ jobs:
       - name: Support longpaths
         run: git config --system core.longpaths true
       - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
+        uses: actions/checkout@v4.2.0
         with:
           submodules: 'true'
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.0.2
+        uses: microsoft/setup-msbuild@v2
       - name: Setup Node 20
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4.0.4
         with:
           node-version: 20
       - name: Install watchman
@@ -205,7 +205,7 @@ jobs:
         react-native-version: ['0.73', '0.74']
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
+        uses: actions/checkout@v4.2.0
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
@@ -233,7 +233,7 @@ jobs:
         basekit: ['', '-BaseKit']
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
+        uses: actions/checkout@v4.2.0
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
@@ -268,7 +268,7 @@ jobs:
         basekit: [''] #['', '-BaseKit']
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
+        uses: actions/checkout@v4.2.0
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
