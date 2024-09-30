@@ -11,7 +11,11 @@
 #pragma comment(lib, "NativeCamera.lib")
 #pragma comment(lib, "NativeXr.lib")
 #pragma comment(lib, "xr.lib")
-#pragma comment(lib, "openxr_loaderd.lib")
+#ifdef _DEBUG
+    #pragma comment(lib, "openxr_loaderd.lib")
+#else
+    #pragma comment(lib, "openxr_loader.lib")
+#endif
 #endif
 
 #endif
