@@ -127,7 +127,7 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-        platform: [x86, x64, ARM64]
+        platform: [x64, ARM64]
         config: [Debug, Release]
         react-native-version: ['0.73', '0.74']
         basekit: ['', '-BaseKit']
