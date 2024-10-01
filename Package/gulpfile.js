@@ -387,12 +387,12 @@ const copyx64ReleaseBaseKitRNTAFiles = gulp.series(createUWPDirectories, copyx64
 const copyARM64DebugRNTAFiles = gulp.series(createUWPDirectories, copyARM64DebugUWPFiles);
 const copyARM64DebugBaseKitRNTAFiles = gulp.series(createUWPDirectories, copyARM64DebugUWPFiles);
 const copyARM64ReleaseRNTAFiles = gulp.series(createUWPDirectories, copyARM64ReleaseUWPFiles);
-const copyARM64ReleaseBaseKitRNTAFiles = gulp.series(createUWPDirectories, copyARM64DebugUWPFiles);
+const copyARM64ReleaseBaseKitRNTAFiles = gulp.series(createUWPDirectories, copyARM64ReleaseUWPFiles);
 
 const copyx86DebugRNTAFiles = gulp.series(createUWPDirectories, copyx86DebugUWPFiles);
 const copyx86DebugBaseKitRNTAFiles = gulp.series(createUWPDirectories, copyx86DebugUWPFiles);
 const copyx86ReleaseRNTAFiles = gulp.series(createUWPDirectories, copyx86ReleaseUWPFiles);
-const copyx86ReleaseBaseKitRNTAFiles = gulp.series(createUWPDirectories, copyx86DebugUWPFiles);
+const copyx86ReleaseBaseKitRNTAFiles = gulp.series(createUWPDirectories, copyx86ReleaseUWPFiles);
 
 const copyUWPFiles = gulp.series(
   createUWPDirectories,
