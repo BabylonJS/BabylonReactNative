@@ -102,7 +102,7 @@ const buildAndroid = async () => {
 
 const buildAndroidRNTA = async () => {
   const basekitBuildProp = basekitBuild ? "-PBASEKIT_BUILD=1" : "";
-  exec(`./gradlew babylonjs_react-native:assembleRelease --stacktrace --info ${basekitBuildProp}`, '../Apps/BRNPlayground/android');
+  exec(`./gradlew app:assembleRelease --stacktrace --info ${basekitBuildProp}`, '../Apps/BRNPlayground/android');
 };
 
 const makeUWPProjectPlatform = async (name, arch) => {
