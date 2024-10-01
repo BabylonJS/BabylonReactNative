@@ -103,14 +103,13 @@ const buildAndroid = async () => {
 const buildAndroidRNTA = async () => {
   const basekitBuildProp = basekitBuild ? "-PBASEKIT_BUILD=1" : "";
   exec(`./gradlew app:assembleRelease --stacktrace --info ${basekitBuildProp}`, '../Apps/BRNPlayground/android');
-  if (basekitBuild) {
-    await new Promise(resolve => {
-      gulp.src(`../Apps/BRNPlayground/android/app/build/outputs/apk/release/app-release.apk`)
-        .pipe(rename('app-release-basekit.apk')) 
-        .pipe(gulp.dest('../Apps/BRNPlayground/android/app/build/outputs/apk/release/'))
-        .on('end', resolve);
-    });
-  }
+  const baseKitOrFull = basekitBuild ? '-basekit' : '-full';
+  const oldPath = '../Apps/BRNPlayground/android/app/build/outputs/apk/release/app-release.apk';
+  const newPath = `../Apps/BRNPlayground/android/app/build/outputs/apk/release/app-release${baseKitOrFull}.apk`;
+
+  fs.rename(oldPath, newPath, function (err) {
+    if (err) throw err;
+  });
 };
 
 const makeUWPProjectPlatform = async (name, arch) => {
