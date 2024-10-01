@@ -110,7 +110,7 @@ jobs:
         if: ${{ matrix.platform == 'android' }}
         with:
           name: 'AndroidAPK${{ matrix.react-native-version }}'
-          path: Apps/build/outputs/apk/release
+          path: ./Apps/BRNPlayground/android/app/build/outputs/apk/release
       - name: Upload iOS App
         uses: actions/upload-artifact@v4
         if: ${{ matrix.platform == 'ios' }}
