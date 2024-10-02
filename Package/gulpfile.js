@@ -103,12 +103,19 @@ const buildAndroid = async () => {
 const buildAndroidRNTA = async () => {
   const basekitBuildProp = basekitBuild ? "-PBASEKIT_BUILD=1" : "";
   exec(`./gradlew app:assembleRelease --stacktrace --info ${basekitBuildProp}`, '../Apps/BRNPlayground/android');
-  const baseKitOrFull = basekitBuild ? '-basekit' : '-full';
-  const oldPath = '../Apps/BRNPlayground/android/app/build/outputs/apk/release/app-release.apk';
-  const newPath = `../Apps/BRNPlayground/android/app/build/outputs/apk/release/app-release${baseKitOrFull}.apk`;
+  const baseKitOrFull = basekitBuild ? '-basekit' : '';
+  const srcFile = '../Apps/BRNPlayground/android/app/build/outputs/apk/release/app-release.apk';
+  const newName = `app-release${baseKitOrFull}.apk`;
 
-  fs.rename(oldPath, newPath, function (err) {
-    if (err) throw err;
+  const apkFolder = '../Apps/BRNPlayground/apk';
+  if (!fs.existsSync(apkFolder)) {
+    fs.mkdirSync(apkFolder, { recursive: true });
+  }
+  await new Promise(resolve => {
+    gulp.src(srcFile)
+    .pipe(rename(newName))
+    .pipe(gulp.dest(apkFolder))
+    .on('end', resolve);
   });
 };
 
