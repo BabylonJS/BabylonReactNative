@@ -92,6 +92,13 @@ jobs:
         working-directory: ./Package
         env:
           JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
+
+#      - name: Build iOS App
+#        if: ${{ matrix.platform == 'ios' }}
+#        run: |
+#          xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -workspace BRNPlayground.xcworkspace -scheme ReactTestApp build CODE_SIGNING_ALLOWED=NO -archivePath ./playgroundSimulator.xcarchive archive
+#        working-directory: ./Apps/BRNPlayground/ios
+
       - name: Display structure
         run: ls -R
       - name: Upload Assembled ${{ matrix.platform }} Folder
