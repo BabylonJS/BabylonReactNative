@@ -129,7 +129,7 @@ jobs:
         run: npm install
         working-directory: ./Apps/BRNPlayground
 
-      - name: Build Windows Bundle
+      - name: Build iOS Bundle
         run: npm run build:ios
         working-directory: ./Apps/BRNPlayground
 
@@ -139,6 +139,14 @@ jobs:
       - name: Gulp (iOS)
         run: npx gulp buildIOSRNTA
         working-directory: ./Package
+
+      - name: Cache XCFrameworks
+        uses: actions/cache@v2
+        with:
+          path: Modules/@babylonjs/react-native-iosandroid/ios/libs
+          key: ${{ runner.os }}-xcframeworks-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-xcframeworks
 
   test-publish-android-ios:
     runs-on: macos-latest
