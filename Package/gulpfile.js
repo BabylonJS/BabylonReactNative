@@ -94,12 +94,12 @@ const buildIphoneSimulator = async () => {
 
 const buildIphoneOSRNTA = async () => {
   exec('xcodebuild -sdk iphoneos -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', 'iOS/Build');
-  exec('xcodebuild -sdk iphoneos -configuration Release -workspace BRNPlayground.xcworkspace -scheme ReactTestApp build CODE_SIGNING_ALLOWED=NO -archivePath ./playgroundiOS.xcarchive archive', '../Apps/BRNPlayground/ios/Build');
+  //exec('xcodebuild -sdk iphoneos -configuration Release -workspace BRNPlayground.xcworkspace -scheme ReactTestApp build CODE_SIGNING_ALLOWED=NO -archivePath ./playgroundiOS.xcarchive archive', '../Apps/BRNPlayground/ios/Build');
 };
 
 const buildIphoneSimulatorRNTA = async () => {
   exec('xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', 'iOS/Build');
-  exec('xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -workspace BRNPlayground.xcworkspace -scheme ReactTestApp build CODE_SIGNING_ALLOWED=NO -archivePath ./playgroundSimulator.xcarchive archive', '../Apps/BRNPlayground/ios/Build');
+  //exec('xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -workspace BRNPlayground.xcworkspace -scheme ReactTestApp build CODE_SIGNING_ALLOWED=NO -archivePath ./playgroundSimulator.xcarchive archive', '../Apps/BRNPlayground/ios/Build');
 };
 
 const buildIOS = gulp.series(makeXCodeProj, buildIphoneOS, buildIphoneSimulator);
