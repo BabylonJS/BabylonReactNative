@@ -14,10 +14,6 @@ jobs:
         uses: actions/checkout@v4.2.0
         with:
           submodules: 'recursive'
-#      - name: Setup Node 16
-#        uses: actions/setup-node@v4.0.4
-#        with:
-#          node-version: 16
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground

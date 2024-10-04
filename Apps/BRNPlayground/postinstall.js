@@ -28,7 +28,7 @@ function postInstall() {
   exec("npm install --legacy-peer-deps", {
     cwd: "../../Modules/@babylonjs/react-native",
   });
-/*
+
   if (os.platform() === "darwin") {
     iosCMake();
 
@@ -38,7 +38,7 @@ function postInstall() {
 
     console.log(chalk.black.bgCyan("Installing iOS pods..."));
     exec("pod install", { cwd: "ios" });
-  }*/
+  }
 }
 
 postInstall();
