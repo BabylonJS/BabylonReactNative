@@ -111,7 +111,14 @@ jobs:
         with:
           name: 'Assembled-BaseKit-${{ matrix.platform }}${{ matrix.react-native-version }}'
           path: Package/Assembled-BaseKit-iOSAndroid
-
+      - name: Cache XCFrameworks
+        uses: actions/cache@v2
+        if: ${{ matrix.platform == 'ios' }}
+        with:
+          path: Modules/@babylonjs/react-native-iosandroid/ios/libs
+          key: ${{ runner.os }}-xcframeworks-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-xcframeworks
       - name: Upload APK
         uses: actions/upload-artifact@v4
         if: ${{ matrix.platform == 'android' }}
