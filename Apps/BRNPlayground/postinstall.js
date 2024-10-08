@@ -32,7 +32,7 @@ function postInstall() {
   if (os.platform() === "darwin") {
     iosCMake();
 
-    exec("npm install && npx gulp buildIOSRNTA", {
+    exec("npm install && npx gulp buildRNTAios", {
       cwd: "../../Package",
     });
 
