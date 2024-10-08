@@ -10,7 +10,7 @@ jobs:
 #    strategy:
 #      matrix:
 #        platform: [ios, android]
-#        react-native-version: ['0.73', '0.74', '0.75']
+#        react-native-version: ['0.73', '0.74']
 #    steps:
 #      - name: Checkout Repo
 #        uses: actions/checkout@v4.2.0
@@ -54,7 +54,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        react-native-version: ['0.73', '0.74', '0.75']
+        react-native-version: ['0.73', '0.74']
         platform: ['android', 'ios']
     steps:
       - name: Checkout Repo
@@ -143,7 +143,7 @@ jobs:
       matrix:
         platform: [x64, ARM64]
         config: [Debug, Release]
-        react-native-version: ['0.73', '0.74', '0.75']
+        react-native-version: ['0.73', '0.74']
         basekit: ['', '-BaseKit']
     steps:
       - name: Support longpaths
@@ -161,9 +161,9 @@ jobs:
       - name: Install watchman
         run: choco install watchman
         working-directory: ./Apps/BRNPlayground
-#      - name: Set React-Native version ${{ matrix.react-native-version }}
-#        run: npm run set-react-version -- ${{ matrix.react-native-version }}
-#        working-directory: ./Apps/BRNPlayground
+      - name: Set React-Native version ${{ matrix.react-native-version }}
+        run: npm run set-react-version -- ${{ matrix.react-native-version }}
+        working-directory: ./Apps/BRNPlayground
       - name: NPM Install RNTA
         run: npm install
         working-directory: ./Apps/BRNPlayground
@@ -221,7 +221,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        react-native-version: ['0.73', '0.74', '0.75']
+        react-native-version: ['0.73', '0.74']
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4.2.0
@@ -248,7 +248,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        react-native-version: ['0.73', '0.74', '0.75']
+        react-native-version: ['0.73', '0.74']
         basekit: ['', '-BaseKit']
     steps:
       - name: Checkout Repo
@@ -283,7 +283,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        react-native-version: ['0.73', '0.74', '0.75']
+        react-native-version: ['0.73', '0.74']
         basekit: ['', '-BaseKit']
     steps:
       - name: Checkout Repo
