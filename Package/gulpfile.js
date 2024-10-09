@@ -555,8 +555,8 @@ const validateAssembledAndroid = async () => {
   let expectedandroid = [
     `${assemblediOSAndroidDir}/android`,
     `${assemblediOSAndroidDir}/android/build.gradle`,
-    //`${assemblediOSAndroidDir}/android/include`,
-    //`${assemblediOSAndroidDir}/android/include/IXrContextARCore.h`, WHY?
+    `${assemblediOSAndroidDir}/android/include`,
+    `${assemblediOSAndroidDir}/android/include/IXrContextARCore.h`,
     `${assemblediOSAndroidDir}/android/src`,
     `${assemblediOSAndroidDir}/android/src/main`,
     `${assemblediOSAndroidDir}/android/src/main/AndroidManifest.xml`,
