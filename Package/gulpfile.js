@@ -764,12 +764,12 @@ const buildIOSAndroid = gulp.series(patchPackageVersion, buildIOS, buildAndroid,
 
 const build = gulp.series(buildIOSAndroid, switchToBaseKit, buildIOSAndroid);
 
+// a variant is full kit or base kit
+const buildAndroidRNTAKitVariant = gulp.series(patchPackageVersion, buildAndroidRNTA, copyAndroidFiles, validateAssembledAndroid);
+const buildIOSRNTAKitVariant = gulp.series(patchPackageVersion, buildIOSRNTA, createIOSUniversalLibs, copyFilesiOS, validateAssemblediOS);
 
-const _buildAndroidRNTA = gulp.series(patchPackageVersion, buildAndroidRNTA, copyAndroidFiles, validateAssembledAndroid);
-const _buildIOSRNTA = gulp.series(patchPackageVersion, buildIOSRNTA, createIOSUniversalLibs, copyFilesiOS, validateAssemblediOS);
-
-const buildRNTAandroid = gulp.series(enableRNTA, _buildAndroidRNTA, switchToBaseKit, _buildAndroidRNTA);
-const buildRNTAios = gulp.series(enableRNTA, _buildIOSRNTA, switchToBaseKit, _buildIOSRNTA);
+const buildRNTAandroid = gulp.series(enableRNTA, buildAndroidRNTAKitVariant, switchToBaseKit, buildAndroidRNTAKitVariant);
+const buildRNTAios = gulp.series(enableRNTA, buildIOSRNTAKitVariant, switchToBaseKit, buildIOSRNTAKitVariant);
 
 const rebuild = gulp.series(clean, build);
 const pack = gulp.series(rebuild, createPackage);
