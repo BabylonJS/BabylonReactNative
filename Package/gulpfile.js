@@ -329,7 +329,7 @@ const copyAndroidFiles = async () => {
   });
 
   await new Promise(resolve => {
-    gulp.src('../Package/iOS/Build/_deps/babylonnative-src/Dependencies/xr/Source/ARCore/Include/*')
+    gulp.src('../Package/Android/Build/_deps/babylonnative-src/Dependencies/xr/Source/ARCore/Include/*')
       .pipe(gulp.dest(`${assemblediOSAndroidDir}/android/include`))
       .on('end', resolve);
   });
