@@ -249,6 +249,14 @@ const copyIOSFiles = async () => {
       .pipe(gulp.dest(`${assemblediOSAndroidDir}/ios/include`))
       .on('end', resolve);
   });
+
+  // this file is part of Android but copied from iOS cmake fetching because easier than finding gradle temp build directory
+  await new Promise(resolve => {
+    gulp.src('../Package/iOS/Build/_deps/babylonnative-src/Dependencies/xr/Source/ARCore/Include/*')
+      .pipe(gulp.dest(`${assemblediOSAndroidDir}/android/include`))
+      .on('end', resolve);
+  });
+
 };
 
 const createIOSUniversalLibs = async () => {
@@ -325,12 +333,6 @@ const copyAndroidFiles = async () => {
       .pipe(gulp.src(`${playgroundDirectory}/node_modules/@babylonjs/react-native-iosandroid/android/src**/main/AndroidManifest.xml`))
       .pipe(gulp.src(`${playgroundDirectory}/node_modules/@babylonjs/react-native-iosandroid/android/src**/main/java/**/*`))
       .pipe(gulp.dest(`${assemblediOSAndroidDir}/android`))
-      .on('end', resolve);
-  });
-
-  await new Promise(resolve => {
-    gulp.src('../Package/Android/Build/_deps/babylonnative-src/Dependencies/xr/Source/ARCore/Include/*')
-      .pipe(gulp.dest(`${assemblediOSAndroidDir}/android/include`))
       .on('end', resolve);
   });
 
@@ -555,8 +557,6 @@ const validateAssembledAndroid = async () => {
   let expectedandroid = [
     `${assemblediOSAndroidDir}/android`,
     `${assemblediOSAndroidDir}/android/build.gradle`,
-    `${assemblediOSAndroidDir}/android/include`,
-    `${assemblediOSAndroidDir}/android/include/IXrContextARCore.h`,
     `${assemblediOSAndroidDir}/android/src`,
     `${assemblediOSAndroidDir}/android/src/main`,
     `${assemblediOSAndroidDir}/android/src/main/AndroidManifest.xml`,
@@ -597,6 +597,8 @@ const validateAssembledAndroid = async () => {
 
 const validateAssemblediOS = async () => {
   let expectedios = [
+    `${assemblediOSAndroidDir}/android/include`,
+    `${assemblediOSAndroidDir}/android/include/IXrContextARCore.h`,
     `${assemblediOSAndroidDir}/ios`,
     `${assemblediOSAndroidDir}/ios/BabylonModule.mm`,
     `${assemblediOSAndroidDir}/ios/BabylonNativeInterop.h`,
