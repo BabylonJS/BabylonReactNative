@@ -250,7 +250,6 @@ const copyIOSFiles = async () => {
       .on('end', resolve);
   });
 
-  shelljs.mkdir('-p', `${assemblediOSAndroidDir}/android/include`);
   // this file is part of Android but copied from iOS cmake fetching because easier than finding gradle temp build directory
   await new Promise(resolve => {
     gulp.src('../Package/iOS/Build/_deps/babylonnative-src/Dependencies/xr/Source/ARCore/Include/*')
@@ -598,6 +597,7 @@ const validateAssembledAndroid = async () => {
 
 const validateAssemblediOS = async () => {
   let expectedios = [
+    `${assemblediOSAndroidDir}/android`,
     `${assemblediOSAndroidDir}/android/include`,
     `${assemblediOSAndroidDir}/android/include/IXrContextARCore.h`,
     `${assemblediOSAndroidDir}/ios`,
