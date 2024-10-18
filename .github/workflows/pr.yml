@@ -158,6 +158,12 @@ jobs:
         uses: actions/setup-node@v4.0.4
         with:
           node-version: 20
+      - name: Install 10.0.18362.0 Windows SDK
+        run: |
+          $sdkVersion = '10.0.18362.0'
+          $installerUrl = "https://go.microsoft.com/fwlink/p/?linkid=2120843&clcid=0x409&Culture=en-US&country=US&Consent=0&callingAppTelemetryId=0&passive=false&dest=https://go.microsoft.com/fwlink/?linkid=2120843"
+          Invoke-WebRequest -Uri $installerUrl -OutFile 'winsdksetup.exe'
+          Start-Process -FilePath 'winsdksetup.exe' -ArgumentList "/features OptionId.WindowsDesktopSoftwareDevelopmentKit OptionId.WindowsSoftwareDevelopmentKit, /quiet" -Wait
       - name: Install watchman
         run: choco install watchman
         working-directory: ./Apps/BRNPlayground
