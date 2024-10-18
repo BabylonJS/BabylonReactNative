@@ -138,7 +138,7 @@ jobs:
       release-version: 0.0.${GITHUB_SHA::8}
 
   windows-rnta:
-    runs-on: windows-2019
+    runs-on: windows-2022
     strategy:
       matrix:
         platform: [x64, ARM64]
