@@ -182,6 +182,13 @@ jobs:
         run: npm install
         working-directory: ./Package
 
+
+      - name: RNPermissions Patch test
+        run: copy /Y RNPermissions.vcxproj .\Apps\BRNPlayground\node_modules\react-native-permissions\windows\RNPermissions\RNPermissions.vcxproj
+        working-directory: ./
+
+
+
       - name: NPM Generate Windows Project
         run: npx install-windows-test-app
         working-directory: ./Apps/BRNPlayground
