@@ -184,8 +184,9 @@ jobs:
 
 
       - name: RNPermissions Patch test
-        run: copy /Y RNPermissions.vcxproj .\Apps\BRNPlayground\node_modules\react-native-permissions\windows\RNPermissions\RNPermissions.vcxproj
+        run: Copy-Item -Path "RNPermissions.vcxproj" -Destination "Apps\BRNPlayground\node_modules\react-native-permissions\windows\RNPermissions\RNPermissions.vcxproj" -Force
         working-directory: ./
+        
 
 
 
