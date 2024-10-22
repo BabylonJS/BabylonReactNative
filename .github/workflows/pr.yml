@@ -199,7 +199,7 @@ jobs:
         working-directory: ./Modules
 
       - name: CMake BabylonNative
-        run: cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0.22621.0 -DCMAKE_UNITY_BUILD=true -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=10.0.22621.0 -A ${{ matrix.platform == 'x86' && 'win32' || matrix.platform}} ${{ matrix.basekit == '-BaseKit' && '-DBASEKIT_BUILD=1' || matrix.basekit}} ./../../../react-native-windows/windows
+        run: cmake -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -A ${{ matrix.platform == 'x86' && 'win32' || matrix.platform}} ${{ matrix.basekit == '-BaseKit' && '-DBASEKIT_BUILD=1' || matrix.basekit}} ./../../../react-native-windows/windows
         working-directory: ./Modules/@babylonjs/react-native/Build/uwp_${{ matrix.platform }}
 
       - name: Nuget restore
