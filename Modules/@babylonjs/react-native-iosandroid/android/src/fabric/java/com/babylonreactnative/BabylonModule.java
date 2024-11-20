@@ -8,7 +8,7 @@ import com.facebook.react.module.annotations.ReactModule;
 
 @ReactModule(name = BabylonModule.NAME)
 public final class BabylonModule extends NativeBabylonModuleSpec {
-    static final String NAME = "EngineViewNativeComponent";
+    static final String NAME = "BabylonModule";
 
     BabylonModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -17,22 +17,22 @@ public final class BabylonModule extends NativeBabylonModuleSpec {
     @NonNull
     @Override
     public String getName() {
-       return BabylonModule.NAME;
+        return BabylonModule.NAME;
     }
 
     @Override
     public void initialize(Promise promise) {
-//        this.getReactApplicationContext().runOnJSQueueThread(() -> {
-//            BabylonNativeInterop.initialize(this.getReactApplicationContext());
-//            promise.resolve(null);
-//        });
+        this.getReactApplicationContext().runOnJSQueueThread(() -> {
+            BabylonNativeInterop.initialize(this.getReactApplicationContext());
+            promise.resolve(null);
+        });
     }
 
     @Override
     public void resetView(Promise promise) {
-//        this.getReactApplicationContext().runOnUiQueueThread(() -> {
-//            BabylonNativeInterop.resetView();
-//            promise.resolve(null);
-//        });
+        this.getReactApplicationContext().runOnUiQueueThread(() -> {
+            BabylonNativeInterop.resetView();
+            promise.resolve(null);
+        });
     }
 }

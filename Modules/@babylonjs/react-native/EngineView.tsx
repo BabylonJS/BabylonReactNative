@@ -9,6 +9,7 @@ export interface EngineViewProps extends NativeEngineViewProps {
     camera?: Camera;
     displayFrameRate?: boolean;
     isTransparent?: boolean;
+    androidView?: "TextureView" | "SurfaceView" | "SurfaceViewZTopMost" | "SurfaceViewZMediaOverlay";
     antiAliasing?: 0 | 1 | 2 | 4 | 8 | 16;
     onInitialized?: (view: EngineViewCallbacks) => void;
 }

@@ -1,11 +1,8 @@
 package com.babylonreactnative;
 
-import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
@@ -40,11 +37,11 @@ public final class EngineViewManager extends SimpleViewManager<EngineView> imple
         return new EngineView(reactContext);
     }
 
-//    @Override
-//    public void onDropViewInstance(@NonNull EngineView view) {
-//        super.onDropViewInstance(view);
-//        // TODO: Native view specific cleanup
-//    }
+    @Override
+    public void onDropViewInstance(@NonNull EngineView view) {
+        super.onDropViewInstance(view);
+        // TODO: Native view specific cleanup
+    }
 
     @Override
     public void setIsTransparent(EngineView view, boolean value) {
