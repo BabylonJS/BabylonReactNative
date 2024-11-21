@@ -5,10 +5,10 @@
 #include <UIKit/UIKit.h>
 #include "react/renderer/componentregistry/ComponentDescriptorProvider.h"
 
-#import <react/renderer/components/BabylonModuleSpec/ComponentDescriptors.h>
-#import <react/renderer/components/BabylonModuleSpec/EventEmitters.h>
-#import <react/renderer/components/BabylonModuleSpec/Props.h>
-#import <react/renderer/components/BabylonModuleSpec/RCTComponentViewHelpers.h>
+#import <react/renderer/components/BabylonReactNative/ComponentDescriptors.h>
+#import <react/renderer/components/BabylonReactNative/EventEmitters.h>
+#import <react/renderer/components/BabylonReactNative/Props.h>
+#import <react/renderer/components/BabylonReactNative/RCTComponentViewHelpers.h>
 
 #import "RCTFabricComponentsPlugins.h"
 
@@ -17,7 +17,7 @@
 
 using namespace facebook::react;
 
-@interface BabylonEngineViewComponentView () <RCTEngineViewNativeComponentViewProtocol>
+@interface BabylonEngineViewComponentView () <RCTEngineViewViewProtocol>
 @end
 
 @implementation BabylonEngineViewComponentView {
@@ -25,12 +25,12 @@ using namespace facebook::react;
 }
 
 + (ComponentDescriptorProvider)componentDescriptorProvider {
-  return concreteComponentDescriptorProvider<EngineViewNativeComponentComponentDescriptor>();
+  return concreteComponentDescriptorProvider<EngineViewComponentDescriptor>();
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
   if (self = [super initWithFrame:frame]) {
-    static const auto defaultProps = std::make_shared<const EngineViewNativeComponentProps>();
+    static const auto defaultProps = std::make_shared<const EngineViewProps>();
     _props = defaultProps;
     _engineView = [[EngineView alloc] init];
     _engineView.translatesAutoresizingMaskIntoConstraints = false;
@@ -48,8 +48,8 @@ using namespace facebook::react;
 
 - (void)updateProps:(Props::Shared const &)props oldProps:(Props::Shared const &)oldProps
 {
-  const auto &oldViewProps = *std::static_pointer_cast<EngineViewNativeComponentProps const>(_props);
-  const auto &newViewProps = *std::static_pointer_cast<EngineViewNativeComponentProps const>(props);
+  const auto &oldViewProps = *std::static_pointer_cast<EngineViewProps const>(_props);
+  const auto &newViewProps = *std::static_pointer_cast<EngineViewProps const>(props);
   
   if (oldViewProps.isTransparent != newViewProps.isTransparent) {
     [_engineView setIsTransparentFlag:[NSNumber numberWithBool:newViewProps.isTransparent]];
@@ -74,7 +74,7 @@ using namespace facebook::react;
 
 @end
 
-Class<RCTComponentViewProtocol> EngineViewNativeComponentCls(void) {
+Class<RCTComponentViewProtocol> EngineViewCls(void) {
   return BabylonEngineViewComponentView.class;
 }
 

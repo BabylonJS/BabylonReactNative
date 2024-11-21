@@ -29,5 +29,5 @@ export const Commands: NativeCommands = codegenNativeCommands<NativeCommands>({
 });
 
 export default codegenNativeComponent<NativeProps>(
-  'EngineViewNativeComponent'
+  'EngineView'
 ) as HostComponent<NativeProps>;

@@ -7,14 +7,15 @@ import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewManagerDelegate;
-import com.facebook.react.viewmanagers.EngineViewNativeComponentManagerDelegate;
-import com.facebook.react.viewmanagers.EngineViewNativeComponentManagerInterface;
+import com.facebook.react.viewmanagers.EngineViewManagerDelegate;
+import com.facebook.react.viewmanagers.EngineViewManagerInterface;
 
 @ReactModule(name = EngineViewManager.NAME)
-public final class EngineViewManager extends SimpleViewManager<EngineView> implements EngineViewNativeComponentManagerInterface<EngineView> {
+public final class EngineViewManager extends SimpleViewManager<EngineView> implements EngineViewManagerInterface<EngineView> {
     private final ViewManagerDelegate<EngineView> mDelegate;
 
-    static final String NAME = "EngineViewNativeComponent";
+    static final String NAME = "EngineView";
+
     @NonNull
     @Override
     public String getName() {
@@ -22,7 +23,7 @@ public final class EngineViewManager extends SimpleViewManager<EngineView> imple
     }
 
     public EngineViewManager() {
-        mDelegate = new EngineViewNativeComponentManagerDelegate<>(this);
+        mDelegate = new EngineViewManagerDelegate<>(this);
     }
 
     @Nullable
@@ -35,12 +36,6 @@ public final class EngineViewManager extends SimpleViewManager<EngineView> imple
     @Override
     protected EngineView createViewInstance(@NonNull ThemedReactContext reactContext) {
         return new EngineView(reactContext);
-    }
-
-    @Override
-    public void onDropViewInstance(@NonNull EngineView view) {
-        super.onDropViewInstance(view);
-        // TODO: Native view specific cleanup
     }
 
     @Override

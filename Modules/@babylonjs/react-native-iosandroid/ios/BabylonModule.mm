@@ -5,7 +5,7 @@
 #import <React/RCTInvalidating.h>
 
 #ifdef RCT_NEW_ARCH_ENABLED
-#import <BabylonModuleSpec/BabylonModuleSpec.h>
+#import <BabylonReactNative/BabylonReactNative.h>
 #endif
 
 #import <Foundation/Foundation.h>
@@ -34,6 +34,7 @@ RCT_EXPORT_METHOD(initialize:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseR
         resolve([NSNull null]);
     });
 }
+
 
 RCT_EXPORT_METHOD(resetView:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject) {
     dispatch_async(dispatch_get_main_queue(), ^{
