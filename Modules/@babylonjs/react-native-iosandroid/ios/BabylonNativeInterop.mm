@@ -37,19 +37,11 @@ static NSMutableArray* activeTouches = [NSMutableArray new];
     } };
 
     BabylonNative::Initialize(*GetJSIRuntime(bridge), std::move(jsDispatcher));
-
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-        name:RCTBridgeWillInvalidateModulesNotification
-        object:bridge.parentBridge];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self
-        selector:@selector(onBridgeWillInvalidate:)
-        name:RCTBridgeWillInvalidateModulesNotification
-        object:bridge.parentBridge];
 }
 
 // NOTE: This happens during dev mode reload, when the JS engine is being shutdown and restarted.
-+ (void)onBridgeWillInvalidate:(NSNotification*)notification
+// It's called by RCTInvalidating.
++ (void)invalidate
 {
     BabylonNative::Deinitialize();
 }

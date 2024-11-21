@@ -22,7 +22,7 @@
     "@babylonjs/react-native": "file:../../Modules/@babylonjs/react-native",
     "@babylonjs/react-native-iosandroid": "file:../../Modules/@babylonjs/react-native-iosandroid",
     "@babylonjs/react-native-windows": "file:../../Modules/@babylonjs/react-native-windows",
-    "@react-native-community/slider": "^4.2.2",
+    "@react-native-community/slider": "^4.5.5",
     "react": "18.2.0",
     "react-native": "0.73.5",
     "react-native-macos": "^0.73.0",

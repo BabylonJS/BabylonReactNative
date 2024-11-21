@@ -5,6 +5,7 @@
 
 @interface BabylonNativeInterop : NSObject
 + (void)initialize:(RCTBridge*)bridge;
++ (void)invalidate;
 + (void)updateView:(MTKView*)mtkView;
 + (void)updateMSAA:(NSNumber*)value;
 + (void)renderView;

@@ -1,11 +1,11 @@
 import React, { Component, FunctionComponent, SyntheticEvent, useCallback, useEffect, useState, useRef, useMemo } from 'react';
-import { ViewProps, View, Text, findNodeHandle, UIManager } from 'react-native';
+import { View, Text, findNodeHandle, UIManager } from 'react-native';
 import { Camera, SceneInstrumentation } from '@babylonjs/core';
 import { ReactNativeEngine } from './ReactNativeEngine';
 import { useModuleInitializer, useRenderLoop } from './NativeEngineHook';
 import { NativeEngineViewProps, NativeEngineView } from './NativeEngineView';
 
-export interface EngineViewProps extends ViewProps {
+export interface EngineViewProps extends NativeEngineViewProps {
     camera?: Camera;
     displayFrameRate?: boolean;
     isTransparent?: boolean;

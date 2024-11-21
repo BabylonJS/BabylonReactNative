@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.platforms    = { :ios => "12.0" }
   s.source       = { :git => package["repository"]["url"], :tag => s.version }
 
-  s.source_files = "ios/*.{h,m,mm}"
+  s.source_files = "ios/**/*.{h,m,mm}"
   s.requires_arc = true
   s.xcconfig     = { 'USER_HEADER_SEARCH_PATHS' => '$(inherited) ${PODS_TARGET_SRCROOT}/shared ${PODS_TARGET_SRCROOT}/../react-native/shared' }
 
