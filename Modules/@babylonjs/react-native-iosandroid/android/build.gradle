@@ -62,9 +62,6 @@ buildscript {
 }
 
 def graphics_api = safeExtGet('GRAPHICS_API', "OpenGL")
-
-apply plugin: 'com.android.library'
-
 configurations {
     extractHeaders
     extractLibs
