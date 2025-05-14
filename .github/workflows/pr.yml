@@ -287,7 +287,7 @@ jobs:
         
       # - name: Windows build BRN
         # run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m BRNPlayground.sln
-        working-directory: ./Apps/BRNPlayground/windows
+        #working-directory: ./Apps/BRNPlayground/windows
 
 # Test packages
   build-android-ios-065:
