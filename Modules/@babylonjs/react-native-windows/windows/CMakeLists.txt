@@ -46,6 +46,8 @@ endif()
 
 target_include_directories(BabylonNative PRIVATE ${SHARED_INCLUDES})
 
+disable_warnings(Graphics)
+
 target_link_libraries(BabylonNative
     arcana
     GraphicsDevice
