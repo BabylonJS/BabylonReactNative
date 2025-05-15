@@ -46,7 +46,16 @@ endif()
 
 target_include_directories(BabylonNative PRIVATE ${SHARED_INCLUDES})
 
+# because of warning C5030: attribute 'msvc::intrinsic' is not recognized
+# solution is to update VS version but this might bring more issues
 disable_warnings(Graphics)
+disable_warnings(NativeEngine)
+disable_warnings(NativeCamera)
+disable_warnings(NativeInput)
+disable_warnings(NativeCapture)
+disable_warnings(Canvas)
+disable_warnings(Window)
+disable_warnings(NativeXr)
 
 target_link_libraries(BabylonNative
     arcana
