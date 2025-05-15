@@ -16,7 +16,7 @@
     <ApplicationType>Windows Store</ApplicationType>
     <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
     <WindowsTargetPlatformVersion Condition=" '$(WindowsTargetPlatformVersion)' == '' ">10.0</WindowsTargetPlatformVersion>
-    <WindowsTargetPlatformMinVersion>10.0.22000.0</WindowsTargetPlatformMinVersion>
+    <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="ReactNativeWindowsProps">
@@ -136,19 +136,17 @@
         $(BabylonNativeBuildDir)babylonnative\Plugins\NativeInput\$(Configuration);
         $(BabylonNativeBuildDir)babylonnative\Plugins\NativeOptimizations\$(Configuration);
         $(BabylonNativeBuildDir)babylonnative\Plugins\NativeTracing\$(Configuration);
+        $(BabylonNativeBuildDir)babylonnative\Plugins\NativeXr\$(Configuration);
         $(BabylonNativeBuildDir)babylonnative\Polyfills\Window\$(Configuration);
         $(BabylonNativeBuildDir)babylonnative\Polyfills\Canvas\$(Configuration);
         $(BabylonNativeBuildDir)jsi\$(Configuration);
         $(BabylonNativeBuildDir)$(Configuration);
         $(BabylonNativeBuildDir)_deps\arcana.cpp-build\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\jsruntimehost-build\Polyfills\Scheduling\$(Configuration);
         $(BabylonNativeBuildDir)_deps\jsruntimehost-build\Core\JsRuntime\$(Configuration);
         $(BabylonNativeBuildDir)_deps\jsruntimehost-build\Core\Node-API-JSI\$(Configuration);
         $(BabylonNativeBuildDir)_deps\jsruntimehost-build\Polyfills\XMLHttpRequest\$(Configuration);
         $(BabylonNativeBuildDir)_deps\urllib-build\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\bgfx.cmake-build\cmake\bgfx\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\bgfx.cmake-build\cmake\bx\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\bgfx.cmake-build\cmake\bimg\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\bgfx.cmake-build\$(Configuration);
         $(BabylonNativeBuildDir)_deps\glslang-build\glslang\$(Configuration);
         $(BabylonNativeBuildDir)_deps\glslang-build\glslang\OSDependent\Windows\$(Configuration);
         $(BabylonNativeBuildDir)_deps\glslang-build\OGLCompilersDLL\$(Configuration);
@@ -197,15 +195,17 @@
         NativeInput.lib;
         NativeOptimizations.lib;
         NativeTracing.lib;
+        NativeXr.lib;
         OGLCompilerd.lib;
+        openxr_loaderd.lib;
         OSDependentd.lib;
         spirv-cross-cored.lib;
         spirv-cross-hlsld.lib;
         SPIRVd.lib;
         UrlLib.lib;
         Window.lib;
-        Scheduling.lib;
         XMLHttpRequest.lib;
+        xr.lib;
         WindowsApp.lib;
         %(AdditionalDependencies);
       </AdditionalDependencies>
@@ -249,15 +249,17 @@
         NativeInput.lib;
         NativeOptimizations.lib;
         NativeTracing.lib;
+        NativeXr.lib;
         OGLCompiler.lib;
+        openxr_loader.lib;
         OSDependent.lib;
         spirv-cross-core.lib;
         spirv-cross-hlsl.lib;
         SPIRV.lib;
         UrlLib.lib;
         Window.lib;
-        Scheduling.lib;
         XMLHttpRequest.lib;
+        xr.lib;
         WindowsApp.lib;
         %(AdditionalDependencies);
       </AdditionalDependencies>
