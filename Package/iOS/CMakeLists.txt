@@ -23,15 +23,8 @@ project(ReactNativeBabylon)
 include(${CMAKE_CURRENT_SOURCE_DIR}/../../Apps/${BUILD_RNAPP_DIR}/node_modules/@babylonjs/react-native-iosandroid/ios/CMakeLists.txt)
 
 set(PACKAGED_LIBS
-    astc-encoder
-    etc1
-    etc2
-    nvtt
-    squish
-    pvrtc
-    iqa
-    edtaa3
-    tinyexr
+    bimg_encode
+    bimg_decode
     bgfx
     bimg
     bx
@@ -55,7 +48,6 @@ set(PACKAGED_LIBS
     SPIRV
     spirv-cross-core
     spirv-cross-msl
-    tinyexr
     UrlLib
     Window
     XMLHttpRequest
