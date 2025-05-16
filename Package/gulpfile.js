@@ -345,8 +345,6 @@ const createUWPDirectories = async () => {
   shelljs.mkdir('-p', `${assembledWindowsDir}/windows/libs/x64/Release`);
   shelljs.mkdir('-p', `${assembledWindowsDir}/windows/BabylonReactNative`);
   shelljs.mkdir('-p', `${assembledWindowsDir}/windows/include`);
-  shelljs.mkdir('-p', `${assembledWindowsDir}/windows/OpenXR-MixedReality/include/openxr`);
-  shelljs.mkdir('-p', `${assembledWindowsDir}/windows/OpenXR-MixedReality/include/XrUtility`);
 }
 
 const copyCommonFilesUWP = () => {
@@ -399,28 +397,6 @@ const copyVCXProjUWPFiles = () => {
     .pipe(gulp.dest(`${assembledWindowsDir}/windows/BabylonReactNative`));
 }
 
-const copyOpenXRInfoFiles = () => {
-  return gulp.src('../Modules/@babylonjs/react-native/Build/uwp_x64/_deps/openxr-mixedreality-src/LICENSE')
-    .pipe(gulp.src('../Modules/@babylonjs/react-native/Build/uwp_x64/_deps/openxr-mixedreality-src/README.md'))
-    .pipe(gulp.dest(`${assembledWindowsDir}/windows/OpenXR-MixedReality`));
-}
-
-const copyOpenXRPreviewHeaders = () => {
-  return gulp.src('../Modules/@babylonjs/react-native/Build/uwp_x64/_deps/openxr-mixedreality-src/openxr_preview/include/openxr/*')
-    .pipe(gulp.dest(`${assembledWindowsDir}/windows/OpenXR-MixedReality/include/openxr`));
-}
-
-const copyOpenXRUtilityHeaders = () => {
-  return gulp.src('../Modules/@babylonjs/react-native/Build/uwp_x64/_deps/openxr-mixedreality-src/shared/XrUtility/*')
-    .pipe(gulp.dest(`${assembledWindowsDir}/windows/OpenXR-MixedReality/include/XrUtility`));
-}
-
-const copyOpenXRHelperHeaders = () => {
-  return gulp.src('../Modules/@babylonjs/react-native/Build/uwp_x64/_deps/babylonnative-src/Dependencies/xr/Source/OpenXR/Include/*')
-    .pipe(gulp.src('../Modules/@babylonjs/react-native-windows/windows/include/*'))
-    .pipe(gulp.dest(`${assembledWindowsDir}/windows/include`));
-}
-
 const copyUWPFiles = gulp.series(
   createUWPDirectories,
   basekitBuild ? 
@@ -442,11 +418,7 @@ const copyUWPFiles = gulp.series(
     copyx64ReleaseUWPFiles,
     copyARM64DebugUWPFiles,
     copyARM64ReleaseUWPFiles,
-    copyVCXProjUWPFiles,
-    copyOpenXRInfoFiles,
-    copyOpenXRPreviewHeaders,
-    copyOpenXRUtilityHeaders,
-    copyOpenXRHelperHeaders));
+    copyVCXProjUWPFiles));
 
 const validateAssembled = async () => {
   // When the package contents are updated *and validated*, update the expected below from the output of the failed validation console output (run `gulp validateAssembled`).
