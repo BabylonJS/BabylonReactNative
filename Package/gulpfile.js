@@ -537,6 +537,7 @@ const validateAssemblediOSAndroid = async () => {
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings`,
+    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/AbortController.xcscheme`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/AppRuntime.xcscheme`,
