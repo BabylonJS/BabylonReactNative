@@ -22,6 +22,8 @@ project(ReactNativeBabylon)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/../../Apps/${BUILD_RNAPP_DIR}/node_modules/@babylonjs/react-native-iosandroid/ios/CMakeLists.txt)
 
+set_property(TARGET BabylonNative PROPERTY XCODE_GENERATE_SCHEME YES)
+
 set(PACKAGED_LIBS
     bimg_encode
     bimg_decode
