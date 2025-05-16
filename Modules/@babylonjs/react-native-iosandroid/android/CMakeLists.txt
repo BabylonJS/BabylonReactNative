@@ -41,6 +41,12 @@ add_subdirectory(${babylonnative_SOURCE_DIR} ${babylonnative_SOURCE_DIR}/build/A
 disable_warnings(NativeXr)
 disable_warnings(NativeCamera)
 disable_warnings(XMLHttpRequest)
+disable_warnings(Graphics)
+disable_warnings(NativeEngine)
+disable_warnings(NativeInput)
+disable_warnings(NativeCapture)
+disable_warnings(Canvas)
+disable_warnings(Window)
 
 set(BABYLON_REACT_NATIVE_SHARED_DIR "${CMAKE_CURRENT_LIST_DIR}/../../react-native/shared")
 add_subdirectory(${BABYLON_REACT_NATIVE_SHARED_DIR} ${CMAKE_CURRENT_BINARY_DIR}/shared)
