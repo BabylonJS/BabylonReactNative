@@ -55,7 +55,6 @@ disable_warnings(NativeInput)
 disable_warnings(NativeCapture)
 disable_warnings(Canvas)
 disable_warnings(Window)
-disable_warnings(NativeXr)
 
 target_link_libraries(BabylonNative
     arcana
