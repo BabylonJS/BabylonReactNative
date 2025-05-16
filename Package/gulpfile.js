@@ -104,7 +104,7 @@ const buildAndroidRNTA = async () => {
 
 const makeUWPProjectPlatform = async (name, arch) => {
   shelljs.mkdir('-p', `./../Modules/@babylonjs/react-native/Build/uwp_${name}`);
-  exec(`cmake -G "Visual Studio 17 2022" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -DCMAKE_UNITY_BUILD=true ${cmakeBasekitBuildDefinition} -A ${arch} ./../../../react-native-windows/windows`, `./../Modules/@babylonjs/react-native/Build/uwp_${name}`);
+  exec(`cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -DCMAKE_UNITY_BUILD=true ${cmakeBasekitBuildDefinition} -A ${arch} ./../../../react-native-windows/windows`, `./../Modules/@babylonjs/react-native/Build/uwp_${name}`);
 };
 
 const makeUWPProjectx86 = async () => makeUWPProjectPlatform('x86', 'Win32');
@@ -345,6 +345,8 @@ const createUWPDirectories = async () => {
   shelljs.mkdir('-p', `${assembledWindowsDir}/windows/libs/x64/Release`);
   shelljs.mkdir('-p', `${assembledWindowsDir}/windows/BabylonReactNative`);
   shelljs.mkdir('-p', `${assembledWindowsDir}/windows/include`);
+  shelljs.mkdir('-p', `${assembledWindowsDir}/windows/OpenXR-MixedReality/include/openxr`);
+  shelljs.mkdir('-p', `${assembledWindowsDir}/windows/OpenXR-MixedReality/include/XrUtility`);
 }
 
 const copyCommonFilesUWP = () => {
@@ -397,6 +399,28 @@ const copyVCXProjUWPFiles = () => {
     .pipe(gulp.dest(`${assembledWindowsDir}/windows/BabylonReactNative`));
 }
 
+const copyOpenXRInfoFiles = () => {
+  return gulp.src('../Modules/@babylonjs/react-native/Build/uwp_x64/_deps/openxr-mixedreality-src/LICENSE')
+    .pipe(gulp.src('../Modules/@babylonjs/react-native/Build/uwp_x64/_deps/openxr-mixedreality-src/README.md'))
+    .pipe(gulp.dest(`${assembledWindowsDir}/windows/OpenXR-MixedReality`));
+}
+
+const copyOpenXRPreviewHeaders = () => {
+  return gulp.src('../Modules/@babylonjs/react-native/Build/uwp_x64/_deps/openxr-mixedreality-src/openxr_preview/include/openxr/*')
+    .pipe(gulp.dest(`${assembledWindowsDir}/windows/OpenXR-MixedReality/include/openxr`));
+}
+
+const copyOpenXRUtilityHeaders = () => {
+  return gulp.src('../Modules/@babylonjs/react-native/Build/uwp_x64/_deps/openxr-mixedreality-src/shared/XrUtility/*')
+    .pipe(gulp.dest(`${assembledWindowsDir}/windows/OpenXR-MixedReality/include/XrUtility`));
+}
+
+const copyOpenXRHelperHeaders = () => {
+  return gulp.src('../Modules/@babylonjs/react-native/Build/uwp_x64/_deps/babylonnative-src/Dependencies/xr/Source/OpenXR/Include/*')
+    .pipe(gulp.src('../Modules/@babylonjs/react-native-windows/windows/include/*'))
+    .pipe(gulp.dest(`${assembledWindowsDir}/windows/include`));
+}
+
 const copyUWPFiles = gulp.series(
   createUWPDirectories,
   basekitBuild ? 
@@ -418,7 +442,11 @@ const copyUWPFiles = gulp.series(
     copyx64ReleaseUWPFiles,
     copyARM64DebugUWPFiles,
     copyARM64ReleaseUWPFiles,
-    copyVCXProjUWPFiles));
+    copyVCXProjUWPFiles,
+    copyOpenXRInfoFiles,
+    copyOpenXRPreviewHeaders,
+    copyOpenXRUtilityHeaders,
+    copyOpenXRHelperHeaders));
 
 const validateAssembled = async () => {
   // When the package contents are updated *and validated*, update the expected below from the output of the failed validation console output (run `gulp validateAssembled`).
@@ -521,7 +549,6 @@ const validateAssemblediOSAndroid = async () => {
     `${assemblediOSAndroidDir}/ios/libs/libNativeXr.a`,
     `${assemblediOSAndroidDir}/ios/libs/libOGLCompiler.a`,
     `${assemblediOSAndroidDir}/ios/libs/libOSDependent.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libScheduling.a`,
     `${assemblediOSAndroidDir}/ios/libs/libspirv-cross-core.a`,
     `${assemblediOSAndroidDir}/ios/libs/libspirv-cross-msl.a`,
     `${assemblediOSAndroidDir}/ios/libs/libSPIRV.a`,
@@ -538,7 +565,6 @@ const validateAssemblediOSAndroid = async () => {
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/AbortController.xcscheme`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/AppRuntime.xcscheme`,
@@ -570,17 +596,26 @@ const validateAssemblediOSAndroid = async () => {
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/OSDependent.xcscheme`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/Scheduling.xcscheme`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/ScriptLoader.xcscheme`,
+    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/sharpyuv.xcscheme`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/spirv-cross-core.xcscheme`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/spirv-cross-msl.xcscheme`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/SPIRV.xcscheme`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/TestUtils.xcscheme`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/URL.xcscheme`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/UrlLib.xcscheme`,
+    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/webp.xcscheme`,
+    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/webpdecode.xcscheme`,
+    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/webpdecoder.xcscheme`,
+    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/webpdemux.xcscheme`,
+    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/webpdsp.xcscheme`,
+    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/webpdspdecode.xcscheme`,
+    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/webpencode.xcscheme`,
+    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/webputils.xcscheme`,
+    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/webputilsdecode.xcscheme`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/WebSocket.xcscheme`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/Window.xcscheme`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/XMLHttpRequest.xcscheme`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/xr.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/Blob.xcscheme`,
     `${assemblediOSAndroidDir}/package.json`,
     `${assemblediOSAndroidDir}/react-native-babylon.podspec`,
     `${assemblediOSAndroidDir}/README.md`,
