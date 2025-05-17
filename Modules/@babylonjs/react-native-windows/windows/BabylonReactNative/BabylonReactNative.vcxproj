@@ -136,7 +136,6 @@
         $(BabylonNativeBuildDir)babylonnative\Plugins\NativeInput\$(Configuration);
         $(BabylonNativeBuildDir)babylonnative\Plugins\NativeOptimizations\$(Configuration);
         $(BabylonNativeBuildDir)babylonnative\Plugins\NativeTracing\$(Configuration);
-        $(BabylonNativeBuildDir)babylonnative\Plugins\NativeXr\$(Configuration);
         $(BabylonNativeBuildDir)babylonnative\Polyfills\Window\$(Configuration);
         $(BabylonNativeBuildDir)babylonnative\Polyfills\Canvas\$(Configuration);
         $(BabylonNativeBuildDir)jsi\$(Configuration);
@@ -197,7 +196,6 @@
         NativeInput.lib;
         NativeOptimizations.lib;
         NativeTracing.lib;
-        NativeXr.lib;
         OGLCompilerd.lib;
         openxr_loaderd.lib;
         OSDependentd.lib;
@@ -251,7 +249,6 @@
         NativeInput.lib;
         NativeOptimizations.lib;
         NativeTracing.lib;
-        NativeXr.lib;
         OGLCompiler.lib;
         openxr_loader.lib;
         OSDependent.lib;
