@@ -233,61 +233,61 @@ jobs:
         run: npx gulp buildUWPPlayground${{ matrix.platform }}${{ matrix.config }}
         working-directory: ./Package
 
-  # build-windows-rnta:
-    # runs-on: windows-2019
-    # steps:
-      # - name: Support longpaths
-        # run: git config --system core.longpaths true
-      # - name: Checkout Repo
-        # uses: actions/checkout@v2.3.3
-        # with:
-          # submodules: 'true'
-      # - name: Setup MSBuild
-        # uses: microsoft/setup-msbuild@v1.0.2
-      # - name: Setup Node 20
-        # uses: actions/setup-node@v3
-        # with:
-          # node-version: 20
+  build-windows-rnta:
+    runs-on: windows-2019
+    steps:
+      - name: Support longpaths
+        run: git config --system core.longpaths true
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+        with:
+          submodules: 'true'
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.0.2
+      - name: Setup Node 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
 
-      # - name: Install watchman
-        # run: choco install watchman
-        # working-directory: ./Apps/BRNPlayground
+      - name: Install watchman
+        run: choco install watchman
+        working-directory: ./Apps/BRNPlayground
 
-      # - name: NPM Install RNTA
-        # run: npm install
-        # working-directory: ./Apps/BRNPlayground
+      - name: NPM Install RNTA
+        run: npm install
+        working-directory: ./Apps/BRNPlayground
 
-      # - name: Build Windows Bundle
-        # run: npm run build:windows
-        # working-directory: ./Apps/BRNPlayground
+      - name: Build Windows Bundle
+        run: npm run build:windows
+        working-directory: ./Apps/BRNPlayground
 
-      # - name: NPM Install Package
-        # run: npm install
-        # working-directory: ./Package
+      - name: NPM Install Package
+        run: npm install
+        working-directory: ./Package
 
-      # - name: NPM Generate Windows Project
-        # run: npx install-windows-test-app
-        # working-directory: ./Apps/BRNPlayground
+      - name: NPM Generate Windows Project
+        run: npx install-windows-test-app
+        working-directory: ./Apps/BRNPlayground
        
-      # - name: BabylonNative build directory
-        # run: mkdir @babylonjs/react-native/Build/uwp_x64
-        # working-directory: ./Modules
+      - name: BabylonNative build directory
+        run: mkdir @babylonjs/react-native/Build/uwp_x64
+        working-directory: ./Modules
 
-      # - name: CMake BabylonNative
-        # run: cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_UNITY_BUILD=true -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=10.0.19041.0 -A x64 ./../../../react-native-windows/windows
-        # working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
+      - name: CMake BabylonNative
+        run: cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_UNITY_BUILD=true -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=10.0.19041.0 -A x64 ./../../../react-native-windows/windows
+        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
 
-      # - name: Nuget restore
-        # run: nuget restore BRNPlayground.sln
-        # working-directory: ./Apps/BRNPlayground/windows
+      - name: Nuget restore
+        run: nuget restore BRNPlayground.sln
+        working-directory: ./Apps/BRNPlayground/windows
 
-      # - name: Windows build BN
-        # run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m ReactNativeBabylon.sln
-        # working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
+      - name: Windows build BN
+        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m ReactNativeBabylon.sln
+        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
         
-      # - name: Windows build BRN
-        # run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m BRNPlayground.sln
-        #working-directory: ./Apps/BRNPlayground/windows
+      - name: Windows build BRN
+        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m BRNPlayground.sln
+        working-directory: ./Apps/BRNPlayground/windows
 
 # Test packages
   build-android-ios-065:
