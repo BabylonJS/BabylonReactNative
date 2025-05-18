@@ -154,7 +154,6 @@
         $(BabylonNativeBuildDir)_deps\glslang-build\SPIRV\$(Configuration);
         $(BabylonNativeBuildDir)_deps\spirv-cross-build\$(Configuration);
         $(BabylonNativeBuildDir)_deps\openxr-sdk-build\src\loader\$(Configuration);
-        $(BabylonNativeBuildDir)_deps\libwebp-build\$(Configuration);
         %(AdditionalLibraryDirectories);
       </AdditionalLibraryDirectories>
       <!-- Library directories when building from npm package -->
@@ -206,10 +205,6 @@
         Window.lib;
         XMLHttpRequest.lib;
         WindowsApp.lib;
-        libsharpyuv.lib;
-        libwebp.lib;
-        libwebpdecoder.lib;
-        libwebpdemux.lib;
         %(AdditionalDependencies);
       </AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
@@ -261,10 +256,6 @@
         Window.lib;
         XMLHttpRequest.lib;
         WindowsApp.lib;
-        libsharpyuv.lib;
-        libwebp.lib;
-        libwebpdecoder.lib;
-        libwebpdemux.lib;
         %(AdditionalDependencies);
       </AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
