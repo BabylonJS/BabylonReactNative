@@ -203,6 +203,7 @@
         SPIRVd.lib;
         UrlLib.lib;
         Window.lib;
+        Scheduling.lib;
         XMLHttpRequest.lib;
         WindowsApp.lib;
         %(AdditionalDependencies);
@@ -254,6 +255,7 @@
         SPIRV.lib;
         UrlLib.lib;
         Window.lib;
+        Scheduling.lib;
         XMLHttpRequest.lib;
         WindowsApp.lib;
         %(AdditionalDependencies);
