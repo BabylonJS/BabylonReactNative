@@ -197,7 +197,6 @@
         NativeOptimizations.lib;
         NativeTracing.lib;
         OGLCompilerd.lib;
-        openxr_loaderd.lib;
         OSDependentd.lib;
         spirv-cross-cored.lib;
         spirv-cross-hlsld.lib;
@@ -205,7 +204,6 @@
         UrlLib.lib;
         Window.lib;
         XMLHttpRequest.lib;
-        xr.lib;
         WindowsApp.lib;
         %(AdditionalDependencies);
       </AdditionalDependencies>
@@ -250,7 +248,6 @@
         NativeOptimizations.lib;
         NativeTracing.lib;
         OGLCompiler.lib;
-        openxr_loader.lib;
         OSDependent.lib;
         spirv-cross-core.lib;
         spirv-cross-hlsl.lib;
@@ -258,7 +255,6 @@
         UrlLib.lib;
         Window.lib;
         XMLHttpRequest.lib;
-        xr.lib;
         WindowsApp.lib;
         %(AdditionalDependencies);
       </AdditionalDependencies>
