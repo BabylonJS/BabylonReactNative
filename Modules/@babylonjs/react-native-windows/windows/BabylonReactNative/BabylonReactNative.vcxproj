@@ -141,6 +141,7 @@
         $(BabylonNativeBuildDir)jsi\$(Configuration);
         $(BabylonNativeBuildDir)$(Configuration);
         $(BabylonNativeBuildDir)_deps\arcana.cpp-build\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\jsruntimehost-build\Polyfills\Scheduling\$(Configuration);
         $(BabylonNativeBuildDir)_deps\jsruntimehost-build\Core\JsRuntime\$(Configuration);
         $(BabylonNativeBuildDir)_deps\jsruntimehost-build\Core\Node-API-JSI\$(Configuration);
         $(BabylonNativeBuildDir)_deps\jsruntimehost-build\Polyfills\XMLHttpRequest\$(Configuration);
