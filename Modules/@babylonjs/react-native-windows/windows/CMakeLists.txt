@@ -35,6 +35,9 @@ add_subdirectory(${babylonnative_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/Babylon
 # Disable Unity build for UrlLib because of conflict in header between windows.h and winrt
 set_property(TARGET UrlLib PROPERTY UNITY_BUILD false)
 
+# Disable the WebP plugin option
+set(BABYLON_NATIVE_PLUGIN_NATIVEENGINE_WEBP OFF CACHE BOOL "Disable Babylon Native WebP Support")
+
 add_library(BabylonNative
     ${SHARED_SOURCES})
 
