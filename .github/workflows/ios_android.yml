@@ -11,7 +11,7 @@ on:
         type: string
       xcode-version:
         type: string
-        default: '15.4'
+        default: '16.2'
 
 jobs:
   Build:
