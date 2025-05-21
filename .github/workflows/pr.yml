@@ -23,7 +23,7 @@ jobs:
       - name: Setup CMake
         uses: jwlawson/actions-setup-cmake@v1.8
         with:
-          cmake-version: '3.26.3'
+          cmake-version: '3.30.3'
       - name: Setup Ninja
         run: brew install ninja
       - name: NPM Install (Playground)
@@ -59,7 +59,7 @@ jobs:
       - name: Setup CMake
         uses: jwlawson/actions-setup-cmake@v1.8
         with:
-          cmake-version: '3.26.3'
+          cmake-version: '3.30.3'
       - name: Setup Ninja
         run: brew install ninja
       - name: Setup Watchman
@@ -164,7 +164,7 @@ jobs:
       - name: Setup CMake
         uses: jwlawson/actions-setup-cmake@v1.8
         with:
-          cmake-version: '3.26.3'
+          cmake-version: '3.30.3'
       - name: Setup Ninja
         run: brew install ninja
       - name: Setup Java
@@ -224,7 +224,9 @@ jobs:
         run: npx gulp makeUWPProject${{ matrix.platform }}
         working-directory: ./Package
       - name: Gulp Build ${{ matrix.platform }} ${{ matrix.config }} (Windows)
-        run: npx gulp buildUWP${{ matrix.platform }}${{ matrix.config }}
+        run: |
+          $env:NODE_OPTIONS="--openssl-legacy-provider"
+          npx gulp buildUWP${{ matrix.platform }}${{ matrix.config }}
         working-directory: ./Package
       - name: Gulp NuGet Restore Playground
         run: npx gulp nugetRestoreUWPPlayground
