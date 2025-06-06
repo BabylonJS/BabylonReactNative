@@ -28,13 +28,16 @@ jobs:
         run: npm install
         working-directory: ./Apps/Playground
 
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Build BabylonNative source tree
+        run: npx gulp buildBabylonNativeSourceTree
+        working-directory: ./Package
       - name: Build Windows Bundle
         run: npm run build:android
         working-directory: ./Apps/Playground
 
-      - name: NPM Install (Binary Package)
-        run: npm install
-        working-directory: ./Package
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
@@ -63,13 +66,17 @@ jobs:
         run: npm install
         working-directory: ./Apps/Playground
 
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Build BabylonNative source tree
+        run: npx gulp buildBabylonNativeSourceTree
+        working-directory: ./Package
+
       - name: Build iOS Bundle
         run: npm run build:ios
         working-directory: ./Apps/Playground
 
-      - name: NPM Install (Binary Package)
-        run: npm install
-        working-directory: ./Package
       - name: Gulp (iOS)
         run: npx gulp buildIOSRNTA
         working-directory: ./Package
@@ -106,13 +113,16 @@ jobs:
         run: npm install
         working-directory: ./Apps/Playground
 
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Build BabylonNative source tree
+        run: npx gulp buildBabylonNativeSourceTree
+        working-directory: ./Package
+
       - name: Build Windows Bundle
         run: npm run build:windows
         working-directory: ./Apps/Playground
-
-      - name: NPM Install Package
-        run: npm install
-        working-directory: ./Package
 
       - name: NPM Generate Windows Project
         run: npx install-windows-test-app
