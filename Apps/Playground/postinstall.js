@@ -12,7 +12,7 @@ function exec(cmd, options) {
 function iosCMake() {
   console.log(chalk.black.bgCyan("Running CMake for iOS..."));
   exec("cmake -B ../../Build/iOS -G Xcode", {
-    cwd: "node_modules/@babylonjs/react-native-iosandroid/ios",
+    cwd: "node_modules/@babylonjs/react-native/ios",
   });
 }
 
@@ -32,9 +32,9 @@ function postInstall() {
   if (os.platform() === "darwin") {
     iosCMake();
 
-    exec("npm install && npx gulp buildIOSRNTA", {
+    /*exec("npm install && npx gulp buildIOSRNTA", {
       cwd: "../../Package",
-    });
+    });*/
 
     console.log(chalk.black.bgCyan("Installing iOS pods..."));
     exec("pod install", { cwd: "ios" });
