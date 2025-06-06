@@ -18,15 +18,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: NPM Install (Playground)
-        run: npm install
-        working-directory: ./Apps/Playground
-      - name: Select React Native Version 
-        run: npm run select 0.64
-        working-directory: ./Apps/Playground
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
+      - name: NPM Install (Playground)
+        run: npm install
+        working-directory: ./Apps/Playground
+
       - name: Gulp
         run: npx gulp buildTS --releaseVersion ${{ inputs.release-version }}
         working-directory: ./Package
