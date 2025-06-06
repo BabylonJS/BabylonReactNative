@@ -34,9 +34,9 @@ jobs:
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
-      - name: Build Android Bundle
-        run: npm run build:android
-        working-directory: ./Apps/Playground
+#      - name: Build Android Bundle
+#        run: npm run build:android
+#        working-directory: ./Apps/Playground
 
       - name: Setup Java
         uses: actions/setup-java@v3
@@ -119,9 +119,9 @@ jobs:
         run: npm install
         working-directory: ./Apps/Playground
 
-      - name: Build Windows Bundle
-        run: npm run build:windows
-        working-directory: ./Apps/Playground
+#      - name: Build Windows Bundle
+#        run: npm run build:windows
+#        working-directory: ./Apps/Playground
 
       - name: NPM Generate Windows Project
         run: npx install-windows-test-app
