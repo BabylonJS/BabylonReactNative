@@ -34,7 +34,7 @@ jobs:
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
-      - name: Build Windows Bundle
+      - name: Build Android Bundle
         run: npm run build:android
         working-directory: ./Apps/Playground
 
@@ -83,7 +83,7 @@ jobs:
       - name: Cache XCFrameworks
         uses: actions/cache@v4
         with:
-          path: Modules/@babylonjs/react-native-iosandroid/ios/libs
+          path: Modules/@babylonjs/react-native/ios/libs
           key: ${{ runner.os }}-xcframeworks-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-xcframeworks
