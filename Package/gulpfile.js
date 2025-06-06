@@ -9,6 +9,10 @@ const rename = require('gulp-rename');
 const glob = require('glob');
 const chalk = require('chalk');
 
+const unzipper = require('unzipper');
+const os = require('os');
+
+
 let assemblediOSAndroidDir = 'Assembled-iOSAndroid';
 let assembledWindowsDir = 'Assembled-Windows';
 let basekitBuild = false;
@@ -686,6 +690,142 @@ const patchPackageVersion = async () => {
   }
 }
 
+
+const COMMIT_ID = '7f82d72f22e9789b9b66cb837aec0c9bc8ff65ee';
+const ZIP_URL = `https://github.com/BabylonJS/BabylonNative/archive/${COMMIT_ID}.zip`;
+const TARGET_DIR = path.resolve(__dirname, '../Modules/@babylonjs/react-native/shared/BabylonNative');
+const ZIP_PATH = path.join(TARGET_DIR, `${COMMIT_ID}.zip`);
+const UNZIP_FOLDER = path.join(TARGET_DIR, `BabylonNative-${COMMIT_ID}`);
+const CMAKE_LISTS_PATH = path.join(TARGET_DIR, 'CMakeLists.txt');
+const TEMP_BUILD_DIR = path.join(TARGET_DIR, 'tempBuild');
+const DEPS_OUTPUT_DIR = path.join(TARGET_DIR, 'deps');
+
+async function downloadZip(url, dest) {
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`Failed to download zip: ${res.status} ${res.statusText}`);
+  }
+
+  const fileStream = fs.createWriteStream(dest);
+  const reader = res.body.getReader();
+
+  return new Promise((resolve, reject) => {
+    function pump() {
+      reader.read().then(({ done, value }) => {
+        if (done) {
+          fileStream.end();
+          resolve();
+          return;
+        }
+        fileStream.write(Buffer.from(value), pump);
+      }).catch(reject);
+    }
+
+    fileStream.on('error', reject);
+    pump();
+  });
+}
+
+async function unzipFile(zipPath, destDir) {
+  await fs.createReadStream(zipPath)
+    .pipe(unzipper.Extract({ path: destDir }))
+    .promise();
+}
+
+function deleteFile(filePath) {
+  return fs.promises.unlink(filePath);
+}
+
+function runCMake(buildDir) {
+  let cmakeCommand = `cmake -S . -B ../tempBuild`;
+
+  exec(cmakeCommand, buildDir);
+}
+
+function writeCMakeListsFile(commitId, cmakePath) {
+  const content = `add_subdirectory(BabylonNative-${commitId})\n`;
+  fs.writeFileSync(cmakePath, content, 'utf8');
+}
+
+function deleteFolderRecursive(folderPath) {
+  if (fs.existsSync(folderPath)) {
+    fs.rmSync(folderPath, { recursive: true, force: true });
+    console.log(`Deleted folder: ${folderPath}`);
+  }
+}
+
+function copyRecursiveExcludingGit(src, dest) {
+  if (!fs.existsSync(src)) return;
+
+  fs.mkdirSync(dest, { recursive: true });
+  const entries = fs.readdirSync(src, { withFileTypes: true });
+
+  for (const entry of entries) {
+    if (entry.name === '.git') continue;
+
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+
+    if (entry.isDirectory()) {
+      copyRecursiveExcludingGit(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
+}
+
+function copyDepsFolders() {
+  const depsSrc = path.join(TEMP_BUILD_DIR, '_deps');
+  if (!fs.existsSync(depsSrc)) return;
+
+  fs.mkdirSync(DEPS_OUTPUT_DIR, { recursive: true });
+
+  const entries = fs.readdirSync(depsSrc, { withFileTypes: true });
+
+  for (const entry of entries) {
+    if (entry.isDirectory() && entry.name.endsWith('-src')) {
+      const fullSrcPath = path.join(depsSrc, entry.name);
+      const fullDestPath = path.join(DEPS_OUTPUT_DIR, entry.name);
+      console.log(`Copying ${entry.name} to deps/`);
+      copyRecursiveExcludingGit(fullSrcPath, fullDestPath);
+    }
+  }
+}
+const buildBabylonNativeSourceTree = async () => {
+  fs.mkdirSync(TARGET_DIR, { recursive: true });
+
+  console.log(`Downloading BabylonNative commit ${COMMIT_ID}...`);
+  await downloadZip(ZIP_URL, ZIP_PATH);
+
+  console.log('Unzipping...');
+  await unzipFile(ZIP_PATH, TARGET_DIR);
+
+  console.log('Deleting ZIP...');
+  await deleteFile(ZIP_PATH);
+
+  console.log('Creating CMakeLists.txt...');
+  writeCMakeListsFile(COMMIT_ID, CMAKE_LISTS_PATH);
+
+  console.log('Running CMake...');
+  await runCMake(UNZIP_FOLDER);
+
+  console.log('Copying *-src folders to deps/ (excluding .git)...');
+  copyDepsFolders();
+
+  console.log('Deleting tempBuild folder...');
+  deleteFolderRecursive(TEMP_BUILD_DIR);
+
+
+  console.log('Remove unnecessary sources');
+  deleteFolderRecursive(`${UNZIP_FOLDER}/.github`);
+  deleteFolderRecursive(`${UNZIP_FOLDER}/Apps`);
+  deleteFolderRecursive(`${UNZIP_FOLDER}/Documentation`);
+  deleteFolderRecursive(`${UNZIP_FOLDER}/Install`);
+  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx`);
+  
+}
+
+
 const copyFiles = gulp.parallel(copyIOSAndroidCommonFiles, copyIOSFiles, copyAndroidFiles);
 
 const buildIOS = gulp.series(makeXCodeProj, buildIphoneOS, buildIphoneSimulator);
@@ -751,3 +891,6 @@ exports.packUWP = packUWP;
 exports.packUWPNoBuild = packUWPNoBuild;
 
 exports.default = build;
+
+
+exports.buildBabylonNativeSourceTree = buildBabylonNativeSourceTree;
