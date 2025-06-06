@@ -1,5 +1,5 @@
 {
-  "name": "BRNPlayground",
+  "name": "Playground",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -10,10 +10,10 @@
     "build:windows": "mkdirp dist && react-native bundle --entry-file index.js --platform windows --dev true --bundle-output dist/main.windows.bundle --assets-dest dist",
     "ios": "react-native run-ios",
     "lint": "eslint .",
-    "macos": "react-native run-macos --scheme BRNPlayground",
+    "macos": "react-native run-macos --scheme Playground",
     "start": "react-native start",
     "test": "jest",
-    "windows": "react-native run-windows --sln windows/BRNPlayground.sln",
+    "windows": "react-native run-windows --sln windows/Playground.sln",
     "postinstall": "node ./postinstall.js"
   },
   "dependencies": {
