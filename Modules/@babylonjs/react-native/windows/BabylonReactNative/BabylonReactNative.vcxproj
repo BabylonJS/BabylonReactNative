@@ -20,12 +20,12 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="ReactNativeWindowsProps">
-    <!-- First try and resolve react-native-windows package at a relative location when installing the @babylonjs/react-native package in your project -->
-    <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(ProjectDir)..\..\..\..\..\node_modules\react-native-windows\package.json')">$(ProjectDir)\..\..\..\..\..\node_modules\react-native-windows\</ReactNativeWindowsDir>
-    <!-- Else try and resolve react-native-windows package in the Apps\Playground\node_modules folder relative to the BabylonNative.vcxproj location in the github repo -->
-    <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(SolutionDir)..\node_modules\react-native-windows\package.json')">$(SolutionDir)\..\node_modules\react-native-windows\</ReactNativeWindowsDir>
-    <!-- If all else failes, try and resolve react-native-windows package using the Playground app node_modules -->
-    <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(ProjectDir)..\..\..\..\..\Apps\Playground\node_modules\react-native-windows\package.json')">$(ProjectDir)\..\..\..\..\..\Apps\Playground\node_modules\react-native-windows\</ReactNativeWindowsDir>
+    <!-- First try and resolve react-native package at a relative location when installing the @babylonjs/react-native package in your project -->
+    <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(ProjectDir)..\..\..\..\..\node_modules\react-native\package.json')">$(ProjectDir)\..\..\..\..\..\node_modules\react-native\</ReactNativeWindowsDir>
+    <!-- Else try and resolve react-native package in the Apps\Playground\node_modules folder relative to the BabylonNative.vcxproj location in the github repo -->
+    <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(SolutionDir)..\node_modules\react-native\package.json')">$(SolutionDir)\..\node_modules\react-native\</ReactNativeWindowsDir>
+    <!-- If all else failes, try and resolve react-native package using the Playground app node_modules -->
+    <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(ProjectDir)..\..\..\..\..\Apps\Playground\node_modules\react-native\package.json')">$(ProjectDir)\..\..\..\..\..\Apps\Playground\node_modules\react-native\</ReactNativeWindowsDir>
   </PropertyGroup>
   <PropertyGroup Label="BabylonReactNativeProps">
     <BabylonReactNativeDir Condition="'$(BabylonReactNativeDir)' == '' And Exists('$(ProjectDir)\..\..\..\react-native')">$(ProjectDir)..\..\..\react-native\</BabylonReactNativeDir>
@@ -295,7 +295,7 @@
   </ImportGroup>
   <Target Name="EnsureReactNativeWindowsTargets" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-      <ErrorText>This project references targets in your node_modules\react-native-windows folder that are missing. The missing file is {0}.</ErrorText>
+      <ErrorText>This project references targets in your node_modules\react-native folder that are missing. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.props')" Text="$([System.String]::Format('$(ErrorText)', '$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.props'))" />
     <Error Condition="!Exists('$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.targets'))" />
@@ -308,7 +308,7 @@
   </Target>
   <Target Name="EnsureBabylonReactNative" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-      <ErrorText>This project is missing BabylonNative static libs. These libs are either distributed with the @babylonjs/react-native-windows npm package or are found through submodule reference</ErrorText>
+      <ErrorText>This project is missing BabylonNative static libs. These libs are either distributed with the @babylonjs/react-native npm package or are found through submodule reference</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(BabylonNativeBuildDir)') And !Exists('$(BabylonNativeLibsDir)')" Text="$(ErrorText)" />
   </Target>

@@ -79,12 +79,7 @@ const buildTypeScript = async () => {
 
 const makeXCodeProj = async () => {
   shelljs.mkdir('-p', 'iOS/Build');
-  exec(`cmake -B Build -G Xcode ${cmakeBasekitBuildDefinition} -DBUILD_RNAPP_DIR=Playground/Playground`, 'iOS');
-};
-
-const makeXCodeProjRNTA = async () => {
-  shelljs.mkdir('-p', 'iOS/Build');
-  exec(`cmake -B Build -G Xcode ${cmakeBasekitBuildDefinition} -DBUILD_RNAPP_DIR=BRNPlayground`, 'iOS');
+  exec(`cmake -B Build -G Xcode ${cmakeBasekitBuildDefinition} -DBUILD_RNAPP_DIR=Playground`, 'iOS');
 };
 
 const buildIphoneOS = async () => {
@@ -95,20 +90,14 @@ const buildIphoneSimulator = async () => {
   exec('xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', 'iOS/Build');
 };
 
-
 const buildAndroid = async () => {
   const basekitBuildProp = basekitBuild ? "-PBASEKIT_BUILD=1" : "";
-  exec(`./gradlew babylonjs_react-native:assembleRelease --stacktrace --info ${basekitBuildProp}`, '../Apps/Playground/Playground/android');
-};
-
-const buildAndroidRNTA = async () => {
-  const basekitBuildProp = basekitBuild ? "-PBASEKIT_BUILD=1" : "";
-  exec(`./gradlew babylonjs_react-native:assembleRelease --stacktrace --info ${basekitBuildProp}`, '../Apps/BRNPlayground/android');
+  exec(`./gradlew babylonjs_react-native:assembleRelease --stacktrace --info ${basekitBuildProp}`, '../Apps/Playground/android');
 };
 
 const makeUWPProjectPlatform = async (name, arch) => {
   shelljs.mkdir('-p', `./../Modules/@babylonjs/react-native/Build/uwp_${name}`);
-  exec(`cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -DCMAKE_UNITY_BUILD=true ${cmakeBasekitBuildDefinition} -A ${arch} ./../../../react-native-windows/windows`, `./../Modules/@babylonjs/react-native/Build/uwp_${name}`);
+  exec(`cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -DCMAKE_UNITY_BUILD=true ${cmakeBasekitBuildDefinition} -A ${arch} ./../../../react-native/windows`, `./../Modules/@babylonjs/react-native/Build/uwp_${name}`);
 };
 
 const makeUWPProjectx86 = async () => makeUWPProjectPlatform('x86', 'Win32');
@@ -122,27 +111,27 @@ const makeUWPProject = gulp.parallel(
 );
 
 const buildUWPx86Debug = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\Build.bat -Platform Win32 -Configuration Debug');
+  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\Build.bat -Platform Win32 -Configuration Debug');
 }
 
 const buildUWPx86Release = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\Build.bat -Platform Win32 -Configuration Release');
+  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\Build.bat -Platform Win32 -Configuration Release');
 }
 
 const buildUWPx64Debug = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\Build.bat -Platform x64 -Configuration Debug');
+  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\Build.bat -Platform x64 -Configuration Debug');
 }
 
 const buildUWPx64Release = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\Build.bat -Platform x64 -Configuration Release');
+  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\Build.bat -Platform x64 -Configuration Release');
 }
 
 const buildUWPARM64Debug = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\Build.bat -Platform ARM64 -Configuration Debug');
+  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\Build.bat -Platform ARM64 -Configuration Debug');
 }
 
 const buildUWPARM64Release = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\Build.bat -Platform ARM64 -Configuration Release');
+  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\Build.bat -Platform ARM64 -Configuration Release');
 }
 
 const buildUWPProject = gulp.parallel(
@@ -159,27 +148,27 @@ const nugetRestoreUWPPlayground = async () => {
 }
 
 const buildUWPPlaygroundx86Debug = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\BuildPlayground.bat -Platform x86 -Configuration Debug');
+  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\BuildPlayground.bat -Platform x86 -Configuration Debug');
 }
 
 const buildUWPPlaygroundx86Release = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\BuildPlayground.bat -Platform x86 -Configuration Release');
+  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\BuildPlayground.bat -Platform x86 -Configuration Release');
 }
 
 const buildUWPPlaygroundx64Debug = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\BuildPlayground.bat -Platform x64 -Configuration Debug');
+  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\BuildPlayground.bat -Platform x64 -Configuration Debug');
 }
 
 const buildUWPPlaygroundx64Release = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\BuildPlayground.bat -Platform x64 -Configuration Release');
+  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\BuildPlayground.bat -Platform x64 -Configuration Release');
 }
 
 const buildUWPPlaygroundARM64Debug = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\BuildPlayground.bat -Platform ARM64 -Configuration Debug');
+  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\BuildPlayground.bat -Platform ARM64 -Configuration Debug');
 }
 
 const buildUWPPlaygroundARM64Release = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native-windows\\windows\\scripts\\BuildPlayground.bat -Platform ARM64 -Configuration Release');
+  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\BuildPlayground.bat -Platform ARM64 -Configuration Release');
 }
 
 const buildUWPPlayground = gulp.parallel(
@@ -352,10 +341,10 @@ const createUWPDirectories = async () => {
 }
 
 const copyCommonFilesUWP = () => {
-  return gulp.src('../Modules/@babylonjs/react-native-windows/package.json')
-    .pipe(gulp.src('../Modules/@babylonjs/react-native-windows/README.md'))
+  return gulp.src('../Modules/@babylonjs/react-native/package.json')
+    .pipe(gulp.src('../Modules/@babylonjs/react-native/README.md'))
     .pipe(gulp.src('../NOTICE.html'))
-    .pipe(gulp.src('../Modules/@babylonjs/react-native-windows/*.ts*'))
+    .pipe(gulp.src('../Modules/@babylonjs/react-native/*.ts*'))
     .pipe(gulp.dest(`${assembledWindowsDir}`));
 }
 
@@ -396,7 +385,7 @@ const copyARM64ReleaseUWPFiles = () => {
 }
 
 const copyVCXProjUWPFiles = () => {
-  const uwpFilesDir = '../Modules/@babylonjs/react-native-windows/windows/BabylonReactNative';
+  const uwpFilesDir = '../Modules/@babylonjs/react-native/windows/BabylonReactNative';
   return gulp.src([`${uwpFilesDir}/*.*`, `!${uwpFilesDir}/*.pfx`])
     .pipe(gulp.dest(`${assembledWindowsDir}/windows/BabylonReactNative`));
 }
@@ -630,7 +619,7 @@ const patchPackageVersion = async () => {
   if (releaseVersionIndex != -1 || versionIndex != -1) {
 
     const packageJsonPath = '../Modules/@babylonjs/react-native/package.json';
-    const packageJsonPathWindows = '../Modules/@babylonjs/react-native-windows/package.json';
+    const packageJsonPathWindows = '../Modules/@babylonjs/react-native/package.json';
     const packageJsonPathiOSAndroid = '../Modules/@babylonjs/react-native-iosandroid/package.json';
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath));
     const packageJsonWindows = JSON.parse(fs.readFileSync(packageJsonPathWindows));
@@ -666,12 +655,12 @@ const patchPackageVersion = async () => {
           delete packageJsonWindows['peerDependencies']['react-native-permissions'];
         } else {
           packageJsoniOSAndroid["name"] = "@babylonjs/react-native-iosandroid" + packageNamePostfix;
-          packageJsonWindows["name"] = "@babylonjs/react-native-windows" + packageNamePostfix;
+          packageJsonWindows["name"] = "@babylonjs/react-native" + packageNamePostfix;
         }
         packageJson.peerDependencies['react-native'] = peerDep;
         packageJsoniOSAndroid.peerDependencies['react-native'] = peerDep;
         packageJsonWindows.peerDependencies['react-native'] = peerDep;
-        packageJsonWindows.peerDependencies['react-native-windows'] = peerDep;
+        packageJsonWindows.peerDependencies['react-native'] = peerDep;
       }
     }
     // release version
@@ -828,8 +817,8 @@ const buildBabylonNativeSourceTree = async () => {
 
 const copyFiles = gulp.parallel(copyIOSAndroidCommonFiles, copyIOSFiles, copyAndroidFiles);
 
-const buildIOS = gulp.series(makeXCodeProj, buildIphoneOS, buildIphoneSimulator);
-const buildIOSRNTA = gulp.series(makeXCodeProjRNTA, createXCFrameworks);
+//const buildIOS = gulp.series(makeXCodeProj, buildIphoneOS, buildIphoneSimulator);
+const buildIOS = gulp.series(makeXCodeProj, createXCFrameworks);
 const buildTS = gulp.series(patchPackageVersion, copyCommonFiles, copySharedFiles, buildTypeScript, validateAssembled);
 const buildIOSAndroid = gulp.series(patchPackageVersion, buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validateAssemblediOSAndroid);
 const build = gulp.series(buildIOSAndroid, switchToBaseKit, buildIOSAndroid);
@@ -839,10 +828,9 @@ const pack = gulp.series(rebuild, createPackage);
 exports.validateAssembled = validateAssembled;
 exports.validateAssemblediOSAndroid = validateAssemblediOSAndroid;
 
+//exports.buildIOS = buildIOS;
 exports.buildIOS = buildIOS;
-exports.buildIOSRNTA = buildIOSRNTA;
 exports.buildAndroid = buildAndroid;
-exports.buildAndroidRNTA = buildAndroidRNTA;
 exports.createIOSUniversalLibs = createIOSUniversalLibs;
 exports.createXCFrameworks = createXCFrameworks;
 exports.copyFiles = copyFiles;
