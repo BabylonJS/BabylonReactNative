@@ -96,7 +96,7 @@ android {
                         "-DFETCHCONTENT_SOURCE_DIR_URLLIB=../shared/BabylonNative/deps/urllib-src",
                         "-DFETCHCONTENT_SOURCE_DIR_SPIRV-CROSS=../shared/BabylonNative/deps/spirv-cross-src",
                         "-DFETCHCONTENT_SOURCE_DIR_LIBWEBP=../shared/BabylonNative/deps/libwebp-src",
-                        "-DFETCHCONTENT_SOURCE_DIR_GLSLANG=../shared/BabylonNative/deps/glslang-src",
+                        "-DFETCHCONTENT_SOURCE_DIR_GLSLANG=../shared/BabylonNative/deps/glslang-src"
             }
         }
         ndk {

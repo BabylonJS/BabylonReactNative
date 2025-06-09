@@ -1,6 +1,6 @@
 include(FetchContent)
 
-add_subdirectory(BabylonNative)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/BabylonNative)
 
 set(SHARED_INCLUDES
     "${CMAKE_CURRENT_LIST_DIR}")

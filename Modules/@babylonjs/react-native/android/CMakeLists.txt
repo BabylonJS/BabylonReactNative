@@ -25,7 +25,7 @@ set(BABYLON_NATIVE_PLUGIN_NATIVEENGINE_WEBP OFF CACHE BOOL "Disable Babylon Nati
 
 set(THIS_LIBRARY BabylonNative)
 
-include(${CMAKE_CURRENT_LIST_DIR}/../../react-native/shared/CMakeLists.txt)
+#include(${CMAKE_CURRENT_LIST_DIR}/../../react-native/shared/CMakeLists.txt)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 set(CMAKE_CXX_STANDARD 17)
@@ -39,7 +39,10 @@ target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactCommon/js
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/src/")
 
 set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
-add_subdirectory(${babylonnative_SOURCE_DIR} ${babylonnative_SOURCE_DIR}/build/Android_${CMAKE_ANDROID_ARCH_ABI}/)
+#add_subdirectory(${babylonnative_SOURCE_DIR} ${babylonnative_SOURCE_DIR}/build/Android_${CMAKE_ANDROID_ARCH_ABI}/)
+
+set(BABYLON_REACT_NATIVE_SHARED_DIR "${CMAKE_CURRENT_LIST_DIR}/../../react-native/shared")
+add_subdirectory(${BABYLON_REACT_NATIVE_SHARED_DIR} ${CMAKE_CURRENT_BINARY_DIR}/shared)
 
 if (NOT ${BASEKIT_BUILD})
     disable_warnings(NativeXr)
@@ -53,8 +56,6 @@ disable_warnings(NativeCapture)
 disable_warnings(Canvas)
 disable_warnings(Window)
 
-set(BABYLON_REACT_NATIVE_SHARED_DIR "${CMAKE_CURRENT_LIST_DIR}/../../react-native/shared")
-add_subdirectory(${BABYLON_REACT_NATIVE_SHARED_DIR} ${CMAKE_CURRENT_BINARY_DIR}/shared)
 
 add_library(fbjni SHARED IMPORTED)
 set_target_properties(fbjni PROPERTIES

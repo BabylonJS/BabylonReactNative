@@ -732,7 +732,7 @@ function runCMake(buildDir) {
 }
 
 function writeCMakeListsFile(commitId, cmakePath) {
-  const content = `add_subdirectory(BabylonNative-${commitId})\n`;
+  const content = `add_subdirectory(\${CMAKE_CURRENT_LIST_DIR}/BabylonNative-${commitId})\n`;
   fs.writeFileSync(cmakePath, content, 'utf8');
 }
 
@@ -810,7 +810,7 @@ const buildBabylonNativeSourceTree = async () => {
   deleteFolderRecursive(`${UNZIP_FOLDER}/Apps`);
   deleteFolderRecursive(`${UNZIP_FOLDER}/Documentation`);
   deleteFolderRecursive(`${UNZIP_FOLDER}/Install`);
-  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx`);
+  //deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx`);
   
 }
 
