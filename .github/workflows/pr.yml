@@ -45,7 +45,7 @@ jobs:
           java-version: '17'
           check-latest: true
       - name: Gulp (Android)
-        run: npx gulp buildAndroidRNTA
+        run: npx gulp buildAndroid
         working-directory: ./Package
         env:
           JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
@@ -72,12 +72,12 @@ jobs:
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
-      - name: Build iOS Bundle
-        run: npm run build:ios
-        working-directory: ./Apps/Playground
+#      - name: Build iOS Bundle
+#        run: npm run build:ios
+#        working-directory: ./Apps/Playground
 
       - name: Gulp (iOS)
-        run: npx gulp buildIOSRNTA
+        run: npx gulp buildIOS
         working-directory: ./Package
 
       - name: Cache XCFrameworks
