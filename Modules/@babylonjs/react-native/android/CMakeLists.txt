@@ -190,7 +190,6 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
     endif()
 
     target_include_directories(BabylonNative PRIVATE ${SHARED_INCLUDES})
-
 else()
     # <= React Native 0.70
     # Define a minimal version of libturbomodulejsijni.so that includes CallInvokerHolder.cpp.

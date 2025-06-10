@@ -36,7 +36,7 @@ if ( propertiesFile.isFile() ) {
 
 def cpp_distribution = (REACT_VERSION >= 71) ? "c++_shared" : "c++_static";
 
-def basekitBuild = 0
+def basekitBuild = "ON"
 if (project.hasProperty("BASEKIT_BUILD")) {
     basekitBuild = project.getProperty("BASEKIT_BUILD")
 }
@@ -96,7 +96,9 @@ android {
                         "-DFETCHCONTENT_SOURCE_DIR_URLLIB=../shared/BabylonNative/deps/urllib-src",
                         "-DFETCHCONTENT_SOURCE_DIR_SPIRV-CROSS=../shared/BabylonNative/deps/spirv-cross-src",
                         "-DFETCHCONTENT_SOURCE_DIR_LIBWEBP=../shared/BabylonNative/deps/libwebp-src",
-                        "-DFETCHCONTENT_SOURCE_DIR_GLSLANG=../shared/BabylonNative/deps/glslang-src"
+                        "-DFETCHCONTENT_SOURCE_DIR_GLSLANG=../shared/BabylonNative/deps/glslang-src",
+                        "-DFETCHCONTENT_SOURCE_DIR_BASE-N=../shared/BabylonNative/deps/base-n-src",
+                        "-DFETCHCONTENT_SOURCE_DIR_ANDROIDEXTENSIONS=../shared/BabylonNative/deps/androidextensions-src"
             }
         }
         ndk {
