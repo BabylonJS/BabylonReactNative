@@ -680,8 +680,10 @@ const patchPackageVersion = async () => {
 }
 
 
-const COMMIT_ID = '7f82d72f22e9789b9b66cb837aec0c9bc8ff65ee';
-const ZIP_URL = `https://github.com/BabylonJS/BabylonNative/archive/${COMMIT_ID}.zip`;
+//const COMMIT_ID = '7f82d72f22e9789b9b66cb837aec0c9bc8ff65ee';
+//const ZIP_URL = `https://github.com/BabylonJS/BabylonNative/archive/${COMMIT_ID}.zip`;
+const COMMIT_ID = '21911774d516e677e99baecbee6054de9429f4b6';
+const ZIP_URL = `https://github.com/CedricGuillemet/BabylonNative/archive/${COMMIT_ID}.zip`;
 const TARGET_DIR = path.resolve(__dirname, '../Modules/@babylonjs/react-native/shared/BabylonNative');
 const ZIP_PATH = path.join(TARGET_DIR, `${COMMIT_ID}.zip`);
 const UNZIP_FOLDER = path.join(TARGET_DIR, `BabylonNative-${COMMIT_ID}`);
@@ -726,7 +728,7 @@ function deleteFile(filePath) {
 }
 
 function runCMake(buildDir) {
-  let cmakeCommand = `cmake -S . -B ../tempBuild`;
+  let cmakeCommand = `cmake -S . -B ../tempBuild -DBABYLON_NATIVE_BUILD_SOURCETREE=ON`;
 
   exec(cmakeCommand, buildDir);
 }
