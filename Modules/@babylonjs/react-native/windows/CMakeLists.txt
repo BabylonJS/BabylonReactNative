@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.15.3)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+#set(CMAKE_SYSTEM_NAME WindowsStore)
+#set(CMAKE_SYSTEM_VERSION 10.0.19041.0) 
+
 project(ReactNativeBabylon)
 
 # Disable the WebP plugin option
@@ -8,9 +11,10 @@ set(BABYLON_NATIVE_PLUGIN_NATIVEENGINE_WEBP OFF CACHE BOOL "Disable Babylon Nati
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(BABYLON_REACT_NATIVE_DIR "${CMAKE_CURRENT_LIST_DIR}/../../react-native")
-
-include(${BABYLON_REACT_NATIVE_DIR}/shared/CMakeLists.txt)
+# BabylonNative CMake entry
+set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
+set(BABYLON_NATIVE_USE_SWAPCHAINPANEL ON CACHE BOOL "")
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../shared ${CMAKE_CURRENT_BINARY_DIR}/shared)
 
 # Configure Babylon Native to use JSI
 # Note: We should avoid installing node_modules in the Module\@babylonjs\react-native folder.
@@ -28,9 +32,6 @@ endif()
 add_subdirectory("${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi/jsi" ${CMAKE_CURRENT_BINARY_DIR}/jsi)
 target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi)
 
-set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
-set(BABYLON_NATIVE_USE_SWAPCHAINPANEL ON CACHE BOOL "")
-add_subdirectory(${babylonnative_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/BabylonNative EXCLUDE_FROM_ALL)
 # Disable Unity build for UrlLib because of conflict in header between windows.h and winrt
 set_property(TARGET UrlLib PROPERTY UNITY_BUILD false)
 
