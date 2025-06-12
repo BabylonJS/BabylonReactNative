@@ -23,8 +23,6 @@ Pod::Spec.new do |s|
 
   s.frameworks = "MetalKit", "ARKit"
 
-  s.dependency "React-RCTFabric"
-
   s.libraries = 'astc-encoder',
                 'BabylonNative',
                 'bgfx',
