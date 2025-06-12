@@ -227,8 +227,9 @@ const createIOSUniversalLibs = async () => {
 };
 
 const createXCFrameworks = async () => {
-  if (fs.existsSync('../Modules/@babylonjs/react-native-iosandroid/ios/libs/')) {
-    console.log('XCFrameworks already exist, skipping creation. If you want to recreate them, delete the ios/libs directory in the react-native-iosandroid module.');
+  // expected to be in Package folder
+  if (fs.existsSync('../Modules/@babylonjs/react-native/ios/libs/')) {
+    console.log('XCFrameworks already exist, skipping creation. If you want to recreate them, delete the ios/libs directory in the react-native module.');
     return;
   }
 
@@ -237,13 +238,14 @@ const createXCFrameworks = async () => {
     'iphonesimulator': ['x86_64', 'arm64'],
   };
 
+  const xcodeprojDir = "../../../Modules/@babylonjs/Build/iOS";
   // Build static libraries for each platform
   Object.keys(PLATFORMS_MAP).forEach(platform => {
     const archs = PLATFORMS_MAP[platform];
     archs.forEach(arch => {
       const outputDir = `iOS/Build/${platform}-${arch}`;
       shelljs.mkdir('-p', outputDir);
-      const buildCommand = `xcodebuild -sdk ${platform} -arch ${arch} -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES`;
+      const buildCommand = `xcodebuild -sdk ${platform} -arch ${arch} -configuration Release -project ${xcodeprojDir}/ReactNativeBabylon.xcodeproj -target BabylonNative build CODE_SIGNING_ALLOWED=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES`;
       exec(buildCommand, 'iOS/Build');
       exec(`mv iOS/Build/Release-${platform}/*.a ${outputDir}`);
       exec(`rm -rf iOS/Build/Release-${platform}`);
