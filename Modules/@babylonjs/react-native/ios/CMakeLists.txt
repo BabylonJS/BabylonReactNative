@@ -12,13 +12,13 @@ set(PLATFORM "OS64COMBINED" CACHE STRING "")
 set(DEPLOYMENT_TARGET "12" CACHE STRING "")
 set(ENABLE_ARC OFF CACHE STRING "Enables or disables ARC support.")
 set(ENABLE_PCH OFF CACHE STRING "Enables or disables precompiled headers.")
-
+set(CMAKE_XCODE_GENERATE_SCHEME ON)
 project(ReactNativeBabylon)
 
 # Disable the WebP plugin option
 set(BABYLON_NATIVE_PLUGIN_NATIVEENGINE_WEBP OFF CACHE BOOL "Disable Babylon Native WebP Support")
 
-include(${CMAKE_CURRENT_LIST_DIR}/../../react-native/shared/CMakeLists.txt)
+#include(${CMAKE_CURRENT_LIST_DIR}/../../react-native/shared/CMakeLists.txt)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 set(CMAKE_CXX_STANDARD 17)
@@ -43,7 +43,7 @@ target_include_directories(reactnative INTERFACE ${REACTNATIVE_DIR}/ReactCommon/
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/")
 
 set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
-add_subdirectory(${babylonnative_SOURCE_DIR} ${babylonnative_SOURCE_DIR}/build/ios)
+#add_subdirectory(${babylonnative_SOURCE_DIR} ${babylonnative_SOURCE_DIR}/build/ios)
 
 set(BABYLON_REACT_NATIVE_SHARED_DIR "${CMAKE_CURRENT_LIST_DIR}/../../react-native/shared")
 add_subdirectory(${BABYLON_REACT_NATIVE_SHARED_DIR} ${CMAKE_CURRENT_BINARY_DIR}/shared)
@@ -82,4 +82,5 @@ set_target_properties(BabylonNative PROPERTIES
     XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC NO
     XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET 12.0
     XCODE_ATTRIBUTE_ENABLE_BITCODE YES
+    XCODE_GENERATE_SCHEME ON
 )

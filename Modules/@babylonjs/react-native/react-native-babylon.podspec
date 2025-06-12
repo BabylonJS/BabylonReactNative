@@ -23,6 +23,38 @@ Pod::Spec.new do |s|
 
   s.frameworks = "MetalKit", "ARKit"
 
+  s.dependency "React-RCTFabric"
+
+  s.libraries = 'astc-encoder',
+                'BabylonNative',
+                'bgfx',
+                'bimg',
+                'bx',
+                'Canvas',
+                'GenericCodeGen',
+                'glslang',
+                'glslang-default-resource-limits',
+                'Graphics',
+                'jsRuntime',
+                'OGLCompiler',
+                'OSDependent',
+                'MachineIndependent',
+                'napi',
+                'NativeCamera',
+                'NativeCapture',
+                'NativeEngine',
+                'NativeInput',
+                'NativeOptimizations',
+                'NativeTracing',
+                'NativeXR',
+                'SPIRV',
+                'spirv-cross-core',
+                'spirv-cross-msl',
+                'tinyexr',
+                'UrlLib',
+                'Window',
+                'XMLHttpRequest',
+                'xr'
   # install_modules_dependencies has been defined in RN 0.70
   # This check ensure that the library can work on older versions of RN
   if defined?(install_modules_dependencies)
