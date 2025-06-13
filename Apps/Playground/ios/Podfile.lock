@@ -856,7 +856,6 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-    - React-RCTFabric
   - react-native-slider (4.5.2):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1237,7 +1236,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 32db5e364bcae8fca8cdf8891830636275add0c5
   React-logger: 4136cd22748f4275b04bf82f7b6853ba93b5e0e3
   React-Mapbuffer: ee9b45b26e759a099a3e024df50b25af390ee998
-  react-native-babylon: 34d3dc4084b73dd55fe46d8dbe1b2e4ced748e36
+  react-native-babylon: bc6e3fa3e8685e8ebc2c012c77d4cabeedf3fc3e
   react-native-slider: adf61cd3d94d719844da9e73c97d1dee9639f658
   React-nativeconfig: 1166714a4f7ea57a0df5c2cb44fbc70f98d580f9
   React-NativeModulesApple: 5113fb30a94471378d4b0d44e86b71c1e3ca29c8
