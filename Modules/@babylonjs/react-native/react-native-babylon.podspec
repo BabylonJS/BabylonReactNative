@@ -4,6 +4,9 @@ package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
 # This Podspec is used for local development
 
+base_base_path = '$(PODS_ROOT)/../../../../Modules/@babylonjs/Build/iOS'
+babylon_base_path = "#{base_base_path}/shared/BabylonNative/BabylonNative-21911774d516e677e99baecbee6054de9429f4b6"
+
 Pod::Spec.new do |s|
   s.name         = "react-native-babylon"
   s.version      = package["version"]
@@ -17,16 +20,20 @@ Pod::Spec.new do |s|
 
   s.source_files = "ios/*.{h,m,mm}"
   s.requires_arc = true
-  s.xcconfig     = { 'USER_HEADER_SEARCH_PATHS' => '$(inherited) ${PODS_TARGET_SRCROOT}/shared ${PODS_TARGET_SRCROOT}/../react-native/shared' }
+  s.xcconfig     = { 'USER_HEADER_SEARCH_PATHS' => '$(inherited) ${PODS_TARGET_SRCROOT}/shared ${PODS_TARGET_SRCROOT}/../react-native/shared',
+  'LIBRARY_SEARCH_PATHS'=> "$(inherited) #{babylon_base_path}/** #{base_base_path}/**" }
+
 
   s.vendored_frameworks = "ios/libs/*.xcframework"
 
   s.frameworks = "MetalKit", "ARKit"
 
-  s.libraries = 'astc-encoder',
-                'BabylonNative',
+  s.libraries = 'BabylonNative',
                 'bgfx',
                 'bimg',
+                'bimg_encode',
+                'bimg_decode',
+                'Scheduling',
                 'bx',
                 'Canvas',
                 'GenericCodeGen',
@@ -48,7 +55,6 @@ Pod::Spec.new do |s|
                 'SPIRV',
                 'spirv-cross-core',
                 'spirv-cross-msl',
-                'tinyexr',
                 'UrlLib',
                 'Window',
                 'XMLHttpRequest',
