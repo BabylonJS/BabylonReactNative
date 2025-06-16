@@ -334,7 +334,7 @@ const validateAssembled = async () => {
     'Assembled/shared/XrContextHelper.h',
     'Assembled/VersionValidation.d.ts',
     'Assembled/VersionValidation.js',
-    'Assembled/VersionValidation.js.map'
+    'Assembled/VersionValidation.js.map',
     `Assembled/android`,
     `Assembled/android/build.gradle`,
     `Assembled/android/CMakeLists.txt`,
