@@ -610,80 +610,6 @@ const createPackageUWP = async () => {
   exec('npm pack', `${assembledWindowsDir}`);
 }
 
-const switchToBaseKit = async () => {
-  assemblediOSAndroidDir = 'Assembled-BaseKit-iOSAndroid';
-  assembledWindowsDir = 'Assembled-BaseKit-Windows';
-  cmakeBasekitBuildDefinition = '-DBASEKIT_BUILD=1';
-  basekitBuild = true;
-  basekitPackagePath = 'BaseKit/';
-}
-
-const patchPackageVersion = async () => {
-  const releaseVersionIndex = process.argv.indexOf('--releaseVersion');
-  const versionIndex = process.argv.indexOf('--reactNative');
-  if (releaseVersionIndex != -1 || versionIndex != -1) {
-
-    const packageJsonPath = '../Modules/@babylonjs/react-native/package.json';
-    const packageJsonPathWindows = '../Modules/@babylonjs/react-native/package.json';
-    const packageJsonPathiOSAndroid = '../Modules/@babylonjs/react-native-iosandroid/package.json';
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath));
-    const packageJsonWindows = JSON.parse(fs.readFileSync(packageJsonPathWindows));
-    const packageJsoniOSAndroid = JSON.parse(fs.readFileSync(packageJsonPathiOSAndroid));
-
-    if (versionIndex != -1) {
-      const version = process.argv[versionIndex + 1];
-      if (version == '0.64' || version == '0.65' || version == '0.69' || version == '0.70' || version == '0.71') {
-        console.log(chalk.black.bgCyan(`Updating Package.json for React Native ${version}.`));
-
-        // default 0.64
-        let peerDep = '>=0.63.1 <0.65.0';
-        let packageNamePostfix = '-0-64';
-        if (version == '0.65') {
-          peerDep = '>=0.65.0 < 0.69.0';
-          packageNamePostfix = '-0-65';
-        } else if (version == '0.69') {
-          peerDep = '>=0.69.0 < 0.70.0';
-          packageNamePostfix = '-0-69';
-        } else if (version == '0.70') {
-          peerDep = '>=0.70.0 < 0.71.0';
-          packageNamePostfix = '-0-70';
-        } else if (version == '0.71') {
-          peerDep = '>=0.71.0';
-          packageNamePostfix = '-0-71';
-        }
-
-        if (basekitBuild)
-        {
-          packageJsoniOSAndroid["name"] = "@babylonjs/react-native-basekit-iosandroid" + packageNamePostfix;
-          packageJsonWindows["name"] = "@babylonjs/react-native-basekit-windows" + packageNamePostfix;
-          delete packageJsoniOSAndroid['peerDependencies']['react-native-permissions'];
-          delete packageJsonWindows['peerDependencies']['react-native-permissions'];
-        } else {
-          packageJsoniOSAndroid["name"] = "@babylonjs/react-native-iosandroid" + packageNamePostfix;
-          packageJsonWindows["name"] = "@babylonjs/react-native" + packageNamePostfix;
-        }
-        packageJson.peerDependencies['react-native'] = peerDep;
-        packageJsoniOSAndroid.peerDependencies['react-native'] = peerDep;
-        packageJsonWindows.peerDependencies['react-native'] = peerDep;
-        packageJsonWindows.peerDependencies['react-native'] = peerDep;
-      }
-    }
-    // release version
-    if (releaseVersionIndex !== -1) {
-      const releaseVersion = process.argv[releaseVersionIndex + 1];
-      console.log(chalk.black.bgCyan(`Updating Package.json for Release version ${releaseVersion}.`));
-      packageJsonWindows.peerDependencies["@babylonjs/react-native"] = releaseVersion;
-      packageJsoniOSAndroid.peerDependencies["@babylonjs/react-native"] = releaseVersion;
-    }
-
-    fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
-    fs.writeFileSync(packageJsonPathWindows, JSON.stringify(packageJsonWindows, null, 2));
-    fs.writeFileSync(packageJsonPathiOSAndroid, JSON.stringify(packageJsoniOSAndroid, null, 2));
-  } else {
-    console.log(chalk.black.bgCyan(`No valid React Native version set. Letting Package.json unchanged.`))
-  }
-}
-
 
 //const COMMIT_ID = '7f82d72f22e9789b9b66cb837aec0c9bc8ff65ee';
 //const ZIP_URL = `https://github.com/BabylonJS/BabylonNative/archive/${COMMIT_ID}.zip`;
@@ -826,9 +752,9 @@ const copyFiles = gulp.parallel(copyIOSAndroidCommonFiles, copyIOSFiles, copyAnd
 
 //const buildIOS = gulp.series(makeXCodeProj, buildIphoneOS, buildIphoneSimulator);
 const buildIOS = gulp.series(makeXCodeProj);//, createXCFrameworks);
-const buildTS = gulp.series(patchPackageVersion, copyCommonFiles, copySharedFiles, buildTypeScript, validateAssembled);
-const buildIOSAndroid = gulp.series(patchPackageVersion, buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validateAssemblediOSAndroid);
-const build = gulp.series(buildIOSAndroid, switchToBaseKit, buildIOSAndroid);
+const buildTS = gulp.series(copyCommonFiles, copySharedFiles, buildTypeScript, validateAssembled);
+const buildIOSAndroid = gulp.series(buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles, validateAssemblediOSAndroid);
+const build = gulp.series(buildIOSAndroid, buildIOSAndroid);
 const rebuild = gulp.series(clean, build);
 const pack = gulp.series(rebuild, createPackage);
 
@@ -851,7 +777,7 @@ const packAndroid = gulp.series(clean, buildAndroid, copyFiles, createPackage, c
 exports.packAndroid = packAndroid;
 
 const copyPackageFilesUWP = gulp.series(copyUWPFiles);
-const buildUWPPublish = gulp.series(patchPackageVersion, buildUWP, copyPackageFilesUWP, switchToBaseKit, patchPackageVersion, buildUWP, copyPackageFilesUWP);
+const buildUWPPublish = gulp.series(buildUWP, copyPackageFilesUWP, buildUWP, copyPackageFilesUWP);
 const packUWP = gulp.series(clean, buildUWP, copyPackageFilesUWP, createPackage, createPackageUWP);
 const packUWPNoBuild = gulp.series(clean, copyPackageFilesUWP, createPackage, createPackageUWP);
 
