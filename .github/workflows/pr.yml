@@ -3,8 +3,6 @@ on:
   pull_request:
     branches:
       - master
-env:
-  BRN_Version: '0.69'
 
 jobs:
   build-android:
@@ -76,14 +74,6 @@ jobs:
         run: npx gulp buildIOS
         working-directory: ./Package
 
-      - name: Cache XCFrameworks
-        uses: actions/cache@v4
-        with:
-          path: Modules/@babylonjs/react-native/ios/libs
-          key: ${{ runner.os }}-xcframeworks-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-xcframeworks
-
   build-windows:
     runs-on: windows-2019
     steps:
@@ -135,15 +125,37 @@ jobs:
         run: nuget restore Playground.sln
         working-directory: ./Apps/Playground/windows
 
-      - name: Windows build BN
-        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m ReactNativeBabylon.sln
-        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
+#      - name: Windows build BN
+#        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m ReactNativeBabylon.sln
+#        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
         
-      - name: Windows build BRN
-        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m Playground.sln
-        working-directory: ./Apps/Playground/windows
+#      - name: Windows build BRN
+#        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m Playground.sln
+#        working-directory: ./Apps/Playground/windows
 
   build-typescript:
     uses: ./.github/workflows/typescript.yml
     with:
       release-version: 0.0.${GITHUB_SHA::8}
+
+  package:
+    needs: [build-typescript, build-iOS, build-android]
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2.3.3
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Download Assembled Folder
+        uses: actions/download-artifact@v4
+        with:
+          name: 'Assembled'
+          path: Package/Assembled
+
+      - name: Publish Package dry run
+        run: |
+          npm publish --access public --dry-run
+        working-directory: ./Package/Assembled
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
