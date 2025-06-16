@@ -21,6 +21,9 @@ jobs:
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
+      - name: NPM Install (Modules)
+        run: npm install
+        working-directory: ./Modules/@babylonjs/react-native
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
