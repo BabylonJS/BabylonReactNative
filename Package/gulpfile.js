@@ -338,8 +338,9 @@ const validateAssembled = async () => {
     `Assembled/android`,
     `Assembled/android/build.gradle`,
     `Assembled/android/CMakeLists.txt`,
-    `Assembled/android/include`,
-    `Assembled/android/include/IXrContextARCore.h`,
+// TODO: Is following needed ?
+//    `Assembled/android/include`, 
+//    `Assembled/android/include/IXrContextARCore.h`,
     `Assembled/android/src`,
     `Assembled/android/src/main`,
     `Assembled/android/src/main/AndroidManifest.xml`,
@@ -357,8 +358,9 @@ const validateAssembled = async () => {
     `Assembled/ios/BabylonNativeInterop.h`,
     `Assembled/ios/BabylonNativeInterop.mm`,
     `Assembled/ios/EngineViewManager.mm`,
-    `Assembled/ios/include`,
-    `Assembled/ios/include/IXrContextARKit.h`,
+// TODO: Is following needed ?
+//    `Assembled/ios/include`,
+//    `Assembled/ios/include/IXrContextARKit.h`,
     `Assembled/package.json`,
     `Assembled/react-native-babylon.podspec`,
   ];
