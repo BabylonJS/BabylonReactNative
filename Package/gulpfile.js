@@ -338,6 +338,7 @@ const validateAssembled = async () => {
     `Assembled/android`,
     `Assembled/android/build.gradle`,
     `Assembled/android/CMakeLists.txt`,
+    `Assembled/android/README.md`,
 // TODO: Is following needed ?
 //    `Assembled/android/include`, 
 //    `Assembled/android/include/IXrContextARCore.h`,
@@ -365,7 +366,7 @@ const validateAssembled = async () => {
     `Assembled/react-native-babylon.podspec`,
   ];
 
-  const actual = glob.sync('Assembled/**/*', {ignore: ['Assembled/shared/BabylonNative/BabylonNative-*/**']});
+  const actual = glob.sync('Assembled/**/*', {ignore: ['Assembled/shared/BabylonNative/BabylonNative-*/**', 'Assembled/shared/BabylonNative/deps/**']});
   checkDirectory(actual, expected, `Assembled`);
 }
 
