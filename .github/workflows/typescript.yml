@@ -29,7 +29,7 @@ jobs:
         working-directory: ./Apps/Playground
 
       - name: Gulp
-        run: npx gulp buildTS
+        run: npx gulp buildAssembled
         working-directory: ./Package
       - name: Upload Assembled Folder
         uses: actions/upload-artifact@v4

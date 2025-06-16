@@ -12,12 +12,9 @@ const chalk = require('chalk');
 const unzipper = require('unzipper');
 const os = require('os');
 
-
-let assemblediOSAndroidDir = 'Assembled-iOSAndroid';
 let assembledWindowsDir = 'Assembled-Windows';
 let basekitBuild = false;
 let cmakeBasekitBuildDefinition = '';
-let basekitPackagePath = '';
 
 function exec(command, workingDirectory = '.', logCommand = true) {
   if (logCommand) {
@@ -57,10 +54,6 @@ function checkDirectory(actualList, expectedList, directoryName) {
 const clean = async () => {
   if (shelljs.test('-d', 'Assembled')) {
     shelljs.rm('-r', 'Assembled');
-  }
-
-  if (shelljs.test('-d', `${assemblediOSAndroidDir}`)) {
-    shelljs.rm('-r', `${assemblediOSAndroidDir}`);
   }
 
   if (shelljs.test('-d', `${assembledWindowsDir}`)) {
@@ -185,144 +178,28 @@ const buildUWP = gulp.series(makeUWPProject, buildUWPProject);
 const copyCommonFiles = () => {
   return gulp.src('../Modules/@babylonjs/react-native/README.md')
     .pipe(gulp.src('../NOTICE.html'))
+    .pipe(gulp.src(`../Modules/@babylonjs/react-native/react-native-babylon.podspec`))
     .pipe(gulp.dest('Assembled'));
 };
 
 const copySharedFiles = () => {
-  return gulp.src('../Modules/@babylonjs/react-native/shared/BabylonNative.h')
-    .pipe(gulp.src('../Modules/@babylonjs/react-native/shared/XrContextHelper.h'))
-    .pipe(gulp.src('../Modules/@babylonjs/react-native/shared/XrAnchorHelper.h'))
+  return gulp.src('../Modules/@babylonjs/react-native/shared/**')
     .pipe(gulp.dest('Assembled/shared'));
 };
 
-const copyIOSAndroidCommonFiles = () => {
-  return gulp.src('../Modules/@babylonjs/react-native-iosandroid/package.json')
-    .pipe(gulp.src('../Modules/@babylonjs/react-native-iosandroid/README.md'))
-    .pipe(gulp.src('../NOTICE.html'))
-    .pipe(gulp.src(`${basekitPackagePath}react-native-babylon.podspec`))
-    .pipe(gulp.dest(`${assemblediOSAndroidDir}/`));
+const copyIOSFiles = () => {
+  return gulp.src('../Modules/@babylonjs/react-native/ios/**')
+    .pipe(gulp.dest(`Assembled/ios`));
 };
 
-const copyIOSFiles = async () => {
-  await new Promise(resolve => {
-    gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/ios/*.h')
-      .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/ios/*.mm'))
-      // This xcodeproj is garbage that we don't need in the package, but `pod install` ignores the package if it doesn't contain at least one xcodeproj. 🤷🏼‍♂️
-      .pipe(gulp.src('iOS/Build/ReactNativeBabylon.xcodeproj**/**/*'))
-      .pipe(gulp.dest(`${assemblediOSAndroidDir}/ios`))
-      .on('end', resolve);
-  });
-
-  await new Promise(resolve => {
-    gulp.src('../Package/iOS/Build/_deps/babylonnative-src/Dependencies/xr/Source/ARKit/Include/*')
-      .pipe(gulp.dest(`${assemblediOSAndroidDir}/ios/include`))
-      .on('end', resolve);
-  });
+const copyAndroidFiles = () => {
+  return gulp.src('../Modules/@babylonjs/react-native/android/**')
+    .pipe(gulp.dest(`Assembled/android`));
 };
 
-const createIOSUniversalLibs = async () => {
-  shelljs.mkdir('-p', `${assemblediOSAndroidDir}/ios/libs`);
-  const libs = await readdirAsync('iOS/Build/Release-iphoneos');
-  libs.map(lib => exec(`lipo -create iOS/Build/Release-iphoneos/${lib} iOS/Build/Release-iphonesimulator/${lib} -output ${assemblediOSAndroidDir}/ios/libs/${lib}`));
-};
-
-const createXCFrameworks = async () => {
-  // expected to be in Package folder
-  if (fs.existsSync('../Modules/@babylonjs/react-native/ios/libs/')) {
-    console.log('XCFrameworks already exist, skipping creation. If you want to recreate them, delete the ios/libs directory in the react-native module.');
-    return;
-  }
-
-  const PLATFORMS_MAP = {
-    'iphoneos': ['arm64'],
-    'iphonesimulator': ['x86_64', 'arm64'],
-  };
-
-  const xcodeprojDir = "../../../Modules/@babylonjs/Build/iOS";
-  // Build static libraries for each platform
-  Object.keys(PLATFORMS_MAP).forEach(platform => {
-    const archs = PLATFORMS_MAP[platform];
-    archs.forEach(arch => {
-      const outputDir = `iOS/Build/${platform}-${arch}`;
-      shelljs.mkdir('-p', outputDir);
-      const buildCommand = `xcodebuild -sdk ${platform} -arch ${arch} -configuration Release -project ${xcodeprojDir}/ReactNativeBabylon.xcodeproj -target BabylonNative build CODE_SIGNING_ALLOWED=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES`;
-      exec(buildCommand, 'iOS/Build');
-      exec(`mv iOS/Build/Release-${platform}/*.a ${outputDir}`);
-      exec(`rm -rf iOS/Build/Release-${platform}`);
-    });
-  });
-
-  // Get the list of libraries
-  const libs = await readdirAsync(`iOS/Build/iphoneos-arm64`);
-
-  // Merge multi arch libraries into single libraries for platform with multiple archs
-  Object.keys(PLATFORMS_MAP).forEach(platform => {
-    const archs = PLATFORMS_MAP[platform];
-    if (archs.length === 1) {
-      // Copy the single arch library to the output directory
-      const outputDir = `${assemblediOSAndroidDir}/ios/libs/${platform}`;
-      shelljs.mkdir('-p', outputDir);
-      exec(`cp -r iOS/Build/${platform}-${archs[0]}/*.a ${outputDir}`);
-      return
-    }
-
-    const outputDir = `${assemblediOSAndroidDir}/ios/libs/${platform}`; 
-    shelljs.mkdir('-p', outputDir);
-    libs.forEach(lib => {
-      let params = ""
-      archs.forEach(arch => {
-        params += ` iOS/Build/${platform}-${arch}/${lib}`
-      });
-      exec(`lipo -create ${params} -output ${outputDir}/${lib}`);
-    });
-  });
-
-  // Create xcframework for each library
-  libs.forEach(lib => {
-    const params = Object.keys(PLATFORMS_MAP).map(platform => ` -library ${assemblediOSAndroidDir}/ios/libs/${platform}/${lib}`).join('');
-    const outputDir = `${assemblediOSAndroidDir}/ios/libs/`;
-    const libName = lib.split('.')[0];
-    exec(`xcodebuild -create-xcframework ${params} -output ${outputDir}/${libName}.xcframework`);
-  });
-
-  shelljs.mkdir('-p', '../Modules/@babylonjs/react-native-iosandroid/ios/libs');
-  exec(`cp -r ${assemblediOSAndroidDir}/ios/libs/*.xcframework ../Modules/@babylonjs/react-native-iosandroid/ios/libs/`);
-  exec(`rm -rf ${assemblediOSAndroidDir}/ios/libs`);
-};
-
-const copyAndroidFiles = async () => {
-  await new Promise(resolve => {
-    gulp.src(`${basekitPackagePath}Android/build.gradle`)
-      .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/src**/main/AndroidManifest.xml'))
-      .pipe(gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/src**/main/java/**/*'))
-      .pipe(gulp.dest(`${assemblediOSAndroidDir}/android`))
-      .on('end', resolve);
-  });
-
-  await new Promise(resolve => {
-    gulp.src('../Package/iOS/Build/_deps/babylonnative-src/Dependencies/xr/Source/ARCore/Include/*')
-      .pipe(gulp.dest(`${assemblediOSAndroidDir}/android/include`))
-      .on('end', resolve);
-  });
-
-  await new Promise(resolve => {
-    const jnidir = '../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/build/intermediates/library_and_local_jars_jni/release/jni/**';
-    gulp.src(`${jnidir}/libBabylonNative.so`)
-      .pipe(gulp.dest(`${assemblediOSAndroidDir}/android/src/main/jniLibs/`))
-      .on('end', resolve);
-  });
-
-  // This is no longer found in the directory above because it is explicitly excluded because Playground has been updated to RN 0.64 which includes
-  // the real implementation of libturbomodulejsijni.so, but we still need to support RN 0.63 consumers, so grab this one explicitly to include it in the package.
-
-  const versionIndex = process.argv.indexOf('--reactNative');
-  if (versionIndex != -1 && process.argv[versionIndex + 1] != '0.71') {
-    await new Promise(resolve => {
-      gulp.src('../Apps/Playground/Playground/node_modules/@babylonjs/react-native-iosandroid/android/build/intermediates/cmake/release/obj/{arm64-v8a,armeabi-v7a,x86}/libturbomodulejsijni.so')
-        .pipe(gulp.dest(`${assemblediOSAndroidDir}/android/src/main/jniLibs/`))
-        .on('end', resolve);
-    });
-  }
+const copyWindowsFiles = () => {
+  return gulp.src('../Modules/@babylonjs/react-native/windows/**')
+    .pipe(gulp.dest(`Assembled/windows`));
 };
 
 const createUWPDirectories = async () => {
@@ -418,7 +295,7 @@ const copyUWPFiles = gulp.series(
 const validateAssembled = async () => {
   // When the package contents are updated *and validated*, update the expected below from the output of the failed validation console output (run `gulp validateAssembled`).
   // This helps ensure a bad package is not accidentally published due to tooling changes, etc.
-  const expected = [
+  const expectedTS = [
     'Assembled/BabylonModule.d.ts',
     'Assembled/BabylonModule.js',
     'Assembled/BabylonModule.js.map',
@@ -459,157 +336,43 @@ const validateAssembled = async () => {
   ];
 
   const actual = glob.sync('Assembled/**/*');
-  checkDirectory(actual, expected, 'Assembled');
-}
+  checkDirectory(actual, expectedTS, 'Assembled');
 
-const validateAssemblediOSAndroid = async () => {
   let expectediosandroid = [
-    `${assemblediOSAndroidDir}/android`,
-    `${assemblediOSAndroidDir}/android/build.gradle`,
-    `${assemblediOSAndroidDir}/android/include`,
-    `${assemblediOSAndroidDir}/android/include/IXrContextARCore.h`,
-    `${assemblediOSAndroidDir}/android/src`,
-    `${assemblediOSAndroidDir}/android/src/main`,
-    `${assemblediOSAndroidDir}/android/src/main/AndroidManifest.xml`,
-    `${assemblediOSAndroidDir}/android/src/main/java`,
-    `${assemblediOSAndroidDir}/android/src/main/java/com`,
-    `${assemblediOSAndroidDir}/android/src/main/java/com/babylonreactnative`,
-    `${assemblediOSAndroidDir}/android/src/main/java/com/babylonreactnative/BabylonModule.java`,
-    `${assemblediOSAndroidDir}/android/src/main/java/com/babylonreactnative/BabylonNativeInterop.java`,
-    `${assemblediOSAndroidDir}/android/src/main/java/com/babylonreactnative/BabylonPackage.java`,
-    `${assemblediOSAndroidDir}/android/src/main/java/com/babylonreactnative/EngineView.java`,
-    `${assemblediOSAndroidDir}/android/src/main/java/com/babylonreactnative/EngineViewManager.java`,
-    `${assemblediOSAndroidDir}/android/src/main/java/com/babylonreactnative/SnapshotDataReturnedEvent.java`,
-    `${assemblediOSAndroidDir}/android/src/main/jniLibs`,
-    `${assemblediOSAndroidDir}/android/src/main/jniLibs/arm64-v8a`,
-    `${assemblediOSAndroidDir}/android/src/main/jniLibs/arm64-v8a/libBabylonNative.so`,
-    `${assemblediOSAndroidDir}/android/src/main/jniLibs/armeabi-v7a`,
-    `${assemblediOSAndroidDir}/android/src/main/jniLibs/armeabi-v7a/libBabylonNative.so`,
-    `${assemblediOSAndroidDir}/android/src/main/jniLibs/x86`,
-    `${assemblediOSAndroidDir}/android/src/main/jniLibs/x86/libBabylonNative.so`,
-    `${assemblediOSAndroidDir}/android/src/main/jniLibs/x86_64`,
-    `${assemblediOSAndroidDir}/android/src/main/jniLibs/x86_64/libBabylonNative.so`,
-    `${assemblediOSAndroidDir}/ios`,
-    `${assemblediOSAndroidDir}/ios/BabylonModule.mm`,
-    `${assemblediOSAndroidDir}/ios/BabylonNativeInterop.h`,
-    `${assemblediOSAndroidDir}/ios/BabylonNativeInterop.mm`,
-    `${assemblediOSAndroidDir}/ios/EngineViewManager.mm`,
-    `${assemblediOSAndroidDir}/ios/include`,
-    `${assemblediOSAndroidDir}/ios/libs`,
-    `${assemblediOSAndroidDir}/ios/libs/libBabylonNative.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libbgfx.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libbimg.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libbx.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libCanvas.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libGenericCodeGen.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libglslang.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libglslang-default-resource-limits.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libGraphics.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libJsRuntime.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libMachineIndependent.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libnapi.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libNativeCapture.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libNativeEngine.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libNativeInput.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libNativeOptimizations.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libNativeTracing.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libNativeXr.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libOGLCompiler.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libOSDependent.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libspirv-cross-core.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libspirv-cross-msl.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libSPIRV.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libbimg_encode.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libbimg_decode.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libUrlLib.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libWindow.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libXMLHttpRequest.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libNativeCamera.a`,
-    `${assemblediOSAndroidDir}/ios/libs/libxr.a`,
-    `${assemblediOSAndroidDir}/ios/include/IXrContextARKit.h`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/project.pbxproj`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/project.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/AbortController.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/AppRuntime.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/BabylonNative.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/bgfx.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/bimg_decode.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/bimg_encode.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/bimg.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/bx.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/Canvas.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/Console.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/ExternalTexture.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/Foundation.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/GenericCodeGen.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/glslang-default-resource-limits.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/glslang.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/Graphics.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/JsRuntime.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/MachineIndependent.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/napi.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/NativeCamera.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/NativeCapture.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/NativeEngine.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/NativeInput.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/NativeOptimizations.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/NativeTracing.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/NativeXr.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/OGLCompiler.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/OSDependent.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/Scheduling.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/ScriptLoader.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/spirv-cross-core.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/spirv-cross-msl.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/SPIRV.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/TestUtils.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/URL.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/UrlLib.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/WebSocket.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/Window.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/XMLHttpRequest.xcscheme`,
-    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/xr.xcscheme`,
-    `${assemblediOSAndroidDir}/package.json`,
-    `${assemblediOSAndroidDir}/react-native-babylon.podspec`,
-    `${assemblediOSAndroidDir}/README.md`,
-    `${assemblediOSAndroidDir}/NOTICE.html`,
+    `Assembled/android`,
+    `Assembled/android/build.gradle`,
+    `Assembled/android/include`,
+    `Assembled/android/include/IXrContextARCore.h`,
+    `Assembled/android/src`,
+    `Assembled/android/src/main`,
+    `Assembled/android/src/main/AndroidManifest.xml`,
+    `Assembled/android/src/main/java`,
+    `Assembled/android/src/main/java/com`,
+    `Assembled/android/src/main/java/com/babylonreactnative`,
+    `Assembled/android/src/main/java/com/babylonreactnative/BabylonModule.java`,
+    `Assembled/android/src/main/java/com/babylonreactnative/BabylonNativeInterop.java`,
+    `Assembled/android/src/main/java/com/babylonreactnative/BabylonPackage.java`,
+    `Assembled/android/src/main/java/com/babylonreactnative/EngineView.java`,
+    `Assembled/android/src/main/java/com/babylonreactnative/EngineViewManager.java`,
+    `Assembled/android/src/main/java/com/babylonreactnative/SnapshotDataReturnedEvent.java`,
+    `Assembled/ios`,
+    `Assembled/ios/BabylonModule.mm`,
+    `Assembled/ios/BabylonNativeInterop.h`,
+    `Assembled/ios/BabylonNativeInterop.mm`,
+    `Assembled/ios/EngineViewManager.mm`,
+    `Assembled/ios/include`,
+    `Assembled/ios/include/IXrContextARKit.h`,
+    `Assembled/package.json`,
+    `Assembled/react-native-babylon.podspec`,
   ];
 
-  const versionIndex = process.argv.indexOf('--reactNative');	
-  if (versionIndex != -1) {	
-    if (process.argv[versionIndex + 1] !== '0.71') {	
-      const expectediosandroidNot071 = [
-        `${assemblediOSAndroidDir}/android/src/main/jniLibs/arm64-v8a/libturbomodulejsijni.so`,
-        `${assemblediOSAndroidDir}/android/src/main/jniLibs/armeabi-v7a/libturbomodulejsijni.so`,
-        `${assemblediOSAndroidDir}/android/src/main/jniLibs/x86/libturbomodulejsijni.so`,
-      ];
-      expectediosandroid = expectediosandroid.concat(expectediosandroidNot071);
-    }
-  }
-  const actualiosandroid = glob.sync(`${assemblediOSAndroidDir}/**/*`);
-  checkDirectory(actualiosandroid, expectediosandroid, `${assemblediOSAndroidDir}`);
+  checkDirectory(actualiosandroid, expectediosandroid, `Assembled`);
 }
 
 const createPackage = async () => {
   exec('npm pack', 'Assembled');
 };
 
-const createPackageiOSAndroid = async () => {
-  exec('npm pack', `${assemblediOSAndroidDir}`);
-};
-
-const createPackageUWP = async () => {
-  exec('npm pack', `${assembledWindowsDir}`);
-}
-
-
-//const COMMIT_ID = '7f82d72f22e9789b9b66cb837aec0c9bc8ff65ee';
-//const ZIP_URL = `https://github.com/BabylonJS/BabylonNative/archive/${COMMIT_ID}.zip`;
 const COMMIT_ID = 'a736d2d675c4733e70186237d39412f187139b48';
 const ZIP_URL = `https://github.com/CedricGuillemet/BabylonNative/archive/${COMMIT_ID}.zip`;
 const TARGET_DIR = path.resolve(__dirname, '../Modules/@babylonjs/react-native/shared/BabylonNative');
@@ -734,35 +497,22 @@ const buildBabylonNativeSourceTree = async () => {
   console.log('Deleting tempBuild folder...');
   deleteFolderRecursive(TEMP_BUILD_DIR);
 
-
   console.log('Remove unnecessary sources');
   deleteFolderRecursive(`${UNZIP_FOLDER}/.github`);
   deleteFolderRecursive(`${UNZIP_FOLDER}/Apps`);
   deleteFolderRecursive(`${UNZIP_FOLDER}/Documentation`);
   deleteFolderRecursive(`${UNZIP_FOLDER}/Install`);
   //deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx`);
-  
 }
 
+const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyIOSFiles, copyAndroidFiles, copyWindowsFiles);
+const buildAssembled = gulp.series(buildBabylonNativeSourceTree, copyFiles, buildTypeScript, validateAssembled);
 
-const copyFiles = gulp.parallel(copyIOSAndroidCommonFiles, copyIOSFiles, copyAndroidFiles);
-
-//const buildIOS = gulp.series(makeXCodeProj, buildIphoneOS, buildIphoneSimulator);
-const buildIOS = gulp.series(makeXCodeProj, buildIphoneOS, buildIphoneSimulator);
-const buildTS = gulp.series(copyCommonFiles, copySharedFiles, buildTypeScript, validateAssembled);
-const buildIOSAndroid = gulp.series(buildIOS, buildAndroid, createIOSUniversalLibs, copyFiles/*, validateAssemblediOSAndroid*/);
-const build = gulp.series(buildIOSAndroid, buildIOSAndroid);
-const rebuild = gulp.series(clean, build);
-const pack = gulp.series(rebuild, createPackage);
-
+exports.buildAssembled = buildAssembled;
+exports.buildTypeScript = buildTypeScript;
 exports.validateAssembled = validateAssembled;
-//exports.validateAssemblediOSAndroid = validateAssemblediOSAndroid;
-
-//exports.buildIOS = buildIOS;
 exports.buildIOS = buildIOS;
 exports.buildAndroid = buildAndroid;
-exports.createIOSUniversalLibs = createIOSUniversalLibs;
-exports.createXCFrameworks = createXCFrameworks;
 exports.copyFiles = copyFiles;
 
 exports.clean = clean;
@@ -770,13 +520,10 @@ exports.build = build;
 exports.rebuild = rebuild;
 exports.pack = pack;
 
-const packAndroid = gulp.series(clean, buildAndroid, copyFiles, createPackage, createPackageiOSAndroid);
-exports.packAndroid = packAndroid;
-
 const copyPackageFilesUWP = gulp.series(copyUWPFiles);
 const buildUWPPublish = gulp.series(buildUWP, copyPackageFilesUWP, buildUWP, copyPackageFilesUWP);
-const packUWP = gulp.series(clean, buildUWP, copyPackageFilesUWP, createPackage, createPackageUWP);
-const packUWPNoBuild = gulp.series(clean, copyPackageFilesUWP, createPackage, createPackageUWP);
+const packUWP = gulp.series(clean, buildUWP, copyPackageFilesUWP, createPackage);
+const packUWPNoBuild = gulp.series(clean, copyPackageFilesUWP, createPackage);
 
 exports.buildTS = buildTS;
 exports.makeUWPProjectx86 = makeUWPProjectx86;
