@@ -561,7 +561,6 @@ const buildBabylonNativeSourceTree = async () => {
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx/examples`,['common']);
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx/bindings`);
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx/docs`);
-  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx/scripts`);
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx/tools`);
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/spirv-cross-src/reference`);
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/spirv-cross-src/shaders`);
