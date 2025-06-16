@@ -450,7 +450,7 @@ function deleteFile(filePath) {
 }
 
 function runCMake(buildDir) {
-  let cmakeCommand = `cmake -S . -B ../tempBuild -DBABYLON_NATIVE_BUILD_SOURCETREE=ON`;
+  let cmakeCommand = `cmake -S . -B ../tempBuild -DBABYLON_NATIVE_BUILD_SOURCETREE=ON -DBABYLON_NATIVE_BUILD_APPS=OFF`;
 
   exec(cmakeCommand, buildDir);
 }
@@ -460,10 +460,32 @@ function writeCMakeListsFile(commitId, cmakePath) {
   fs.writeFileSync(cmakePath, content, 'utf8');
 }
 
-function deleteFolderRecursive(folderPath) {
-  if (fs.existsSync(folderPath)) {
-    fs.rmSync(folderPath, { recursive: true, force: true });
-    console.log(`Deleted folder: ${folderPath}`);
+function deleteFolderRecursive(folderPath, excludeSubFolders = []) {
+  if (!fs.existsSync(folderPath)) return;
+
+  const entries = fs.readdirSync(folderPath, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const fullPath = path.join(folderPath, entry.name);
+
+    if (entry.isDirectory()) {
+      if (excludeSubFolders.includes(entry.name)) {
+        continue; // Skip this folder
+      }
+      deleteFolderRecursive(fullPath, excludeSubFolders);
+    } else {
+      fs.unlinkSync(fullPath);
+    }
+  }
+
+  // After deleting contents, delete the root folder if it's not in the excluded list
+  const folderName = path.basename(folderPath);
+  if (!excludeSubFolders.includes(folderName)) {
+    const remaining = fs.readdirSync(folderPath);
+    if (remaining.length === 0) {
+      fs.rmdirSync(folderPath);
+      console.log(`Deleted folder: ${folderPath}`);
+    }
   }
 }
 
@@ -533,7 +555,21 @@ const buildBabylonNativeSourceTree = async () => {
   deleteFolderRecursive(`${UNZIP_FOLDER}/Apps`);
   deleteFolderRecursive(`${UNZIP_FOLDER}/Documentation`);
   deleteFolderRecursive(`${UNZIP_FOLDER}/Install`);
-  //deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx`);
+
+  // dependencies cleanup
+  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx/3rdparty`, ['renderdoc']);
+  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx/examples`,['common']);
+  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx/bindings`);
+  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx/docs`);
+  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx/scripts`);
+  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx/tools`);
+  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/spirv-cross-src/reference`);
+  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/spirv-cross-src/shaders`);
+  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/spirv-cross-src/shaders-msl`);
+  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/spirv-cross-src/shaders-hlsl`);
+  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/spirv-cross-src/shaders-hlsl-no-opt`);
+  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/glslang-src/Test`);
+ 
 }
 
 const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyIOSFiles, copyAndroidFiles, copyWindowsFiles);
