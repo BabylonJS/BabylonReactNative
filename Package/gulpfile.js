@@ -687,7 +687,7 @@ const patchPackageVersion = async () => {
 
 //const COMMIT_ID = '7f82d72f22e9789b9b66cb837aec0c9bc8ff65ee';
 //const ZIP_URL = `https://github.com/BabylonJS/BabylonNative/archive/${COMMIT_ID}.zip`;
-const COMMIT_ID = '7dd5bd439ee51adc77d0a71eb033c0c1e6f3ba54';
+const COMMIT_ID = '4b170e1d07aa6158532bef02420c80bef5191167';
 const ZIP_URL = `https://github.com/CedricGuillemet/BabylonNative/archive/${COMMIT_ID}.zip`;
 const TARGET_DIR = path.resolve(__dirname, '../Modules/@babylonjs/react-native/shared/BabylonNative');
 const ZIP_PATH = path.join(TARGET_DIR, `${COMMIT_ID}.zip`);
