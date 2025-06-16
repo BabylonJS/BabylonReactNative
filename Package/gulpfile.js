@@ -516,16 +516,16 @@ exports.buildAndroid = buildAndroid;
 exports.copyFiles = copyFiles;
 
 exports.clean = clean;
-exports.build = build;
+/*exports.build = build;
 exports.rebuild = rebuild;
-exports.pack = pack;
+exports.pack = pack;*/
 
 const copyPackageFilesUWP = gulp.series(copyUWPFiles);
 const buildUWPPublish = gulp.series(buildUWP, copyPackageFilesUWP, buildUWP, copyPackageFilesUWP);
 const packUWP = gulp.series(clean, buildUWP, copyPackageFilesUWP, createPackage);
 const packUWPNoBuild = gulp.series(clean, copyPackageFilesUWP, createPackage);
 
-exports.buildTS = buildTS;
+//exports.buildTS = buildTS;
 exports.makeUWPProjectx86 = makeUWPProjectx86;
 exports.makeUWPProjectx64 = makeUWPProjectx64;
 exports.makeUWPProjectARM64 = makeUWPProjectARM64;
@@ -555,7 +555,7 @@ exports.copyUWPFiles = copyUWPFiles;
 exports.packUWP = packUWP;
 exports.packUWPNoBuild = packUWPNoBuild;
 
-exports.default = build;
+exports.default = buildAssembled;
 
 
 exports.buildBabylonNativeSourceTree = buildBabylonNativeSourceTree;
