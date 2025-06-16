@@ -511,7 +511,7 @@ const buildAssembled = gulp.series(buildBabylonNativeSourceTree, copyFiles, buil
 exports.buildAssembled = buildAssembled;
 exports.buildTypeScript = buildTypeScript;
 exports.validateAssembled = validateAssembled;
-exports.buildIOS = buildIOS;
+//exports.buildIOS = buildIOS;
 exports.buildAndroid = buildAndroid;
 exports.copyFiles = copyFiles;
 
