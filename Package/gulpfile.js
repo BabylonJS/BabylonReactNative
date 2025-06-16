@@ -295,7 +295,7 @@ const copyUWPFiles = gulp.series(
 const validateAssembled = async () => {
   // When the package contents are updated *and validated*, update the expected below from the output of the failed validation console output (run `gulp validateAssembled`).
   // This helps ensure a bad package is not accidentally published due to tooling changes, etc.
-  const expectedTS = [
+  const expected = [
     'Assembled/BabylonModule.d.ts',
     'Assembled/BabylonModule.js',
     'Assembled/BabylonModule.js.map',
@@ -328,19 +328,16 @@ const validateAssembled = async () => {
     'Assembled/NOTICE.html',
     'Assembled/shared',
     'Assembled/shared/BabylonNative.h',
+    'Assembled/shared/BabylonNative.cpp',
+    'Assembled/shared/BabylonNative',
     'Assembled/shared/XrAnchorHelper.h',
     'Assembled/shared/XrContextHelper.h',
     'Assembled/VersionValidation.d.ts',
     'Assembled/VersionValidation.js',
     'Assembled/VersionValidation.js.map'
-  ];
-
-  const actual = glob.sync('Assembled/**/*');
-  checkDirectory(actual, expectedTS, 'Assembled');
-
-  let expectediosandroid = [
     `Assembled/android`,
     `Assembled/android/build.gradle`,
+    `Assembled/android/CMakeLists.txt`,
     `Assembled/android/include`,
     `Assembled/android/include/IXrContextARCore.h`,
     `Assembled/android/src`,
@@ -366,7 +363,8 @@ const validateAssembled = async () => {
     `Assembled/react-native-babylon.podspec`,
   ];
 
-  checkDirectory(actualiosandroid, expectediosandroid, `Assembled`);
+  const actual = glob.sync('Assembled/**/*', {ignore: ['Assembled/shared/BabylonNative/BabylonNative-*/**']});
+  checkDirectory(actual, expected, `Assembled`);
 }
 
 const createPackage = async () => {
@@ -507,11 +505,12 @@ const buildBabylonNativeSourceTree = async () => {
 
 const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyIOSFiles, copyAndroidFiles, copyWindowsFiles);
 const buildAssembled = gulp.series(buildBabylonNativeSourceTree, copyFiles, buildTypeScript, validateAssembled);
+const buildIOS = gulp.series(makeXCodeProj,  buildIphoneOS, buildIphoneSimulator);
 
 exports.buildAssembled = buildAssembled;
 exports.buildTypeScript = buildTypeScript;
 exports.validateAssembled = validateAssembled;
-//exports.buildIOS = buildIOS;
+exports.buildIOS = buildIOS;
 exports.buildAndroid = buildAndroid;
 exports.copyFiles = copyFiles;
 
