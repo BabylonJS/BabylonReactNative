@@ -206,7 +206,7 @@ const validateAssembled = async () => {
     'Assembled/windows/CMakeLists.txt'
   ];
 
-  const actual = glob.sync('Assembled/**/*', {ignore: ['Assembled/shared/BabylonNative/BabylonNative-*/**', 'Assembled/shared/BabylonNative/deps/**']});
+  const actual = glob.sync('Assembled/**/*', {ignore: ['Assembled/shared/BabylonNative/Repo/**', 'Assembled/shared/BabylonNative/deps/**']});
   checkDirectory(actual, expected, `Assembled`);
 }
 
