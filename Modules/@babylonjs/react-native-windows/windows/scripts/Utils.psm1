@@ -47,7 +47,7 @@ function Restore-CMakeProject {
     }
     
     cd $BuildDir
-    cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -A $Arch ..\..\..\windows 
+    cmake -G "Visual Studio 17 2022" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -A $Arch ..\..\..\windows 
 
     if ($? -Eq $False) {
       Write-Error "cmake failed. Make sure cmake is added to your PATH variable"

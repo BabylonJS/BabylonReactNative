@@ -275,7 +275,7 @@ jobs:
         working-directory: ./Modules
 
       - name: CMake BabylonNative
-        run: cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_UNITY_BUILD=true -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=10.0.19041.0 -A x64 ./../../../react-native-windows/windows
+        run: cmake -G "Visual Studio 17 2022" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_UNITY_BUILD=true -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=10.0.19041.0 -A x64 ./../../../react-native-windows/windows
         working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
 
       - name: Nuget restore
