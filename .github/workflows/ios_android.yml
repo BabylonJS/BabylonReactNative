@@ -11,7 +11,7 @@ on:
         type: string
       xcode-version:
         type: string
-        default: '16.2'
+        default: '15.4'
 
 jobs:
   Build:
@@ -23,14 +23,14 @@ jobs:
           submodules: 'recursive'
       - name: Free space
         uses: ./.github/workflows/macos_freespace
-      - name: Setup Node 18
+      - name: Setup Node 16
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 16
       - name: Setup CMake
         uses: jwlawson/actions-setup-cmake@v1.8
         with:
-          cmake-version: '3.30.3'
+          cmake-version: '3.26.3'
       - name: Setup Ninja
         run: brew install ninja
       - name: 'Select XCode ${{ inputs.xcode-version }}'

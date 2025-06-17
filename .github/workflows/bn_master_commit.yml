@@ -18,14 +18,14 @@ jobs:
           submodules: 'recursive'
       - name: Free space
         uses: ./.github/workflows/macos_freespace
-      - name: Setup Node 18
+      - name: Setup Node 16
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 16
       - name: Setup CMake
         uses: jwlawson/actions-setup-cmake@v1.8
         with:
-          cmake-version: '3.30.3'
+          cmake-version: '3.26.3'
       - name: Setup Ninja
         run: brew install ninja
       - name: NPM Install (Playground)
@@ -59,10 +59,10 @@ jobs:
           submodules: 'recursive'
       - name: Free space
         uses: ./.github/workflows/macos_freespace
-      - name: Setup Node 18
+      - name: Setup Node 16
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 16
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
@@ -90,10 +90,10 @@ jobs:
           submodules: 'true'
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.0.2
-      - name: Setup Node 18
+      - name: Setup Node 16
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 16
       - name: Setup NuGet
         uses: nuget/setup-nuget@v1
         with:
