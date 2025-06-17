@@ -75,7 +75,7 @@ jobs:
         working-directory: ./Package
 
   build-windows:
-    runs-on: windows-2019
+    runs-on: windows-latest
     steps:
       - name: Support longpaths
         run: git config --system core.longpaths true
