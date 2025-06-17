@@ -1,20 +1,12 @@
-const util = require('util');
 const fs = require('fs');
 const path = require('path');
-const readdirAsync = util.promisify(fs.readdir);
 const log = require('fancy-log');
 const gulp = require('gulp');
 const shelljs = require('shelljs');
-const rename = require('gulp-rename');
 const glob = require('glob');
 const chalk = require('chalk');
 
 const unzipper = require('unzipper');
-const os = require('os');
-
-let assembledWindowsDir = 'Assembled-Windows';
-let basekitBuild = false;
-let cmakeBasekitBuildDefinition = '';
 
 function exec(command, workingDirectory = '.', logCommand = true) {
   if (logCommand) {
@@ -55,10 +47,6 @@ const clean = async () => {
   if (shelljs.test('-d', 'Assembled')) {
     shelljs.rm('-r', 'Assembled');
   }
-
-  if (shelljs.test('-d', `${assembledWindowsDir}`)) {
-    shelljs.rm('-r', `${assembledWindowsDir}`);
-  }
 };
 
 const buildTypeScript = async () => {
@@ -84,96 +72,8 @@ const buildIphoneSimulator = async () => {
 };
 
 const buildAndroid = async () => {
-  const basekitBuildProp = basekitBuild ? "-PBASEKIT_BUILD=1" : "";
-  exec(`./gradlew babylonjs_react-native:assembleRelease --stacktrace --info ${basekitBuildProp}`, '../Apps/Playground/android');
+  exec(`./gradlew babylonjs_react-native:assembleRelease --stacktrace --info`, '../Apps/Playground/android');
 };
-
-const makeUWPProjectPlatform = async (name, arch) => {
-  shelljs.mkdir('-p', `./../Modules/@babylonjs/react-native/Build/uwp_${name}`);
-  exec(`cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0 -DCMAKE_UNITY_BUILD=true ${cmakeBasekitBuildDefinition} -A ${arch} ./../../../react-native/windows`, `./../Modules/@babylonjs/react-native/Build/uwp_${name}`);
-};
-
-const makeUWPProjectx86 = async () => makeUWPProjectPlatform('x86', 'Win32');
-const makeUWPProjectx64 = async () => makeUWPProjectPlatform('x64', 'x64');
-const makeUWPProjectARM64 = async () => makeUWPProjectPlatform('arm64', 'arm64');
-
-const makeUWPProject = gulp.parallel(
-  makeUWPProjectx86,
-  makeUWPProjectx64,
-  makeUWPProjectARM64
-);
-
-const buildUWPx86Debug = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\Build.bat -Platform Win32 -Configuration Debug');
-}
-
-const buildUWPx86Release = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\Build.bat -Platform Win32 -Configuration Release');
-}
-
-const buildUWPx64Debug = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\Build.bat -Platform x64 -Configuration Debug');
-}
-
-const buildUWPx64Release = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\Build.bat -Platform x64 -Configuration Release');
-}
-
-const buildUWPARM64Debug = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\Build.bat -Platform ARM64 -Configuration Debug');
-}
-
-const buildUWPARM64Release = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\Build.bat -Platform ARM64 -Configuration Release');
-}
-
-const buildUWPProject = gulp.parallel(
-  buildUWPx86Debug,
-  buildUWPx86Release,
-  buildUWPx64Debug,
-  buildUWPx64Release,
-  buildUWPARM64Debug,
-  buildUWPARM64Release
-);
-
-const nugetRestoreUWPPlayground = async () => {
-  exec('nuget restore Playground.sln', './../Apps/Playground/Playground/windows');
-}
-
-const buildUWPPlaygroundx86Debug = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\BuildPlayground.bat -Platform x86 -Configuration Debug');
-}
-
-const buildUWPPlaygroundx86Release = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\BuildPlayground.bat -Platform x86 -Configuration Release');
-}
-
-const buildUWPPlaygroundx64Debug = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\BuildPlayground.bat -Platform x64 -Configuration Debug');
-}
-
-const buildUWPPlaygroundx64Release = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\BuildPlayground.bat -Platform x64 -Configuration Release');
-}
-
-const buildUWPPlaygroundARM64Debug = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\BuildPlayground.bat -Platform ARM64 -Configuration Debug');
-}
-
-const buildUWPPlaygroundARM64Release = async () => {
-  exec('.\\..\\Modules\\@babylonjs\\react-native\\windows\\scripts\\BuildPlayground.bat -Platform ARM64 -Configuration Release');
-}
-
-const buildUWPPlayground = gulp.parallel(
-  buildUWPPlaygroundx86Debug,
-  buildUWPPlaygroundx86Release,
-  buildUWPPlaygroundx64Debug,
-  buildUWPPlaygroundx64Release,
-  buildUWPPlaygroundARM64Debug,
-  buildUWPPlaygroundARM64Release
-);
-
-const buildUWP = gulp.series(makeUWPProject, buildUWPProject);
 
 const copyCommonFiles = () => {
   return gulp.src('../Modules/@babylonjs/react-native/README.md')
@@ -201,96 +101,6 @@ const copyWindowsFiles = () => {
   return gulp.src('../Modules/@babylonjs/react-native/windows/**')
     .pipe(gulp.dest(`Assembled/windows`));
 };
-
-const createUWPDirectories = async () => {
-  shelljs.mkdir('-p', `${assembledWindowsDir}`);
-  shelljs.mkdir('-p', `${assembledWindowsDir}/windows`);
-  shelljs.mkdir('-p', `${assembledWindowsDir}/windows/libs`);
-  shelljs.mkdir('-p', `${assembledWindowsDir}/windows/libs/arm64`);
-  shelljs.mkdir('-p', `${assembledWindowsDir}/windows/libs/arm64/Debug`);
-  shelljs.mkdir('-p', `${assembledWindowsDir}/windows/libs/arm64/Release`);
-  shelljs.mkdir('-p', `${assembledWindowsDir}/windows/libs/x86`);
-  shelljs.mkdir('-p', `${assembledWindowsDir}/windows/libs/x86/Debug`);
-  shelljs.mkdir('-p', `${assembledWindowsDir}/windows/libs/x86/Release`);
-  shelljs.mkdir('-p', `${assembledWindowsDir}/windows/libs/x64`);
-  shelljs.mkdir('-p', `${assembledWindowsDir}/windows/libs/x64/Debug`);
-  shelljs.mkdir('-p', `${assembledWindowsDir}/windows/libs/x64/Release`);
-  shelljs.mkdir('-p', `${assembledWindowsDir}/windows/BabylonReactNative`);
-  shelljs.mkdir('-p', `${assembledWindowsDir}/windows/include`);
-}
-
-const copyCommonFilesUWP = () => {
-  return gulp.src('../Modules/@babylonjs/react-native/package.json')
-    .pipe(gulp.src('../Modules/@babylonjs/react-native/README.md'))
-    .pipe(gulp.src('../NOTICE.html'))
-    .pipe(gulp.src('../Modules/@babylonjs/react-native/*.ts*'))
-    .pipe(gulp.dest(`${assembledWindowsDir}`));
-}
-
-const copyx86DebugUWPFiles = () => {
-  return gulp.src('../Modules/@babylonjs/react-native/Build/uwp_x86/**/Debug/**/*.{lib,pri}')
-    .pipe(rename({ dirname: '' }))
-    .pipe(gulp.dest(`${assembledWindowsDir}/windows/libs/x86/Debug`));
-}
-
-const copyx86ReleaseUWPFiles = () => {
-  return gulp.src('../Modules/@babylonjs/react-native/Build/uwp_x86/**/Release/**/*.{lib,pri}')
-    .pipe(rename({ dirname: '' }))
-    .pipe(gulp.dest(`${assembledWindowsDir}/windows/libs/x86/Release`));
-}
-
-const copyx64DebugUWPFiles = () => {
-  return gulp.src('../Modules/@babylonjs/react-native/Build/uwp_x64/**/Debug/**/*.{lib,pri}')
-    .pipe(rename({ dirname: '' }))
-    .pipe(gulp.dest(`${assembledWindowsDir}/windows/libs/x64/Debug`));
-}
-
-const copyx64ReleaseUWPFiles = () => {
-  return gulp.src('../Modules/@babylonjs/react-native/Build/uwp_x64/**/Release/**/*.{lib,pri}')
-    .pipe(rename({ dirname: '' }))
-    .pipe(gulp.dest(`${assembledWindowsDir}/windows/libs/x64/Release`));
-}
-
-const copyARM64DebugUWPFiles = () => {
-  return gulp.src('../Modules/@babylonjs/react-native/Build/uwp_arm64/**/Debug/**/*.{lib,pri}')
-    .pipe(rename({ dirname: '' }))
-    .pipe(gulp.dest(`${assembledWindowsDir}/windows/libs/arm64/Debug`));
-}
-
-const copyARM64ReleaseUWPFiles = () => {
-  return gulp.src('../Modules/@babylonjs/react-native/Build/uwp_arm64/**/Release/**/*.{lib,pri}')
-    .pipe(rename({ dirname: '' }))
-    .pipe(gulp.dest(`${assembledWindowsDir}/windows/libs/arm64/Release`));
-}
-
-const copyVCXProjUWPFiles = () => {
-  const uwpFilesDir = '../Modules/@babylonjs/react-native/windows/BabylonReactNative';
-  return gulp.src([`${uwpFilesDir}/*.*`, `!${uwpFilesDir}/*.pfx`])
-    .pipe(gulp.dest(`${assembledWindowsDir}/windows/BabylonReactNative`));
-}
-
-const copyUWPFiles = gulp.series(
-  createUWPDirectories,
-  basekitBuild ? 
-  gulp.parallel(
-    copyCommonFilesUWP,
-    copyx86DebugUWPFiles,
-    copyx86ReleaseUWPFiles,
-    copyx64DebugUWPFiles,
-    copyx64ReleaseUWPFiles,
-    copyARM64DebugUWPFiles,
-    copyARM64ReleaseUWPFiles,
-    copyVCXProjUWPFiles)
-    :
-  gulp.parallel(
-    copyCommonFilesUWP,
-    copyx86DebugUWPFiles,
-    copyx86ReleaseUWPFiles,
-    copyx64DebugUWPFiles,
-    copyx64ReleaseUWPFiles,
-    copyARM64DebugUWPFiles,
-    copyARM64ReleaseUWPFiles,
-    copyVCXProjUWPFiles));
 
 const validateAssembled = async () => {
   // When the package contents are updated *and validated*, update the expected below from the output of the failed validation console output (run `gulp validateAssembled`).
@@ -408,7 +218,7 @@ const COMMIT_ID = 'a736d2d675c4733e70186237d39412f187139b48';
 const ZIP_URL = `https://github.com/CedricGuillemet/BabylonNative/archive/${COMMIT_ID}.zip`;
 const TARGET_DIR = path.resolve(__dirname, '../Modules/@babylonjs/react-native/shared/BabylonNative');
 const ZIP_PATH = path.join(TARGET_DIR, `${COMMIT_ID}.zip`);
-const UNZIP_FOLDER = path.join(TARGET_DIR, `BabylonNative-${COMMIT_ID}`);
+const UNZIP_FOLDER = path.join(TARGET_DIR, `Repo`);
 const CMAKE_LISTS_PATH = path.join(TARGET_DIR, 'CMakeLists.txt');
 const TEMP_BUILD_DIR = path.join(TARGET_DIR, 'tempBuild');
 const DEPS_OUTPUT_DIR = path.join(TARGET_DIR, 'deps');
@@ -455,8 +265,8 @@ function runCMake(buildDir) {
   exec(cmakeCommand, buildDir);
 }
 
-function writeCMakeListsFile(commitId, cmakePath) {
-  const content = `add_subdirectory(\${CMAKE_CURRENT_LIST_DIR}/BabylonNative-${commitId})\n`;
+function writeCMakeListsFile(cmakePath) {
+  const content = `add_subdirectory(\${CMAKE_CURRENT_LIST_DIR}/Repo)\n`;
   fs.writeFileSync(cmakePath, content, 'utf8');
 }
 
@@ -539,7 +349,13 @@ const buildBabylonNativeSourceTree = async () => {
   await deleteFile(ZIP_PATH);
 
   console.log('Creating CMakeLists.txt...');
-  writeCMakeListsFile(COMMIT_ID, CMAKE_LISTS_PATH);
+  writeCMakeListsFile(CMAKE_LISTS_PATH);
+
+  console.log('Renaming BabylonNative-xxx folder ...');
+  await fs.rename(`${TARGET_DIR}/BabylonNative-${COMMIT_ID}`, `${TARGET_DIR}/Repo`, (err) => {
+    if (err) throw err;
+    console.log('Rename complete!');
+  });
 
   console.log('Running CMake...');
   await runCMake(UNZIP_FOLDER);
@@ -583,46 +399,6 @@ exports.buildAndroid = buildAndroid;
 exports.copyFiles = copyFiles;
 
 exports.clean = clean;
-/*exports.build = build;
-exports.rebuild = rebuild;
-exports.pack = pack;*/
-
-const copyPackageFilesUWP = gulp.series(copyUWPFiles);
-const buildUWPPublish = gulp.series(buildUWP, copyPackageFilesUWP, buildUWP, copyPackageFilesUWP);
-const packUWP = gulp.series(clean, buildUWP, copyPackageFilesUWP, createPackage);
-const packUWPNoBuild = gulp.series(clean, copyPackageFilesUWP, createPackage);
-
-//exports.buildTS = buildTS;
-exports.makeUWPProjectx86 = makeUWPProjectx86;
-exports.makeUWPProjectx64 = makeUWPProjectx64;
-exports.makeUWPProjectARM64 = makeUWPProjectARM64;
-exports.makeUWPProject = makeUWPProject;
-
-exports.buildUWPx86Debug = buildUWPx86Debug;
-exports.buildUWPx86Release = buildUWPx86Release;
-exports.buildUWPx64Debug = buildUWPx64Debug;
-exports.buildUWPx64Release = buildUWPx64Release;
-exports.buildUWPARM64Debug = buildUWPARM64Debug;
-exports.buildUWPARM64Release = buildUWPARM64Release;
-exports.buildUWPProject = buildUWPProject;
-
-exports.nugetRestoreUWPPlayground = nugetRestoreUWPPlayground;
-exports.buildUWPPlaygroundx86Debug = buildUWPPlaygroundx86Debug;
-exports.buildUWPPlaygroundx86Release = buildUWPPlaygroundx86Release;
-exports.buildUWPPlaygroundx64Debug = buildUWPPlaygroundx64Debug;
-exports.buildUWPPlaygroundx64Release = buildUWPPlaygroundx64Release;
-exports.buildUWPPlaygroundARM64Debug = buildUWPPlaygroundARM64Debug;
-exports.buildUWPPlaygroundARM64Release = buildUWPPlaygroundARM64Release;
-exports.buildUWPPlayground = buildUWPPlayground;
-
-exports.buildUWP = buildUWP;
-exports.buildUWPPublish = buildUWPPublish;
-
-exports.copyUWPFiles = copyUWPFiles;
-exports.packUWP = packUWP;
-exports.packUWPNoBuild = packUWPNoBuild;
-
 exports.default = buildAssembled;
-
 
 exports.buildBabylonNativeSourceTree = buildBabylonNativeSourceTree;
