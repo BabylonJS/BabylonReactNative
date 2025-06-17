@@ -78,7 +78,7 @@ jobs:
 
   build-windows:
     name: Build Windows ${{ matrix.platform }} ${{ matrix.config }} - BabylonNative ${{ github.event.client_payload.sha }}
-    runs-on: windows-2019
+    runs-on: windows-latest
     strategy:
       matrix:
         platform: [x86, x64, ARM64]

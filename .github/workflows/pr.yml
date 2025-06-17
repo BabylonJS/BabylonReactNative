@@ -189,7 +189,7 @@ jobs:
           JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
 
   build-windows:
-    runs-on: windows-2019
+    runs-on: windows-latest
     strategy:
       matrix:
         platform: [x86, x64, ARM64]
@@ -235,7 +235,7 @@ jobs:
         working-directory: ./Package
 
   build-windows-rnta:
-    runs-on: windows-2019
+    runs-on: windows-latest
     steps:
       - name: Support longpaths
         run: git config --system core.longpaths true
