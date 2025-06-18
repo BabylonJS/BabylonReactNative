@@ -24,7 +24,7 @@
     "react": "18.2.0",
     "react-native": "0.73.5",
     "react-native-macos": "^0.73.0",
-    "react-native-permissions": "^5.4.1",
+    "react-native-permissions": "^4.1.5",
     "react-native-windows": "^0.73.0"
   },
   "devDependencies": {
