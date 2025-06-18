@@ -295,11 +295,8 @@
   </ImportGroup>
   <Target Name="BabylonNativeBuild" BeforeTargets="PrepareForBuild">
     <Exec Command='cmake ^
-    -G "Visual Studio 16 2019" ^
     -B ..\..\Build_uwp$(Platform) ^
     -D CMAKE_SYSTEM_NAME=WindowsStore ^
-    -D CMAKE_SYSTEM_VERSION=$(TargetPlatformVersion) ^
-    -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=$(TargetPlatformVersion) ^
     -A $(Platform) ^
     -D FETCHCONTENT_FULLY_DISCONNECTED=ON ^
     -D BABYLON_NATIVE_BUILD_APPS=OFF ^
@@ -318,6 +315,7 @@
     <Exec Command='"MSBuild.exe" ^
       "$(ProjectDir)..\..\Build_uwp$(Platform)\ReactNativeBabylon.sln" ^
       /p:Configuration=$(Configuration) ^
+      /p:WindowsTargetPlatformVersion=$(TargetPlatformVersion) ^
       /p:Platform=$(Platform)' />
   </Target>
   <Target Name="EnsureReactNativeWindowsTargets" BeforeTargets="PrepareForBuild">
