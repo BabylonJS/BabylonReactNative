@@ -17,8 +17,6 @@ set(BABYLON_NATIVE_USE_SWAPCHAINPANEL ON CACHE BOOL "")
 # Installing react-native dependencies for both the Playground app and the @babylonjs\react-native package will generate a bad bundle/runtime errors.
 set(NAPI_JAVASCRIPT_ENGINE "JSI" CACHE STRING "")
 
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../shared ${CMAKE_CURRENT_BINARY_DIR}/shared)
-
 set(PLAYGROUND_DIR "${CMAKE_CURRENT_LIST_DIR}/../../..")
 
 if(EXISTS "${PLAYGROUND_DIR}/react-native/package.json")
@@ -30,6 +28,8 @@ endif()
 
 add_subdirectory("${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi/jsi" ${CMAKE_CURRENT_BINARY_DIR}/jsi)
 target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi)
+
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../shared ${CMAKE_CURRENT_BINARY_DIR}/shared)
 
 # Disable Unity build for UrlLib because of conflict in header between windows.h and winrt
 set_property(TARGET UrlLib PROPERTY UNITY_BUILD false)
