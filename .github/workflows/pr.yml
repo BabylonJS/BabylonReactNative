@@ -283,11 +283,11 @@ jobs:
         working-directory: ./Apps/BRNPlayground/windows
 
       - name: Windows build BN
-        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m ReactNativeBabylon.sln
+        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /p:WindowsTargetPlatformVersion=10.0.19041.0 /m ReactNativeBabylon.sln
         working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
         
       - name: Windows build BRN
-        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m BRNPlayground.sln
+        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /p:WindowsTargetPlatformVersion=10.0.19041.0 /m BRNPlayground.sln
         working-directory: ./Apps/BRNPlayground/windows
 
 # Test packages

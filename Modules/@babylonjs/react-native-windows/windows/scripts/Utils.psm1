@@ -65,7 +65,7 @@ function Compile-Solution {
     )
 
     $MSBuild = Get-MSBuildPath
-    & "$MSBuild" /p:Configuration="$Configuration" /p:Platform="$Platform" /m $Solution
+    & "$MSBuild" /p:Configuration="$Configuration" /p:Platform="$Platform" /p:WindowsTargetPlatformVersion=10.0.19041.0 /m $Solution
     if ($? -Eq $False) {
         Write-Error "$Platform $Configuration Build failed."
         exit 1
