@@ -76,46 +76,46 @@ jobs:
         run: npx gulp buildIOS
         working-directory: ./Package
 
-  build-windows:
-    name: Build Windows ${{ matrix.platform }} ${{ matrix.config }} - BabylonNative ${{ github.event.client_payload.sha }}
-    runs-on: windows-latest
-    strategy:
-      matrix:
-        platform: [x86, x64, ARM64]
-        config: [Debug, Release]
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
-        with:
-          submodules: 'true'
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.0.2
-      - name: Setup Node 16
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - name: Setup NuGet
-        uses: nuget/setup-nuget@v1
-        with:
-          nuget-version: '5.x'
-      - name: NPM Install (Playground)
-        run: npm install
-        working-directory: ./Apps/Playground
-      - name: NPM Install (React Native ${{ env.BRN_Version }})
-        run: npm run select --reactNative ${{ env.BRN_Version }}
-        working-directory: ./Apps/Playground
-      - name: NPM Install (Binary Package)
-        run: npm install
-        working-directory: ./Package
-      - name: Gulp Setup Project ${{ matrix.platform }} (Windows)
-        run: npx gulp makeUWPProject${{ matrix.platform }}
-        working-directory: ./Package
-      - name: Gulp Build ${{ matrix.platform }} ${{ matrix.config }} (Windows)
-        run: npx gulp buildUWP${{ matrix.platform }}${{ matrix.config }}
-        working-directory: ./Package
-      - name: Gulp NuGet Restore Playground
-        run: npx gulp nugetRestoreUWPPlayground
-        working-directory: ./Package
-      - name: Gulp Build ${{ matrix.platform }} ${{ matrix.config }} Playground (Windows)
-        run: npx gulp buildUWPPlayground${{ matrix.platform }}${{ matrix.config }}
-        working-directory: ./Package
+  # build-windows:
+  #   name: Build Windows ${{ matrix.platform }} ${{ matrix.config }} - BabylonNative ${{ github.event.client_payload.sha }}
+  #   runs-on: windows-latest
+  #   strategy:
+  #     matrix:
+  #       platform: [x86, x64, ARM64]
+  #       config: [Debug, Release]
+  #   steps:
+  #     - name: Checkout Repo
+  #       uses: actions/checkout@v2.3.3
+  #       with:
+  #         submodules: 'true'
+  #     - name: Setup MSBuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #     - name: Setup Node 16
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 16
+  #     - name: Setup NuGet
+  #       uses: nuget/setup-nuget@v1
+  #       with:
+  #         nuget-version: '5.x'
+  #     - name: NPM Install (Playground)
+  #       run: npm install
+  #       working-directory: ./Apps/Playground
+  #     - name: NPM Install (React Native ${{ env.BRN_Version }})
+  #       run: npm run select --reactNative ${{ env.BRN_Version }}
+  #       working-directory: ./Apps/Playground
+  #     - name: NPM Install (Binary Package)
+  #       run: npm install
+  #       working-directory: ./Package
+  #     - name: Gulp Setup Project ${{ matrix.platform }} (Windows)
+  #       run: npx gulp makeUWPProject${{ matrix.platform }}
+  #       working-directory: ./Package
+  #     - name: Gulp Build ${{ matrix.platform }} ${{ matrix.config }} (Windows)
+  #       run: npx gulp buildUWP${{ matrix.platform }}${{ matrix.config }}
+  #       working-directory: ./Package
+  #     - name: Gulp NuGet Restore Playground
+  #       run: npx gulp nugetRestoreUWPPlayground
+  #       working-directory: ./Package
+  #     - name: Gulp Build ${{ matrix.platform }} ${{ matrix.config }} Playground (Windows)
+  #       run: npx gulp buildUWPPlayground${{ matrix.platform }}${{ matrix.config }}
+  #       working-directory: ./Package

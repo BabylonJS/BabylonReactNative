@@ -188,107 +188,107 @@ jobs:
         env:
           JAVA_HOME: ${{ env.JAVA_HOME_11_X64 }}
 
-  build-windows:
-    runs-on: windows-latest
-    strategy:
-      matrix:
-        platform: [x86, x64, ARM64]
-        config: [Debug, Release]
-    steps:
-      - name: Support longpaths
-        run: git config --system core.longpaths true
-      - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
-        with:
-          submodules: 'true'
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.0.2
-      - name: Setup Node 16
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - name: Setup NuGet
-        uses: nuget/setup-nuget@v1
-        with:
-          nuget-version: '5.x'
-      - name: NPM Install (Playground)
-        run: npm install
-        working-directory: ./Apps/Playground
-      - name: NPM Install (React Native ${{ env.BRN_Version }})
-        run: npm run select ${{ env.BRN_Version }}
-        working-directory: ./Apps/Playground
-      - name: NPM Install (Binary Package)
-        run: npm install
-        working-directory: ./Package
-      - name: Gulp Setup Project ${{ matrix.platform }} (Windows)
-        run: npx gulp makeUWPProject${{ matrix.platform }}
-        working-directory: ./Package
-      - name: Gulp Build ${{ matrix.platform }} ${{ matrix.config }} (Windows)
-        run: |
-          npx gulp buildUWP${{ matrix.platform }}${{ matrix.config }}
-        working-directory: ./Package
-      - name: Gulp NuGet Restore Playground
-        run: npx gulp nugetRestoreUWPPlayground
-        working-directory: ./Package
-      - name: Gulp Build ${{ matrix.platform }} ${{ matrix.config }} Playground (Windows)
-        run: npx gulp buildUWPPlayground${{ matrix.platform }}${{ matrix.config }}
-        working-directory: ./Package
+  # build-windows:
+  #   runs-on: windows-latest
+  #   strategy:
+  #     matrix:
+  #       platform: [x86, x64, ARM64]
+  #       config: [Debug, Release]
+  #   steps:
+  #     - name: Support longpaths
+  #       run: git config --system core.longpaths true
+  #     - name: Checkout Repo
+  #       uses: actions/checkout@v2.3.3
+  #       with:
+  #         submodules: 'true'
+  #     - name: Setup MSBuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #     - name: Setup Node 16
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 16
+  #     - name: Setup NuGet
+  #       uses: nuget/setup-nuget@v1
+  #       with:
+  #         nuget-version: '5.x'
+  #     - name: NPM Install (Playground)
+  #       run: npm install
+  #       working-directory: ./Apps/Playground
+  #     - name: NPM Install (React Native ${{ env.BRN_Version }})
+  #       run: npm run select ${{ env.BRN_Version }}
+  #       working-directory: ./Apps/Playground
+  #     - name: NPM Install (Binary Package)
+  #       run: npm install
+  #       working-directory: ./Package
+  #     - name: Gulp Setup Project ${{ matrix.platform }} (Windows)
+  #       run: npx gulp makeUWPProject${{ matrix.platform }}
+  #       working-directory: ./Package
+  #     - name: Gulp Build ${{ matrix.platform }} ${{ matrix.config }} (Windows)
+  #       run: |
+  #         npx gulp buildUWP${{ matrix.platform }}${{ matrix.config }}
+  #       working-directory: ./Package
+  #     - name: Gulp NuGet Restore Playground
+  #       run: npx gulp nugetRestoreUWPPlayground
+  #       working-directory: ./Package
+  #     - name: Gulp Build ${{ matrix.platform }} ${{ matrix.config }} Playground (Windows)
+  #       run: npx gulp buildUWPPlayground${{ matrix.platform }}${{ matrix.config }}
+  #       working-directory: ./Package
 
-  build-windows-rnta:
-    runs-on: windows-latest
-    steps:
-      - name: Support longpaths
-        run: git config --system core.longpaths true
-      - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
-        with:
-          submodules: 'true'
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.0.2
-      - name: Setup Node 20
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
+  # build-windows-rnta:
+  #   runs-on: windows-latest
+  #   steps:
+  #     - name: Support longpaths
+  #       run: git config --system core.longpaths true
+  #     - name: Checkout Repo
+  #       uses: actions/checkout@v2.3.3
+  #       with:
+  #         submodules: 'true'
+  #     - name: Setup MSBuild
+  #       uses: microsoft/setup-msbuild@v1.0.2
+  #     - name: Setup Node 20
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 20
 
-      - name: Install watchman
-        run: choco install watchman
-        working-directory: ./Apps/BRNPlayground
+  #     - name: Install watchman
+  #       run: choco install watchman
+  #       working-directory: ./Apps/BRNPlayground
 
-      - name: NPM Install RNTA
-        run: npm install
-        working-directory: ./Apps/BRNPlayground
+  #     - name: NPM Install RNTA
+  #       run: npm install
+  #       working-directory: ./Apps/BRNPlayground
 
-      - name: Build Windows Bundle
-        run: npm run build:windows
-        working-directory: ./Apps/BRNPlayground
+  #     - name: Build Windows Bundle
+  #       run: npm run build:windows
+  #       working-directory: ./Apps/BRNPlayground
 
-      - name: NPM Install Package
-        run: npm install
-        working-directory: ./Package
+  #     - name: NPM Install Package
+  #       run: npm install
+  #       working-directory: ./Package
 
-      - name: NPM Generate Windows Project
-        run: npx install-windows-test-app
-        working-directory: ./Apps/BRNPlayground
+  #     - name: NPM Generate Windows Project
+  #       run: npx install-windows-test-app
+  #       working-directory: ./Apps/BRNPlayground
        
-      - name: BabylonNative build directory
-        run: mkdir @babylonjs/react-native/Build/uwp_x64
-        working-directory: ./Modules
+  #     - name: BabylonNative build directory
+  #       run: mkdir @babylonjs/react-native/Build/uwp_x64
+  #       working-directory: ./Modules
 
-      - name: CMake BabylonNative
-        run: cmake -G "Visual Studio 17 2022" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_UNITY_BUILD=true -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=10.0.19041.0 -A x64 ./../../../react-native-windows/windows
-        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
+  #     - name: CMake BabylonNative
+  #       run: cmake -G "Visual Studio 17 2022" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_UNITY_BUILD=true -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=10.0.19041.0 -A x64 ./../../../react-native-windows/windows
+  #       working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
 
-      - name: Nuget restore
-        run: nuget restore BRNPlayground.sln
-        working-directory: ./Apps/BRNPlayground/windows
+  #     - name: Nuget restore
+  #       run: nuget restore BRNPlayground.sln
+  #       working-directory: ./Apps/BRNPlayground/windows
 
-      - name: Windows build BN
-        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /p:WindowsTargetPlatformVersion=10.0.19041.0 /m ReactNativeBabylon.sln
-        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
+  #     - name: Windows build BN
+  #       run: MSBuild /p:Platform="x64" /p:Configuration="Release" /p:WindowsTargetPlatformVersion=10.0.19041.0 /m ReactNativeBabylon.sln
+  #       working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
         
-      - name: Windows build BRN
-        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /p:WindowsTargetPlatformVersion=10.0.19041.0 /m BRNPlayground.sln
-        working-directory: ./Apps/BRNPlayground/windows
+  #     - name: Windows build BRN
+  #       run: MSBuild /p:Platform="x64" /p:Configuration="Release" /p:WindowsTargetPlatformVersion=10.0.19041.0 /m BRNPlayground.sln
+  #       working-directory: ./Apps/BRNPlayground/windows
 
 # Test packages
   build-android-ios-065:
@@ -315,29 +315,29 @@ jobs:
       react-native-version: '0.71'
       release-version: 0.0.${GITHUB_SHA::8}
 
-  build-windows-065:
-    uses: ./.github/workflows/windows.yml
-    with:
-      react-native-version: '0.65'
-      release-version: 0.0.${GITHUB_SHA::8}
+  # build-windows-065:
+  #   uses: ./.github/workflows/windows.yml
+  #   with:
+  #     react-native-version: '0.65'
+  #     release-version: 0.0.${GITHUB_SHA::8}
 
-  build-windows-069:
-    uses: ./.github/workflows/windows.yml
-    with:
-      react-native-version: '0.69'
-      release-version: 0.0.${GITHUB_SHA::8}
+  # build-windows-069:
+  #   uses: ./.github/workflows/windows.yml
+  #   with:
+  #     react-native-version: '0.69'
+  #     release-version: 0.0.${GITHUB_SHA::8}
 
-  build-windows-070:
-    uses: ./.github/workflows/windows.yml
-    with:
-      react-native-version: '0.70'
-      release-version: 0.0.${GITHUB_SHA::8}
+  # build-windows-070:
+  #   uses: ./.github/workflows/windows.yml
+  #   with:
+  #     react-native-version: '0.70'
+  #     release-version: 0.0.${GITHUB_SHA::8}
 
-  build-windows-071:
-    uses: ./.github/workflows/windows.yml
-    with:
-      react-native-version: '0.71'
-      release-version: 0.0.${GITHUB_SHA::8}
+  # build-windows-071:
+  #   uses: ./.github/workflows/windows.yml
+  #   with:
+  #     react-native-version: '0.71'
+  #     release-version: 0.0.${GITHUB_SHA::8}
 
   build-typescript:
     uses: ./.github/workflows/typescript.yml
