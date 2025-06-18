@@ -18,7 +18,7 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../shared ${CMAKE_CURRENT_BINARY_DIR}
 # Installing react-native dependencies for both the Playground app and the @babylonjs\react-native package will generate a bad bundle/runtime errors.
 set(NAPI_JAVASCRIPT_ENGINE "JSI" CACHE STRING "")
 
-set(PLAYGROUND_DIR "${CMAKE_CURRENT_LIST_DIR}/../../../../Apps/Playground")
+set(PLAYGROUND_DIR "${CMAKE_CURRENT_LIST_DIR}/../../..")
 
 if(EXISTS "${PLAYGROUND_DIR}/node_modules/react-native/package.json")
     get_filename_component(REACTNATIVE_DIR_CMAKE "${PLAYGROUND_DIR}/node_modules/react-native" ABSOLUTE)

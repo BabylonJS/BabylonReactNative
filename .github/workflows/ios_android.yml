@@ -18,7 +18,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
+        uses: actions/checkout@v4.2.2
         with:
           submodules: 'recursive'
       - name: Setup Node 18
@@ -29,8 +29,6 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v1.8
         with:
           cmake-version: '3.30.3'
-      - name: Setup Ninja
-        run: brew install ninja
       - name: 'Select XCode ${{ inputs.xcode-version }}'
         run: sudo xcode-select --switch /Applications/Xcode_${{ inputs.xcode-version }}.app/Contents/Developer
       - name: Setup Java
