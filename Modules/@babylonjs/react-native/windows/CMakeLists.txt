@@ -20,8 +20,8 @@ set(NAPI_JAVASCRIPT_ENGINE "JSI" CACHE STRING "")
 
 set(PLAYGROUND_DIR "${CMAKE_CURRENT_LIST_DIR}/../../..")
 
-if(EXISTS "${PLAYGROUND_DIR}/node_modules/react-native/package.json")
-    get_filename_component(REACTNATIVE_DIR_CMAKE "${PLAYGROUND_DIR}/node_modules/react-native" ABSOLUTE)
+if(EXISTS "${PLAYGROUND_DIR}/react-native/package.json")
+    get_filename_component(REACTNATIVE_DIR_CMAKE "${PLAYGROUND_DIR}/react-native" ABSOLUTE)
 else()
     message("Playground directory ${PLAYGROUND_DIR}")
     message(FATAL_ERROR "No Playground available")
