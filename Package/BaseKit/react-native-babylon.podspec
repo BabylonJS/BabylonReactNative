@@ -39,6 +39,7 @@ Pod::Spec.new do |s|
     'ios/libs/libNativeTracing.a',
     'ios/libs/libOGLCompiler.a',
     'ios/libs/libOSDependent.a',
+    'ios/libs/libScheduling.a',
     'ios/libs/libspirv-cross-core.a',
     'ios/libs/libspirv-cross-msl.a',
     'ios/libs/libSPIRV.a',
