@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 3.15.3)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-#set(CMAKE_SYSTEM_NAME WindowsStore)
-#set(CMAKE_SYSTEM_VERSION 10.0.19041.0) 
-
 project(ReactNativeBabylon)
 
 # Disable the WebP plugin option
