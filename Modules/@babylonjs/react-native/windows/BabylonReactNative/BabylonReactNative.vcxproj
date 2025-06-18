@@ -20,12 +20,12 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="ReactNativeWindowsProps">
-    <!-- First try and resolve react-native package at a relative location when installing the @babylonjs/react-native package in your project -->
-    <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(ProjectDir)..\..\..\..\..\node_modules\react-native\package.json')">$(ProjectDir)\..\..\..\..\..\node_modules\react-native\</ReactNativeWindowsDir>
-    <!-- Else try and resolve react-native package in the Apps\Playground\node_modules folder relative to the BabylonNative.vcxproj location in the github repo -->
-    <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(SolutionDir)..\node_modules\react-native\package.json')">$(SolutionDir)\..\node_modules\react-native\</ReactNativeWindowsDir>
-    <!-- If all else failes, try and resolve react-native package using the Playground app node_modules -->
-    <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(ProjectDir)..\..\..\..\..\Apps\Playground\node_modules\react-native\package.json')">$(ProjectDir)\..\..\..\..\..\Apps\Playground\node_modules\react-native\</ReactNativeWindowsDir>
+    <!-- First try and resolve react-native-windows package at a relative location when installing the @babylonjs/react-native package in your project -->
+    <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(ProjectDir)..\..\..\..\..\node_modules\react-native-windows\package.json')">$(ProjectDir)..\..\..\..\..\node_modules\react-native-windows\</ReactNativeWindowsDir>
+    <!-- Else try and resolve react-native-windows package in the Apps\Playground\node_modules folder relative to the BabylonNative.vcxproj location in the github repo -->
+    <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(SolutionDir)..\node_modules\react-native-windows\package.json')">$(SolutionDir)..\node_modules\react-native-windows\</ReactNativeWindowsDir>
+    <!-- If all else failes, try and resolve react-native-windows package using the Playground app node_modules -->
+    <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(ProjectDir)..\..\..\..\..\Apps\Playground\node_modules\react-native-windows\package.json')">$(ProjectDir)..\..\..\..\..\Apps\Playground\node_modules\react-native-windows\</ReactNativeWindowsDir>
   </PropertyGroup>
   <PropertyGroup Label="BabylonReactNativeProps">
     <BabylonReactNativeDir Condition="'$(BabylonReactNativeDir)' == '' And Exists('$(ProjectDir)\..\..\..\react-native')">$(ProjectDir)..\..\..\react-native\</BabylonReactNativeDir>
@@ -293,6 +293,35 @@
   <ImportGroup Label="ReactNativeWindowsTargets">
     <Import Project="$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.targets" Condition="Exists('$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.targets')" />
   </ImportGroup>
+  <Target Name="BabylonNativeBuild" BeforeTargets="PrepareForBuild">
+    <Exec Command='cmake --version' />
+    <Exec Command='cmake ^
+    -G"Visual Studio 17 2022" ^
+    -B$(ProjectDir)..\..\Build_uwp$(Platform) ^
+    -DCMAKE_SYSTEM_NAME=WindowsStore ^
+    -DCMAKE_SYSTEM_VERSION=$(TargetPlatformVersion) ^
+    -A$(Platform) ^
+    -DFETCHCONTENT_FULLY_DISCONNECTED=ON ^
+    -DBABYLON_NATIVE_BUILD_APPS=OFF ^
+    -DBABYLON_NATIVE_INSTALL=OFF ^
+    -DBABYLON_NATIVE_PLUGIN_TESTUTILS=OFF ^
+    -DFETCHCONTENT_SOURCE_DIR_BGFX.CMAKE=$(ProjectDir)..\..\shared\BabylonNative\deps\bgfx.cmake-src ^
+    -DFETCHCONTENT_SOURCE_DIR_ARCANA.CPP=$(ProjectDir)..\..\shared\BabylonNative\deps\arcana.cpp-src ^
+    -DFETCHCONTENT_SOURCE_DIR_CMAKEEXTENSIONS=$(ProjectDir)..\..\shared\BabylonNative\deps\cmakeextensions-src ^
+    -DFETCHCONTENT_SOURCE_DIR_JSRUNTIMEHOST=$(ProjectDir)..\..\shared\BabylonNative\deps\jsruntimehost-src ^
+    -DFETCHCONTENT_SOURCE_DIR_URLLIB=$(ProjectDir)..\..\shared\BabylonNative\deps\urllib-src ^
+    -DFETCHCONTENT_SOURCE_DIR_SPIRV-CROSS=$(ProjectDir)..\..\shared\BabylonNative\deps\spirv-cross-src ^
+    -DFETCHCONTENT_SOURCE_DIR_LIBWEBP=$(ProjectDir)..\..\shared\BabylonNative\deps\libwebp-src ^
+    -DFETCHCONTENT_SOURCE_DIR_GLSLANG=$(ProjectDir)..\..\shared\BabylonNative\deps\glslang-src ^
+    -DFETCHCONTENT_SOURCE_DIR_BASE-N=$(ProjectDir)..\..\shared\BabylonNative\deps\base-n-src ^
+    -DFETCHCONTENT_SOURCE_DIR_IOS-CMAKE=$(ProjectDir)..\..\shared\BabylonNative\deps\ios-cmake-src ^
+    -S"$(ProjectDir).."' />
+    <Exec Command='"MSBuild.exe" ^
+      "$(ProjectDir)..\..\Build_uwp$(Platform)\ReactNativeBabylon.sln" ^
+      /p:Configuration=$(Configuration) ^
+      /p:WindowsTargetPlatformVersion=$(TargetPlatformVersion) ^
+      /p:Platform=$(Platform)' />
+  </Target>
   <Target Name="EnsureReactNativeWindowsTargets" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references targets in your node_modules\react-native folder that are missing. The missing file is {0}.</ErrorText>
@@ -305,12 +334,6 @@
       <ErrorText>This project is missing the @babylonjs/react-native npm package. Please install this @babylonjs/react-native with npm.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(BabylonReactNativeDir)')" Text="$(ErrorText)" />
-  </Target>
-  <Target Name="EnsureBabylonReactNative" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project is missing BabylonNative static libs. These libs are either distributed with the @babylonjs/react-native npm package or are found through submodule reference</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(BabylonNativeBuildDir)') And !Exists('$(BabylonNativeLibsDir)')" Text="$(ErrorText)" />
   </Target>
   <ImportGroup Label="ExtensionTargets">
     <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.targets')" />

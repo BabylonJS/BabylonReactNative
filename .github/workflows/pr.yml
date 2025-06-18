@@ -9,15 +9,13 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
+        uses: actions/checkout@v4.2.2
         with:
           submodules: 'recursive'
       - name: Setup CMake
         uses: jwlawson/actions-setup-cmake@v1.8
         with:
           cmake-version: '3.30.3'
-      - name: Setup Ninja
-        run: brew install ninja
       - name: Setup Watchman
         run: brew install watchman
       - name: NPM Install (Binary Package)
@@ -50,7 +48,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
+        uses: actions/checkout@v4.2.2
         with:
           submodules: 'recursive'
       - name: Setup Watchman
@@ -75,12 +73,12 @@ jobs:
         working-directory: ./Package
 
   build-windows:
-    runs-on: windows-2019
+    runs-on: windows-latest
     steps:
       - name: Support longpaths
         run: git config --system core.longpaths true
       - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
+        uses: actions/checkout@v4.2.2
         with:
           submodules: 'true'
       - name: Setup MSBuild
@@ -113,13 +111,13 @@ jobs:
         run: npx install-windows-test-app
         working-directory: ./Apps/Playground
        
-      - name: BabylonNative build directory
-        run: mkdir @babylonjs/react-native/Build/uwp_x64
-        working-directory: ./Modules
+#      - name: BabylonNative build directory
+#        run: mkdir @babylonjs/react-native/Build/uwp_x64
+#        working-directory: ./Modules
 
-      - name: CMake BabylonNative
-        run: cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_UNITY_BUILD=true -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=10.0.19041.0 -A x64 ./../../../react-native/windows
-        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
+#      - name: CMake BabylonNative
+#        run: cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_UNITY_BUILD=true -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=10.0.19041.0 -A x64 ./../../../react-native/windows
+#        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
 
       - name: Nuget restore
         run: nuget restore Playground.sln
@@ -129,9 +127,9 @@ jobs:
 #        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m ReactNativeBabylon.sln
 #        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
         
-#      - name: Windows build BRN
-#        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m Playground.sln
-#        working-directory: ./Apps/Playground/windows
+      - name: Windows build Playground
+        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /p:WindowsTargetPlatformVersion=10.0.19041.0 /m Playground.sln
+        working-directory: ./Apps/Playground/windows
 
   build-typescript:
     uses: ./.github/workflows/typescript.yml
@@ -143,7 +141,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
+        uses: actions/checkout@v4.2.2
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package

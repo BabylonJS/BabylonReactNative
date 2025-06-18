@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 3.15.3)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-#set(CMAKE_SYSTEM_NAME WindowsStore)
-#set(CMAKE_SYSTEM_VERSION 10.0.19041.0) 
-
 project(ReactNativeBabylon)
 
 # Disable the WebP plugin option
@@ -14,23 +11,25 @@ set(CMAKE_CXX_STANDARD 17)
 # BabylonNative CMake entry
 set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
 set(BABYLON_NATIVE_USE_SWAPCHAINPANEL ON CACHE BOOL "")
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../shared ${CMAKE_CURRENT_BINARY_DIR}/shared)
 
 # Configure Babylon Native to use JSI
 # Note: We should avoid installing node_modules in the Module\@babylonjs\react-native folder.
 # Installing react-native dependencies for both the Playground app and the @babylonjs\react-native package will generate a bad bundle/runtime errors.
 set(NAPI_JAVASCRIPT_ENGINE "JSI" CACHE STRING "")
 
-set(PLAYGROUND_DIR "${CMAKE_CURRENT_LIST_DIR}/../../../../Apps/Playground")
+set(PLAYGROUND_DIR "${CMAKE_CURRENT_LIST_DIR}/../../..")
 
-if(EXISTS "${PLAYGROUND_DIR}/node_modules/react-native/package.json")
-    get_filename_component(REACTNATIVE_DIR_CMAKE "${PLAYGROUND_DIR}/node_modules/react-native" ABSOLUTE)
+if(EXISTS "${PLAYGROUND_DIR}/react-native/package.json")
+    get_filename_component(REACTNATIVE_DIR_CMAKE "${PLAYGROUND_DIR}/react-native" ABSOLUTE)
 else()
+    message("Playground directory ${PLAYGROUND_DIR}")
     message(FATAL_ERROR "No Playground available")
 endif()
 
 add_subdirectory("${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi/jsi" ${CMAKE_CURRENT_BINARY_DIR}/jsi)
 target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi)
+
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../shared ${CMAKE_CURRENT_BINARY_DIR}/shared)
 
 # Disable Unity build for UrlLib because of conflict in header between windows.h and winrt
 set_property(TARGET UrlLib PROPERTY UNITY_BUILD false)
@@ -55,6 +54,7 @@ disable_warnings(NativeInput)
 disable_warnings(NativeCapture)
 disable_warnings(Canvas)
 disable_warnings(Window)
+disable_warnings(ExternalTexture)
 
 target_link_libraries(BabylonNative
     arcana

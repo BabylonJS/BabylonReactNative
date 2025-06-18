@@ -12,10 +12,10 @@ on:
 
 jobs:
   Build:
-    runs-on: windows-2019
+    runs-on: windows-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
+        uses: actions/checkout@v4.2.2
         with:
           submodules: 'true'
       - name: Setup MSBuild
