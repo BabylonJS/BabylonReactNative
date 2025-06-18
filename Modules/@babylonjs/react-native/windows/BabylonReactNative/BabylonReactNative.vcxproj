@@ -294,26 +294,27 @@
     <Import Project="$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.targets" Condition="Exists('$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.targets')" />
   </ImportGroup>
   <Target Name="BabylonNativeBuild" BeforeTargets="PrepareForBuild">
+    <Exec Command='cmake --version' />
     <Exec Command='cmake ^
-    -G "Visual Studio 16 2019" ^
-    -B $(ProjectDir)..\..\Build_uwp$(Platform) ^
-    -D CMAKE_SYSTEM_NAME=WindowsStore ^
-    -D CMAKE_SYSTEM_VERSION=$(TargetPlatformVersion) ^
-    -A $(Platform) ^
-    -D FETCHCONTENT_FULLY_DISCONNECTED=ON ^
-    -D BABYLON_NATIVE_BUILD_APPS=OFF ^
-    -D BABYLON_NATIVE_INSTALL=OFF ^
-    -D FETCHCONTENT_SOURCE_DIR_BGFX.CMAKE=../../shared/BabylonNative/deps/bgfx.cmake-src ^
-    -D FETCHCONTENT_SOURCE_DIR_ARCANA.CPP=../../shared/BabylonNative/deps/arcana.cpp-src ^
-    -D FETCHCONTENT_SOURCE_DIR_CMAKEEXTENSIONS=../../shared/BabylonNative/deps/cmakeextensions-src ^
-    -D FETCHCONTENT_SOURCE_DIR_JSRUNTIMEHOST=../../shared/BabylonNative/deps/jsruntimehost-src ^
-    -D FETCHCONTENT_SOURCE_DIR_URLLIB=../../shared/BabylonNative/deps/urllib-src ^
-    -D FETCHCONTENT_SOURCE_DIR_SPIRV-CROSS=../../shared/BabylonNative/deps/spirv-cross-src ^
-    -D FETCHCONTENT_SOURCE_DIR_LIBWEBP=../../shared/BabylonNative/deps/libwebp-src ^
-    -D FETCHCONTENT_SOURCE_DIR_GLSLANG=../../shared/BabylonNative/deps/glslang-src ^
-    -D FETCHCONTENT_SOURCE_DIR_BASE-N=../../shared/BabylonNative/deps/base-n-src ^
-    -D FETCHCONTENT_SOURCE_DIR_IOS-CMAKE=../../shared/BabylonNative/deps/ios-cmake-src ^
-    -S "$(ProjectDir).."' />
+    -G"Visual Studio 16 2019" ^
+    -B$(ProjectDir)..\..\Build_uwp$(Platform) ^
+    -DCMAKE_SYSTEM_NAME=WindowsStore ^
+    -DCMAKE_SYSTEM_VERSION=$(TargetPlatformVersion) ^
+    -A$(Platform) ^
+    -DFETCHCONTENT_FULLY_DISCONNECTED=ON ^
+    -DBABYLON_NATIVE_BUILD_APPS=OFF ^
+    -DBABYLON_NATIVE_INSTALL=OFF ^
+    -DFETCHCONTENT_SOURCE_DIR_BGFX.CMAKE=$(ProjectDir)..\..\shared\BabylonNative\deps\bgfx.cmake-src ^
+    -DFETCHCONTENT_SOURCE_DIR_ARCANA.CPP=$(ProjectDir)..\..\shared\BabylonNative\deps\arcana.cpp-src ^
+    -DFETCHCONTENT_SOURCE_DIR_CMAKEEXTENSIONS=$(ProjectDir)..\..\shared\BabylonNative\deps\cmakeextensions-src ^
+    -DFETCHCONTENT_SOURCE_DIR_JSRUNTIMEHOST=$(ProjectDir)..\..\shared\BabylonNative\deps\jsruntimehost-src ^
+    -DFETCHCONTENT_SOURCE_DIR_URLLIB=$(ProjectDir)..\..\shared\BabylonNative\deps\urllib-src ^
+    -DFETCHCONTENT_SOURCE_DIR_SPIRV-CROSS=$(ProjectDir)..\..\shared\BabylonNative\deps\spirv-cross-src ^
+    -DFETCHCONTENT_SOURCE_DIR_LIBWEBP=$(ProjectDir)..\..\shared\BabylonNative\deps\libwebp-src ^
+    -DFETCHCONTENT_SOURCE_DIR_GLSLANG=$(ProjectDir)..\..\shared\BabylonNative\deps\glslang-src ^
+    -DFETCHCONTENT_SOURCE_DIR_BASE-N=$(ProjectDir)..\..\shared\BabylonNative\deps\base-n-src ^
+    -DFETCHCONTENT_SOURCE_DIR_IOS-CMAKE=$(ProjectDir)..\..\shared\BabylonNative\deps\ios-cmake-src ^
+    -S"$(ProjectDir).."' />
     <Exec Command='"MSBuild.exe" ^
       "$(ProjectDir)..\..\Build_uwp$(Platform)\ReactNativeBabylon.sln" ^
       /p:Configuration=$(Configuration) ^
