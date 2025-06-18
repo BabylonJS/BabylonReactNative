@@ -304,6 +304,7 @@
     -DFETCHCONTENT_FULLY_DISCONNECTED=ON ^
     -DBABYLON_NATIVE_BUILD_APPS=OFF ^
     -DBABYLON_NATIVE_INSTALL=OFF ^
+    -DBABYLON_NATIVE_PLUGIN_TESTUTILS=OFF ^
     -DFETCHCONTENT_SOURCE_DIR_BGFX.CMAKE=$(ProjectDir)..\..\shared\BabylonNative\deps\bgfx.cmake-src ^
     -DFETCHCONTENT_SOURCE_DIR_ARCANA.CPP=$(ProjectDir)..\..\shared\BabylonNative\deps\arcana.cpp-src ^
     -DFETCHCONTENT_SOURCE_DIR_CMAKEEXTENSIONS=$(ProjectDir)..\..\shared\BabylonNative\deps\cmakeextensions-src ^

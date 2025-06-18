@@ -11,12 +11,13 @@ set(CMAKE_CXX_STANDARD 17)
 # BabylonNative CMake entry
 set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
 set(BABYLON_NATIVE_USE_SWAPCHAINPANEL ON CACHE BOOL "")
-add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../shared ${CMAKE_CURRENT_BINARY_DIR}/shared)
 
 # Configure Babylon Native to use JSI
 # Note: We should avoid installing node_modules in the Module\@babylonjs\react-native folder.
 # Installing react-native dependencies for both the Playground app and the @babylonjs\react-native package will generate a bad bundle/runtime errors.
 set(NAPI_JAVASCRIPT_ENGINE "JSI" CACHE STRING "")
+
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../shared ${CMAKE_CURRENT_BINARY_DIR}/shared)
 
 set(PLAYGROUND_DIR "${CMAKE_CURRENT_LIST_DIR}/../../..")
 
@@ -53,6 +54,7 @@ disable_warnings(NativeInput)
 disable_warnings(NativeCapture)
 disable_warnings(Canvas)
 disable_warnings(Window)
+disable_warnings(ExternalTexture)
 
 target_link_libraries(BabylonNative
     arcana

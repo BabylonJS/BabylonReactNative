@@ -59,7 +59,7 @@ const buildTypeScript = async () => {
 };
 
 const makeXCodeProj = async () => {
-  exec(`cmake react-native/ios -G Xcode -DBUILD_RNAPP_DIR=Playground -B Build/iOS -DFETCHCONTENT_FULLY_DISCONNECTED=ON -DBABYLON_NATIVE_BUILD_APPS=OFF -DBABYLON_NATIVE_INSTALL=OFF -DFETCHCONTENT_SOURCE_DIR_BGFX.CMAKE=./react-native/shared/BabylonNative/deps/bgfx.cmake-src -DFETCHCONTENT_SOURCE_DIR_ARCANA.CPP=./react-native/shared/BabylonNative/deps/arcana.cpp-src -DFETCHCONTENT_SOURCE_DIR_CMAKEEXTENSIONS=./react-native/shared/BabylonNative/deps/cmakeextensions-src -DFETCHCONTENT_SOURCE_DIR_JSRUNTIMEHOST=./react-native/shared/BabylonNative/deps/jsruntimehost-src -DFETCHCONTENT_SOURCE_DIR_URLLIB=./react-native/shared/BabylonNative/deps/urllib-src -DFETCHCONTENT_SOURCE_DIR_SPIRV-CROSS=./react-native/shared/BabylonNative/deps/spirv-cross-src -DFETCHCONTENT_SOURCE_DIR_LIBWEBP=./react-native/shared/BabylonNative/deps/libwebp-src -DFETCHCONTENT_SOURCE_DIR_GLSLANG=./react-native/shared/BabylonNative/deps/glslang-src -DFETCHCONTENT_SOURCE_DIR_BASE-N=./react-native/shared/BabylonNative/deps/base-n-src -DFETCHCONTENT_SOURCE_DIR_IOS-CMAKE=./react-native/shared/BabylonNative/deps/ios-cmake-src`, 
+  exec(`cmake react-native/ios -G Xcode -DBUILD_RNAPP_DIR=Playground -B Build/iOS -DFETCHCONTENT_FULLY_DISCONNECTED=ON -DBABYLON_NATIVE_BUILD_APPS=OFF -DBABYLON_NATIVE_PLUGIN_TESTUTILS=OFF -DBABYLON_NATIVE_INSTALL=OFF -DFETCHCONTENT_SOURCE_DIR_BGFX.CMAKE=./react-native/shared/BabylonNative/deps/bgfx.cmake-src -DFETCHCONTENT_SOURCE_DIR_ARCANA.CPP=./react-native/shared/BabylonNative/deps/arcana.cpp-src -DFETCHCONTENT_SOURCE_DIR_CMAKEEXTENSIONS=./react-native/shared/BabylonNative/deps/cmakeextensions-src -DFETCHCONTENT_SOURCE_DIR_JSRUNTIMEHOST=./react-native/shared/BabylonNative/deps/jsruntimehost-src -DFETCHCONTENT_SOURCE_DIR_URLLIB=./react-native/shared/BabylonNative/deps/urllib-src -DFETCHCONTENT_SOURCE_DIR_SPIRV-CROSS=./react-native/shared/BabylonNative/deps/spirv-cross-src -DFETCHCONTENT_SOURCE_DIR_LIBWEBP=./react-native/shared/BabylonNative/deps/libwebp-src -DFETCHCONTENT_SOURCE_DIR_GLSLANG=./react-native/shared/BabylonNative/deps/glslang-src -DFETCHCONTENT_SOURCE_DIR_BASE-N=./react-native/shared/BabylonNative/deps/base-n-src -DFETCHCONTENT_SOURCE_DIR_IOS-CMAKE=./react-native/shared/BabylonNative/deps/ios-cmake-src`, 
     '../Modules/@babylonjs');
 };
 
@@ -260,7 +260,7 @@ function deleteFile(filePath) {
 }
 
 function runCMake(buildDir) {
-  let cmakeCommand = `cmake -S . -B ../tempBuild -DBABYLON_NATIVE_BUILD_SOURCETREE=ON -DBABYLON_NATIVE_BUILD_APPS=OFF`;
+  let cmakeCommand = `cmake -S . -B ../tempBuild -DBABYLON_NATIVE_BUILD_SOURCETREE=ON -DBABYLON_NATIVE_BUILD_APPS=OFF -DBABYLON_NATIVE_PLUGIN_TESTUTILS=OFF`;
 
   exec(cmakeCommand, buildDir);
 }
