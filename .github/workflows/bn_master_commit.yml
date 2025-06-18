@@ -13,7 +13,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
+        uses: actions/checkout@v4.2.2
         with:
           submodules: 'recursive'
       - name: Setup Node 18
@@ -24,8 +24,6 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v1.8
         with:
           cmake-version: '3.30.3'
-      - name: Setup Ninja
-        run: brew install ninja
       - name: NPM Install (Playground)
         run: npm install
         working-directory: ./Apps/Playground
@@ -52,7 +50,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
+        uses: actions/checkout@v4.2.2
         with:
           submodules: 'recursive'
       - name: Setup Node 18
@@ -81,7 +79,7 @@ jobs:
         config: [Debug, Release]
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
+        uses: actions/checkout@v4.2.2
         with:
           submodules: 'true'
       - name: Setup MSBuild
