@@ -128,8 +128,8 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
     #add_library(react_render_imagemanager ALIAS ReactAndroid::react_render_imagemanager)
     #add_library(rrc_image ALIAS ReactAndroid::rrc_image)
 
-    #find_package(fbjni REQUIRED CONFIG)
-    #add_library(fbjni ALIAS fbjni::fbjni)
+    find_package(fbjni REQUIRED CONFIG)
+    add_library(fbjni ALIAS fbjni::fbjni)
 
     target_link_libraries(BabylonNative
         GLESv3
@@ -139,7 +139,7 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
         -lz
         arcana
         #fabricjni                           # prefab ready
-        #fbjni                               # via 3rd party prefab
+        fbjni                               # via 3rd party prefab
         #folly_runtime                       # prefab ready
         #glog                                # prefab ready
         #jsi                                 # prefab ready
