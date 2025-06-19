@@ -25,8 +25,6 @@ set(BABYLON_NATIVE_PLUGIN_NATIVEENGINE_WEBP OFF CACHE BOOL "Disable Babylon Nati
 
 set(THIS_LIBRARY BabylonNative)
 
-#include(${CMAKE_CURRENT_LIST_DIR}/../../react-native/shared/CMakeLists.txt)
-
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 set(CMAKE_CXX_STANDARD 17)
 file(TO_CMAKE_PATH "${REACTNATIVE_DIR}" REACTNATIVE_DIR_CMAKE)
@@ -35,13 +33,13 @@ file(TO_CMAKE_PATH "${REACTNATIVE_DIR}" REACTNATIVE_DIR_CMAKE)
 set(NAPI_JAVASCRIPT_ENGINE "JSI" CACHE STRING "The JavaScript engine to power N-API")
 add_subdirectory(${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi/jsi ${CMAKE_CURRENT_BINARY_DIR}/jsi)
 target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi)
+target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/jni/react/turbomodule)
+target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactCommon/callinvoker)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/src/")
 
 set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
-#add_subdirectory(${babylonnative_SOURCE_DIR} ${babylonnative_SOURCE_DIR}/build/Android_${CMAKE_ANDROID_ARCH_ABI}/)
-
-set(BABYLON_REACT_NATIVE_SHARED_DIR "${CMAKE_CURRENT_LIST_DIR}/../../react-native/shared")
+set(BABYLON_REACT_NATIVE_SHARED_DIR "${CMAKE_CURRENT_LIST_DIR}/../shared")
 add_subdirectory(${BABYLON_REACT_NATIVE_SHARED_DIR} ${CMAKE_CURRENT_BINARY_DIR}/shared)
 
 if (NOT ${BASEKIT_BUILD})
@@ -53,6 +51,11 @@ disable_warnings(Graphics)
 disable_warnings(NativeEngine)
 disable_warnings(NativeInput)
 disable_warnings(NativeCapture)
+disable_warnings(NativeOptimizations) # deprecated stl
+disable_warnings(NativeTracing) # deprecated stl
+disable_warnings(JsRuntime) # deprecated stl
+disable_warnings(Scheduling) # deprecated stl
+
 disable_warnings(Canvas)
 disable_warnings(Window)
 
@@ -65,6 +68,8 @@ set_target_properties(fbjni PROPERTIES
 add_library(BabylonNative SHARED
     src/main/cpp/BabylonNativeInterop.cpp
     ${SHARED_SOURCES})
+
+disable_warnings(BabylonNative) # deprecated stl
 
 if (${BASEKIT_BUILD})
     target_compile_definitions(BabylonNative PRIVATE BASEKIT_BUILD=1)
@@ -102,29 +107,29 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
     target_compile_options(BabylonNative PRIVATE -Wall -Werror -fexceptions -frtti -std=c++17 -DWITH_INSPECTOR=1 -DLOG_TAG=\"ReactNative\")
 
     # Prefab packages from React Native
-    find_package(ReactAndroid REQUIRED CONFIG)
-    add_library(react_render_debug ALIAS ReactAndroid::react_render_debug)
-    add_library(turbomodulejsijni ALIAS ReactAndroid::turbomodulejsijni)
-    add_library(runtimeexecutor ALIAS ReactAndroid::runtimeexecutor)
-    add_library(react_codegen_rncore ALIAS ReactAndroid::react_codegen_rncore)
-    add_library(react_debug ALIAS ReactAndroid::react_debug)
-    add_library(react_render_componentregistry ALIAS ReactAndroid::react_render_componentregistry)
-    add_library(react_newarchdefaults ALIAS ReactAndroid::react_newarchdefaults)
-    add_library(react_render_core ALIAS ReactAndroid::react_render_core)
-    add_library(react_render_graphics ALIAS ReactAndroid::react_render_graphics)
-    add_library(rrc_view ALIAS ReactAndroid::rrc_view)
-    add_library(jsi ALIAS ReactAndroid::jsi)
-    add_library(glog ALIAS ReactAndroid::glog)
-    add_library(fabricjni ALIAS ReactAndroid::fabricjni)
-    add_library(react_render_mapbuffer ALIAS ReactAndroid::react_render_mapbuffer)
-    add_library(yoga ALIAS ReactAndroid::yoga)
-    add_library(folly_runtime ALIAS ReactAndroid::folly_runtime)
-    add_library(react_nativemodule_core ALIAS ReactAndroid::react_nativemodule_core)
-    add_library(react_render_imagemanager ALIAS ReactAndroid::react_render_imagemanager)
-    add_library(rrc_image ALIAS ReactAndroid::rrc_image)
+    #find_package(ReactAndroid REQUIRED CONFIG)
+    #add_library(react_render_debug ALIAS ReactAndroid::react_render_debug)
+    #add_library(turbomodulejsijni ALIAS ReactAndroid::turbomodulejsijni)
+    #add_library(runtimeexecutor ALIAS ReactAndroid::runtimeexecutor)
+    #add_library(react_codegen_rncore ALIAS ReactAndroid::react_codegen_rncore)
+    #add_library(react_debug ALIAS ReactAndroid::react_debug)
+    #add_library(react_render_componentregistry ALIAS ReactAndroid::react_render_componentregistry)
+    #add_library(react_newarchdefaults ALIAS ReactAndroid::react_newarchdefaults)
+    #add_library(react_render_core ALIAS ReactAndroid::react_render_core)
+    #add_library(react_render_graphics ALIAS ReactAndroid::react_render_graphics)
+    #add_library(rrc_view ALIAS ReactAndroid::rrc_view)
+    #add_library(jsi ALIAS ReactAndroid::jsi)
+    #add_library(glog ALIAS ReactAndroid::glog)
+    #add_library(fabricjni ALIAS ReactAndroid::fabricjni)
+    #add_library(react_render_mapbuffer ALIAS ReactAndroid::react_render_mapbuffer)
+    #add_library(yoga ALIAS ReactAndroid::yoga)
+    #add_library(folly_runtime ALIAS ReactAndroid::folly_runtime)
+    #add_library(react_nativemodule_core ALIAS ReactAndroid::react_nativemodule_core)
+    #add_library(react_render_imagemanager ALIAS ReactAndroid::react_render_imagemanager)
+    #add_library(rrc_image ALIAS ReactAndroid::rrc_image)
 
-    find_package(fbjni REQUIRED CONFIG)
-    add_library(fbjni ALIAS fbjni::fbjni)
+    #find_package(fbjni REQUIRED CONFIG)
+    #add_library(fbjni ALIAS fbjni::fbjni)
 
     target_link_libraries(BabylonNative
         GLESv3
@@ -133,26 +138,26 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
         log
         -lz
         arcana
-        fabricjni                           # prefab ready
-        fbjni                               # via 3rd party prefab
-        folly_runtime                       # prefab ready
-        glog                                # prefab ready
-        jsi                                 # prefab ready
-        react_codegen_rncore                # prefab ready
-        react_debug                         # prefab ready
-        react_nativemodule_core             # prefab ready
-        react_newarchdefaults               # prefab ready
-        react_render_componentregistry      # prefab ready
-        react_render_core                   # prefab ready
-        react_render_debug                  # prefab ready
-        react_render_graphics               # prefab ready
-        react_render_imagemanager           # prefab ready
-        react_render_mapbuffer              # prefab ready
-        rrc_image                           # prefab ready
-        rrc_view                            # prefab ready
-        runtimeexecutor                     # prefab ready
-        turbomodulejsijni                   # prefab ready
-        yoga                                # prefab ready
+        #fabricjni                           # prefab ready
+        #fbjni                               # via 3rd party prefab
+        #folly_runtime                       # prefab ready
+        #glog                                # prefab ready
+        #jsi                                 # prefab ready
+        #react_codegen_rncore                # prefab ready
+        #react_debug                         # prefab ready
+        #react_nativemodule_core             # prefab ready
+        #react_newarchdefaults               # prefab ready
+        #react_render_componentregistry      # prefab ready
+        #react_render_core                   # prefab ready
+        #react_render_debug                  # prefab ready
+        #react_render_graphics               # prefab ready
+        #react_render_imagemanager           # prefab ready
+        #react_render_mapbuffer              # prefab ready
+        #rrc_image                           # prefab ready
+        #rrc_view                            # prefab ready
+        #runtimeexecutor                     # prefab ready
+        #turbomodulejsijni                   # prefab ready
+        #yoga                                # prefab ready
         AndroidExtensions
         GraphicsDevice
         JsRuntime
@@ -168,9 +173,9 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
 
     # We use an interface target to propagate flags to all the generated targets
     # such as the folly flags or others.
-    add_library(common_flags INTERFACE)
-    target_compile_options(common_flags INTERFACE ${folly_FLAGS})
-    target_link_libraries(ReactAndroid::react_codegen_rncore INTERFACE common_flags)
+    #add_library(common_flags INTERFACE)
+    #target_compile_options(common_flags INTERFACE ${folly_FLAGS})
+    #target_link_libraries(ReactAndroid::react_codegen_rncore INTERFACE common_flags)
 
     # If project is on RN CLI v9, then we can use the following lines to link against the autolinked 3rd party libraries.
     if(EXISTS ${PROJECT_BUILD_DIR}/generated/rncli/src/main/jni/Android-rncli.cmake)
