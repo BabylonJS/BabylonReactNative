@@ -64,11 +64,11 @@ const makeXCodeProj = async () => {
 };
 
 const buildIphoneOS = async () => {
-  exec('xcodebuild -sdk iphoneos -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', '../Modules/@babylonjs/Build/iOS');
+  exec('xcodebuild -sdk iphoneos -configuration Release -project BRNPlayground.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', '../Apps/Playground/ios');
 };
 
 const buildIphoneSimulator = async () => {
-  exec('xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -project ReactNativeBabylon.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', '../Modules/@babylonjs/Build/iOS');
+  exec('xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -project BRNPlayground.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', '../Apps/Playground/ios');
 };
 
 const buildAndroid = async () => {
@@ -389,7 +389,7 @@ const buildBabylonNativeSourceTree = async () => {
 
 const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyIOSFiles, copyAndroidFiles, copyWindowsFiles);
 const buildAssembled = gulp.series(buildBabylonNativeSourceTree, copyFiles, buildTypeScript, validateAssembled);
-const buildIOS = gulp.series(makeXCodeProj,  buildIphoneOS, buildIphoneSimulator);
+const buildIOS = gulp.series(makeXCodeProj,  buildIphoneOS, buildIphoneSimulator); // should not be used anymore
 
 exports.buildAssembled = buildAssembled;
 exports.buildTypeScript = buildTypeScript;
