@@ -177,8 +177,8 @@ dependencies {
     implementation 'com.google.ar:core:1.22.0'
     implementation 'com.facebook.fbjni:fbjni:0.3.0'
 
-    //extractHeaders 'com.facebook.fbjni:fbjni:0.3.0:headers'
-    //extractLibs 'com.facebook.fbjni:fbjni:0.3.0', 'com.google.ar:core:1.22.0'
+    extractHeaders 'com.facebook.fbjni:fbjni:0.3.0:headers'
+    extractLibs 'com.facebook.fbjni:fbjni:0.3.0', 'com.google.ar:core:1.22.0'
 }
 
 def configureReactNativePom(def pom) {
