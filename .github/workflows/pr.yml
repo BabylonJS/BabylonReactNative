@@ -148,6 +148,13 @@ jobs:
       - name: Publish Package dry run
         run: |
           npm publish --access public --dry-run
+          npm pack
         working-directory: ./Package/Assembled
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Upload .tgz tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: BabylonReactNative
+          path: "*.tgz"
