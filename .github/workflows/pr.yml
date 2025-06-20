@@ -157,4 +157,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: BabylonReactNative
-          path: "*.tgz"
+          path: "./Package/Assembled/*.tgz"
