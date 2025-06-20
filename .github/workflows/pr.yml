@@ -131,7 +131,7 @@ jobs:
       release-version: 0.0.${GITHUB_SHA::8}
 
   package:
-    needs: [build-typescript, build-iOS, build-android]
+    needs: [build-typescript] #, build-iOS, build-android]
     runs-on: macos-latest
     steps:
       - name: Checkout Repo
