@@ -4,7 +4,7 @@ package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
 # This Podspec is used for local development
 
-base_base_path = '$(PODS_ROOT)/../../../../Modules/@babylonjs/Build/iOS'
+base_base_path = '$(PODS_ROOT)/../../node_modules/@babylonjs/react-native/Build/iOS'
 babylon_base_path = "#{base_base_path}/shared/BabylonNative/Repo"
 
 Pod::Spec.new do |s|
@@ -21,12 +21,12 @@ Pod::Spec.new do |s|
   s.source_files = "ios/*.{h,m,mm}"
   s.requires_arc = true
   s.xcconfig     = { 'USER_HEADER_SEARCH_PATHS' => '$(inherited) ${PODS_TARGET_SRCROOT}/shared ${PODS_TARGET_SRCROOT}/../react-native/shared',
-  'LIBRARY_SEARCH_PATHS'=> "$(inherited) #{babylon_base_path}/** #{base_base_path}/**" }
+  'LIBRARY_SEARCH_PATHS'=> "$(inherited) #{babylon_base_path}/** #{base_base_path}/** " }
 
 
   s.vendored_frameworks = "ios/libs/*.xcframework"
 
-  s.frameworks = "MetalKit", "ARKit"
+  s.frameworks = "MetalKit", "ARKit", "AVFoundation", "CoreMedia"
 
   s.libraries = 'BabylonNative',
                 'bgfx',
