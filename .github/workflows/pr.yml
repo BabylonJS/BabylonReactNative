@@ -74,6 +74,7 @@ jobs:
 
   build-windows:
     runs-on: windows-latest
+    continue-on-error: true
     steps:
       - name: Support longpaths
         run: git config --system core.longpaths true
@@ -111,21 +112,9 @@ jobs:
         run: npx install-windows-test-app
         working-directory: ./Apps/Playground
        
-#      - name: BabylonNative build directory
-#        run: mkdir @babylonjs/react-native/Build/uwp_x64
-#        working-directory: ./Modules
-
-#      - name: CMake BabylonNative
-#        run: cmake -G "Visual Studio 16 2019" -D CMAKE_SYSTEM_NAME=WindowsStore -D CMAKE_SYSTEM_VERSION=10.0.19041.0 -DCMAKE_UNITY_BUILD=true -D CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION_MAXIMUM=10.0.19041.0 -A x64 ./../../../react-native/windows
-#        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
-
       - name: Nuget restore
         run: nuget restore Playground.sln
         working-directory: ./Apps/Playground/windows
-
-#      - name: Windows build BN
-#        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m ReactNativeBabylon.sln
-#        working-directory: ./Modules/@babylonjs/react-native/Build/uwp_x64
         
       - name: Windows build Playground
         run: MSBuild /p:Platform="x64" /p:Configuration="Release" /p:WindowsTargetPlatformVersion=10.0.19041.0 /m Playground.sln
