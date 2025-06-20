@@ -64,11 +64,11 @@ const makeXCodeProj = async () => {
 };
 
 const buildIphoneOS = async () => {
-  exec('xcodebuild -sdk iphoneos -configuration Release -project BRNPlayground.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', '../Apps/Playground/ios');
+  exec('xcodebuild -sdk iphoneos -configuration Release -project BRNPlayground.xcworkspace -target Playground build CODE_SIGNING_ALLOWED=NO', '../Apps/Playground/ios');
 };
 
 const buildIphoneSimulator = async () => {
-  exec('xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -project BRNPlayground.xcodeproj -scheme BabylonNative build CODE_SIGNING_ALLOWED=NO', '../Apps/Playground/ios');
+  exec('xcodebuild -sdk iphonesimulator -arch x86_64 -configuration Release -project BRNPlayground.xcworkspace -target Playground build CODE_SIGNING_ALLOWED=NO', '../Apps/Playground/ios');
 };
 
 const buildAndroid = async () => {
