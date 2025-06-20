@@ -57,12 +57,7 @@ const buildTypeScript = async () => {
   packageJson.main = `${path.basename(packageJson.main, '.ts')}.js`;
   fs.writeFileSync('Assembled/package.json', JSON.stringify(packageJson, null, 4));
 };
-/*
-const makeXCodeProj = async () => {
-  exec(`cmake -S ios -G Xcode -B Build/iOS -DFETCHCONTENT_FULLY_DISCONNECTED=ON -DBABYLON_NATIVE_BUILD_APPS=OFF -DBABYLON_NATIVE_PLUGIN_TESTUTILS=OFF -DBABYLON_NATIVE_INSTALL=OFF -DFETCHCONTENT_SOURCE_DIR_BGFX.CMAKE=./react-native/shared/BabylonNative/deps/bgfx.cmake-src -DFETCHCONTENT_SOURCE_DIR_ARCANA.CPP=./react-native/shared/BabylonNative/deps/arcana.cpp-src -DFETCHCONTENT_SOURCE_DIR_CMAKEEXTENSIONS=./react-native/shared/BabylonNative/deps/cmakeextensions-src -DFETCHCONTENT_SOURCE_DIR_JSRUNTIMEHOST=./react-native/shared/BabylonNative/deps/jsruntimehost-src -DFETCHCONTENT_SOURCE_DIR_URLLIB=./react-native/shared/BabylonNative/deps/urllib-src -DFETCHCONTENT_SOURCE_DIR_SPIRV-CROSS=./react-native/shared/BabylonNative/deps/spirv-cross-src -DFETCHCONTENT_SOURCE_DIR_LIBWEBP=./react-native/shared/BabylonNative/deps/libwebp-src -DFETCHCONTENT_SOURCE_DIR_GLSLANG=./react-native/shared/BabylonNative/deps/glslang-src -DFETCHCONTENT_SOURCE_DIR_BASE-N=./react-native/shared/BabylonNative/deps/base-n-src -DFETCHCONTENT_SOURCE_DIR_IOS-CMAKE=./react-native/shared/BabylonNative/deps/ios-cmake-src`, 
-    '../Modules/@babylonjs/react-native');
-};
-*/
+
 const buildIphoneOS = async () => {
   exec('xcodebuild -sdk iphoneos -configuration Release -workspace BRNPlayground.xcworkspace -scheme Playground build CODE_SIGNING_ALLOWED=NO', '../Apps/Playground/ios');
 };
