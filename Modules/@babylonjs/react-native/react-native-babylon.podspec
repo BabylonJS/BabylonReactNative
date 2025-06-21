@@ -6,7 +6,7 @@ package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
 podspec_dir = File.dirname(__FILE__)
 base_base_path = File.expand_path('../../../node_modules/@babylonjs/react-native/Build/iOS', podspec_dir)
-base_base_path_symlink = File.expand_path('../../../Modules/@babylonjs/react-native/Build/iOS', podspec_dir)
+base_base_path_symlink = File.expand_path('../../../../../Modules/@babylonjs/react-native/Build/iOS', podspec_dir)
 babylon_base_path = File.join(base_base_path, 'shared/BabylonNative/Repo')
 babylon_base_path_symlink = File.join(base_base_path_symlink, 'shared/BabylonNative/Repo')
 

@@ -24,7 +24,6 @@ function iosCMake() {
     '-DFETCHCONTENT_SOURCE_DIR_IOS-CMAKE=./shared/BabylonNative/deps/ios-cmake-src'
   ], { stdio: 'inherit' });
 
-
   cmake.on('exit', code => {
     if (code !== 0) {
       console.error(`CMake exited with code ${code}`);
@@ -34,7 +33,10 @@ function iosCMake() {
 }
 
 function postInstall() {
-  if (os.platform() === "darwin") {
+  if (
+    os.platform() === "darwin" &&
+    process.env.BABYLON_NO_CMAKE_POSTINSTALL !== "1"
+  ) {
     iosCMake();
   }
 }
