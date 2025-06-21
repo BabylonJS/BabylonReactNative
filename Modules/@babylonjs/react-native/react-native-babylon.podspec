@@ -24,7 +24,7 @@ Pod::Spec.new do |s|
   s.source_files = "ios/*.{h,m,mm}"
   s.requires_arc = true
   s.xcconfig     = { 'USER_HEADER_SEARCH_PATHS' => '$(inherited) ${PODS_TARGET_SRCROOT}/shared ${PODS_TARGET_SRCROOT}/../react-native/shared',
-  'LIBRARY_SEARCH_PATHS'=> "$(inherited) #{babylon_base_path}/** #{base_base_path}/** #{babylon_base_path_symlink}/** #{base_base_path_symlink}/**" }
+  'LIBRARY_SEARCH_PATHS'=> "$(inherited) #{babylon_base_path}/\${CONFIGURATION}-\${PLATFORM_NAME}/** #{babylon_base_path}/** #{base_base_path}/\${CONFIGURATION}-\${PLATFORM_NAME}/** #{base_base_path}/** #{babylon_base_path_symlink}/\${CONFIGURATION}-\${PLATFORM_NAME}/** #{base_base_path_symlink}/**" }
 
 
   s.vendored_frameworks = "ios/libs/*.xcframework"
