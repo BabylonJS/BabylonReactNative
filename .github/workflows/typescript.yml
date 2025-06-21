@@ -22,7 +22,9 @@ jobs:
         run: npm install
         working-directory: ./Package
       - name: NPM Install (Modules)
-        run: npm install
+        run: |
+          export BABYLON_NO_CMAKE_POSTINSTALL=1
+          npm install
         working-directory: ./Modules/@babylonjs/react-native
       - name: NPM Install (Playground)
         run: |
