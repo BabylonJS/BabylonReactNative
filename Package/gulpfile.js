@@ -382,7 +382,7 @@ const buildBabylonNativeSourceTree = async () => {
 }
 
 const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyIOSFiles, copyAndroidFiles, copyWindowsFiles);
-const buildAssembled = gulp.series(buildBabylonNativeSourceTree, copyFiles, buildTypeScript, validateAssembled);
+const buildAssembled = gulp.series(copyFiles, buildTypeScript, validateAssembled);
 const buildIOS = gulp.series(buildIphoneOS, buildIphoneSimulator);
 
 exports.buildAssembled = buildAssembled;
