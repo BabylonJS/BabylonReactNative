@@ -7,8 +7,24 @@ package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 podspec_dir = File.dirname(__FILE__)
 base_base_path = File.expand_path('../../../node_modules/@babylonjs/react-native/Build/iOS', podspec_dir)
 base_base_path_symlink = File.expand_path('../../../../../Modules/@babylonjs/react-native/Build/iOS', podspec_dir)
-babylon_base_path = File.join(base_base_path, 'shared/BabylonNative/Repo')
-babylon_base_path_symlink = File.join(base_base_path_symlink, 'shared/BabylonNative/Repo')
+#babylon_base_path = File.join(base_base_path, 'shared/BabylonNative/Repo')
+#babylon_base_path_symlink = File.join(base_base_path_symlink, 'shared/BabylonNative/Repo')
+base = "$(inherited) #{base_base_path}/\${CONFIGURATION}-\${PLATFORM_NAME} #{base_base_path_symlink}/\${CONFIGURATION}-\${PLATFORM_NAME} "
+
+items = ['/shared/BabylonNative/Repo/Polyfills/Canvas', 
+'/shared/BabylonNative/Repo/Polyfills/Window', 
+'/shared/BabylonNative/Repo/Plugins/ExternalTexture', 
+'/shared/BabylonNative/Repo/Plugins/NativeCamera', 
+'/shared/BabylonNative/Repo/Plugins/NativeCapture', 
+'/shared/BabylonNative/Repo/Plugins/NativeEngine',
+'/shared/BabylonNative/Repo/Plugins/NativeInput', 
+'/shared/BabylonNative/Repo/Plugins/NativeOptimizations', 
+'/shared/BabylonNative/Repo/Plugins/NativeTracing', 
+'/shared/BabylonNative/Repo/Plugins/NativeXr', 
+'/shared/BabylonNative/Repo/Core/Graphics']
+
+result = base + items.map { |item| "#{base_base_path}#{item}/\${CONFIGURATION}-\${PLATFORM_NAME}" }.join(" ") + 
+  items.map { |itemb| "#{base_base_path_symlink}#{itemb}/\${CONFIGURATION}-\${PLATFORM_NAME}" }.join(" ")
 
 Pod::Spec.new do |s|
   s.name         = "react-native-babylon"
@@ -24,7 +40,7 @@ Pod::Spec.new do |s|
   s.source_files = "ios/*.{h,m,mm}"
   s.requires_arc = true
   s.xcconfig     = { 'USER_HEADER_SEARCH_PATHS' => '$(inherited) ${PODS_TARGET_SRCROOT}/shared ${PODS_TARGET_SRCROOT}/../react-native/shared',
-  'LIBRARY_SEARCH_PATHS'=> "$(inherited) #{base_base_path}/** #{base_base_path_symlink}/**" }
+  'LIBRARY_SEARCH_PATHS'=>  result}
 
   s.vendored_frameworks = "ios/libs/*.xcframework"
 
