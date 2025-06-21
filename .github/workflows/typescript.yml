@@ -8,7 +8,7 @@ on:
         type: string
 jobs:
   Build:
-    runs-on: linux-latest
+    runs-on: macos-latest
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4.2.2
@@ -20,6 +20,9 @@ jobs:
           node-version: 18
       - name: NPM Install (Binary Package)
         run: npm install
+        working-directory: ./Package
+      - name: Build BabylonNative source tree
+        run: npx gulp buildBabylonNativeSourceTree
         working-directory: ./Package
       - name: NPM Install (Modules)
         run: npm install
