@@ -379,11 +379,10 @@ const buildBabylonNativeSourceTree = async () => {
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/spirv-cross-src/shaders-hlsl`);
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/spirv-cross-src/shaders-hlsl-no-opt`);
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/glslang-src/Test`);
- 
 }
 
 const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyIOSFiles, copyAndroidFiles, copyWindowsFiles);
-const buildAssembled = gulp.series(buildBabylonNativeSourceTree, copyFiles, buildTypeScript, validateAssembled);
+const buildAssembled = gulp.series(copyFiles, buildTypeScript, validateAssembled);
 const buildIOS = gulp.series(buildIphoneOS, buildIphoneSimulator);
 
 exports.buildAssembled = buildAssembled;

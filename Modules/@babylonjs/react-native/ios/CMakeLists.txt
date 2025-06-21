@@ -18,8 +18,6 @@ project(ReactNativeBabylon)
 # Disable the WebP plugin option
 set(BABYLON_NATIVE_PLUGIN_NATIVEENGINE_WEBP OFF CACHE BOOL "Disable Babylon Native WebP Support")
 
-#include(${CMAKE_CURRENT_LIST_DIR}/../../react-native/shared/CMakeLists.txt)
-
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -x objective-c++")
