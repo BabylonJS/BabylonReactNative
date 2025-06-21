@@ -4,8 +4,9 @@ package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
 # This Podspec is used for local development
 
-base_base_path = '$(PODS_ROOT)/../../node_modules/@babylonjs/react-native/Build/iOS'
-babylon_base_path = "#{base_base_path}/shared/BabylonNative/Repo"
+podspec_dir = File.dirname(__FILE__)
+base_base_path = File.expand_path('../../@babylonjs/react-native/Build/iOS', podspec_dir)
+babylon_base_path = File.join(base_base_path, 'shared/BabylonNative/Repo')
 
 Pod::Spec.new do |s|
   s.name         = "react-native-babylon"
