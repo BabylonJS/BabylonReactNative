@@ -7,8 +7,6 @@ package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 podspec_dir = File.dirname(__FILE__)
 base_base_path = File.expand_path('../../../node_modules/@babylonjs/react-native/Build/iOS', podspec_dir)
 base_base_path_symlink = File.expand_path('../../../../../Modules/@babylonjs/react-native/Build/iOS', podspec_dir)
-#babylon_base_path = File.join(base_base_path, 'shared/BabylonNative/Repo')
-#babylon_base_path_symlink = File.join(base_base_path_symlink, 'shared/BabylonNative/Repo')
 base = "$(inherited) #{base_base_path}/\${CONFIGURATION}-\${PLATFORM_NAME} #{base_base_path_symlink}/\${CONFIGURATION}-\${PLATFORM_NAME} "
 
 items = ['/shared/BabylonNative/Repo/Polyfills/Canvas', 
@@ -21,7 +19,26 @@ items = ['/shared/BabylonNative/Repo/Polyfills/Canvas',
 '/shared/BabylonNative/Repo/Plugins/NativeOptimizations', 
 '/shared/BabylonNative/Repo/Plugins/NativeTracing', 
 '/shared/BabylonNative/Repo/Plugins/NativeXr', 
-'/shared/BabylonNative/Repo/Core/Graphics']
+'/shared/BabylonNative/Repo/Core/Graphics',
+
+'/shared/BabylonNative/Repo/Dependencies/xr', 
+
+'/_deps/bgfx.cmake-build/cmake/bgfx',
+'/_deps/bgfx.cmake-build/cmake/bimg',
+'/_deps/bgfx.cmake-build/cmake/bx',
+
+'/_deps/glslang-build/glslang',
+'/_deps/glslang-build/glslang/OSDependent/Unix',
+'/_deps/glslang-build/OGLCompilersDLL',
+'/_deps/glslang-build/SPIRV',
+'/_deps/urllib-build',
+'/_deps/jsruntimehost-build/Polyfills/XMLHttpRequest',
+'/_deps/jsruntimehost-build/Polyfills/Scheduling',
+
+'/_deps/jsruntimehost-build/Core/JsRuntime',
+'/_deps/jsruntimehost-build/Core/Node-API-JSI',
+'/_deps/spirv-cross-build']
+
 
 result = base + items.map { |item| "#{base_base_path}#{item}/\${CONFIGURATION}-\${PLATFORM_NAME}" }.join(" ") + 
   items.map { |itemb| "#{base_base_path_symlink}#{itemb}/\${CONFIGURATION}-\${PLATFORM_NAME}" }.join(" ")
