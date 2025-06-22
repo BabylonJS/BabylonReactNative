@@ -56,3 +56,6 @@ jsi
 
 shared/BabylonNative
 Build_uwp*/
+*.map
+*.d.ts
+*.js

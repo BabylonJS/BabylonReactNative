@@ -196,6 +196,7 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
 
     target_include_directories(BabylonNative PRIVATE ${SHARED_INCLUDES})
 else()
+    message(FATAL_ERROR "<= React Native 0.70 not supported anymore")
     # <= React Native 0.70
     # Define a minimal version of libturbomodulejsijni.so that includes CallInvokerHolder.cpp.
     # This is the only part of the TurboModule system we need for now. Eventually when TurboModule

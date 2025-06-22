@@ -94,7 +94,6 @@ android {
                         "-DFBJNI_LIBPATH=${extractedLibDir}/fbjni-0.3.0.aar/jni",
                         "-DREACTNATIVE_DIR=${rootDir}/../node_modules/react-native/",
                         "-DBASEKIT_BUILD=${basekitBuild}",
-
                         "-DFETCHCONTENT_FULLY_DISCONNECTED=ON",
                         "-DBABYLON_NATIVE_BUILD_APPS=OFF",
                         "-DBABYLON_NATIVE_INSTALL=OFF",
@@ -177,8 +176,8 @@ dependencies {
     implementation 'com.google.ar:core:1.22.0'
     implementation 'com.facebook.fbjni:fbjni:0.3.0'
 
-    extractHeaders 'com.facebook.fbjni:fbjni:0.3.0:headers'
-    extractLibs 'com.facebook.fbjni:fbjni:0.3.0', 'com.google.ar:core:1.22.0'
+    //extractHeaders 'com.facebook.fbjni:fbjni:0.3.0:headers'
+    //extractLibs 'com.facebook.fbjni:fbjni:0.3.0', 'com.google.ar:core:1.22.0'
 }
 
 def configureReactNativePom(def pom) {

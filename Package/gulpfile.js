@@ -383,7 +383,7 @@ const buildBabylonNativeSourceTree = async () => {
 
 const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyIOSFiles, copyAndroidFiles, copyWindowsFiles);
 const buildAssembled = gulp.series(buildBabylonNativeSourceTree, copyFiles, buildTypeScript, validateAssembled);
-const buildIOS = gulp.series(buildIphoneOS, buildIphoneSimulator);
+const buildIOS = gulp.series(buildIphoneOS); // buildIphoneSimulator is optional. Build is slower and it should not make more checks
 
 exports.buildAssembled = buildAssembled;
 exports.buildTypeScript = buildTypeScript;
