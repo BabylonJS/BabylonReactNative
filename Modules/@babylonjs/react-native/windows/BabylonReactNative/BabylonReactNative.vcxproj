@@ -126,16 +126,16 @@
       <!-- Library directories when building in repo -->
       <!-- Note: you can add BabylonNative component build folders here as needed -->
       <AdditionalLibraryDirectories Condition="'$(BabylonNativeBuildDir)' != ''">
-        $(BabylonNativeBuildDir)babylonnative\Core\Graphics\$(Configuration);
-        $(BabylonNativeBuildDir)babylonnative\Dependencies\xr\$(Configuration);
-        $(BabylonNativeBuildDir)babylonnative\Plugins\NativeCamera\$(Configuration);
-        $(BabylonNativeBuildDir)babylonnative\Plugins\NativeCapture\$(Configuration);
-        $(BabylonNativeBuildDir)babylonnative\Plugins\NativeEngine\$(Configuration);
-        $(BabylonNativeBuildDir)babylonnative\Plugins\NativeInput\$(Configuration);
-        $(BabylonNativeBuildDir)babylonnative\Plugins\NativeOptimizations\$(Configuration);
-        $(BabylonNativeBuildDir)babylonnative\Plugins\NativeTracing\$(Configuration);
-        $(BabylonNativeBuildDir)babylonnative\Polyfills\Window\$(Configuration);
-        $(BabylonNativeBuildDir)babylonnative\Polyfills\Canvas\$(Configuration);
+        $(BabylonNativeBuildDir)shared\babylonnative\Repo\Core\Graphics\$(Configuration);
+        $(BabylonNativeBuildDir)shared\babylonnative\Repo\Dependencies\xr\$(Configuration);
+        $(BabylonNativeBuildDir)shared\babylonnative\Repo\Plugins\NativeCamera\$(Configuration);
+        $(BabylonNativeBuildDir)shared\babylonnative\Repo\Plugins\NativeCapture\$(Configuration);
+        $(BabylonNativeBuildDir)shared\babylonnative\Repo\Plugins\NativeEngine\$(Configuration);
+        $(BabylonNativeBuildDir)shared\babylonnative\Repo\Plugins\NativeInput\$(Configuration);
+        $(BabylonNativeBuildDir)shared\babylonnative\Repo\Plugins\NativeOptimizations\$(Configuration);
+        $(BabylonNativeBuildDir)shared\babylonnative\Repo\Plugins\NativeTracing\$(Configuration);
+        $(BabylonNativeBuildDir)shared\babylonnative\Repo\Polyfills\Window\$(Configuration);
+        $(BabylonNativeBuildDir)shared\babylonnative\Repo\Polyfills\Canvas\$(Configuration);
         $(BabylonNativeBuildDir)jsi\$(Configuration);
         $(BabylonNativeBuildDir)$(Configuration);
         $(BabylonNativeBuildDir)_deps\arcana.cpp-build\$(Configuration);
@@ -297,7 +297,7 @@
     <Exec Command='cmake --version' />
     <Exec Command='cmake ^
     -G"Visual Studio 17 2022" ^
-    -B$(ProjectDir)..\..\Build_uwp$(Platform) ^
+    -B$(ProjectDir)\..\..\..\react-native\Build\uwp_$(Platform) ^
     -DCMAKE_SYSTEM_NAME=WindowsStore ^
     -DCMAKE_SYSTEM_VERSION=$(TargetPlatformVersion) ^
     -A$(Platform) ^
@@ -315,9 +315,10 @@
     -DFETCHCONTENT_SOURCE_DIR_GLSLANG=$(ProjectDir)..\..\shared\BabylonNative\deps\glslang-src ^
     -DFETCHCONTENT_SOURCE_DIR_BASE-N=$(ProjectDir)..\..\shared\BabylonNative\deps\base-n-src ^
     -DFETCHCONTENT_SOURCE_DIR_IOS-CMAKE=$(ProjectDir)..\..\shared\BabylonNative\deps\ios-cmake-src ^
+    -DJSRUNTIMEHOST_CORE_APPRUNTIME=0 ^
     -S"$(ProjectDir).."' />
     <Exec Command='"MSBuild.exe" ^
-      "$(ProjectDir)..\..\Build_uwp$(Platform)\ReactNativeBabylon.sln" ^
+      "$(ProjectDir)\..\..\..\react-native\Build\uwp_$(Platform)\ReactNativeBabylon.sln" ^
       /p:Configuration=$(Configuration) ^
       /p:WindowsTargetPlatformVersion=$(TargetPlatformVersion) ^
       /p:Platform=$(Platform)' />
