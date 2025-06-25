@@ -124,7 +124,7 @@ jobs:
         working-directory: ./Apps/Playground/windows
         
       - name: Windows build Playground
-        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m Playground.sln
+        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m Playground.sln /v:detailed
         working-directory: ./Apps/Playground/windows
 
   build-typescript:
