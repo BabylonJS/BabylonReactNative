@@ -3,9 +3,6 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 project(ReactNativeBabylon)
 
-# Disable the WebP plugin option
-set(BABYLON_NATIVE_PLUGIN_NATIVEENGINE_WEBP OFF CACHE BOOL "Disable Babylon Native WebP Support")
-
 set(CMAKE_CXX_STANDARD 17)
 
 # BabylonNative CMake entry

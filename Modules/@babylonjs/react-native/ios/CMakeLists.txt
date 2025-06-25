@@ -15,9 +15,6 @@ set(ENABLE_PCH OFF CACHE STRING "Enables or disables precompiled headers.")
 set(CMAKE_XCODE_GENERATE_SCHEME ON)
 project(ReactNativeBabylon)
 
-# Disable the WebP plugin option
-set(BABYLON_NATIVE_PLUGIN_NATIVEENGINE_WEBP OFF CACHE BOOL "Disable Babylon Native WebP Support")
-
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -x objective-c++")

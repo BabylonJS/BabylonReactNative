@@ -20,9 +20,6 @@ cmake_minimum_required(VERSION 3.13.2)
 #   [24, infinite)   ES2 & ES3 & Vulkan
 project(ReactNativeBabylon)
 
-# Disable the WebP plugin option
-set(BABYLON_NATIVE_PLUGIN_NATIVEENGINE_WEBP OFF CACHE BOOL "Disable Babylon Native WebP Support")
-
 set(THIS_LIBRARY BabylonNative)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
