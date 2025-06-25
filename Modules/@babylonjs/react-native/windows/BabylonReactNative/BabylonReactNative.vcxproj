@@ -126,6 +126,10 @@
       <!-- Library directories when building in repo -->
       <!-- Note: you can add BabylonNative component build folders here as needed -->
       <AdditionalLibraryDirectories>
+        $(ReactNativeWindowsDir)_A;
+        $(ProjectDir)_B;
+        $(ProjectDir)\..\..\..\react-native_C;
+        $(BabylonNativeDir)_D;
         $(BabylonNativeBuildDir)shared\babylonnative\Repo\Core\Graphics\$(Configuration);
         $(BabylonNativeBuildDir)shared\babylonnative\Repo\Dependencies\xr\$(Configuration);
         $(BabylonNativeBuildDir)shared\babylonnative\Repo\Plugins\NativeCamera\$(Configuration);
