@@ -17,7 +17,7 @@ module.exports = makeMetroConfig({
       '@babylonjs/react-native': path.resolve(__dirname, './node_modules/@babylonjs/tract-native'),
       'base-64': path.resolve(__dirname, './node_modules/base-64'),
       'semver': path.resolve(__dirname, './node_modules/semver'),
-      'react-native-permissions':  path.resolve(__dirname, './node_modules/semver/react-native-permissions')
+      'react-native-permissions':  path.resolve(__dirname, './node_modules/react-native-permissions')
     },
   },
   watchFolders: [
