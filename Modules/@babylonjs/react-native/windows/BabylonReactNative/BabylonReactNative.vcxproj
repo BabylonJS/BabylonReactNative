@@ -36,10 +36,6 @@
     <BabylonNativeBuildDir Condition="'$(Platform)'=='Win32' And '$(BabylonNativeDir)' != ''">$(BabylonNativeDir)uwp_x86\</BabylonNativeBuildDir>
     <BabylonNativeBuildDir Condition="'$(Platform)'=='ARM' And '$(BabylonNativeDir)' != ''">$(BabylonNativeDir)uwp_arm\</BabylonNativeBuildDir>
     <BabylonNativeBuildDir Condition="'$(Platform)'=='ARM64' And '$(BabylonNativeDir)' != ''">$(BabylonNativeDir)uwp_arm64\</BabylonNativeBuildDir>
-    <BabylonNativeLibsDir Condition="'$(Platform)'=='x64' And '$(BabylonNativeDir)' == ''">..\libs\x64\</BabylonNativeLibsDir>
-    <BabylonNativeLibsDir Condition="'$(Platform)'=='Win32' And '$(BabylonNativeDir)' == ''">..\libs\x86\</BabylonNativeLibsDir>
-    <BabylonNativeLibsDir Condition="'$(Platform)'=='ARM' And '$(BabylonNativeDir)' == ''">..\libs\arm\</BabylonNativeLibsDir>
-    <BabylonNativeLibsDir Condition="'$(Platform)'=='ARM64' And '$(BabylonNativeDir)' == ''">..\libs\arm64\</BabylonNativeLibsDir>
   </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|ARM">
@@ -127,6 +123,11 @@
       <!-- Library directories when building in repo -->
       <!-- Note: you can add BabylonNative component build folders here as needed -->
       <AdditionalLibraryDirectories>
+        $(ReactNativeWindowsDir)_A;
+        $(ProjectDir)_B;
+        $(ProjectDir)\..\..\..\react-native_C;
+        $(BabylonNativeDir)_D;
+        $(BabylonReactNativeDir)_E;
         $(BabylonNativeBuildDir)shared\babylonnative\Repo\Core\Graphics\$(Configuration);
         $(BabylonNativeBuildDir)shared\babylonnative\Repo\Dependencies\xr\$(Configuration);
         $(BabylonNativeBuildDir)shared\babylonnative\Repo\Plugins\NativeCamera\$(Configuration);
