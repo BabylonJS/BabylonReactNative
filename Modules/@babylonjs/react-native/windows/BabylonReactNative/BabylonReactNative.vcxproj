@@ -31,11 +31,10 @@
     <BabylonReactNativeDir Condition="'$(BabylonReactNativeDir)' == '' And Exists('$(ProjectDir)\..\..\..\react-native\package.json')">$(ProjectDir)..\..\..\react-native\</BabylonReactNativeDir>
     <BabylonReactNativeDir Condition="'$(BabylonReactNativeDir)' == '' And Exists('$(ProjectDir)\..\..\package.json')">$(ProjectDir)..\..\</BabylonReactNativeDir>
     <BabylonReactNativeDir Condition="'$(BabylonReactNativeDir)' == ''">$(ProjectDir)..\..\</BabylonReactNativeDir>
-    <BabylonNativeDir Condition="Exists('$(BabylonReactNativeDir)Build')">$(BabylonReactNativeDir)Build\</BabylonNativeDir>
-    <BabylonNativeBuildDir Condition="'$(Platform)'=='x64' And '$(BabylonNativeDir)' != ''">$(BabylonNativeDir)uwp_x64\</BabylonNativeBuildDir>
-    <BabylonNativeBuildDir Condition="'$(Platform)'=='Win32' And '$(BabylonNativeDir)' != ''">$(BabylonNativeDir)uwp_x86\</BabylonNativeBuildDir>
-    <BabylonNativeBuildDir Condition="'$(Platform)'=='ARM' And '$(BabylonNativeDir)' != ''">$(BabylonNativeDir)uwp_arm\</BabylonNativeBuildDir>
-    <BabylonNativeBuildDir Condition="'$(Platform)'=='ARM64' And '$(BabylonNativeDir)' != ''">$(BabylonNativeDir)uwp_arm64\</BabylonNativeBuildDir>
+    <BabylonNativeBuildDir Condition="'$(Platform)'=='x64'">$(BabylonNativeDir)Build\uwp_x64\</BabylonNativeBuildDir>
+    <BabylonNativeBuildDir Condition="'$(Platform)'=='Win32'">$(BabylonNativeDir)Build\uwp_x86\</BabylonNativeBuildDir>
+    <BabylonNativeBuildDir Condition="'$(Platform)'=='ARM'">$(BabylonNativeDir)Build\uwp_arm\</BabylonNativeBuildDir>
+    <BabylonNativeBuildDir Condition="'$(Platform)'=='ARM64'">$(BabylonNativeDir)Build\uwp_arm64\</BabylonNativeBuildDir>
   </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|ARM">
