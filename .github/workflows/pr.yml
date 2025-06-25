@@ -106,7 +106,9 @@ jobs:
         working-directory: ./Package
 
       - name: NPM Install (Playground)
-        run: npm install
+        run: |
+          copy /Y package-windows.json ./Apps/Playground/package.json
+          npm install
         working-directory: ./Apps/Playground
 
 #      - name: Build Windows Bundle
