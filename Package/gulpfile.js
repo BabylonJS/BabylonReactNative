@@ -74,6 +74,7 @@ const copyCommonFiles = () => {
   return gulp.src('../Modules/@babylonjs/react-native/README.md')
     .pipe(gulp.src('../NOTICE.html'))
     .pipe(gulp.src(`../Modules/@babylonjs/react-native/react-native-babylon.podspec`))
+    .pipe(gulp.src(`../Modules/@babylonjs/react-native/postinstall.js`))
     .pipe(gulp.dest('Assembled'));
 };
 
@@ -169,6 +170,7 @@ const validateAssembled = async () => {
 //    `Assembled/ios/include/IXrContextARKit.h`,
     `Assembled/package.json`,
     `Assembled/react-native-babylon.podspec`,
+    `Assembled/postinstall.js`,
 
     'Assembled/android/src/main/cpp',
     'Assembled/android/src/main/cpp/BabylonNativeInterop.cpp',
