@@ -154,11 +154,6 @@
         $(BabylonNativeBuildDir)_deps\openxr-sdk-build\src\loader\$(Configuration);
         %(AdditionalLibraryDirectories);
       </AdditionalLibraryDirectories>
-      <!-- Library directories when building from npm package -->
-      <AdditionalLibraryDirectories Condition="'$(BabylonNativeLibsDir)' != ''">
-        $(BabylonNativeLibsDir)$(Configuration);
-        %(AdditionalLibraryDirectories)
-      </AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
@@ -296,7 +291,7 @@
     <Exec Command='cmake --version' />
     <Exec Command='cmake ^
     -G"Visual Studio 17 2022" ^
-    -B$(ProjectDir)\..\..\..\react-native\Build\uwp_$(Platform) ^
+    -B$(ProjectDir)..\..\..\react-native\Build\uwp_$(Platform) ^
     -DCMAKE_SYSTEM_NAME=WindowsStore ^
     -DCMAKE_SYSTEM_VERSION=$(TargetPlatformVersion) ^
     -A$(Platform) ^
