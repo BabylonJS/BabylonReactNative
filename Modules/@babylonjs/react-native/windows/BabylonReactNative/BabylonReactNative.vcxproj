@@ -28,8 +28,8 @@
     <ReactNativeWindowsDir Condition="'$(ReactNativeWindowsDir)' == '' And Exists('$(ProjectDir)..\..\..\..\..\Apps\Playground\node_modules\react-native-windows\package.json')">$(ProjectDir)..\..\..\..\..\Apps\Playground\node_modules\react-native-windows\</ReactNativeWindowsDir>
   </PropertyGroup>
   <PropertyGroup Label="BabylonReactNativeProps">
-    <BabylonReactNativeDir Condition="'$(BabylonReactNativeDir)' == '' And Exists('$(ProjectDir)\..\..\..\react-native')">$(ProjectDir)..\..\..\react-native\</BabylonReactNativeDir>
-    <BabylonReactNativeDir Condition="'$(BabylonReactNativeDir)' == '' And Exists('$(ProjectDir)\..\..\')">$(ProjectDir)..\..\</BabylonReactNativeDir>
+    <BabylonReactNativeDir Condition="'$(BabylonReactNativeDir)' == '' And Exists('$(ProjectDir)\..\..\..\react-native\package.json')">$(ProjectDir)..\..\..\react-native\</BabylonReactNativeDir>
+    <BabylonReactNativeDir Condition="'$(BabylonReactNativeDir)' == '' And Exists('$(ProjectDir)\..\..\package.json')">$(ProjectDir)..\..\</BabylonReactNativeDir>
     <BabylonReactNativeDir Condition="'$(BabylonReactNativeDir)' == ''">$(ProjectDir)..\..\</BabylonReactNativeDir>
     <BabylonNativeDir Condition="Exists('$(BabylonReactNativeDir)Build')">$(BabylonReactNativeDir)Build\</BabylonNativeDir>
     <BabylonNativeBuildDir Condition="'$(Platform)'=='x64' And '$(BabylonNativeDir)' != ''">$(BabylonNativeDir)uwp_x64\</BabylonNativeBuildDir>
@@ -127,10 +127,6 @@
       <!-- Library directories when building in repo -->
       <!-- Note: you can add BabylonNative component build folders here as needed -->
       <AdditionalLibraryDirectories>
-        $(ReactNativeWindowsDir)_A;
-        $(ProjectDir)_B;
-        $(ProjectDir)\..\..\..\react-native_C;
-        $(BabylonNativeDir)_D;
         $(BabylonNativeBuildDir)shared\babylonnative\Repo\Core\Graphics\$(Configuration);
         $(BabylonNativeBuildDir)shared\babylonnative\Repo\Dependencies\xr\$(Configuration);
         $(BabylonNativeBuildDir)shared\babylonnative\Repo\Plugins\NativeCamera\$(Configuration);
@@ -149,6 +145,7 @@
         $(BabylonNativeBuildDir)_deps\jsruntimehost-build\Core\Node-API-JSI\$(Configuration);
         $(BabylonNativeBuildDir)_deps\jsruntimehost-build\Polyfills\XMLHttpRequest\$(Configuration);
         $(BabylonNativeBuildDir)_deps\urllib-build\$(Configuration);
+        $(BabylonNativeBuildDir)_deps\libwebp-build\$(Configuration);
         $(BabylonNativeBuildDir)_deps\bgfx.cmake-build\cmake\bgfx\$(Configuration);
         $(BabylonNativeBuildDir)_deps\bgfx.cmake-build\cmake\bx\$(Configuration);
         $(BabylonNativeBuildDir)_deps\bgfx.cmake-build\cmake\bimg\$(Configuration);
@@ -201,6 +198,8 @@
         SPIRVd.lib;
         UrlLib.lib;
         Window.lib;
+        libwebp.lib;
+        libsharpyuv.lib;
         Scheduling.lib;
         XMLHttpRequest.lib;
         WindowsApp.lib;
@@ -255,6 +254,8 @@
         Scheduling.lib;
         XMLHttpRequest.lib;
         WindowsApp.lib;
+        libwebp.lib;
+        libsharpyuv.lib;
         %(AdditionalDependencies);
       </AdditionalDependencies>
       <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
