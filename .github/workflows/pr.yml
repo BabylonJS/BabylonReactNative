@@ -107,8 +107,8 @@ jobs:
 
       - name: NPM Install (Playground)
         run: |
-          copy /Y package-windows.json ./Apps/Playground/package.json
-          copy /Y package-lock-windows.json ./Apps/Playground/package-lock.json
+          copy /Y package-windows.json package.json
+          copy /Y package-lock-windows.json package-lock.json
           npm install
         working-directory: ./Apps/Playground
 
