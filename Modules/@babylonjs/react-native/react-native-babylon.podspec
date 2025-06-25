@@ -10,34 +10,31 @@ base_base_path_symlink = File.expand_path('../../../../../Modules/@babylonjs/rea
 base = "$(inherited) #{base_base_path}/\${CONFIGURATION}-\${PLATFORM_NAME} #{base_base_path_symlink}/\${CONFIGURATION}-\${PLATFORM_NAME} "
 
 items = ['/shared/BabylonNative/Repo/Polyfills/Canvas', 
-'/shared/BabylonNative/Repo/Polyfills/Window', 
-'/shared/BabylonNative/Repo/Plugins/ExternalTexture', 
-'/shared/BabylonNative/Repo/Plugins/NativeCamera', 
-'/shared/BabylonNative/Repo/Plugins/NativeCapture', 
-'/shared/BabylonNative/Repo/Plugins/NativeEngine',
-'/shared/BabylonNative/Repo/Plugins/NativeInput', 
-'/shared/BabylonNative/Repo/Plugins/NativeOptimizations', 
-'/shared/BabylonNative/Repo/Plugins/NativeTracing', 
-'/shared/BabylonNative/Repo/Plugins/NativeXr', 
-'/shared/BabylonNative/Repo/Core/Graphics',
-
-'/shared/BabylonNative/Repo/Dependencies/xr', 
-
-'/_deps/bgfx.cmake-build/cmake/bgfx',
-'/_deps/bgfx.cmake-build/cmake/bimg',
-'/_deps/bgfx.cmake-build/cmake/bx',
-
-'/_deps/glslang-build/glslang',
-'/_deps/glslang-build/glslang/OSDependent/Unix',
-'/_deps/glslang-build/OGLCompilersDLL',
-'/_deps/glslang-build/SPIRV',
-'/_deps/urllib-build',
-'/_deps/jsruntimehost-build/Polyfills/XMLHttpRequest',
-'/_deps/jsruntimehost-build/Polyfills/Scheduling',
-
-'/_deps/jsruntimehost-build/Core/JsRuntime',
-'/_deps/jsruntimehost-build/Core/Node-API-JSI',
-'/_deps/spirv-cross-build']
+  '/shared/BabylonNative/Repo/Polyfills/Window', 
+  '/shared/BabylonNative/Repo/Plugins/ExternalTexture', 
+  '/shared/BabylonNative/Repo/Plugins/NativeCamera', 
+  '/shared/BabylonNative/Repo/Plugins/NativeCapture', 
+  '/shared/BabylonNative/Repo/Plugins/NativeEngine',
+  '/shared/BabylonNative/Repo/Plugins/NativeInput', 
+  '/shared/BabylonNative/Repo/Plugins/NativeOptimizations', 
+  '/shared/BabylonNative/Repo/Plugins/NativeTracing', 
+  '/shared/BabylonNative/Repo/Plugins/NativeXr', 
+  '/shared/BabylonNative/Repo/Core/Graphics',
+  '/shared/BabylonNative/Repo/Dependencies/xr', 
+  '/_deps/bgfx.cmake-build/cmake/bgfx',
+  '/_deps/bgfx.cmake-build/cmake/bimg',
+  '/_deps/bgfx.cmake-build/cmake/bx',
+  '/_deps/glslang-build/glslang',
+  '/_deps/glslang-build/glslang/OSDependent/Unix',
+  '/_deps/glslang-build/OGLCompilersDLL',
+  '/_deps/glslang-build/SPIRV',
+  '/_deps/urllib-build',
+  '/_deps/libwebp-build',
+  '/_deps/jsruntimehost-build/Polyfills/XMLHttpRequest',
+  '/_deps/jsruntimehost-build/Polyfills/Scheduling',
+  '/_deps/jsruntimehost-build/Core/JsRuntime',
+  '/_deps/jsruntimehost-build/Core/Node-API-JSI',
+  '/_deps/spirv-cross-build']
 
 
 result = base + items.map { |item| "#{base_base_path}#{item}/\${CONFIGURATION}-\${PLATFORM_NAME}" }.join(" ") + 
@@ -93,6 +90,8 @@ Pod::Spec.new do |s|
                 'UrlLib',
                 'Window',
                 'XMLHttpRequest',
+                'webp',
+                'sharpyuv',
                 'xr'
   # install_modules_dependencies has been defined in RN 0.70
   # This check ensure that the library can work on older versions of RN
