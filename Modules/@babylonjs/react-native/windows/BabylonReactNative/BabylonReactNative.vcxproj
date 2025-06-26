@@ -168,6 +168,9 @@
     <Link>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <!-- Debug Libraries -->
+      <AdditionalDependencies Condition="'$(BABYLON_NATIVE_PLUGIN_NATIVECAMERA)' != '0'">
+        NativeCamera.lib;
+      </AdditionalDependencies>
       <AdditionalDependencies>
         arcana.lib;
         BabylonNative.lib;
@@ -185,9 +188,6 @@
         JsRuntime.lib;
         MachineIndependentd.lib;
         napi.lib;
-        <AdditionalDependencies Condition="'$(BABYLON_NATIVE_PLUGIN_NATIVECAMERA)' != '0'">
-          NativeCamera.lib;
-        </AdditionalDependencies>
         NativeCapture.lib;
         NativeEngine.lib;
         NativeInput.lib;
@@ -223,6 +223,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <!-- Release Libraries -->
+      <AdditionalDependencies Condition="'$(BABYLON_NATIVE_PLUGIN_NATIVECAMERA)' != '0'">
+        NativeCamera.lib;
+      </AdditionalDependencies>
       <AdditionalDependencies>
         arcana.lib;
         BabylonNative.lib;
@@ -240,9 +243,6 @@
         JsRuntime.lib;
         MachineIndependent.lib;
         napi.lib;
-        <AdditionalDependencies Condition="'$(BABYLON_NATIVE_PLUGIN_NATIVECAMERA)' != '0'">
-          NativeCamera.lib;
-        </AdditionalDependencies>
         NativeCapture.lib;
         NativeEngine.lib;
         NativeInput.lib;

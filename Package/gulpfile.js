@@ -78,6 +78,16 @@ const copyCommonFiles = () => {
     .pipe(gulp.dest('Assembled'));
 };
 
+const copyAndroidARCoreFiles = () => {
+    return gulp.src('../Modules/@babylonjs/react-native/shared/BabylonNative/Repo/Dependencies/xr/Source/ARCore/Include/*')
+      .pipe(gulp.dest(`Assembled/android/include`));
+};
+
+const copyiOSARKitFiles = () => {
+    return gulp.src('../Modules/@babylonjs/react-native/shared/BabylonNative/Repo/Dependencies/xr/Source/ARKit/Include/*')
+      .pipe(gulp.dest(`Assembled/ios/include`));
+};
+
 const copySharedFiles = () => {
   return gulp.src('../Modules/@babylonjs/react-native/shared/**')
     .pipe(gulp.dest('Assembled/shared'));
@@ -145,9 +155,8 @@ const validateAssembled = async () => {
     `Assembled/android/build.gradle`,
     `Assembled/android/CMakeLists.txt`,
     `Assembled/android/README.md`,
-// TODO: Is following needed ?
-//    `Assembled/android/include`, 
-//    `Assembled/android/include/IXrContextARCore.h`,
+    `Assembled/android/include`, 
+    `Assembled/android/include/IXrContextARCore.h`,
     `Assembled/android/src`,
     `Assembled/android/src/main`,
     `Assembled/android/src/main/AndroidManifest.xml`,
@@ -165,9 +174,8 @@ const validateAssembled = async () => {
     `Assembled/ios/BabylonNativeInterop.h`,
     `Assembled/ios/BabylonNativeInterop.mm`,
     `Assembled/ios/EngineViewManager.mm`,
-// TODO: Is following needed ?
-//    `Assembled/ios/include`,
-//    `Assembled/ios/include/IXrContextARKit.h`,
+    `Assembled/ios/include`,
+    `Assembled/ios/include/IXrContextARKit.h`,
     `Assembled/package.json`,
     `Assembled/react-native-babylon.podspec`,
     `Assembled/postinstall.js`,
@@ -211,7 +219,7 @@ const createPackage = async () => {
   exec('npm pack', 'Assembled');
 };
 
-const COMMIT_ID = 'ffba8e72f5d10d0d2939b6634894a85213ef39c3';
+const COMMIT_ID = '6c25966e8f8c0f3a0c13fdf77064f1bde790391f';
 const ZIP_URL = `https://github.com/CedricGuillemet/BabylonNative/archive/${COMMIT_ID}.zip`;
 const TARGET_DIR = path.resolve(__dirname, '../Modules/@babylonjs/react-native/shared/BabylonNative');
 const ZIP_PATH = path.join(TARGET_DIR, `${COMMIT_ID}.zip`);
@@ -383,7 +391,7 @@ const buildBabylonNativeSourceTree = async () => {
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/glslang-src/Test`);
 }
 
-const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyIOSFiles, copyAndroidFiles, copyWindowsFiles);
+const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyAndroidARCoreFiles , copyiOSARKitFiles, copyIOSFiles, copyAndroidFiles, copyWindowsFiles);
 const buildAssembled = gulp.series(buildBabylonNativeSourceTree, copyFiles, buildTypeScript, validateAssembled);
 const buildIOS = gulp.series(buildIphoneOS); // buildIphoneSimulator is optional. Build is slower and it should not make more checks
 
