@@ -5,9 +5,9 @@ package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 # This Podspec is used for local development
 
 podspec_dir = File.dirname(__FILE__)
-base_base_path = File.expand_path('../../../node_modules/@babylonjs/react-native/Build/iOS', podspec_dir)
-base_base_path_symlink = File.expand_path('../../../../../Modules/@babylonjs/react-native/Build/iOS', podspec_dir)
-base = "$(inherited) #{base_base_path}/\${CONFIGURATION}-\${PLATFORM_NAME} #{base_base_path_symlink}/\${CONFIGURATION}-\${PLATFORM_NAME} "
+base_path = File.expand_path('../../../node_modules/@babylonjs/react-native/Build/iOS', podspec_dir)
+base_path_symlink = File.expand_path('../../../../../Modules/@babylonjs/react-native/Build/iOS', podspec_dir)
+base = "$(inherited) #{base_path}/\${CONFIGURATION}-\${PLATFORM_NAME} #{base_path_symlink}/\${CONFIGURATION}-\${PLATFORM_NAME} "
 
 items = ['/shared/BabylonNative/Repo/Polyfills/Canvas', 
   '/shared/BabylonNative/Repo/Polyfills/Window', 
@@ -37,8 +37,8 @@ items = ['/shared/BabylonNative/Repo/Polyfills/Canvas',
   '/_deps/spirv-cross-build']
 
 
-result = base + items.map { |item| "#{base_base_path}#{item}/\${CONFIGURATION}-\${PLATFORM_NAME}" }.join(" ") + 
-  items.map { |itemb| "#{base_base_path_symlink}#{itemb}/\${CONFIGURATION}-\${PLATFORM_NAME}" }.join(" ")
+result = base + items.map { |item| "#{base_path}#{item}/\${CONFIGURATION}-\${PLATFORM_NAME}" }.join(" ") + " " +
+  items.map { |itemb| "#{base_path_symlink}#{itemb}/\${CONFIGURATION}-\${PLATFORM_NAME}" }.join(" ")
 
 Pod::Spec.new do |s|
   s.name         = "react-native-babylon"
