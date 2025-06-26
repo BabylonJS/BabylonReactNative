@@ -105,7 +105,8 @@ android {
                         "-DFETCHCONTENT_SOURCE_DIR_LIBWEBP=../shared/BabylonNative/deps/libwebp-src",
                         "-DFETCHCONTENT_SOURCE_DIR_GLSLANG=../shared/BabylonNative/deps/glslang-src",
                         "-DFETCHCONTENT_SOURCE_DIR_BASE-N=../shared/BabylonNative/deps/base-n-src",
-                        "-DFETCHCONTENT_SOURCE_DIR_ANDROIDEXTENSIONS=../shared/BabylonNative/deps/androidextensions-src"
+                        "-DFETCHCONTENT_SOURCE_DIR_ANDROIDEXTENSIONS=../shared/BabylonNative/deps/androidextensions-src",
+                        "-DFETCHCONTENT_SOURCE_DIR_ARCORE-ANDROID-SDK=../shared/BabylonNative/deps/arcore-android-sdk-src"
             }
         }
         ndk {
