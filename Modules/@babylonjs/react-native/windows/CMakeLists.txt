@@ -31,15 +31,10 @@ add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../shared ${CMAKE_CURRENT_BINARY_DIR}
 # Disable Unity build for UrlLib because of conflict in header between windows.h and winrt
 set_property(TARGET UrlLib PROPERTY UNITY_BUILD false)
 
-add_library(BabylonNative
-    ${SHARED_SOURCES})
+add_library(BabylonNative ${SHARED_SOURCES})
 
-if (${BASEKIT_BUILD})
-    target_compile_definitions(BabylonNative PRIVATE BASEKIT_BUILD=1)
-else()
-    set(ADDITIONAL_LIBRARIES NativeXr NativeCamera)
-endif()
-
+target_compile_definitions(BabylonNative PRIVATE BABYLON_NATIVE_PLUGIN_NATIVEXR=${BABYLON_NATIVE_PLUGIN_NATIVEXR})
+target_compile_definitions(BabylonNative PRIVATE BABYLON_NATIVE_PLUGIN_NATIVECAMERA=${BABYLON_NATIVE_PLUGIN_NATIVECAMERA})
 target_include_directories(BabylonNative PRIVATE ${SHARED_INCLUDES})
 
 # because of warning C5030: attribute 'msvc::intrinsic' is not recognized

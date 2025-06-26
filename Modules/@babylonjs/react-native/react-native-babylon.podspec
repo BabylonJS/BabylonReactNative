@@ -58,41 +58,53 @@ Pod::Spec.new do |s|
 
   s.vendored_frameworks = "ios/libs/*.xcframework"
 
-  s.frameworks = "MetalKit", "ARKit", "AVFoundation", "CoreMedia"
+  frameworks = ['MetalKit', 'AVFoundation', 'CoreMedia']
 
-  s.libraries = 'BabylonNative',
-                'bgfx',
-                'bimg',
-                'bimg_encode',
-                'bimg_decode',
-                'Scheduling',
-                'bx',
-                'Canvas',
-                'GenericCodeGen',
-                'glslang',
-                'glslang-default-resource-limits',
-                'Graphics',
-                'jsRuntime',
-                'OGLCompiler',
-                'OSDependent',
-                'MachineIndependent',
-                'napi',
-                'NativeCamera',
-                'NativeCapture',
-                'NativeEngine',
-                'NativeInput',
-                'NativeOptimizations',
-                'NativeTracing',
-                'NativeXR',
-                'SPIRV',
-                'spirv-cross-core',
-                'spirv-cross-msl',
-                'UrlLib',
-                'Window',
-                'XMLHttpRequest',
-                'webp',
-                'sharpyuv',
-                'xr'
+  if ENV['BABYLON_NATIVE_PLUGIN_NATIVEXR'] != '0'
+    frameworks << 'ARKit'
+  end
+  s.frameworks = frameworks
+
+  libs = ['BabylonNative',
+          'bgfx',
+          'bimg',
+          'bimg_encode',
+          'bimg_decode',
+          'Scheduling',
+          'bx',
+          'Canvas',
+          'GenericCodeGen',
+          'glslang',
+          'glslang-default-resource-limits',
+          'Graphics',
+          'jsRuntime',
+          'OGLCompiler',
+          'OSDependent',
+          'MachineIndependent',
+          'napi',
+          'NativeCapture',
+          'NativeEngine',
+          'NativeInput',
+          'NativeOptimizations',
+          'NativeTracing',
+          'SPIRV',
+          'spirv-cross-core',
+          'spirv-cross-msl',
+          'UrlLib',
+          'Window',
+          'XMLHttpRequest',
+          'webp',
+          'sharpyuv']
+
+  if ENV['BABYLON_NATIVE_PLUGIN_NATIVECAMERA'] != '0'
+    libs << 'NativeCamera'
+  end
+  if ENV['BABYLON_NATIVE_PLUGIN_NATIVEXR'] != '0'
+    libs << 'NativeXR'
+    libs << 'xr'
+  end
+  s.libraries = libs
+
   # install_modules_dependencies has been defined in RN 0.70
   # This check ensure that the library can work on older versions of RN
   if defined?(install_modules_dependencies)

@@ -61,10 +61,8 @@ if ( propertiesFile.isFile() ) {
 }
 def cpp_distribution = (REACT_VERSION >= 71) ? "c++_shared" : "c++_static";
 
-def basekitBuild = "ON"
-if (project.hasProperty("BASEKIT_BUILD")) {
-    basekitBuild = project.getProperty("BASEKIT_BUILD")
-}
+def BABYLON_NATIVE_PLUGIN_NATIVECAMERA = System.getenv("BABYLON_NATIVE_PLUGIN_NATIVECAMERA") != "0"
+def BABYLON_NATIVE_PLUGIN_NATIVEXR = System.getenv("BABYLON_NATIVE_PLUGIN_NATIVEXR") != "0"
 
 def graphics_api = safeExtGet('GRAPHICS_API', "OpenGL")
 
@@ -93,7 +91,8 @@ android {
                         "-DFBJNI_INCPATH=${extractedLibDir}/fbjni-0.3.0-headers.jar/",
                         "-DFBJNI_LIBPATH=${extractedLibDir}/fbjni-0.3.0.aar/jni",
                         "-DREACTNATIVE_DIR=${rootDir}/../node_modules/react-native/",
-                        "-DBASEKIT_BUILD=${basekitBuild}",
+                        "-DBABYLON_NATIVE_PLUGIN_NATIVECAMERA=${BABYLON_NATIVE_PLUGIN_NATIVECAMERA}",
+                        "-DBABYLON_NATIVE_PLUGIN_NATIVEXR=${BABYLON_NATIVE_PLUGIN_NATIVEXR}",
                         "-DFETCHCONTENT_FULLY_DISCONNECTED=ON",
                         "-DBABYLON_NATIVE_BUILD_APPS=OFF",
                         "-DBABYLON_NATIVE_INSTALL=OFF",

@@ -39,8 +39,10 @@ set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
 set(BABYLON_REACT_NATIVE_SHARED_DIR "${CMAKE_CURRENT_LIST_DIR}/../shared")
 add_subdirectory(${BABYLON_REACT_NATIVE_SHARED_DIR} ${CMAKE_CURRENT_BINARY_DIR}/shared)
 
-if (NOT ${BASEKIT_BUILD})
+if (TARGET NativeXr)
     disable_warnings(NativeXr)
+endif()
+if (TARGET NativeCamera)
     disable_warnings(NativeCamera)
 endif()
 disable_warnings(XMLHttpRequest)
@@ -52,10 +54,8 @@ disable_warnings(NativeOptimizations) # deprecated stl
 disable_warnings(NativeTracing) # deprecated stl
 disable_warnings(JsRuntime) # deprecated stl
 disable_warnings(Scheduling) # deprecated stl
-
 disable_warnings(Canvas)
 disable_warnings(Window)
-
 
 add_library(fbjni SHARED IMPORTED)
 set_target_properties(fbjni PROPERTIES
@@ -67,12 +67,6 @@ add_library(BabylonNative SHARED
     ${SHARED_SOURCES})
 
 disable_warnings(BabylonNative) # deprecated stl
-
-if (${BASEKIT_BUILD})
-    target_compile_definitions(BabylonNative PRIVATE BASEKIT_BUILD=1)
-else()
-    set(ADDITIONAL_LIBRARIES NativeXr NativeCamera)
-endif()
 
 set(TURBOMODULE_DIR "${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/jni/react/turbomodule/")
 if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
@@ -229,3 +223,6 @@ else()
         Canvas
         ${ADDITIONAL_LIBRARIES})
 endif()
+
+target_compile_definitions(BabylonNative PRIVATE BABYLON_NATIVE_PLUGIN_NATIVEXR=${BABYLON_NATIVE_PLUGIN_NATIVEXR})
+target_compile_definitions(BabylonNative PRIVATE BABYLON_NATIVE_PLUGIN_NATIVECAMERA=${BABYLON_NATIVE_PLUGIN_NATIVECAMERA})

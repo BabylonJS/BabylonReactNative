@@ -185,7 +185,9 @@
         JsRuntime.lib;
         MachineIndependentd.lib;
         napi.lib;
-        NativeCamera.lib;
+        <AdditionalDependencies Condition="'$(BABYLON_NATIVE_PLUGIN_NATIVECAMERA)' != '0'">
+          NativeCamera.lib;
+        </AdditionalDependencies>
         NativeCapture.lib;
         NativeEngine.lib;
         NativeInput.lib;
@@ -238,7 +240,9 @@
         JsRuntime.lib;
         MachineIndependent.lib;
         napi.lib;
-        NativeCamera.lib;
+        <AdditionalDependencies Condition="'$(BABYLON_NATIVE_PLUGIN_NATIVECAMERA)' != '0'">
+          NativeCamera.lib;
+        </AdditionalDependencies>
         NativeCapture.lib;
         NativeEngine.lib;
         NativeInput.lib;
