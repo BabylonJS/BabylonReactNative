@@ -45,17 +45,12 @@ set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
 set(BABYLON_REACT_NATIVE_SHARED_DIR "${CMAKE_CURRENT_LIST_DIR}/../../react-native/shared")
 add_subdirectory(${BABYLON_REACT_NATIVE_SHARED_DIR} ${CMAKE_CURRENT_BINARY_DIR}/shared)
 
-add_library(BabylonNative
-    ${SHARED_SOURCES})
-
-if (${BASEKIT_BUILD})
-    target_compile_definitions(BabylonNative PRIVATE BASEKIT_BUILD=1)
-else()
-    set(ADDITIONAL_LIBRARIES NativeXr NativeCamera)
-endif()
+add_library(BabylonNative ${SHARED_SOURCES})
 
 target_include_directories(BabylonNative PRIVATE ${SHARED_INCLUDES})
 target_include_directories(BabylonNative PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+target_compile_definitions(BabylonNative PRIVATE BABYLON_NATIVE_PLUGIN_NATIVEXR=${BABYLON_NATIVE_PLUGIN_NATIVEXR})
+target_compile_definitions(BabylonNative PRIVATE BABYLON_NATIVE_PLUGIN_NATIVECAMERA=${BABYLON_NATIVE_PLUGIN_NATIVECAMERA})
 
 target_link_libraries(BabylonNative
     z
