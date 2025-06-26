@@ -389,6 +389,10 @@ const buildBabylonNativeSourceTree = async () => {
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/spirv-cross-src/shaders-hlsl`);
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/spirv-cross-src/shaders-hlsl-no-opt`);
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/glslang-src/Test`);
+  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/arcore-android-sdk-src/assets`);
+  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/arcore-android-sdk-src/media`);
+  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/arcore-android-sdk-src/samples`);
+  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/arcore-android-sdk-src/tools`);
 }
 
 const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyAndroidARCoreFiles , copyiOSARKitFiles, copyIOSFiles, copyAndroidFiles, copyWindowsFiles);
