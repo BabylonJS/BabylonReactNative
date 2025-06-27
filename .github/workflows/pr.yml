@@ -5,7 +5,7 @@ on:
       - master
 
 env:
-  react-native-version: "0.73.12"
+  react-native-version: "0.73"
 
 jobs:
   build-android:
@@ -105,9 +105,9 @@ jobs:
           Copy-Item -Path ../Package/Assembled/* -Destination ../Modules/@babylonjs/react-native -Recurse -Force
         working-directory: ./Package
         
-      - name: Build Windows Bundle
-        run: npm run build:windows
-        working-directory: ./Apps/Playground
+#      - name: Build Windows Bundle
+#        run: npm run build:windows
+#        working-directory: ./Apps/Playground
       # Bundle ready, now we can build the project
 
       - name: NPM Generate Windows Project
