@@ -23,7 +23,7 @@ jobs:
       - name: NPM Install (Playground)
         run: |
           npx tsx scripts/internal/set-react-version.mts ${{ env.react-native-version }}
-          npm install
+          npm install --legacy-peer-deps
         working-directory: ./Apps/Playground
 #      - name: Build Android Bundle
 #        run: npm run build:android
