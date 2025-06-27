@@ -13,8 +13,7 @@
     "macos": "react-native run-macos --scheme Playground",
     "start": "react-native start",
     "test": "jest",
-    "windows": "react-native run-windows --sln windows/Playground.sln",
-    "set-react-version": "tsx scripts/internal/set-react-version.mts"
+    "windows": "react-native run-windows --sln windows/Playground.sln"
   },
   "dependencies": {
     "@babylonjs/core": "8.3.1",

@@ -403,12 +403,12 @@ if (isMain(import.meta.url)) {
         ? Number.MAX_SAFE_INTEGER
         : toVersionNumber(version);
       if (numVersion >= v(0, 74, 0)) {
-        disableJetifier();
+        //disableJetifier();
       }
 
       // `@react-native-webapis/web-storage` is not compatible with codegen 0.71
       if (numVersion < v(0, 72, 0)) {
-        disableWebStorage();
+        //disableWebStorage();
       }
     });
   }
