@@ -13,7 +13,8 @@
     "macos": "react-native run-macos --scheme Playground",
     "start": "react-native start",
     "test": "jest",
-    "windows": "react-native run-windows --sln windows/Playground.sln"
+    "windows": "react-native run-windows --sln windows/Playground.sln",
+    "set-react-version": "tsx scripts/internal/set-react-version.mts"
   },
   "dependencies": {
     "@babylonjs/core": "8.3.1",
@@ -45,6 +46,13 @@
     "react-test-renderer": "19.1.0",
     "react-native-test-app": "^4.3.15",
     "typescript": "5.0.4"
+  },
+  "defaultPlatformPackages": {
+    "android": "react-native",
+    "ios": "react-native",
+    "macos": "react-native-macos",
+    "visionos": "@callstack/react-native-visionos",
+    "windows": "react-native-windows"
   },
   "engines": {
     "node": ">=18"
