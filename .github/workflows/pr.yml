@@ -5,7 +5,7 @@ on:
       - master
 
 env:
-  react-native-version: "0.73"
+  react-native-version: "0.73.12"
 
 jobs:
   build-android:
@@ -51,9 +51,12 @@ jobs:
           npm install --legacy-peer-deps
         working-directory: ./Apps/Playground
 
-      - name: POD Install
-        run: pod install
-        working-directory: ./Apps/Playground/ios
+      - name: Clean and Install Pods
+        run: |
+          cd ios
+          rm -rf Pods Podfile.lock
+          pod install
+        working-directory: ./Apps/Playground
 
 #      - name: Build iOS Bundle
 #        run: npm run build:ios
