@@ -1,0 +1,2 @@
+set-react-version.mts from https://github.com/microsoft/react-native-test-app/blob/trunk/scripts/internal/set-react-version.mts
+https://github.com/microsoft/react-native-test-app/tree/trunk?tab=MIT-1-ov-file#readme

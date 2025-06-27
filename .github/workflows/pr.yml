@@ -4,6 +4,9 @@ on:
     branches:
       - master
 
+env:
+  react-native-version: "0.73"
+
 jobs:
   build-android:
     runs-on: macos-latest
@@ -18,7 +21,9 @@ jobs:
         working-directory: ./Package
 
       - name: NPM Install (Playground)
-        run: npm install
+        run: |
+          npx tsx scripts/internal/set-react-version.mts ${{ env.react-native-version }}
+          npm install
         working-directory: ./Apps/Playground
 #      - name: Build Android Bundle
 #        run: npm run build:android
