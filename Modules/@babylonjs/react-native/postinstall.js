@@ -4,7 +4,12 @@ const { spawn } = require('child_process');
 
 
 function iosCMake() {
-  const cmake = spawn('cmake', [
+
+  const cmakePath = process.env.BABYLON_CMAKE_PATH ?? "cmake";
+
+  const cmakeVersion = spawn(cmakePath, ['--version'], { stdio: 'inherit' });
+
+  const cmake = spawn(cmakePath, [
     '-S', 'ios',
     '-B', 'Build/iOS',
     '-G', 'Xcode',
