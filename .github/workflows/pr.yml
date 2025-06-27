@@ -46,7 +46,9 @@ jobs:
         working-directory: ./Package
 
       - name: NPM Install (Playground)
-        run: npm install
+        run: |
+          npx tsx scripts/internal/set-react-version.mts ${{ env.react-native-version }}
+          npm install --legacy-peer-deps
         working-directory: ./Apps/Playground
 
       - name: POD Install
@@ -84,9 +86,8 @@ jobs:
 
       - name: NPM Install (Playground)
         run: |
-          Copy-Item -Path "package-windows.json" -Destination "package.json" -Force
-          Copy-Item -Path "package-lock-windows.json" -Destination "package-lock.json" -Force
-          npm install
+          npx tsx scripts/internal/set-react-version.mts ${{ env.react-native-version }}
+          npm install --legacy-peer-deps
         working-directory: ./Apps/Playground
 
         # Windows development version need a bundle to be built
