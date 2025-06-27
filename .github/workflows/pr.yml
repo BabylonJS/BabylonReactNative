@@ -5,7 +5,7 @@ on:
       - master
 
 env:
-  react-native-version: "0.73"
+  react-native-version: "0.74"
 
 jobs:
   build-android:
