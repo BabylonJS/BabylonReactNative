@@ -1,6 +1,9 @@
-name: PR Build
+name: Build
 on:
   pull_request:
+    branches:
+      - master
+  push:
     branches:
       - master
   repository_dispatch:

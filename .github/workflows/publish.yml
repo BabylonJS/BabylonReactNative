@@ -1,10 +1,8 @@
-name: PR Build
+name: Publish Package
 on:
-  pull_request:
-    branches:
-      - master
-  repository_dispatch:
-    types: [babylonnative-master-update]
+  release:
+    types: [published]
+
     
 jobs:
   build-typescript:
