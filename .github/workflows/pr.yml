@@ -4,9 +4,6 @@ on:
     branches:
       - master
 
-env:
-  react-native-version: "0.74"
-
 jobs:
   build-android:
     runs-on: macos-latest
@@ -21,10 +18,7 @@ jobs:
         working-directory: ./Package
 
       - name: NPM Install (Playground)
-        run: |
-          npx tsx scripts/internal/set-react-version.mts ${{ env.react-native-version }}
-          node scripts/set-permissions-version.js
-          npm install --legacy-peer-deps
+        run: npm install
         working-directory: ./Apps/Playground
 #      - name: Build Android Bundle
 #        run: npm run build:android
@@ -47,10 +41,7 @@ jobs:
         working-directory: ./Package
 
       - name: NPM Install (Playground)
-        run: |
-          npx tsx scripts/internal/set-react-version.mts ${{ env.react-native-version }}
-          node scripts/set-permissions-version.js
-          npm install --legacy-peer-deps
+        run: npm install
         working-directory: ./Apps/Playground
 
       - name: Clean and Install Pods
@@ -91,9 +82,9 @@ jobs:
 
       - name: NPM Install (Playground)
         run: |
-          npx tsx scripts/internal/set-react-version.mts ${{ env.react-native-version }}
-          node scripts/set-permissions-version.js
-          npm install --legacy-peer-deps
+          Copy-Item -Path "package-windows.json" -Destination "package.json" -Force
+          Copy-Item -Path "package-lock-windows.json" -Destination "package-lock.json" -Force
+          npm install
         working-directory: ./Apps/Playground
 
         # Windows development version need a bundle to be built
