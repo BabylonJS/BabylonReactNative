@@ -1,11 +1,7 @@
 name: 'build Typescript'
 
 on:
-  workflow_call:
-    inputs:
-      release-version:
-        required: true
-        type: string
+  workflow_call
 jobs:
   Build:
     runs-on: macos-latest

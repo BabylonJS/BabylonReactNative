@@ -1,0 +1,27 @@
+name: 'build android'
+on:
+  workflow_call
+
+jobs:
+  build-android:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4.2.2
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Build BabylonNative source tree
+        run: npx gulp buildBabylonNativeSourceTree
+        working-directory: ./Package
+
+      - name: NPM Install (Playground)
+        run: npm install
+        working-directory: ./Apps/Playground
+#      - name: Build Android Bundle
+#        run: npm run build:android
+#        working-directory: ./Apps/Playground
+      - name: Gulp (Android)
+        run: npx gulp buildAndroid
+        working-directory: ./Package
+  
