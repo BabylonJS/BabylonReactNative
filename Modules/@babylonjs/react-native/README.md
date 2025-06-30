@@ -8,7 +8,7 @@ This quick overview will help you understand the constructs provided by Babylon 
 
 This package has several **peer dependencies**. If these dependencies are unmet, `npm install` will emit warnings. Be sure to add these dependencies to your project.
 
-The `react-native-permissions` dependency is required for XR capabilities of Babylon.js (to request camera permissions automatically). Be sure to follow the `react-native-permissions` [instructions](https://github.com/react-native-community/react-native-permissions#setup) to update your `Podfile` and `Info.plist` (iOS) and/or `AndroidManifest.xml` (Android).
+The `react-native-permissions` dependency is required for XR capabilities of Babylon.js (to request camera permissions automatically). Be sure to follow the `react-native-permissions` [instructions](https://github.com/react-native-community/react-native-permissions#setup) to update your `Podfile` and `Info.plist` (iOS) and/or `AndroidManifest.xml` (Android). These plugins can be disabled and by such, dependency to `react-native-permissions` is not needed anymore (see below).
 
 ### Android Configuration
 
@@ -17,16 +17,53 @@ The minimum Android SDK version is 18. This must be set as `minSdkVersion` in th
 ### iOS Configuration
 
 The minimum deployment target version is 12. This must be set as `iOS Deployment Target` in the consuming project's `project.pbxproj`, and must also be set as `platform` in the consuming project's `podfile`.
+Make sure `pod install` is called from ios folder after npm install.
+
+#### Workspace
+In your app workspace, add a reference to BabylonReactNative project by add these lines:
+```
+<FileRef
+    location = "group:../node_modules/@babylonjs/react-native/Build/iOS/ReactNativeBabylon.xcodeproj">
+</FileRef>
+```
+to your app `xcworkspace/content.xcworkspacedata` file.
+
+#### CMake
+iOS NPM needs CMake 3.26+ to be present to generate Xcode project. If CMake is not in default path(or an older version that can't be upgraded) a local version can be set and used with this variable:
+
+```
+export BABYLON_CMAKE_PATH=/path/to/a/more/recent/cmake
+```
+
+To disable post install CMake generation, set this variable before runnong `npm install`:
+```
+export BABYLON_NO_CMAKE_POSTINSTALL=1
+```
+
+### Plugins selection
+
+Plugins can be disabled at build time. They are all enabled by default and disabling is done with Environment variables:
+
+To disable Camera plugin:
+```
+export BABYLON_NATIVE_PLUGIN_NATIVECAMERA = 0
+```
+
+For Native XR:
+```
+export BABYLON_NATIVE_PLUGIN_NATIVEXR = 0
+```
 
 ### Platform Native Packages
 
-Babylon React Native platform native packages must also be installed for the platforms and React Native versions being targeted. This is only needed for ***apps*** using Babylon React Native, not for ***libraries (React Native packages)*** building on top of Babylon React Native.
+Starting with BabylonReactNative NPM 2.0.0+, one single package is available for iOS, Android and Windows versus multiple packages before.
 
-|         | React Native 0.63 - 0.64                                                                                         | React Native 0.65 - 0.66                                                                                         | React Native 0.69                                                                                                | React Native 0.70                                                                                                |
-| ------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| Android | [@babylonjs/react-native-iosandroid-0-64](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-64) | [@babylonjs/react-native-iosandroid-0-65](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-65) | [@babylonjs/react-native-iosandroid-0-69](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-69) | [@babylonjs/react-native-iosandroid-0-70](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-70) |
-| iOS     | [@babylonjs/react-native-iosandroid-0-64](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-64) | [@babylonjs/react-native-iosandroid-0-65](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-65) | [@babylonjs/react-native-iosandroid-0-69](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-69) | [@babylonjs/react-native-iosandroid-0-70](https://www.npmjs.com/package/@babylonjs/react-native-iosandroid-0-70) |
-| Windows | [@babylonjs/react-native-windows-0-64](https://www.npmjs.com/package/@babylonjs/react-native-windows-0-64)       | [@babylonjs/react-native-windows-0-65](https://www.npmjs.com/package/@babylonjs/react-native-windows-0-65)       | [@babylonjs/react-native-windows-0-69](https://www.npmjs.com/package/@babylonjs/react-native-windows-0-69)       | [@babylonjs/react-native-windows-0-70](https://www.npmjs.com/package/@babylonjs/react-native-windows-0-70)       |
+Babylon.js minimal version :
+
+|BabylonReactNative version | Babylon.js version | BabylonNative commit |
+| ----------- | ------------------------ | --- |
+|2.0.0 | 8.3.0 | 6c25966e8f8c0f3a0c13fdf77064f1bde790391f
+
 
 ### `useEngine`
 
