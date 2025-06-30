@@ -1,52 +1,62 @@
 name: 'build windows'
 
 on:
-  workflow_call:
-    inputs:
-      react-native-version:
-        required: true
-        type: string
-      release-version:
-        required: true
-        type: string
+  workflow_call
 
 jobs:
-  Build:
+  build-windows:
     runs-on: windows-latest
+    continue-on-error: true
     steps:
+      - name: Support longpaths
+        run: git config --system core.longpaths true
       - name: Checkout Repo
         uses: actions/checkout@v4.2.2
-        with:
-          submodules: 'true'
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.0.2
-      - name: Setup Node 18
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Setup NuGet
-        uses: nuget/setup-nuget@v1
-        with:
-          nuget-version: '5.x'
-      - name: NPM Install (Playground)
-        run: npm install
+        uses: microsoft/setup-msbuild@v2
+      - name: Install watchman
+        run: choco install watchman
         working-directory: ./Apps/Playground
-      - name: NPM Install (React Native ${{ inputs.react-native-version }})
-        run: npm run select --reactNative ${{ inputs.react-native-version }}
-        working-directory: ./Apps/Playground
+
       - name: NPM Install (Binary Package)
         run: npm install
         working-directory: ./Package
-      - name: Gulp (Windows)
-        run: npx gulp buildUWPPublish --reactNative ${{ inputs.react-native-version }} --releaseVersion ${{ inputs.release-version }}
+      - name: Build BabylonNative source tree
+        run: npx gulp buildBabylonNativeSourceTree
         working-directory: ./Package
-      - name: Upload Assembled-Windows Folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: 'Assembled-Windows${{ inputs.react-native-version }}'
-          path: Package/Assembled-Windows
-      - name: Upload Assembled-BaseKit-Windows Folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: 'Assembled-BaseKit-Windows${{ inputs.react-native-version }}'
-          path: Package/Assembled-BaseKit-Windows
+
+      - name: NPM Install (Playground)
+        run: |
+          Copy-Item -Path "package-windows.json" -Destination "package.json" -Force
+          Copy-Item -Path "package-lock-windows.json" -Destination "package-lock.json" -Force
+          npm install
+        working-directory: ./Apps/Playground
+
+        # Windows development version need a bundle to be built
+        # building bundle consists in running tsc in package, copy needed files in modules and running bundling command
+      - name: Install Module
+        run: npm install
+        working-directory: ./Modules/@babylonjs/react-native
+
+      - name: Build Type script
+        run: |
+          npx gulp buildTypeScript
+          Copy-Item -Path ../Package/Assembled/* -Destination ../Modules/@babylonjs/react-native -Recurse -Force
+        working-directory: ./Package
+        
+#      - name: Build Windows Bundle
+#        run: npm run build:windows
+#        working-directory: ./Apps/Playground
+      # Bundle ready, now we can build the project
+
+      - name: NPM Generate Windows Project
+        run: npx install-windows-test-app
+        working-directory: ./Apps/Playground
+       
+      - name: Nuget restore
+        run: nuget restore Playground.sln
+        working-directory: ./Apps/Playground/windows
+        
+      - name: Windows build Playground
+        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m Playground.sln /v:detailed
+        working-directory: ./Apps/Playground/windows
