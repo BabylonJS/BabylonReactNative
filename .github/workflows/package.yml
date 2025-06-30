@@ -1,0 +1,30 @@
+name: 'publish'
+on:
+  workflow_call
+
+jobs:
+  build-android:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4.2.2
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: Download Assembled Folder
+        uses: actions/download-artifact@v4
+        with:
+          name: 'Assembled'
+          path: Package/Assembled
+
+      - name: Publish Package dry run
+        run: |
+          npm publish --access public --dry-run
+          npm pack
+        working-directory: ./Package/Assembled
+
+      - name: Upload .tgz tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: BabylonReactNative
+          path: "./Package/Assembled/*.tgz"
