@@ -21,21 +21,20 @@
     "@babylonjs/react-native": "file:../../Modules/@babylonjs/react-native",
     "@react-native-community/slider": "^4.2.2",
     "@react-native/new-app-screen": "0.80.0",
-    "@rnx-kit/metro-config": "2.1.0",
-    "react": "18.2.0",
-    "react-native": "0.73.11",
-    "react-native-permissions": "4.1.5"
+    "react": "19.1.0",
+    "react-native": "0.80.0",
+    "react-native-permissions": "^5.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.3",
     "@babel/runtime": "^7.25.0",
-    "@react-native-community/cli": "12.3.7",
-    "@react-native-community/cli-platform-android": "12.3.7",
-    "@react-native-community/cli-platform-ios": "12.3.7",
-    "@react-native/babel-preset": "0.73.21",
+    "@react-native-community/cli": "19.0.0",
+    "@react-native-community/cli-platform-android": "19.0.0",
+    "@react-native-community/cli-platform-ios": "19.0.0",
+    "@react-native/babel-preset": "0.80.0",
     "@react-native/eslint-config": "0.80.0",
-    "@react-native/metro-config": "0.73.5",
+    "@react-native/metro-config": "0.80.0",
     "@react-native/typescript-config": "0.80.0",
     "@types/jest": "^29.5.13",
     "@types/react": "^19.1.0",
@@ -45,17 +44,7 @@
     "prettier": "2.8.8",
     "react-test-renderer": "19.1.0",
     "react-native-test-app": "^4.3.15",
-    "typescript": "5.0.4",
-    "react-native-macos": "0.73.36",
-    "react-native-windows": "0.73.22",
-    "@callstack/react-native-visionos": "0.73.12"
-  },
-  "defaultPlatformPackages": {
-    "android": "react-native",
-    "ios": "react-native",
-    "macos": "react-native-macos",
-    "visionos": "@callstack/react-native-visionos",
-    "windows": "react-native-windows"
+    "typescript": "5.0.4"
   },
   "engines": {
     "node": ">=18"
