@@ -16,11 +16,11 @@ The minimum Android SDK version is 18. This must be set as `minSdkVersion` in th
 
 ### iOS Configuration
 
-The minimum deployment target version is 12. This must be set as `iOS Deployment Target` in the consuming project's `project.pbxproj`, and must also be set as `platform` in the consuming project's `podfile`.
-Make sure `pod install` is called from ios folder after npm install.
+The minimum deployment target version is 12. This must be set as `iOS Deployment Target` in the consuming project's `project.pbxproj`, and must also be set as `platform` in the consuming project's `Podfile`.
+Make sure `pod install` is called from the ios folder after npm install.
 
 #### Workspace
-In your app workspace, add a reference to BabylonReactNative project by add these lines:
+In your app workspace, add a reference to BabylonReactNative project by adding these lines:
 ```
 <FileRef
     location = "group:../node_modules/@babylonjs/react-native/Build/iOS/ReactNativeBabylon.xcodeproj">
@@ -29,36 +29,36 @@ In your app workspace, add a reference to BabylonReactNative project by add thes
 to your app `xcworkspace/content.xcworkspacedata` file.
 
 #### CMake
-iOS NPM needs CMake 3.26+ to be present to generate Xcode project. If CMake is not in default path(or an older version that can't be upgraded) a local version can be set and used with this variable:
+iOS NPM needs CMake 3.26+ to be present to generate Xcode project. If CMake is not in the default path (or an older version that can't be upgraded) a local version can be set and used with this variable:
 
 ```
 export BABYLON_CMAKE_PATH=/path/to/a/more/recent/cmake
 ```
 
-To disable post install CMake generation, set this variable before runnong `npm install`:
+To disable post install CMake generation, set this variable before running `npm install`:
 ```
 export BABYLON_NO_CMAKE_POSTINSTALL=1
 ```
 
 ### Plugins selection
 
-Plugins can be disabled at build time. They are all enabled by default and disabling is done with Environment variables:
+Plugins can be disabled at build time. They are all enabled by default and disabling is done with environment variables:
 
 To disable Camera plugin:
 ```
-export BABYLON_NATIVE_PLUGIN_NATIVECAMERA = 0
+export BABYLON_NATIVE_PLUGIN_NATIVECAMERA=0
 ```
 
 For Native XR:
 ```
-export BABYLON_NATIVE_PLUGIN_NATIVEXR = 0
+export BABYLON_NATIVE_PLUGIN_NATIVEXR=0
 ```
 
 ### Platform Native Packages
 
 Starting with BabylonReactNative NPM 2.0.0+, one single package is available for iOS, Android and Windows versus multiple packages before.
 
-Babylon.js minimal version :
+Babylon.js minimal version:
 
 |BabylonReactNative version | Babylon.js version | BabylonNative commit |
 | ----------- | ------------------------ | --- |
@@ -136,18 +136,18 @@ e.g.
 
 Note: Currently only one `EngineView` can be active at any given time. Multi-view will be supported in a future release.
 
-The Android specific `androidView` property can help set the type of the view used for rendering. Depending on user needs and performance, refer to the table below. [`TextureView`](https://developer.android.com/reference/android/view/TextureView) can be inserted anywhere in the view hierarchy, but is less efficient. [`SurfaceView`](https://developer.android.com/reference/android/view/SurfaceView) can only be full above or fully below the rest of the UI, but is more efficient.
+The Android specific `androidView` property can help set the type of the view used for rendering. Depending on user needs and performance, refer to the table below. [`TextureView`](https://developer.android.com/reference/android/view/TextureView) can be inserted anywhere in the view hierarchy, but is less efficient. [`SurfaceView`](https://developer.android.com/reference/android/view/SurfaceView) can only be fully above or fully below the rest of the UI, but is more efficient.
 
 | isTransparent | androidView        | Description |
 | ----------- | ------------------------ | ----------- |
 | False       | TextureView              | Opaque TextureView.
-| False       | SurfaceView              | Simple surfaceView (default when no `androidView` set with `isTransparent=false`).
+| False       | SurfaceView              | Simple SurfaceView (default when no `androidView` set with `isTransparent=false`).
 | False       | SurfaceViewZTopMost      | SurfaceView with [ZTopMost](https://developer.android.com/reference/android/view/SurfaceView#setZOrderOnTop(boolean)) set to `true`.
 | False       | SurfaceViewZMediaOverlay | SurfaceView with [ZMediaOverlay](https://developer.android.com/reference/android/view/SurfaceView#setZOrderMediaOverlay(boolean)) set to `true`.
 | True        | TextureView              | Transparent TextureView.
 | True        | SurfaceView              | SurfaceView will stay opaque
-| True        | SurfaceViewZTopMost      | SurfaceView with [ZTopMost](https://developer.android.com/reference/android/view/SurfaceView#setZOrderOnTop(boolean)) set to `true`. Transparent but top most. (default when no `androidView` set with `isTransparent=true`)
-| True        | SurfaceViewZMediaOverlay | SurfaceView with [ZMediaOverlay](https://developer.android.com/reference/android/view/SurfaceView#setZOrderMediaOverlay(boolean)) set to `true`. Only Transparent on top of other SurfaceViews.
+| True        | SurfaceViewZTopMost      | SurfaceView with [ZTopMost](https://developer.android.com/reference/android/view/SurfaceView#setZOrderOnTop(boolean)) set to `true`. Transparent but topmost. (default when no `androidView` set with `isTransparent=true`)
+| True        | SurfaceViewZMediaOverlay | SurfaceView with [ZMediaOverlay](https://developer.android.com/reference/android/view/SurfaceView#setZOrderMediaOverlay(boolean)) set to `true`. Only transparent on top of other SurfaceViews.
 
-More infos on TextureView Vs SurfaceView performance here:
+More information on TextureView vs SurfaceView performance here:
 https://developer.android.com/reference/android/view/TextureView
