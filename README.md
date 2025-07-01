@@ -35,13 +35,13 @@ Note: Official support for React Native frameworks, like Expo, is not provided b
 
 ## Contributing
 
-This quick overview will help you get started developing in the Babylon React Native repository. We support development on Windows and MacOS, but assume the use of [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell) in the instructions below (unless otherwise noted).
+This quick overview will help you get started developing in the Babylon React Native repository. We support development on Windows and macOS, but assume the use of [PowerShell](https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell) in the instructions below (unless otherwise noted).
 
 If you are interested in making contributions, be sure to also review [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Using BabylonReactNative
 
-Following section will describe how to build locally a package and how to develop BabylonReactNative. If your intend is to use the plugin, follow instructions in the NPM  [BabylonReadNative readme](Modules/@babylonjs/react-native/README.md).
+The following section will describe how to build locally a package and how to develop BabylonReactNative. If your intent is to use the plugin, follow instructions in the NPM [BabylonReactNative readme](Modules/@babylonjs/react-native/README.md).
 
 ### **Preparing a new Repo**
 
@@ -53,7 +53,7 @@ Step 1 for all development environments and targets is to clone the repo. Use a 
 git clone https://github.com/BabylonJS/BabylonReactNative
 ```
 
-Prepare BabylonNatice sources:
+Prepare BabylonNative sources:
 
 ```
 cd Package
@@ -71,8 +71,8 @@ npm ci
 This will also automatically do the following to prepare your repo for development:
 
 - Update git submodules to fetch Babylon Native and its dependencies
-- [MacOS only] Run CMake to generate the iOS XCode project for Babylon React Native
-- [MacOS only] Run `pod install` to install cocoa pod depdendencies
+- [macOS only] Run CMake to generate the iOS Xcode project for Babylon React Native
+- [macOS only] Run `pod install` to install cocoa pod dependencies
 
 Finally run ReactNative Test App using:
 
@@ -127,7 +127,7 @@ With Ubuntu, you can install needed packages by this command:
 sudo apt-get install adb ninja-build openjdk-14-jdk android-sdk
 ```
 
-Update PATH with this commands:
+Update PATH with these commands:
 
 ```
 export ANDROID_HOME=$HOME/Android/Sdk
@@ -138,7 +138,7 @@ export PATH=$PATH:$ANDROID_HOME/platform-tools
 ```
 
 ### **Troubleshooting**
-- If the Metro server is not started with `npm run android` , you can start it manually by running `npm run start` in a terminal.
+- If the Metro server is not started with `npm run android`, you can start it manually by running `npm run start` in a terminal.
 - Android Studio is the tool of choice for downloading the various versions of NDK.
 - If something goes wrong with the build `npm run android --verbose` can give some hints.
 - If the emulator is not launched by the build, you can run `~/Android/Sdk/emulator/emulator @name_of_your_image`.
@@ -175,9 +175,9 @@ When making local changes, the following manual test steps should be performed w
 
 ### **Building the NPM Package**
 
-Every change for a Pull Request will trigger the build of the NPM package. The artifact is named `BabylonReactNative` and can be found in the Artifact section of the Corresponding GitHub Action.
+Every change for a Pull Request will trigger the build of the NPM package. The artifact is named `BabylonReactNative` and can be found in the Artifact section of the corresponding GitHub Action.
 
-> :warning: The zip contains a Tarball GZipped `.tgz` that is automatically decompressed on MacOS. When installing that directory ( `npm install /path/to/unzipped/untared/package` ) npm creates symlinks that are not supported by the build system. Installing the .tgz instead of its decompressed version works correctly.
+> :warning: The zip contains a Tarball Gzipped `.tgz` that is automatically decompressed on macOS. When installing that directory ( `npm install /path/to/unzipped/untarred/package` ) npm creates symlinks that are not supported by the build system. Installing the .tgz instead of its decompressed version works correctly.
 
 To get a `.tgz` that can be shared or published, follow these steps:
 
@@ -195,21 +195,20 @@ export BABYLON_NO_CMAKE_POSTINSTALL=1
 npm install
 ```
 
-Build BabylonNative source tree, build Typescript copy mandatory files:
+Build BabylonNative source tree, build TypeScript copy mandatory files:
 
 ```
 cd Package
 npx gulp buildAssembled
 ```
 
-Package content is on `Package/Asssembled` folder. 
+Package content is in `Package/Assembled` folder. 
 Run `npm pack` to make a .tgz.
 
 ## Supported Versions
 
-Package versions are listed on this npm.js page : [@babylonjs/react-native](https://www.npmjs.com/package/@babylonjs/react-native). Check supported Babylon.js version and corresponding BabylonNative dependency in package [README](Modules/@babylonjs/react-native/README.md)
+Package versions are listed on this npm.js page: [@babylonjs/react-native](https://www.npmjs.com/package/@babylonjs/react-native). Check supported Babylon.js version and corresponding BabylonNative dependency in package [README](Modules/@babylonjs/react-native/README.md)
 
 ## Security
 
 If you believe you have found a security vulnerability in this repository, please see [SECURITY.md](SECURITY.md).
-
