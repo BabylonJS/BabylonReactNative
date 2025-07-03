@@ -97,28 +97,6 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
 
     target_compile_options(BabylonNative PRIVATE -Wall -Werror -fexceptions -frtti -std=c++17 -DWITH_INSPECTOR=1 -DLOG_TAG=\"ReactNative\")
 
-    # Prefab packages from React Native
-    #find_package(ReactAndroid REQUIRED CONFIG)
-    #add_library(react_render_debug ALIAS ReactAndroid::react_render_debug)
-    #add_library(turbomodulejsijni ALIAS ReactAndroid::turbomodulejsijni)
-    #add_library(runtimeexecutor ALIAS ReactAndroid::runtimeexecutor)
-    #add_library(react_codegen_rncore ALIAS ReactAndroid::react_codegen_rncore)
-    #add_library(react_debug ALIAS ReactAndroid::react_debug)
-    #add_library(react_render_componentregistry ALIAS ReactAndroid::react_render_componentregistry)
-    #add_library(react_newarchdefaults ALIAS ReactAndroid::react_newarchdefaults)
-    #add_library(react_render_core ALIAS ReactAndroid::react_render_core)
-    #add_library(react_render_graphics ALIAS ReactAndroid::react_render_graphics)
-    #add_library(rrc_view ALIAS ReactAndroid::rrc_view)
-    #add_library(jsi ALIAS ReactAndroid::jsi)
-    #add_library(glog ALIAS ReactAndroid::glog)
-    #add_library(fabricjni ALIAS ReactAndroid::fabricjni)
-    #add_library(react_render_mapbuffer ALIAS ReactAndroid::react_render_mapbuffer)
-    #add_library(yoga ALIAS ReactAndroid::yoga)
-    #add_library(folly_runtime ALIAS ReactAndroid::folly_runtime)
-    #add_library(react_nativemodule_core ALIAS ReactAndroid::react_nativemodule_core)
-    #add_library(react_render_imagemanager ALIAS ReactAndroid::react_render_imagemanager)
-    #add_library(rrc_image ALIAS ReactAndroid::rrc_image)
-
     find_package(fbjni REQUIRED CONFIG)
     add_library(fbjni ALIAS fbjni::fbjni)
 
@@ -129,26 +107,7 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
         log
         -lz
         arcana
-        #fabricjni                           # prefab ready
         fbjni                               # via 3rd party prefab
-        #folly_runtime                       # prefab ready
-        #glog                                # prefab ready
-        #jsi                                 # prefab ready
-        #react_codegen_rncore                # prefab ready
-        #react_debug                         # prefab ready
-        #react_nativemodule_core             # prefab ready
-        #react_newarchdefaults               # prefab ready
-        #react_render_componentregistry      # prefab ready
-        #react_render_core                   # prefab ready
-        #react_render_debug                  # prefab ready
-        #react_render_graphics               # prefab ready
-        #react_render_imagemanager           # prefab ready
-        #react_render_mapbuffer              # prefab ready
-        #rrc_image                           # prefab ready
-        #rrc_view                            # prefab ready
-        #runtimeexecutor                     # prefab ready
-        #turbomodulejsijni                   # prefab ready
-        #yoga                                # prefab ready
         AndroidExtensions
         GraphicsDevice
         JsRuntime
