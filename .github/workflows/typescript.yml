@@ -8,25 +8,13 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4.2.2
-        with:
-          submodules: 'recursive'
-      - name: Setup Node 18
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: NPM Install (Binary Package)
-        run: npm install
-        working-directory: ./Package
-      - name: NPM Install (Modules)
+
+      - name: Setting up developer environment
         run: |
           export BABYLON_NO_CMAKE_POSTINSTALL=1
-          npm install
-        working-directory: ./Modules/@babylonjs/react-native
-      - name: NPM Install (Playground)
-        run: |
-          export BABYLON_NO_CMAKE_POSTINSTALL=1
-          npm install
-        working-directory: ./Apps/Playground
+          node setup_dev.js
+        working-directory: ./
+
       - name: Gulp
         run: npx gulp buildAssembled
         working-directory: ./Package

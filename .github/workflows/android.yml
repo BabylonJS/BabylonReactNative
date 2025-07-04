@@ -8,16 +8,9 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4.2.2
-      - name: NPM Install (Binary Package)
-        run: npm install
-        working-directory: ./Package
-      - name: Build BabylonNative source tree
-        run: npx gulp buildBabylonNativeSourceTree
-        working-directory: ./Package
-
-      - name: NPM Install (Playground)
-        run: npm install
-        working-directory: ./Apps/Playground
+      - name: Setting up developer environment
+        run: node setup_dev.js
+        working-directory: ./
 #      - name: Build Android Bundle
 #        run: npm run build:android
 #        working-directory: ./Apps/Playground
