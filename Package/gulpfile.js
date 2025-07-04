@@ -400,7 +400,7 @@ const buildBabylonNativeSourceTree = async () => {
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/arcore-android-sdk-src/tools`);
 }
 
-const copyFiles = gulp.parallel(copyCommonFiles, copySharedFiles, copyAndroidARCoreFiles , copyiOSARKitFiles, copyIOSFiles, copyAndroidFiles, copyWindowsFiles);
+const copyFiles = gulp.series(copyCommonFiles, copySharedFiles, copyAndroidARCoreFiles , copyiOSARKitFiles, copyIOSFiles, copyAndroidFiles, copyWindowsFiles);
 const buildAssembled = gulp.series(buildBabylonNativeSourceTree, copyFiles, buildTypeScript, validateAssembled);
 const buildIOS = gulp.series(buildIphoneOS); // buildIphoneSimulator is optional. Build is slower and it should not make more checks
 
