@@ -75,7 +75,7 @@ const buildAndroid = async () => {
   exec(`./gradlew babylonjs_react-native:assembleRelease --stacktrace --info`, '../Apps/Playground/android');
 };
 
-const copyCommonFiles = () => {
+const copyCommonFiles = async () => {
   return gulp.src('../Modules/@babylonjs/react-native/README.md')
     .pipe(gulp.src('../NOTICE.html'))
     .pipe(gulp.src(`../Modules/@babylonjs/react-native/react-native-babylon.podspec`))
@@ -83,32 +83,32 @@ const copyCommonFiles = () => {
     .pipe(gulp.dest('Assembled'));
 };
 
-const copyAndroidARCoreFiles = () => {
+const copyAndroidARCoreFiles = async () => {
     return gulp.src('../Modules/@babylonjs/react-native/shared/BabylonNative/Repo/Dependencies/xr/Source/ARCore/Include/*')
       .pipe(gulp.dest(`Assembled/android/include`));
 };
 
-const copyiOSARKitFiles = () => {
+const copyiOSARKitFiles = async () => {
     return gulp.src('../Modules/@babylonjs/react-native/shared/BabylonNative/Repo/Dependencies/xr/Source/ARKit/Include/*')
       .pipe(gulp.dest(`Assembled/ios/include`));
 };
 
-const copySharedFiles = () => {
+const copySharedFiles = async () => {
   return gulp.src('../Modules/@babylonjs/react-native/shared/**')
     .pipe(gulp.dest('Assembled/shared'));
 };
 
-const copyIOSFiles = () => {
+const copyIOSFiles = async () => {
   return gulp.src('../Modules/@babylonjs/react-native/ios/**')
     .pipe(gulp.dest(`Assembled/ios`));
 };
 
-const copyAndroidFiles = () => {
+const copyAndroidFiles = async () => {
   return gulp.src('../Modules/@babylonjs/react-native/android/**')
     .pipe(gulp.dest(`Assembled/android`));
 };
 
-const copyWindowsFiles = () => {
+const copyWindowsFiles = async () => {
   return gulp.src('../Modules/@babylonjs/react-native/windows/**')
     .pipe(gulp.dest(`Assembled/windows`));
 };

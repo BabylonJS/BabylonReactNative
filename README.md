@@ -53,19 +53,10 @@ Step 1 for all development environments and targets is to clone the repo. Use a 
 git clone https://github.com/BabylonJS/BabylonReactNative
 ```
 
-Prepare BabylonNative sources:
+Run setup_dev.js script :
 
 ```
-cd Package
-npm install
-npx gulp buildBabylonNativeSourceTree
-```
-
-Install dependencies for the Test App
-
-```
-cd Apps/Playground
-npm ci
+node setup_dev.js
 ```
 
 This will also automatically do the following to prepare your repo for development:
@@ -74,15 +65,17 @@ This will also automatically do the following to prepare your repo for developme
 - [macOS only] Run CMake to generate the iOS Xcode project for Babylon React Native
 - [macOS only] Run `pod install` to install cocoa pod dependencies
 
-Finally run ReactNative Test App using:
+Finally run Playground Test App using:
 
 ```
+cd Apps/Playground
 npm run ios
 ```
 
 or 
 
 ```
+cd Apps/Playground
 npm run android
 ```
 
