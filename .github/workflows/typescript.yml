@@ -9,12 +9,19 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4.2.2
 
-      - name: Setting up developer environment
+      - name: NPM Install (Binary Package)
+        run: npm install
+        working-directory: ./Package
+      - name: NPM Install (Modules)
         run: |
           export BABYLON_NO_CMAKE_POSTINSTALL=1
-          node setup_dev.js
-        working-directory: ./
-
+          npm install
+        working-directory: ./Modules/@babylonjs/react-native
+      - name: NPM Install (Playground)
+        run: |
+          export BABYLON_NO_CMAKE_POSTINSTALL=1
+          npm install
+        working-directory: ./Apps/Playground
       - name: Gulp
         run: npx gulp buildAssembled
         working-directory: ./Package
