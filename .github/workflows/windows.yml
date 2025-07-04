@@ -18,31 +18,16 @@ jobs:
         run: choco install watchman
         working-directory: ./Apps/Playground
 
-      - name: NPM Install (Binary Package)
-        run: npm install
-        working-directory: ./Package
-      - name: Build BabylonNative source tree
-        run: npx gulp buildBabylonNativeSourceTree
-        working-directory: ./Package
 
-      - name: NPM Install (Playground)
+      - name: Setting up developer environment
         run: |
-          Copy-Item -Path "package-windows.json" -Destination "package.json" -Force
-          Copy-Item -Path "package-lock-windows.json" -Destination "package-lock.json" -Force
-          npm install
-        working-directory: ./Apps/Playground
+          Copy-Item -Path "Apps/Playground/package-windows.json" -Destination "Apps/Playground/package.json" -Force
+          Copy-Item -Path "Apps/Playground/package-lock-windows.json" -Destination "Apps/Playground/package-lock.json" -Force
+          node setup_dev.js
+        working-directory: ./
 
         # Windows development version need a bundle to be built
         # building bundle consists in running tsc in package, copy needed files in modules and running bundling command
-      - name: Install Module
-        run: npm install
-        working-directory: ./Modules/@babylonjs/react-native
-
-      - name: Build Type script
-        run: |
-          npx gulp buildTypeScript
-          Copy-Item -Path ../Package/Assembled/* -Destination ../Modules/@babylonjs/react-native -Recurse -Force
-        working-directory: ./Package
         
 #      - name: Build Windows Bundle
 #        run: npm run build:windows
