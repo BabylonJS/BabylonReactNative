@@ -580,6 +580,7 @@ const validateAssemblediOSAndroid = async () => {
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/Window.xcscheme`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/XMLHttpRequest.xcscheme`,
     `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/xr.xcscheme`,
+    `${assemblediOSAndroidDir}/ios/ReactNativeBabylon.xcodeproj/xcshareddata/xcschemes/Blob.xcscheme`,
     `${assemblediOSAndroidDir}/package.json`,
     `${assemblediOSAndroidDir}/react-native-babylon.podspec`,
     `${assemblediOSAndroidDir}/README.md`,
