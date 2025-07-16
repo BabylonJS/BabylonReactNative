@@ -3,7 +3,8 @@ const os = require("os");
 function iosCMake() {
   const { spawn } = require('child_process');
 
-  const cmake = spawn('npx cmake', [
+  const cmake = spawn('npx', [
+    'cmake',
     '-S', 'ios',
     '-B', 'Build/iOS',
     '-G', 'Xcode',
