@@ -26,7 +26,8 @@
     "readmeFilename": "README.md",
     "dependencies": {
         "base-64": "^0.1.0",
-        "semver": "^7.3.2"
+        "semver": "^7.3.2",
+        "cmake-runtime": "3.31.0"
     },
     "peerDependencies": {
         "@babylonjs/core": ">=5.53.1",
