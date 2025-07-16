@@ -29,12 +29,6 @@ In your app workspace, add a reference to BabylonReactNative project by adding t
 to your app `xcworkspace/content.xcworkspacedata` file.
 
 #### CMake
-iOS NPM needs CMake 3.26+ to be present to generate Xcode project. If CMake is not in the default path (or an older version that can't be upgraded) a local version can be set and used with this variable:
-
-```
-export BABYLON_CMAKE_PATH=/path/to/a/more/recent/cmake
-```
-
 To disable post install CMake generation, set this variable before running `npm install`:
 ```
 export BABYLON_NO_CMAKE_POSTINSTALL=1
