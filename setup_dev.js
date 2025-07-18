@@ -69,9 +69,9 @@ async function main() {
   
   const rootDir = process.cwd();
   
-  // Step 1: NPM Install (Binary Package)
+  // Step 1: NPM Install 
   const packageDir = path.join(rootDir, 'Package');
-  executeStep('npm install', packageDir, 'NPM Install (Binary Package)');
+  executeStep('npm install', packageDir, 'NPM Install');
   
   // Step 2: Build BabylonNative source tree
   executeStep('npx gulp buildBabylonNativeSourceTree', packageDir, 'Build BabylonNative source tree');

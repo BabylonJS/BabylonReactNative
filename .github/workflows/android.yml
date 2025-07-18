@@ -11,9 +11,7 @@ jobs:
       - name: Setting up developer environment
         run: node setup_dev.js
         working-directory: ./
-#      - name: Build Android Bundle
-#        run: npm run build:android
-#        working-directory: ./Apps/Playground
+
       - name: Gulp (Android)
         run: npx gulp buildAndroid
         working-directory: ./Package

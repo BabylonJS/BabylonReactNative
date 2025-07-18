@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4.2.2
-      - name: NPM Install (Binary Package)
+      - name: NPM Install
         run: npm install
         working-directory: ./Package
       - name: Download Assembled Folder

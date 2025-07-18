@@ -21,10 +21,6 @@ jobs:
           pod install
         working-directory: ./Apps/Playground
 
-#      - name: Build iOS Bundle
-#        run: npm run build:ios
-#        working-directory: ./Apps/Playground
-
       - name: Gulp (iOS)
         run: npx gulp buildIOS
         working-directory: ./Package

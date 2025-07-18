@@ -26,14 +26,6 @@ jobs:
           node setup_dev.js
         working-directory: ./
 
-        # Windows development version need a bundle to be built
-        # building bundle consists in running tsc in package, copy needed files in modules and running bundling command
-        
-#      - name: Build Windows Bundle
-#        run: npm run build:windows
-#        working-directory: ./Apps/Playground
-      # Bundle ready, now we can build the project
-
       - name: NPM Generate Windows Project
         run: npx install-windows-test-app
         working-directory: ./Apps/Playground

@@ -12,7 +12,7 @@ The `react-native-permissions` dependency is required for XR capabilities of Bab
 
 ### Android Configuration
 
-The minimum Android SDK version is 18. This must be set as `minSdkVersion` in the consuming project's `build.gradle` file.
+The minimum Android SDK version is 21. This must be set as `minSdkVersion` in the consuming project's `build.gradle` file.
 
 ### iOS Configuration
 
