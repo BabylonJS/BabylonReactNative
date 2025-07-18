@@ -1,0 +1,24 @@
+name: Build
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+  repository_dispatch:
+    types: [babylonnative-master-update]
+    
+jobs:
+  build-android:
+    uses: ./.github/workflows/android.yml
+  build-iOS:
+    uses: ./.github/workflows/ios.yml
+  build-windows:
+    uses: ./.github/workflows/windows.yml
+  build-typescript:
+    uses: ./.github/workflows/typescript.yml
+
+  package:
+    needs: [build-typescript]
+    uses: ./.github/workflows/package.yml
