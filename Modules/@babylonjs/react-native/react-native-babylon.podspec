@@ -72,6 +72,7 @@ Pod::Spec.new do |s|
           'bimg',
           'bimg_encode',
           'bimg_decode',
+          'minz',
           'Scheduling',
           'bx',
           'Canvas',
