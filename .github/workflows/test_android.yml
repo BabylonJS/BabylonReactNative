@@ -23,7 +23,9 @@ jobs:
         working-directory: ./Apps/Playground
 
       - name: Gulp (Android)
-        run: npx gulp buildAndroid
+        run: |
+          npm install
+          npx gulp buildAndroid
         working-directory: ./Package
   
       - name: Upload APK

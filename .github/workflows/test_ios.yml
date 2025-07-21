@@ -30,5 +30,7 @@ jobs:
         working-directory: ./Apps/Playground
 
       - name: Gulp (iOS)
-        run: npx gulp buildIOS
+        run: |
+          npm install
+          npx gulp buildIOS
         working-directory: ./Package
