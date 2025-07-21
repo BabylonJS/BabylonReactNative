@@ -1,0 +1,36 @@
+name: 'build test ios'
+
+on:
+  workflow_call
+
+jobs:
+  build-test-iOS:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4.2.2
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: BabylonReactNative
+          path: ./artifact
+
+      - name: Install build package
+        run: |
+          npm install ../../artifact/babylonjs-react-native-0.0.1.tgz
+          npm install
+        working-directory: ./Apps/Playground
+
+      - name: Clean and Install Pods
+        run: |
+          cd ios
+          rm -rf Pods Podfile.lock
+          pod install
+        working-directory: ./Apps/Playground
+
+      - name: Gulp (iOS)
+        run: |
+          npm install
+          npx gulp buildIOS
+        working-directory: ./Package
