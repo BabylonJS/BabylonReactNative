@@ -19,6 +19,7 @@ jobs:
       - name: Install build package
         run: |
           npm install ../../artifact/babylonjs-react-native-0.0.1.tgz
+          npm install
         working-directory: ./Apps/Playground
 
       - name: Gulp (Android)
