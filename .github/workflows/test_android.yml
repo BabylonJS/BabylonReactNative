@@ -16,11 +16,8 @@ jobs:
           name: BabylonReactNative
           path: ./artifact
 
-      - name: List downloaded files (debugging)
-        run: ls -R ./artifact
       - name: Install build package
         run: |
-          unzip ../../artifact/BabylonReactNative.zip
           npm install ../../artifact/babylonjs-react-native-0.0.1.tgz
         working-directory: ./Apps/Playground
 
