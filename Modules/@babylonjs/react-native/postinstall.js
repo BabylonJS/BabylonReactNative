@@ -2,12 +2,17 @@ const os = require("os");
 
 function iosCMake() {
   const { spawn } = require('child_process');
-
-  const cmake = spawn('npx', [
-    'cmake',
-    '-S', 'ios',
-    '-B', 'Build/iOS',
-    '-G', 'Xcode',
+  const cmake = spawn(
+    "npx",
+    [
+    '--package=cmake-runtime@3.31.1',
+    './node_modules/cmake-runtime/bin/cmake',
+    '-S',
+    'ios',
+    '-B',
+    'Build/iOS',
+    '-G',
+    'Xcode',
     '-DFETCHCONTENT_FULLY_DISCONNECTED=ON',
     '-DBABYLON_NATIVE_BUILD_APPS=OFF',
     '-DBABYLON_NATIVE_PLUGIN_TESTUTILS=OFF',
