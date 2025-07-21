@@ -24,11 +24,6 @@
     "license": "MIT",
     "licenseFilename": "LICENSE",
     "readmeFilename": "README.md",
-    "dependencies": {
-        "base-64": "^0.1.0",
-        "semver": "^7.3.2",
-        "cmake-runtime": "3.31.0"
-    },
     "peerDependencies": {
         "@babylonjs/core": ">=5.53.1",
         "react": "*",
@@ -36,6 +31,9 @@
         "react-native-permissions": ">=3.0.0"
     },
     "devDependencies": {
+        "base-64": "^0.1.0",
+        "semver": "^7.3.2",
+        "cmake-runtime": "3.31.0",
         "@babel/core": "^7.8.4",
         "@babel/runtime": "^7.8.4",
         "@babylonjs/core": ">=5.53.1",

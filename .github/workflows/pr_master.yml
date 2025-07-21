@@ -22,3 +22,11 @@ jobs:
   package:
     needs: [build-typescript]
     uses: ./.github/workflows/package.yml
+
+  test-package-ios:
+    needs: [package]
+    uses: ./.github/workflows/test_ios.yml
+
+  test-package-android:
+    needs: [package]
+    uses: ./.github/workflows/test_android.yml
