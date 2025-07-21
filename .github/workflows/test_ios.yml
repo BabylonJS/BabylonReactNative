@@ -14,12 +14,15 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: BabylonReactNative
-          path: .
+          path: ./artifact
       - name: Install build package
         run: |
-          unzip ../../BabylonReactNative.zip
-          npm install ../../babylonjs-react-native-0.0.1.tgz
+          unzip ../../artifact/BabylonReactNative.zip
+          npm install ../../artifact/babylonjs-react-native-0.0.1.tgz
         working-directory: ./Apps/Playground
+
+      - name: List downloaded files (debugging)
+        run: ls -R ./artifact
 
       - name: Clean and Install Pods
         run: |
