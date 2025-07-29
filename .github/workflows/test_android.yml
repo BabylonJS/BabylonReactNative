@@ -28,11 +28,3 @@ jobs:
           npx gulp buildAndroid
         working-directory: ./Package
   
-      - name: List files (debugging)
-        run: ls -R ./
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: 'AndroidAPK'
-          path: Apps/Playground/android/app/build/outputs/apk/release/app-release.apk
