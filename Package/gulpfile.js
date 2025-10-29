@@ -260,9 +260,8 @@ async function downloadZip(url, dest) {
 }
 
 async function unzipFile(zipPath, destDir) {
-  await fs.createReadStream(zipPath)
-    .pipe(unzipper.Extract({ path: destDir }))
-    .promise();
+  const dir = await unzipper.Open.file(zipPath);
+  await dir.extract({ path: destDir });
 }
 
 function deleteFile(filePath) {
