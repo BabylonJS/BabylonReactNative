@@ -35,5 +35,5 @@ jobs:
         working-directory: ./Apps/Playground/windows
         
       - name: Windows build Playground
-        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m Playground.sln /v:detailed
+        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m Playground.sln /v:detailed /p:WindowsTargetPlatformVersion=10.0.26100.0
         working-directory: ./Apps/Playground/windows
