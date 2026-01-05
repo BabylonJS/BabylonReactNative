@@ -8,8 +8,8 @@
       "name": "Playground",
       "version": "0.0.1",
       "dependencies": {
-        "@babylonjs/core": "8.3.1",
-        "@babylonjs/loaders": "8.3.1",
+        "@babylonjs/core": "8.44.0",
+        "@babylonjs/loaders": "8.44.0",
         "@babylonjs/react-native": "file:../../Modules/@babylonjs/react-native",
         "@react-native-community/slider": "^4.2.2",
         "@react-native/new-app-screen": "0.80.0",
@@ -25,8 +25,6 @@
         "@babel/preset-env": "^7.25.3",
         "@babel/runtime": "^7.25.0",
         "@react-native-community/cli": "19.0.0",
-        "@react-native-community/cli-platform-android": "19.0.0",
-        "@react-native-community/cli-platform-ios": "19.0.0",
         "@react-native/babel-preset": "0.80.0",
         "@react-native/eslint-config": "0.80.0",
         "@react-native/metro-config": "0.80.0",
@@ -64,6 +62,7 @@
         "@types/react": "^18.3.0",
         "@types/react-test-renderer": "^16.9.2",
         "@types/semver": "^7.3.4",
+        "cmake-runtime": "3.31.0",
         "eslint": "7.12.0",
         "just-scripts": "^0.44.7",
         "prettier": "1.19.1",
@@ -2054,15 +2053,15 @@
       }
     },
     "node_modules/@babylonjs/core": {
-      "version": "8.3.1",
-      "resolved": "https://registry.npmjs.org/@babylonjs/core/-/core-8.3.1.tgz",
-      "integrity": "sha512-FBf/rMHeLu1QEhfAm5ye2EV+ACBu2hb9SrnyQnspGhevm8PM4VKA2z2P7IqnDB8CgCjQ4Vr7PCGCmuZ7ZENWoA==",
+      "version": "8.44.0",
+      "resolved": "https://registry.npmjs.org/@babylonjs/core/-/core-8.44.0.tgz",
+      "integrity": "sha512-4Mc1iLnTS0mEddwytUQx3XqV7TUCceMdY4JBgQIZJvZxVaeNZkauXI2riKga9D3ZYigKPq+mlHsDI2i00tnGWQ==",
       "license": "Apache-2.0"
     },
     "node_modules/@babylonjs/loaders": {
-      "version": "8.3.1",
-      "resolved": "https://registry.npmjs.org/@babylonjs/loaders/-/loaders-8.3.1.tgz",
-      "integrity": "sha512-cOGzKYyRuU7eMiLKX0VeyLAk+mjBrdY3Tp6UcB4275MVuJ87kuZoZrsHV4qDsTb9t/aOlu1HpH80lPRI52tnVw==",
+      "version": "8.44.0",
+      "resolved": "https://registry.npmjs.org/@babylonjs/loaders/-/loaders-8.44.0.tgz",
+      "integrity": "sha512-CX1Ih6bsstKzaf16cxecwdJQ3LfzrR2IW+R4j2ZEg4u47oT6ob0nfWYgU4iKkRgAIYEBGbZ54nXWYKt8Ye406A==",
       "license": "Apache-2.0",
       "peerDependencies": {
         "@babylonjs/core": "^8.0.0",
