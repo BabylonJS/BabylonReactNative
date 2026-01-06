@@ -1,7 +1,13 @@
 name: 'build windows'
 
 on:
-  workflow_call
+  workflow_call:
+    inputs:
+      WindowsTargetPlatformVersion:
+        description: 'Windows Target Platform Version'
+        type: string
+        default: '10.0.26100.0'
+        required: false
 
 jobs:
   build-windows:
@@ -35,5 +41,5 @@ jobs:
         working-directory: ./Apps/Playground/windows
         
       - name: Windows build Playground
-        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m Playground.sln /v:detailed /p:WindowsTargetPlatformVersion=10.0.26100.0
+        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m Playground.sln /v:detailed /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }}
         working-directory: ./Apps/Playground/windows
