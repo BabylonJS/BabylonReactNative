@@ -302,7 +302,9 @@
   </ImportGroup>
 <PropertyGroup>
   <GeneratedFilesDirFull>
-    $([System.IO.Path]::GetFullPath('$(ProjectDir)$(GeneratedFilesDir)'))
+    $([System.String]::Copy(
+      $([System.IO.Path]::GetFullPath('$(ProjectDir)$(GeneratedFilesDir)'))
+    ).TrimEnd('\'))
   </GeneratedFilesDirFull>
 </PropertyGroup>
   <Target Name="BabylonNativeBuild" BeforeTargets="PrepareForBuild">
