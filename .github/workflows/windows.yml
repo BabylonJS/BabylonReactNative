@@ -40,6 +40,10 @@ jobs:
         run: nuget restore Playground.sln
         working-directory: ./Apps/Playground/windows
         
+
       - name: Windows build Playground
         run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m Playground.sln /v:detailed /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }}
         working-directory: ./Apps/Playground/windows
+      - name: Files Debug
+        run: ls -R
+        continue-on-error: true
