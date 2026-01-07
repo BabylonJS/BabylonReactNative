@@ -8,13 +8,19 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4.2.2
-      - name: Install
-        run: npm install
-        working-directory: ./
-
       - name: Setting up developer environment
-        run: npx gulp setupDev
+        run: |
+          npm install
+          npx gulp setupDev
         working-directory: ./Package
+
+      - name: Install package tools
+        run: npm install
+        working-directory: ./Modules/@babylonjs/react-native
+
+      - name: Install packages for Playground
+        run: npm install
+        working-directory: ./Apps/Playground
         
       - name: Gulp (Android)
         run: npx gulp buildAndroid

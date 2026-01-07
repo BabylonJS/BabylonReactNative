@@ -1,8 +1,0 @@
-{
-  "name": "babylonreactnative-root",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "postinstall": "npm install --prefix ./Package && npm install --prefix ./Modules/@babylonjs/react-native"
-  }
-}
