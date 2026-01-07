@@ -9,9 +9,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
 set(BABYLON_NATIVE_USE_SWAPCHAINPANEL ON CACHE BOOL "")
 
+# Directory for CPPWINRT generated files
+include_directories(BEFORE ${GENERATED_FILES_DIR})
+
 # Configure Babylon Native to use JSI
 # Note: We should avoid installing node_modules in the Module\@babylonjs\react-native folder.
-# Installing react-native dependencies for both the Playground app and the @babylonjs\react-native package will generate a bad bundle/runtime errors.
+# Installing react-native dependencies for both the Playground app and the @babylonjs/react-native package will generate a bad bundle/runtime errors.
 set(NAPI_JAVASCRIPT_ENGINE "JSI" CACHE STRING "")
 
 set(PLAYGROUND_DIR "${CMAKE_CURRENT_LIST_DIR}/../../..")

@@ -323,7 +323,8 @@
     -DFETCHCONTENT_SOURCE_DIR_BASE-N=$(ProjectDir)..\..\shared\BabylonNative\deps\base-n-src ^
     -DFETCHCONTENT_SOURCE_DIR_IOS-CMAKE=$(ProjectDir)..\..\shared\BabylonNative\deps\ios-cmake-src ^
     -DJSRUNTIMEHOST_CORE_APPRUNTIME=0 ^
-    -S"$(ProjectDir).."' />
+    -S"$(ProjectDir).." ^
+    -DGENERATED_FILES_DIR="$(ProjectDir)$(GeneratedFilesDir)' />
     <Exec Command='"MSBuild.exe" ^
       "$(ProjectDir)\..\..\..\react-native\Build\uwp_$(Platform)\ReactNativeBabylon.sln" ^
       /p:Configuration=$(Configuration) ^

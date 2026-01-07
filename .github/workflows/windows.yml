@@ -31,16 +31,13 @@ jobs:
           Copy-Item -Path "Apps/Playground/package-lock-windows.json" -Destination "Apps/Playground/package-lock.json" -Force
         working-directory: ./
 
-      - name: Setting up developer environment
-        run: |
-          npm install
-          npx gulp setupDev
-        working-directory: ./Package
+      - name: Install
+        run: npm install
+        working-directory: ./
 
-      - name: Install packages for Playground
-        run: |
-          npm install
-        working-directory: ./Apps/Playground
+      - name: Setting up developer environment
+        run: npx gulp setupDev
+        working-directory: ./Package
 
       - name: NPM Generate Windows Project
         run: npx install-windows-test-app
