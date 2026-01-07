@@ -9,8 +9,15 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4.2.2
       - name: Setting up developer environment
-        run: node setup_dev.js
-        working-directory: ./
+        run: |
+          npm install
+          npx gulp setupDev
+        working-directory: ./Package
+
+      - name: Install packages for Playground
+        run: |
+          npm install
+        working-directory: ./Apps/Playground
 
       - name: Gulp (Android)
         run: npx gulp buildAndroid

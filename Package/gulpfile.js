@@ -113,6 +113,11 @@ const copyWindowsFiles = () => {
     .pipe(gulp.dest(`Assembled/windows`));
 };
 
+const copyJSFilesToModule = () => {
+  return gulp.src('Assembled/**')
+    .pipe(gulp.dest(`../Modules/@babylonjs/react-native`));
+}
+
 const validateAssembled = async () => {
   // When the package contents are updated *and validated*, update the expected below from the output of the failed validation console output (run `gulp validateAssembled`).
   // This helps ensure a bad package is not accidentally published due to tooling changes, etc.
@@ -402,6 +407,7 @@ const buildBabylonNativeSourceTree = async () => {
 const copyFiles = gulp.series(copyCommonFiles, copySharedFiles, copyAndroidARCoreFiles , copyiOSARKitFiles, copyIOSFiles, copyAndroidFiles, copyWindowsFiles);
 const buildAssembled = gulp.series(buildBabylonNativeSourceTree, copyFiles, buildTypeScript, validateAssembled);
 const buildIOS = gulp.series(buildIphoneOS); // buildIphoneSimulator is optional. Build is slower and it should not make more checks
+const setupDev = gulp.series(buildAssembled, copyJSFilesToModule);
 
 exports.buildAssembled = buildAssembled;
 exports.buildTypeScript = buildTypeScript;
@@ -414,3 +420,4 @@ exports.clean = clean;
 exports.default = buildAssembled;
 
 exports.buildBabylonNativeSourceTree = buildBabylonNativeSourceTree;
+exports.setupDev = setupDev;
