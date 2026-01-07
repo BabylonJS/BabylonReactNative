@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!-- Note: CppWinRT NuGet dependency should be resolved for the solution not the individual project -->
-  <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.250303.1\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.250303.1\build\native\Microsoft.Windows.CppWinRT.props')" />
+  <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.props')" />
   <PropertyGroup Label="Globals">
     <CppWinRTOptimized>true</CppWinRTOptimized>
     <CppWinRTRootNamespaceAutoMerge>true</CppWinRTRootNamespaceAutoMerge>
@@ -15,8 +15,8 @@
     <AppContainerApplication>true</AppContainerApplication>
     <ApplicationType>Windows Store</ApplicationType>
     <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
-    <WindowsTargetPlatformVersion Condition=" '$(WindowsTargetPlatformVersion)' == '' ">10.0.26100.0</WindowsTargetPlatformVersion>
-    <WindowsTargetPlatformMinVersion>10.0.19041.0</WindowsTargetPlatformMinVersion>
+ <WindowsTargetPlatformVersion Condition=" '$(WindowsTargetPlatformVersion)' == '' ">10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformMinVersion>10.0.18362.0</WindowsTargetPlatformMinVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="ReactNativeWindowsProps">
@@ -300,6 +300,11 @@
   <ImportGroup Label="ReactNativeWindowsTargets">
     <Import Project="$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.targets" Condition="Exists('$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.targets')" />
   </ImportGroup>
+<PropertyGroup>
+  <GeneratedFilesDirFull>
+    $([System.IO.Path]::GetFullPath('$(ProjectDir)$(GeneratedFilesDir)'))
+  </GeneratedFilesDirFull>
+</PropertyGroup>
   <Target Name="BabylonNativeBuild" BeforeTargets="PrepareForBuild">
     <Exec Command='cmake --version' />
     <Exec Command='cmake ^
@@ -312,6 +317,7 @@
     -DBABYLON_NATIVE_BUILD_APPS=OFF ^
     -DBABYLON_NATIVE_INSTALL=OFF ^
     -DBABYLON_NATIVE_PLUGIN_TESTUTILS=OFF ^
+    -DGENERATED_FILES_DIR="$(GeneratedFilesDirFull)" ^
     -DFETCHCONTENT_SOURCE_DIR_BGFX.CMAKE=$(ProjectDir)..\..\shared\BabylonNative\deps\bgfx.cmake-src ^
     -DFETCHCONTENT_SOURCE_DIR_ARCANA.CPP=$(ProjectDir)..\..\shared\BabylonNative\deps\arcana.cpp-src ^
     -DFETCHCONTENT_SOURCE_DIR_CMAKEEXTENSIONS=$(ProjectDir)..\..\shared\BabylonNative\deps\cmakeextensions-src ^
@@ -323,8 +329,7 @@
     -DFETCHCONTENT_SOURCE_DIR_BASE-N=$(ProjectDir)..\..\shared\BabylonNative\deps\base-n-src ^
     -DFETCHCONTENT_SOURCE_DIR_IOS-CMAKE=$(ProjectDir)..\..\shared\BabylonNative\deps\ios-cmake-src ^
     -DJSRUNTIMEHOST_CORE_APPRUNTIME=0 ^
-    -S"$(ProjectDir).." ^
-    -DGENERATED_FILES_DIR="$(ProjectDir)$(GeneratedFilesDir)' />
+    -S"$(ProjectDir).."' />
     <Exec Command='"MSBuild.exe" ^
       "$(ProjectDir)\..\..\..\react-native\Build\uwp_$(Platform)\ReactNativeBabylon.sln" ^
       /p:Configuration=$(Configuration) ^
@@ -345,6 +350,6 @@
     <Error Condition="!Exists('$(BabylonReactNativeDir)')" Text="$(ErrorText)" />
   </Target>
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.250303.1\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.250303.1\build\native\Microsoft.Windows.CppWinRT.targets')" />
+    <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.targets')" />
   </ImportGroup>
 </Project>
