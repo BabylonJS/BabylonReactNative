@@ -300,13 +300,6 @@
   <ImportGroup Label="ReactNativeWindowsTargets">
     <Import Project="$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.targets" Condition="Exists('$(ReactNativeWindowsDir)\PropertySheets\External\Microsoft.ReactNative.Uwp.CppLib.targets')" />
   </ImportGroup>
-<PropertyGroup>
-  <GeneratedFilesDirFull>
-    $([System.String]::Copy(
-      $([System.IO.Path]::GetFullPath('$(ProjectDir)$(GeneratedFilesDir)'))
-    ).TrimEnd('\'))
-  </GeneratedFilesDirFull>
-</PropertyGroup>
   <Target Name="BabylonNativeBuild" BeforeTargets="PrepareForBuild">
     <Exec Command='cmake --version' />
     <Exec Command='cmake ^
@@ -319,7 +312,7 @@
     -DBABYLON_NATIVE_BUILD_APPS=OFF ^
     -DBABYLON_NATIVE_INSTALL=OFF ^
     -DBABYLON_NATIVE_PLUGIN_TESTUTILS=OFF ^
-    -DGENERATED_FILES_DIR="$(GeneratedFilesDirFull)" ^
+    -DGENERATED_FILES_DIR="$(ProjectDir)$(GeneratedFilesDir)winrt\.." ^
     -DFETCHCONTENT_SOURCE_DIR_BGFX.CMAKE=$(ProjectDir)..\..\shared\BabylonNative\deps\bgfx.cmake-src ^
     -DFETCHCONTENT_SOURCE_DIR_ARCANA.CPP=$(ProjectDir)..\..\shared\BabylonNative\deps\arcana.cpp-src ^
     -DFETCHCONTENT_SOURCE_DIR_CMAKEEXTENSIONS=$(ProjectDir)..\..\shared\BabylonNative\deps\cmakeextensions-src ^
