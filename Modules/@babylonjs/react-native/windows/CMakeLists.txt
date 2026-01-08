@@ -10,7 +10,7 @@ set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
 set(BABYLON_NATIVE_USE_SWAPCHAINPANEL ON CACHE BOOL "")
 
 # Directory for CPPWINRT generated files
-include_directories(BEFORE ${GENERATED_FILES_DIR})
+include_directories(BEFORE "${CMAKE_CURRENT_LIST_DIR}/BabylonReactNative/Generated Files")
 
 # Configure Babylon Native to use JSI
 # Note: We should avoid installing node_modules in the Module\@babylonjs\react-native folder.
