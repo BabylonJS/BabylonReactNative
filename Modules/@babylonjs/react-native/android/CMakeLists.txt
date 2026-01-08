@@ -26,17 +26,18 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 set(CMAKE_CXX_STANDARD 17)
 file(TO_CMAKE_PATH "${REACTNATIVE_DIR}" REACTNATIVE_DIR_CMAKE)
 
+set(REACT_NATIVE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../react-native)
+set(input_SRC src/main/cpp/BabylonNativeInterop.cpp ${SHARED_SOURCES})
+include(${REACT_NATIVE_DIR}/ReactAndroid/cmake-utils/ReactNative-application.cmake)
+
 # Configure Babylon Native to use JSI
 set(NAPI_JAVASCRIPT_ENGINE "JSI" CACHE STRING "The JavaScript engine to power N-API")
-add_subdirectory(${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi/jsi ${CMAKE_CURRENT_BINARY_DIR}/jsi)
-target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactCommon/jsi)
-target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/jni/react/turbomodule)
-target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactCommon/callinvoker)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/src/")
 
 set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
 set(BABYLON_REACT_NATIVE_SHARED_DIR "${CMAKE_CURRENT_LIST_DIR}/../shared")
+set(BABYLON_NATIVE_PLUGIN_NATIVEENGINE_WEBP OFF CACHE BOOL "")
 add_subdirectory(${BABYLON_REACT_NATIVE_SHARED_DIR} ${CMAKE_CURRENT_BINARY_DIR}/shared)
 
 if (TARGET NativeXr)
@@ -57,92 +58,130 @@ disable_warnings(Scheduling) # deprecated stl
 disable_warnings(Canvas)
 disable_warnings(Window)
 
-add_library(fbjni SHARED IMPORTED)
-set_target_properties(fbjni PROPERTIES
-    IMPORTED_LOCATION ${FBJNI_LIBPATH}/${ANDROID_ABI}/libfbjni.so
-    INTERFACE_INCLUDE_DIRECTORIES ${FBJNI_INCPATH})
 
-add_library(BabylonNative SHARED
-    src/main/cpp/BabylonNativeInterop.cpp
-    ${SHARED_SOURCES})
+add_library(BabylonNativeShared STATIC ${SHARED_SOURCES})
+disable_warnings(${CMAKE_PROJECT_NAME}) # deprecated stl
+disable_warnings(BabylonNativeShared)
+target_include_directories(BabylonNativeShared PRIVATE ${BABYLON_REACT_NATIVE_SHARED_DIR})
 
-disable_warnings(BabylonNative) # deprecated stl
+target_link_libraries(${CMAKE_PROJECT_NAME} BabylonNativeShared)
 
-# >= React Native 0.71 with prefabs
-include(${REACTNATIVE_DIR_CMAKE}/ReactAndroid/cmake-utils/folly-flags.cmake)
+set(TURBOMODULE_DIR "${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/jni/react/turbomodule/")
+if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
+   # >= React Native 0.71 with prefabs
+   include(${REACTNATIVE_DIR_CMAKE}/ReactAndroid/cmake-utils/folly-flags.cmake)
 
-# We configured the REACT_COMMON_DIR variable as it's commonly used to reference
-# shared C++ code in other targets.
-set(REACT_COMMON_DIR ${REACT_ANDROID_DIR}/../ReactCommon)
+    # We configured the REACT_COMMON_DIR variable as it's commonly used to reference
+    # shared C++ code in other targets.
+    set(REACT_COMMON_DIR ${REACT_ANDROID_DIR}/../ReactCommon)
 
-# If you have ccache installed, we're going to honor it.
-find_program(CCACHE_FOUND ccache)
-if(CCACHE_FOUND)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
-endif(CCACHE_FOUND)
+    # If you have ccache installed, we're going to honor it.
+    find_program(CCACHE_FOUND ccache)
+    if(CCACHE_FOUND)
+        set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+        set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+    endif(CCACHE_FOUND)
 
-set(BUILD_DIR ${PROJECT_BUILD_DIR})
-# When building on Windows, PROJECT_BUILD_DIR might be empty. If it is, then the build breaks because of string replace
-if(CMAKE_HOST_WIN32 AND NOT "${PROJECT_BUILD_DIR}" STREQUAL "")
-    string(REPLACE "\\" "/" BUILD_DIR ${BUILD_DIR})
+    set(BUILD_DIR ${PROJECT_BUILD_DIR})
+    # When building on Windows, PROJECT_BUILD_DIR might be empty. If it is, then the build breaks because of string replace
+    if(CMAKE_HOST_WIN32 AND NOT "${PROJECT_BUILD_DIR}" STREQUAL "")
+        string(REPLACE "\\" "/" BUILD_DIR ${BUILD_DIR})
+    endif()
+
+    target_include_directories(${CMAKE_PROJECT_NAME}
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${PROJECT_BUILD_DIR}/generated/rncli/src/main/jni)
+
+    target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -Wall -Werror -fexceptions -frtti -std=c++17 -DWITH_INSPECTOR=1 -DLOG_TAG=\"ReactNative\")
+
+    find_package(fbjni REQUIRED CONFIG)
+    add_library(fbjni ALIAS fbjni::fbjni)
+
+    target_link_libraries(BabylonNativeShared
+        GLESv3
+        android
+        EGL
+        log
+        -lz
+        arcana
+        fbjni                               # via 3rd party prefab
+        AndroidExtensions
+        GraphicsDevice
+        JsRuntime
+        NativeCapture
+            MachineIndependent
+        NativeEngine
+        NativeInput
+        NativeOptimizations
+        NativeTracing
+        Window
+        XMLHttpRequest
+        Canvas
+
+        ${ADDITIONAL_LIBRARIES})
+
+    # We use an interface target to propagate flags to all the generated targets
+    # such as the folly flags or others.
+    #add_library(common_flags INTERFACE)
+    #target_compile_options(common_flags INTERFACE ${folly_FLAGS})
+    #target_link_libraries(ReactAndroid::react_codegen_rncore INTERFACE common_flags)
+
+    # If project is on RN CLI v9, then we can use the following lines to link against the autolinked 3rd party libraries.
+    if(EXISTS ${PROJECT_BUILD_DIR}/generated/rncli/src/main/jni/Android-rncli.cmake)
+            include(${PROJECT_BUILD_DIR}/generated/rncli/src/main/jni/Android-rncli.cmake)
+            target_link_libraries(${CMAKE_PROJECT_NAME} ${AUTOLINKED_LIBRARIES})
+            foreach(autolinked_library ${AUTOLINKED_LIBRARIES})
+                target_link_libraries(${autolinked_library} common_flags)
+            endforeach()
+    endif()
+
+    # If project is running codegen at the app level, we want to link and build the generated library.
+    if(EXISTS ${PROJECT_BUILD_DIR}/generated/source/codegen/jni/CMakeLists.txt)
+            add_subdirectory(${PROJECT_BUILD_DIR}/generated/source/codegen/jni/ codegen_app_build)
+            get_property(APP_CODEGEN_TARGET DIRECTORY ${PROJECT_BUILD_DIR}/generated/source/codegen/jni/ PROPERTY BUILDSYSTEM_TARGETS)
+            target_link_libraries(${CMAKE_PROJECT_NAME} ${APP_CODEGEN_TARGET})
+            target_link_libraries(${APP_CODEGEN_TARGET} common_flags)
+    endif()
+
+    target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${SHARED_INCLUDES})
+else()
+    message(FATAL_ERROR "<= React Native 0.70 not supported anymore")
+    # <= React Native 0.70
+    # Define a minimal version of libturbomodulejsijni.so that includes CallInvokerHolder.cpp.
+    # This is the only part of the TurboModule system we need for now. Eventually when TurboModule
+    # support ships with React Native, we'll need to strip this back out.
+
+    list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR_CMAKE}/ReactCommon/callinvoker")
+    list(APPEND TURBOMODULE_INC_DIRS "${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni")
+    add_library(turbomodulejsijni SHARED ${REACTNATIVE_DIR_CMAKE}/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni/ReactCommon/CallInvokerHolder.cpp)
+    target_include_directories(turbomodulejsijni PUBLIC "${TURBOMODULE_INC_DIRS}")
+    target_link_libraries(turbomodulejsijni fbjni)
+
+    target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${SHARED_INCLUDES})
+
+    target_link_libraries(BabylonNativeShared
+        GLESv3
+        android
+        EGL
+        log
+        -lz
+        arcana
+        jsi
+        #turbomodulejsijni
+        AndroidExtensions
+        GraphicsDevice
+        JsRuntime
+        NativeCapture
+        NativeEngine
+        NativeInput
+        NativeOptimizations
+        NativeTracing
+        Window
+        XMLHttpRequest
+        Canvas
+        ${ADDITIONAL_LIBRARIES})
 endif()
 
-target_include_directories(BabylonNative
-    PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${PROJECT_BUILD_DIR}/generated/rncli/src/main/jni)
-
-target_compile_options(BabylonNative PRIVATE -Wall -Werror -fexceptions -frtti -std=c++17 -DWITH_INSPECTOR=1 -DLOG_TAG=\"ReactNative\")
-
-find_package(fbjni REQUIRED CONFIG)
-add_library(fbjni ALIAS fbjni::fbjni)
-
-target_link_libraries(BabylonNative
-    GLESv3
-    android
-    EGL
-    log
-    -lz
-    arcana
-    fbjni                               # via 3rd party prefab
-    AndroidExtensions
-    GraphicsDevice
-    JsRuntime
-    NativeCapture
-    NativeEngine
-    NativeInput
-    NativeOptimizations
-    NativeTracing
-    Window
-    XMLHttpRequest
-    Canvas
-    ${ADDITIONAL_LIBRARIES})
-
-# We use an interface target to propagate flags to all the generated targets
-# such as the folly flags or others.
-#add_library(common_flags INTERFACE)
-#target_compile_options(common_flags INTERFACE ${folly_FLAGS})
-#target_link_libraries(ReactAndroid::react_codegen_rncore INTERFACE common_flags)
-
-# If project is on RN CLI v9, then we can use the following lines to link against the autolinked 3rd party libraries.
-if(EXISTS ${PROJECT_BUILD_DIR}/generated/rncli/src/main/jni/Android-rncli.cmake)
-        include(${PROJECT_BUILD_DIR}/generated/rncli/src/main/jni/Android-rncli.cmake)
-        target_link_libraries(${CMAKE_PROJECT_NAME} ${AUTOLINKED_LIBRARIES})
-        foreach(autolinked_library ${AUTOLINKED_LIBRARIES})
-            target_link_libraries(${autolinked_library} common_flags)
-        endforeach()
-endif()
-
-# If project is running codegen at the app level, we want to link and build the generated library.
-if(EXISTS ${PROJECT_BUILD_DIR}/generated/source/codegen/jni/CMakeLists.txt)
-        add_subdirectory(${PROJECT_BUILD_DIR}/generated/source/codegen/jni/ codegen_app_build)
-        get_property(APP_CODEGEN_TARGET DIRECTORY ${PROJECT_BUILD_DIR}/generated/source/codegen/jni/ PROPERTY BUILDSYSTEM_TARGETS)
-        target_link_libraries(${CMAKE_PROJECT_NAME} ${APP_CODEGEN_TARGET})
-        target_link_libraries(${APP_CODEGEN_TARGET} common_flags)
-endif()
-
-target_include_directories(BabylonNative PRIVATE ${SHARED_INCLUDES})
-
-target_compile_definitions(BabylonNative PRIVATE BABYLON_NATIVE_PLUGIN_NATIVEXR=${BABYLON_NATIVE_PLUGIN_NATIVEXR})
-target_compile_definitions(BabylonNative PRIVATE BABYLON_NATIVE_PLUGIN_NATIVECAMERA=${BABYLON_NATIVE_PLUGIN_NATIVECAMERA})
+target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE BABYLON_NATIVE_PLUGIN_NATIVEXR=${BABYLON_NATIVE_PLUGIN_NATIVEXR})
+target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE BABYLON_NATIVE_PLUGIN_NATIVECAMERA=${BABYLON_NATIVE_PLUGIN_NATIVECAMERA})
