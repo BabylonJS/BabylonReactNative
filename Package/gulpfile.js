@@ -164,6 +164,7 @@ const validateAssembled = async () => {
     `Assembled/android`,
     `Assembled/android/build.gradle`,
     `Assembled/android/CMakeLists.txt`,
+    `Assembled/android/ReactBabylonNative.cpp`,
     `Assembled/android/README.md`,
     `Assembled/android/include`, 
     `Assembled/android/include/IXrContextARCore.h`,
