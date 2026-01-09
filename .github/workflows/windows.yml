@@ -29,6 +29,7 @@ jobs:
         run: |
           Copy-Item -Path "Apps/Playground/package-windows.json" -Destination "Apps/Playground/package.json" -Force
           Copy-Item -Path "Apps/Playground/package-lock-windows.json" -Destination "Apps/Playground/package-lock.json" -Force
+          cd Package
           node setup_dev.js
         working-directory: ./
 

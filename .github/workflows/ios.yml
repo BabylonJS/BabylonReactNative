@@ -12,7 +12,7 @@ jobs:
 
       - name: Setting up developer environment
         run: node setup_dev.js
-        working-directory: ./
+        working-directory: ./Package
 
       - name: Clean and Install Pods
         run: |

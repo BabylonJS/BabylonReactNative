@@ -67,7 +67,7 @@ function executeStep(command, workingDir, stepName) {
 async function main() {
   console.log('Setting up developer environment ...');
   
-  const rootDir = process.cwd();
+  const rootDir = path.join(process.cwd(), '..');
   
   // Step 1: NPM Install 
   const packageDir = path.join(rootDir, 'Package');

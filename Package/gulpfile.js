@@ -280,11 +280,6 @@ function runCMake(buildDir) {
   exec(cmakeCommand, buildDir);
 }
 
-function writeCMakeListsFile(cmakePath) {
-  const content = `add_subdirectory(\${CMAKE_CURRENT_LIST_DIR}/Repo)\n`;
-  fs.writeFileSync(cmakePath, content, 'utf8');
-}
-
 function deleteFolderRecursive(folderPath, excludeSubFolders = []) {
   if (!fs.existsSync(folderPath)) return;
 
@@ -362,9 +357,6 @@ const buildBabylonNativeSourceTree = async () => {
 
   console.log('Deleting ZIP...');
   await deleteFile(ZIP_PATH);
-
-  console.log('Creating CMakeLists.txt...');
-  writeCMakeListsFile(CMAKE_LISTS_PATH);
 
   console.log('Renaming BabylonNative-xxx folder ...');
   await fs.rename(`${TARGET_DIR}/BabylonNative-${COMMIT_ID}`, `${TARGET_DIR}/Repo`, (err) => {

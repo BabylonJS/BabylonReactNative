@@ -93,20 +93,7 @@ android {
                         "-DREACTNATIVE_DIR=${rootDir}/../node_modules/react-native/",
                         "-DBABYLON_NATIVE_PLUGIN_NATIVECAMERA=${BABYLON_NATIVE_PLUGIN_NATIVECAMERA ? '1' : '0'}",
                         "-DBABYLON_NATIVE_PLUGIN_NATIVEXR=${BABYLON_NATIVE_PLUGIN_NATIVEXR ? '1' : '0'}",
-                        "-DFETCHCONTENT_FULLY_DISCONNECTED=ON",
-                        "-DBABYLON_NATIVE_BUILD_APPS=OFF",
-                        "-DBABYLON_NATIVE_INSTALL=OFF",
-                        "-DFETCHCONTENT_SOURCE_DIR_BGFX.CMAKE=../shared/BabylonNative/deps/bgfx.cmake-src",
-                        "-DFETCHCONTENT_SOURCE_DIR_ARCANA.CPP=../shared/BabylonNative/deps/arcana.cpp-src",
-                        "-DFETCHCONTENT_SOURCE_DIR_CMAKEEXTENSIONS=../shared/BabylonNative/deps/cmakeextensions-src",
-                        "-DFETCHCONTENT_SOURCE_DIR_JSRUNTIMEHOST=../shared/BabylonNative/deps/jsruntimehost-src",
-                        "-DFETCHCONTENT_SOURCE_DIR_URLLIB=../shared/BabylonNative/deps/urllib-src",
-                        "-DFETCHCONTENT_SOURCE_DIR_SPIRV-CROSS=../shared/BabylonNative/deps/spirv-cross-src",
-                        "-DFETCHCONTENT_SOURCE_DIR_LIBWEBP=../shared/BabylonNative/deps/libwebp-src",
-                        "-DFETCHCONTENT_SOURCE_DIR_GLSLANG=../shared/BabylonNative/deps/glslang-src",
-                        "-DFETCHCONTENT_SOURCE_DIR_BASE-N=../shared/BabylonNative/deps/base-n-src",
-                        "-DFETCHCONTENT_SOURCE_DIR_ANDROIDEXTENSIONS=../shared/BabylonNative/deps/androidextensions-src",
-                        "-DFETCHCONTENT_SOURCE_DIR_ARCORE-ANDROID-SDK=../shared/BabylonNative/deps/arcore-android-sdk-src"
+                        "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
             }
         }
         ndk {

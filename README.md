@@ -56,6 +56,7 @@ git clone https://github.com/BabylonJS/BabylonReactNative
 Run setup_dev.js script :
 
 ```
+cd Package
 node setup_dev.js
 ```
 
