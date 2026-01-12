@@ -34,6 +34,7 @@ items = ['/shared/BabylonNative/Repo/Polyfills/Canvas',
   '/_deps/jsruntimehost-build/Polyfills/Scheduling',
   '/_deps/jsruntimehost-build/Core/JsRuntime',
   '/_deps/jsruntimehost-build/Core/Node-API-JSI',
+  '/_deps/jsruntimehost-build/Core/Foundation',
   '/_deps/spirv-cross-build']
 
 
