@@ -50,7 +50,7 @@ const clean = async () => {
 };
 
 const buildTypeScript = async () => {
-  exec('node node_modules/typescript/bin/tsc --noEmit false --outDir ../../../Package/Assembled', '../Modules/@babylonjs/react-native');
+  exec('node node_modules/typescript/bin/tsc *.ts *.tsx --noEmit false --outDir ../../../Package/Assembled', '../Modules/@babylonjs/react-native');
 
   // Update the 'main' property in package.json to be 'index.js' instead of 'index.ts'
   const packageJson = JSON.parse(fs.readFileSync('Assembled/package.json'));
