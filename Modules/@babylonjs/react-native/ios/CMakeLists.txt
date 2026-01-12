@@ -74,6 +74,7 @@ target_link_libraries(BabylonNative
     NativeInput
     NativeOptimizations
     NativeTracing
+    Foundation
     Window
     XMLHttpRequest
     Canvas

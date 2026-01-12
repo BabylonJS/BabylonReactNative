@@ -110,11 +110,12 @@ if (EXISTS "${TURBOMODULE_DIR}/CMakeLists.txt")
         GraphicsDevice
         JsRuntime
         NativeCapture
-            MachineIndependent
+        MachineIndependent
         NativeEngine
         NativeInput
         NativeOptimizations
         NativeTracing
+        Foundation
         Window
         XMLHttpRequest
         Canvas

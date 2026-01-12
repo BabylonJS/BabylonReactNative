@@ -194,6 +194,7 @@
         NativeInput.lib;
         NativeOptimizations.lib;
         NativeTracing.lib;
+        Foundationd.lib;
         OGLCompilerd.lib;
         OSDependentd.lib;
         spirv-cross-cored.lib;
@@ -250,6 +251,7 @@
         NativeInput.lib;
         NativeOptimizations.lib;
         NativeTracing.lib;
+        Foundation.lib;
         OGLCompiler.lib;
         OSDependent.lib;
         spirv-cross-core.lib;

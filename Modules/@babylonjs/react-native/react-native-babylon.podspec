@@ -90,6 +90,7 @@ Pod::Spec.new do |s|
           'NativeInput',
           'NativeOptimizations',
           'NativeTracing',
+          'Foundation',
           'SPIRV',
           'spirv-cross-core',
           'spirv-cross-msl',
