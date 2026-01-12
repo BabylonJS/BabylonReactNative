@@ -50,7 +50,7 @@ const clean = async () => {
 };
 
 const buildTypeScript = async () => {
-  exec('node node_modules/typescript/bin/tsc *.ts *.tsx --noEmit false --outDir ../../../Package/Assembled', '../Modules/@babylonjs/react-native');
+  exec('node node_modules/typescript/bin/tsc --noEmit false --outDir ../../../Package/Assembled', '../Modules/@babylonjs/react-native');
 
   // Update the 'main' property in package.json to be 'index.js' instead of 'index.ts'
   const packageJson = JSON.parse(fs.readFileSync('Assembled/package.json'));
@@ -395,6 +395,7 @@ const buildBabylonNativeSourceTree = async () => {
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/arcore-android-sdk-src/media`);
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/arcore-android-sdk-src/samples`);
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/arcore-android-sdk-src/tools`);
+  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/jsruntimehost-src/Tests`);
 }
 
 const copyFiles = gulp.series(copyCommonFiles, copySharedFiles, copyAndroidARCoreFiles , copyiOSARKitFiles, copyIOSFiles, copyAndroidFiles, copyWindowsFiles);
