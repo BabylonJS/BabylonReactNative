@@ -45,8 +45,5 @@ jobs:
       - name: Windows build Playground
         run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m Playground.sln /v:detailed /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }}
         working-directory: ./Apps/Playground/windows
-        continue-on-error: true
-      - name: Files Debug
-        if: always()
-        run: ls -R
+
         
