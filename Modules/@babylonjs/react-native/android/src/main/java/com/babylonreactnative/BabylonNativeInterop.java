@@ -15,7 +15,7 @@ public final class BabylonNativeInterop {
 
     private static class BabylonNative {
         static {
-            System.loadLibrary("BabylonNative");
+            System.loadLibrary("ReactNativeBabylon");
         }
 
         public static native void initialize(Context context, long jsiRuntimeRef, CallInvokerHolder jsCallInvokerHolder);
