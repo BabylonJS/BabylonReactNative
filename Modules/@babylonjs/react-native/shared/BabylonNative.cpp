@@ -57,6 +57,7 @@ namespace BabylonNative
             m_nativeXr->SetSessionStateChangedCallback([isXRActive{ m_isXRActive }](bool isSessionActive) { *isXRActive = isSessionActive; });
 #endif
 #if BABYLON_NATIVE_PLUGIN_NATIVECAMERA
+aaa
             Babylon::Plugins::NativeCamera::Initialize(m_env);
 #endif
             Babylon::Plugins::NativeCapture::Initialize(m_env);
