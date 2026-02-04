@@ -50,7 +50,10 @@ static def findNodeModules(baseDir) {
     def nodeModulesPath = Paths.get(basePath.toString(), "node_modules")
     def reactNativePath = Paths.get(nodeModulesPath.toString(), "react-native")
     if (nodeModulesPath.toFile().exists() && reactNativePath.toFile().exists()) {
-      return nodeModulesPath.toString()
+      // skip @babylonjs scoped packages
+      if (!nodeModulesPath.toString().contains("@babylonjs")) {
+        return nodeModulesPath.toString()
+      }
     }
     basePath = basePath.getParent()
   }
