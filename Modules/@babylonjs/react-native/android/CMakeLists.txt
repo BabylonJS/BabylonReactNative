@@ -7,7 +7,6 @@ set (CMAKE_CXX_STANDARD 20)
 
 set (PACKAGE_NAME "ReactNativeBabylon")
 
-
 # Clear some variables
 unset(LIBRN_DIR CACHE)
 unset(libfbjni_link_DIRS CACHE)
@@ -24,12 +23,10 @@ message("-- LIBRN   : " ${LIBRN_DIR})
 
 link_directories(../libs/android/${ANDROID_ABI}/)
 
-
 # Configure Babylon Native to use JSI
 set(NAPI_JAVASCRIPT_ENGINE "JSI" CACHE STRING "The JavaScript engine to power N-API")
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/src/")
-
 
 if(${REACT_NATIVE_VERSION} LESS 66)
     file(
@@ -38,8 +35,6 @@ if(${REACT_NATIVE_VERSION} LESS 66)
             INCLUDE_JSI_CPP
     )
 endif()
-
-
 
 find_library(
         LOG_LIB
@@ -96,53 +91,7 @@ disable_warnings(Scheduling) # deprecated stl
 disable_warnings(Canvas)
 disable_warnings(Window)
 
-
-#add_library(BabylonNativeShared STATIC ${SHARED_SOURCES})
-#disable_warnings(BabylonNativeShared)
-#target_include_directories(BabylonNativeShared PRIVATE ${BABYLON_REACT_NATIVE_SHARED_DIR})
-
 file(GLOB BABYLON_SHARED "${CMAKE_CURRENT_SOURCE_DIR}/../shared/*")
-
-add_library(
-        ${PACKAGE_NAME}
-        SHARED
-        "${CMAKE_CURRENT_SOURCE_DIR}/src/main/cpp/BabylonNativeInterop.cpp"
-        ${BABYLON_SHARED}
-        #BabylonNativeShared
-)
-disable_warnings(${PACKAGE_NAME}) # deprecated stl
-
-
-
-target_include_directories(
-        ${PACKAGE_NAME}
-        PRIVATE
-
-        "${NODE_MODULES_DIR}/react-native/ReactCommon/callinvoker"
-        "${NODE_MODULES_DIR}/react-native/ReactCommon/jsi"
-        "${NODE_MODULES_DIR}/react-native/ReactCommon"
-        "${NODE_MODULES_DIR}/react-native/ReactCommon/react/nativemodule/core"
-        "${NODE_MODULES_DIR}/react-native/ReactCommon/runtimeexecutor"
-        "${NODE_MODULES_DIR}/react-native/ReactAndroid/src/main/jni"
-        "${NODE_MODULES_DIR}/react-native/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni"
-
-        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../shared"
-        PRIVATE $<TARGET_PROPERTY:Graphics,INCLUDE_DIRECTORIES>
-        PRIVATE $<TARGET_PROPERTY:NativeEngine,INCLUDE_DIRECTORIES>
-        PRIVATE $<TARGET_PROPERTY:NativeInput,INCLUDE_DIRECTORIES>
-        PRIVATE $<TARGET_PROPERTY:Window,INCLUDE_DIRECTORIES>
-        PRIVATE $<TARGET_PROPERTY:XMLHttpRequest,INCLUDE_DIRECTORIES>
-        PRIVATE $<TARGET_PROPERTY:NativeCamera,INCLUDE_DIRECTORIES>
-        PRIVATE $<TARGET_PROPERTY:NativeXr,INCLUDE_DIRECTORIES>
-        PRIVATE $<TARGET_PROPERTY:NativeCapture,INCLUDE_DIRECTORIES>
-        PRIVATE $<TARGET_PROPERTY:NativeOptimizations,INCLUDE_DIRECTORIES>
-        PRIVATE $<TARGET_PROPERTY:NativeTracing,INCLUDE_DIRECTORIES>
-        PRIVATE $<TARGET_PROPERTY:Canvas,INCLUDE_DIRECTORIES>
-
-        #BabylonNativeShared
-
-        ${libfbjni_include_DIRS}
-)
 
 unset(REACT_LIB CACHE)
 if(${REACT_NATIVE_VERSION} GREATER_EQUAL 76)
@@ -228,15 +177,6 @@ message("-- TURBO   : " ${TURBOMODULES_LIB})
 
 add_definitions(-DREACT_NATIVE_VERSION=${REACT_NATIVE_VERSION})
 
-# Set RN_SERIALIZABLE_STATE and C++ flags for React Native 0.81+
-if(${REACT_NATIVE_VERSION} GREATER_EQUAL 80)
-    include("${REACT_NATIVE_DIR}/ReactCommon/cmake-utils/react-native-flags.cmake")
-    target_compile_reactnative_options(${PACKAGE_NAME} PRIVATE)
-else()
-  string(APPEND CMAKE_CXX_FLAGS
-         "  -fexceptions -frtti -std=c++${CMAKE_CXX_STANDARD} -Wall -Werror -Wunused-function -Wunused-private-field -Woverloaded-virtual -Wreorder-ctor -Wdelete-non-abstract-non-virtual-dtor -Wmismatched-tags -Wunused-variable -Wpessimizing-move -Wswitch -Wdeprecated-declarations -Werror=deprecated-this-capture")
-endif()
-
 # Link
 if(${REACT_NATIVE_VERSION} GREATER_EQUAL 76)
     set(COMMON_LIBS
@@ -264,6 +204,52 @@ else()
         -landroid
     )
 endif()
+
+
+add_library(
+        ${PACKAGE_NAME}
+        SHARED
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/main/cpp/BabylonNativeInterop.cpp"
+        ${BABYLON_SHARED}
+)
+disable_warnings(${PACKAGE_NAME}) # deprecated stl
+
+# Set RN_SERIALIZABLE_STATE and C++ flags for React Native 0.81+
+if(${REACT_NATIVE_VERSION} GREATER_EQUAL 80)
+    include("${REACT_NATIVE_DIR}/ReactCommon/cmake-utils/react-native-flags.cmake")
+    target_compile_reactnative_options(${PACKAGE_NAME} PRIVATE)
+else()
+  string(APPEND CMAKE_CXX_FLAGS
+         "  -fexceptions -frtti -std=c++${CMAKE_CXX_STANDARD} -Wall -Werror -Wunused-function -Wunused-private-field -Woverloaded-virtual -Wreorder-ctor -Wdelete-non-abstract-non-virtual-dtor -Wmismatched-tags -Wunused-variable -Wpessimizing-move -Wswitch -Wdeprecated-declarations -Werror=deprecated-this-capture")
+endif()
+
+target_include_directories(
+        ${PACKAGE_NAME}
+        PRIVATE
+
+        "${NODE_MODULES_DIR}/react-native/ReactCommon/callinvoker"
+        "${NODE_MODULES_DIR}/react-native/ReactCommon/jsi"
+        "${NODE_MODULES_DIR}/react-native/ReactCommon"
+        "${NODE_MODULES_DIR}/react-native/ReactCommon/react/nativemodule/core"
+        "${NODE_MODULES_DIR}/react-native/ReactCommon/runtimeexecutor"
+        "${NODE_MODULES_DIR}/react-native/ReactAndroid/src/main/jni"
+        "${NODE_MODULES_DIR}/react-native/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni"
+
+        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../shared"
+        PRIVATE $<TARGET_PROPERTY:Graphics,INCLUDE_DIRECTORIES>
+        PRIVATE $<TARGET_PROPERTY:NativeEngine,INCLUDE_DIRECTORIES>
+        PRIVATE $<TARGET_PROPERTY:NativeInput,INCLUDE_DIRECTORIES>
+        PRIVATE $<TARGET_PROPERTY:Window,INCLUDE_DIRECTORIES>
+        PRIVATE $<TARGET_PROPERTY:XMLHttpRequest,INCLUDE_DIRECTORIES>
+        PRIVATE $<TARGET_PROPERTY:NativeCamera,INCLUDE_DIRECTORIES>
+        PRIVATE $<TARGET_PROPERTY:NativeXr,INCLUDE_DIRECTORIES>
+        PRIVATE $<TARGET_PROPERTY:NativeCapture,INCLUDE_DIRECTORIES>
+        PRIVATE $<TARGET_PROPERTY:NativeOptimizations,INCLUDE_DIRECTORIES>
+        PRIVATE $<TARGET_PROPERTY:NativeTracing,INCLUDE_DIRECTORIES>
+        PRIVATE $<TARGET_PROPERTY:Canvas,INCLUDE_DIRECTORIES>
+
+        ${libfbjni_include_DIRS}
+)
 
 target_link_libraries(${PACKAGE_NAME}
     ${COMMON_LIBS}
