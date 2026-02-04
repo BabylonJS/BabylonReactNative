@@ -12,6 +12,10 @@ jobs:
         run: node setup_dev.js
         working-directory: ./Package
 
+      - name: List installed packages
+        run: npm ls
+        working-directory: ./Apps/Playground
+
       - name: Gulp (Android)
         run: npx gulp buildAndroid
         working-directory: ./Package
