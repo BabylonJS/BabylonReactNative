@@ -64,6 +64,7 @@ target_link_libraries(BabylonNative
     Window
     Scheduling
     XMLHttpRequest
+    ShaderCache
     Canvas
     ${ADDITIONAL_LIBRARIES})
 

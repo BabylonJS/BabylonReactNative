@@ -19,6 +19,7 @@ items = ['/shared/BabylonNative/Repo/Polyfills/Canvas',
   '/shared/BabylonNative/Repo/Plugins/NativeOptimizations', 
   '/shared/BabylonNative/Repo/Plugins/NativeTracing', 
   '/shared/BabylonNative/Repo/Plugins/NativeXr', 
+  '/shared/BabylonNative/Repo/Plugins/ShaderCache', 
   '/shared/BabylonNative/Repo/Core/Graphics',
   '/shared/BabylonNative/Repo/Dependencies/xr', 
   '/_deps/bgfx.cmake-build/cmake/bgfx',
@@ -98,6 +99,7 @@ Pod::Spec.new do |s|
           'UrlLib',
           'Window',
           'XMLHttpRequest',
+          'ShaderCache',
           'webp',
           'sharpyuv']
 

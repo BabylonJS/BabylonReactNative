@@ -135,6 +135,7 @@
         $(BabylonNativeBuildDir)shared\babylonnative\Repo\Plugins\NativeInput\$(Configuration);
         $(BabylonNativeBuildDir)shared\babylonnative\Repo\Plugins\NativeOptimizations\$(Configuration);
         $(BabylonNativeBuildDir)shared\babylonnative\Repo\Plugins\NativeTracing\$(Configuration);
+        $(BabylonNativeBuildDir)shared\babylonnative\Repo\Plugins\ShaderCache\$(Configuration);
         $(BabylonNativeBuildDir)shared\babylonnative\Repo\Polyfills\Window\$(Configuration);
         $(BabylonNativeBuildDir)shared\babylonnative\Repo\Polyfills\Canvas\$(Configuration);
         $(BabylonNativeBuildDir)jsi\$(Configuration);
@@ -179,6 +180,7 @@
         bimg.lib;
         bimg_encode.lib;
         bimg_decode.lib;
+        shadercache.lib;
         minz.lib;
         bx.lib;
         Canvas.lib;
@@ -236,6 +238,7 @@
         bimg.lib;
         bimg_encode.lib;
         bimg_decode.lib;
+        shadercache.lib;
         minz.lib;
         bx.lib;
         Canvas.lib;

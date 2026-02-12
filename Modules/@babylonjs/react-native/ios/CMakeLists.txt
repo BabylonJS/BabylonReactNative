@@ -76,6 +76,7 @@ target_link_libraries(BabylonNative
     NativeTracing
     Foundation
     Window
+    ShaderCache
     XMLHttpRequest
     Canvas
     ${ADDITIONAL_LIBRARIES})
