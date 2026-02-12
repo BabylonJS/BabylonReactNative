@@ -247,6 +247,8 @@ target_include_directories(
         PRIVATE $<TARGET_PROPERTY:NativeOptimizations,INCLUDE_DIRECTORIES>
         PRIVATE $<TARGET_PROPERTY:NativeTracing,INCLUDE_DIRECTORIES>
         PRIVATE $<TARGET_PROPERTY:Canvas,INCLUDE_DIRECTORIES>
+        PRIVATE $<TARGET_PROPERTY:ShaderCache,INCLUDE_DIRECTORIES>
+        PRIVATE $<TARGET_PROPERTY:ShaderCompiler,INCLUDE_DIRECTORIES>
 
         ${libfbjni_include_DIRS}
 )
@@ -264,6 +266,8 @@ target_link_libraries(${PACKAGE_NAME}
     NativeTracing
     Window
     NativeXr
+    ShaderCache
+    ShaderCompiler
     NativeCamera
     -lGLESv3
     -lEGL

@@ -77,6 +77,7 @@ target_link_libraries(BabylonNative
     Foundation
     Window
     ShaderCache
+    ShaderCompiler
     XMLHttpRequest
     Canvas
     ${ADDITIONAL_LIBRARIES})
