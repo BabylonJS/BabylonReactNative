@@ -9,9 +9,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
 set(BABYLON_NATIVE_USE_SWAPCHAINPANEL ON CACHE BOOL "")
 
-# Directory for CPPWINRT generated files
+# Directory for CPPWINRT generated files (from BabylonReactNative.vcxproj / CppWinRT NuGet)
 set(WINRT_GENERATED_FILES_DIR "${CMAKE_CURRENT_LIST_DIR}/BabylonReactNative/Generated Files")
-include_directories(BEFORE "${WINRT_GENERATED_FILES_DIR}" "${WINRT_GENERATED_FILES_DIR}/winrt")
 
 # Configure Babylon Native to use JSI
 # Note: We should avoid installing node_modules in the Module\@babylonjs\react-native folder.
@@ -32,6 +31,12 @@ target_include_directories(jsi INTERFACE ${REACTNATIVE_DIR_CMAKE}/ReactCommon/js
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../shared ${CMAKE_CURRENT_BINARY_DIR}/shared)
 
+# Explicitly set CppWinRT generated include paths on targets that need winrt/ projected headers.
+# The global include_directories() no longer propagates reliably to targets defined in subdirectories.
+target_include_directories(Graphics PRIVATE "${WINRT_GENERATED_FILES_DIR}" "${WINRT_GENERATED_FILES_DIR}/winrt")
+target_include_directories(NativeInput PRIVATE "${WINRT_GENERATED_FILES_DIR}" "${WINRT_GENERATED_FILES_DIR}/winrt")
+target_include_directories(ExternalTexture PRIVATE "${WINRT_GENERATED_FILES_DIR}" "${WINRT_GENERATED_FILES_DIR}/winrt")
+
 # Disable Unity build for UrlLib because of conflict in header between windows.h and winrt
 set_property(TARGET UrlLib PROPERTY UNITY_BUILD false)
 
@@ -40,6 +45,7 @@ add_library(BabylonNative ${SHARED_SOURCES})
 target_compile_definitions(BabylonNative PRIVATE BABYLON_NATIVE_PLUGIN_NATIVEXR=${BABYLON_NATIVE_PLUGIN_NATIVEXR})
 target_compile_definitions(BabylonNative PRIVATE BABYLON_NATIVE_PLUGIN_NATIVECAMERA=${BABYLON_NATIVE_PLUGIN_NATIVECAMERA})
 target_include_directories(BabylonNative PRIVATE ${SHARED_INCLUDES})
+target_include_directories(BabylonNative PRIVATE "${WINRT_GENERATED_FILES_DIR}" "${WINRT_GENERATED_FILES_DIR}/winrt")
 
 # because of warning C5030: attribute 'msvc::intrinsic' is not recognized
 # solution is to update VS version but this might bring more issues
