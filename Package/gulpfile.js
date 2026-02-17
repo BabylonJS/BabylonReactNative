@@ -230,8 +230,8 @@ const createPackage = async () => {
   exec('npm pack', 'Assembled');
 };
 
-const COMMIT_ID = 'cbab998495f30aa895ae776f2b3b9ba82af63e77';
-const ZIP_URL = `https://github.com/cedricguillemet/BabylonNative/archive/${COMMIT_ID}.zip`;
+const COMMIT_ID = '9a50d722d493524e1b315dd48fed6b0ed6d062c8';
+const ZIP_URL = `https://github.com/BabylonJS/BabylonNative/archive/${COMMIT_ID}.zip`;
 const TARGET_DIR = path.resolve(__dirname, '../Modules/@babylonjs/react-native/shared/BabylonNative');
 const ZIP_PATH = path.join(TARGET_DIR, `${COMMIT_ID}.zip`);
 const UNZIP_FOLDER = path.join(TARGET_DIR, `Repo`);
