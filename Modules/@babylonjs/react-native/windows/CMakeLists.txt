@@ -15,6 +15,12 @@ set(WINRT_GENERATED_FILES_DIR "${CMAKE_CURRENT_LIST_DIR}/BabylonReactNative/Gene
 # Add WINRT generated files directory globally
 include_directories("${WINRT_GENERATED_FILES_DIR}" "${WINRT_GENERATED_FILES_DIR}/winrt")
 
+# Ensure consistent CppWinRT compilation settings across all targets to match vcxproj
+# This prevents linker errors due to CppWinRT version/setting mismatches
+add_compile_definitions(
+    WINRT_SOURCE_LOCATION=false
+)
+
 # Configure Babylon Native to use JSI
 # Note: We should avoid installing node_modules in the Module\@babylonjs\react-native folder.
 # Installing react-native dependencies for both the Playground app and the @babylonjs/react-native package will generate a bad bundle/runtime errors.
@@ -42,6 +48,20 @@ add_library(BabylonNative ${SHARED_SOURCES})
 target_compile_definitions(BabylonNative PRIVATE BABYLON_NATIVE_PLUGIN_NATIVEXR=${BABYLON_NATIVE_PLUGIN_NATIVEXR})
 target_compile_definitions(BabylonNative PRIVATE BABYLON_NATIVE_PLUGIN_NATIVECAMERA=${BABYLON_NATIVE_PLUGIN_NATIVECAMERA})
 target_include_directories(BabylonNative PRIVATE ${SHARED_INCLUDES})
+
+# Ensure all dependency targets use consistent CppWinRT settings to match BabylonModule.obj
+# Apply WINRT_SOURCE_LOCATION=false to all BabylonNative and its dependencies
+set(BABYLON_TARGETS arcana GraphicsDevice jsi JsRuntime NativeCapture NativeEngine NativeInput NativeOptimizations NativeTracing Window Scheduling XMLHttpRequest ShaderCache Canvas)
+foreach(TARGET_NAME ${BABYLON_TARGETS})
+    if(TARGET ${TARGET_NAME})
+        get_target_property(TARGET_TYPE ${TARGET_NAME} TYPE)
+        if(TARGET_TYPE STREQUAL "INTERFACE_LIBRARY")
+            target_compile_definitions(${TARGET_NAME} INTERFACE WINRT_SOURCE_LOCATION=false)
+        else()
+            target_compile_definitions(${TARGET_NAME} PRIVATE WINRT_SOURCE_LOCATION=false)
+        endif()
+    endif()
+endforeach()
 
 # because of warning C5030: attribute 'msvc::intrinsic' is not recognized
 # solution is to update VS version but this might bring more issues
