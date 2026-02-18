@@ -239,11 +239,11 @@ android {
                 prefab true
                 prefabPublishing true
         }
-        /*prefab {
+        prefab {
             ReactNativeBabylon {
                 headers "${project.buildDir}/headers/ReactNativeBabylon/"
             }
-        }*/
+        }
     }
 
     // Create new configurations that can be referred to in dependencies.
