@@ -24,3 +24,24 @@ allprojects {
         google()
     }
 }
+
+subprojects {
+    afterEvaluate {
+        // Workaround for Kotlin 2.0.x / AGP 8.8.x lint incompatibility (KT-62555)
+        // Use Kotlin's actual attribute type via reflection to avoid type conflict
+        try {
+            def attrClass = Class.forName(
+                "org.jetbrains.kotlin.gradle.targets.native.toolchain.KotlinNativeBundleArtifactFormat\$KotlinNativeBundleArtifactsTypes"
+            )
+            def attr = Attribute.of("kotlin.native.bundle.type", attrClass)
+            def regularValue = attrClass.enumConstants.find { it.name() == "REGULAR" } ?: attrClass.enumConstants[0]
+            configurations.configureEach { config ->
+                if (!config.attributes.contains(attr)) {
+                    config.attributes.attribute(attr, regularValue)
+                }
+            }
+        } catch (Exception e) {
+            logger.warn("Kotlin native bundle type workaround skipped: ${e.message}")
+        }
+    }
+}

@@ -179,8 +179,9 @@ android {
             }
         }
     }
-    lintOptions {
-        abortOnError false
+    lint {
+        abortOnError = false
+        checkReleaseBuilds = false
     }
 
     publishing {
@@ -220,21 +221,28 @@ android {
         }
     }
 
-    packagingOptions {
-        excludes = [
-             "**/libc++_shared.so",
-             "**/libfbjni.so",
-             "**/libjsi.so",
-             "**/libreact_nativemodule_core.so",
-             "**/libreactnativejni.so",
-             "**/libruntimeexecutor.so",
-             "**/libturbomodulejsijni.so",
-             "**/libreactnative.so",
-             "META-INF/**"
-        ]
+    packaging {
+        jniLibs {
+            excludes += [
+                 "**/libc++_shared.so",
+                 "**/libfbjni.so",
+                 "**/libjsi.so",
+                 "**/libreact_nativemodule_core.so",
+                 "**/libreactnativejni.so",
+                 "**/libruntimeexecutor.so",
+                 "**/libturbomodulejsijni.so",
+                 "**/libreactnative.so",
+            ]
+        }
+        resources {
+            excludes += ["META-INF/**"]
+        }
     }
 
     if (ENABLE_PREFAB) {
+        // Ensure the headers directory exists at configuration time for AGP validation
+        file("${project.buildDir}/headers/ReactNativeBabylon").mkdirs()
+
         buildFeatures {
                 prefab true
                 prefabPublishing true
@@ -363,6 +371,10 @@ if (ENABLE_PREFAB) {
             }
             it.path = path
         }
+        // Ensure the output directory exists even when no headers are found
+        doFirst {
+            file("${project.buildDir}/headers/ReactNativeBabylon").mkdirs()
+        }
     }
     preBuild.dependsOn(prepareHeaders)
 }
@@ -387,4 +399,20 @@ configurations.extractLibs.files.each { file ->
 afterEvaluate {
   nativeBuildDependsOn(extractAARHeaders, null)
   nativeBuildDependsOn(extractJNIFiles, null)
+
+  // Workaround for Kotlin 2.0.x / AGP 8.8.x lint incompatibility (KT-62555)
+  try {
+      def attrClass = Class.forName(
+          "org.jetbrains.kotlin.gradle.targets.native.toolchain.KotlinNativeBundleArtifactFormat\$KotlinNativeBundleArtifactsTypes"
+      )
+      def attr = Attribute.of("kotlin.native.bundle.type", attrClass)
+      def regularValue = attrClass.enumConstants.find { it.name() == "REGULAR" } ?: attrClass.enumConstants[0]
+      configurations.configureEach { config ->
+          if (!config.attributes.contains(attr)) {
+              config.attributes.attribute(attr, regularValue)
+          }
+      }
+  } catch (Exception e) {
+      logger.warn("Kotlin native bundle type workaround skipped: ${e.message}")
+  }
 }
