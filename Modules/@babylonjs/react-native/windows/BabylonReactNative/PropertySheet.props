@@ -11,6 +11,11 @@
     For more advanced scenarios, and complete documentation, please see:
     https://github.com/Microsoft/cppwinrt/tree/master/nuget 
     -->
-  <PropertyGroup />
+  <PropertyGroup>
+    <GeneratedFilesDir>Generated Files\</GeneratedFilesDir>
+    <CppWinRTGeneratedFilesDir>$(GeneratedFilesDir)</CppWinRTGeneratedFilesDir>
+    <CppWinRTNamespace>BabylonReactNative</CppWinRTNamespace>
+    <CppWinRTInputs>@(Midl)</CppWinRTInputs>
+  </PropertyGroup>
   <ItemDefinitionGroup />
 </Project>
