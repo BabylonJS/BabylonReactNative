@@ -6,7 +6,7 @@ on:
       WindowsTargetPlatformVersion:
         description: 'Windows Target Platform Version'
         type: string
-        default: '10.0.26100.0'
+        default: '10.0.22621.0'
         required: false
 
 jobs:
