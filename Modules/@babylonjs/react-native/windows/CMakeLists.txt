@@ -12,38 +12,16 @@ set(BABYLON_NATIVE_USE_SWAPCHAINPANEL ON CACHE BOOL "")
 # Force all cmake-built targets to use the same C++/WinRT headers as the vcxproj.
 # The vcxproj uses the CppWinRT NuGet package version pinned by react-native-windows
 # (CppWinRTVersion, typically 2.0.230706.1).
-#
-# Problem: cmake's include_directories(BEFORE) puts our path in AdditionalIncludeDirectories,
-# but the cmake VS generator for WindowsStore auto-adds a NuGet packages.config referencing
-# the latest Microsoft.Windows.CppWinRT. That NuGet package's .props runs AFTER cmake's
-# include dirs and prepends its (newer) path, winning the search order.
-#
-# Fix: generate a Directory.Build.targets in the cmake binary directory. MSBuild imports
-# .targets files AFTER all .props and project content, including NuGet package .props.
-# An ItemDefinitionGroup there prepends our path LAST, making it first in the final
-# compiler include order and ensuring the correct CppWinRT version is found.
-#
-# CPPWINRT_INCLUDE_PATH is passed from BabylonNativeBuild MSBuild target in the vcxproj:
-#   -DCPPWINRT_INCLUDE_PATH="$(CppWinRTToolkitDir)build\native\include"
-# $(CppWinRTToolkitDir) is set by the packages.config-restored Microsoft.Windows.CppWinRT.props
-# (nuget restore runs before MSBuild, so the path is guaranteed to exist).
-if(DEFINED CPPWINRT_INCLUDE_PATH AND NOT "${CPPWINRT_INCLUDE_PATH}" STREQUAL "")
-    file(WRITE "${CMAKE_BINARY_DIR}/Directory.Build.targets"
-"<?xml version=\"1.0\" encoding=\"utf-8\"?>
-<Project xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">
-  <!-- Prepend the CppWinRT include path that matches BabylonReactNative.vcxproj.
-       This ItemDefinitionGroup runs after all NuGet .props (including any auto-restored
-       Microsoft.Windows.CppWinRT), so it wins the include search order. -->
-  <ItemDefinitionGroup>
-    <ClCompile>
-      <AdditionalIncludeDirectories>${CPPWINRT_INCLUDE_PATH};%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
-  </ItemDefinitionGroup>
-</Project>
-")
-    message("-- CppWinRT: Generated Directory.Build.targets in ${CMAKE_BINARY_DIR} with path: ${CPPWINRT_INCLUDE_PATH}")
+# (CppWinRTVersion, typically 2.0.230706.1). Without this, cmake falls back to the
+# Windows SDK CppWinRT which may be a newer version, causing a #pragma detect_mismatch
+# link error ("C++/WinRT version" mismatch at link time).
+# CPPWINRT_INCLUDE_PATH is passed by the BabylonNativeBuild MSBuild target in the vcxproj:
+#   -DCPPWINRT_INCLUDE_PATH="$(NuGetPackageRoot)microsoft.windows.cppwinrt\$(CppWinRTVersion)\build\native\include"
+if(DEFINED CPPWINRT_INCLUDE_PATH AND EXISTS "${CPPWINRT_INCLUDE_PATH}")
+    message("-- CppWinRT: Forcing include path: ${CPPWINRT_INCLUDE_PATH}")
+    include_directories(BEFORE "${CPPWINRT_INCLUDE_PATH}")
 else()
-    message(WARNING "CppWinRT: CPPWINRT_INCLUDE_PATH not set or empty ('${CPPWINRT_INCLUDE_PATH}'). "
+    message(WARNING "CppWinRT: CPPWINRT_INCLUDE_PATH not set or not found ('${CPPWINRT_INCLUDE_PATH}'). "
         "cmake-built targets may use a different CppWinRT version than the vcxproj, "
         "causing a C++/WinRT version detect_mismatch link error.")
 endif()
