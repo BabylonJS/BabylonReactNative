@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!-- Note: CppWinRT NuGet dependency should be resolved for the solution not the individual project -->
-  <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.props')" />
+  <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.230706.1\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.230706.1\build\native\Microsoft.Windows.CppWinRT.props')" />
   <PropertyGroup Label="Globals">
     <CppWinRTOptimized>true</CppWinRTOptimized>
     <CppWinRTRootNamespaceAutoMerge>true</CppWinRTRootNamespaceAutoMerge>
@@ -311,10 +311,12 @@
   </ImportGroup>
   <Target Name="BabylonNativeBuild" BeforeTargets="PrepareForBuild">
     <Exec Command='cmake --version' />
-    <!-- Pass the same CppWinRT NuGet package include path used by this vcxproj (set by react-native-windows
-         via CppWinRTVersion=$(CppWinRTVersion)) so cmake-built BabylonNative targets compile with the same
-         C++/WinRT version. Without this, cmake falls back to the Windows SDK CppWinRT which may differ,
-         causing a #pragma detect_mismatch link error ("C++/WinRT version" mismatch). -->
+    <!-- Pass the same CppWinRT NuGet package include path used by this vcxproj so cmake-built
+         BabylonNative targets compile with the same C++/WinRT version.
+         $(CppWinRTToolkitDir) is set by packages.config-restored Microsoft.Windows.CppWinRT.props,
+         which nuget restore runs BEFORE this build step, so the path is guaranteed to exist.
+         Using $(NuGetPackageRoot) was unreliable because PackageReference auto-restore for this
+         project runs AFTER PrepareForBuild, i.e. after cmake has already configured. -->
     <Exec Command='cmake ^
     -G"Visual Studio 17 2022" ^
     -B$(ProjectDir)..\..\..\react-native\Build\uwp_$(Platform) ^
@@ -322,7 +324,7 @@
     -DCMAKE_SYSTEM_VERSION=$(TargetPlatformVersion) ^
     -A$(Platform) ^
     -DJSRUNTIMEHOST_CORE_APPRUNTIME=0 ^
-    -DCPPWINRT_INCLUDE_PATH="$(NuGetPackageRoot)microsoft.windows.cppwinrt\$(CppWinRTVersion)\build\native\include" ^
+    -DCPPWINRT_INCLUDE_PATH="$(CppWinRTToolkitDir)build\native\include" ^
     -S"$(ProjectDir).."' />
     <Exec Command='"MSBuild.exe" ^
       "$(ProjectDir)\..\..\..\react-native\Build\uwp_$(Platform)\ReactNativeBabylon.sln" ^
@@ -344,6 +346,6 @@
     <Error Condition="!Exists('$(BabylonReactNativeDir)')" Text="$(ErrorText)" />
   </Target>
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.220110.5\build\native\Microsoft.Windows.CppWinRT.targets')" />
+    <Import Project="$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.230706.1\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('$(SolutionDir)\packages\Microsoft.Windows.CppWinRT.2.0.230706.1\build\native\Microsoft.Windows.CppWinRT.targets')" />
   </ImportGroup>
 </Project>
