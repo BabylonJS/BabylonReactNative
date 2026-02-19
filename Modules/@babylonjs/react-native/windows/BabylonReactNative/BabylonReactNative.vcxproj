@@ -311,6 +311,10 @@
   </ImportGroup>
   <Target Name="BabylonNativeBuild" BeforeTargets="PrepareForBuild">
     <Exec Command='cmake --version' />
+    <!-- Pass the same CppWinRT NuGet package include path used by this vcxproj (set by react-native-windows
+         via CppWinRTVersion=$(CppWinRTVersion)) so cmake-built BabylonNative targets compile with the same
+         C++/WinRT version. Without this, cmake falls back to the Windows SDK CppWinRT which may differ,
+         causing a #pragma detect_mismatch link error ("C++/WinRT version" mismatch). -->
     <Exec Command='cmake ^
     -G"Visual Studio 17 2022" ^
     -B$(ProjectDir)..\..\..\react-native\Build\uwp_$(Platform) ^
@@ -318,6 +322,7 @@
     -DCMAKE_SYSTEM_VERSION=$(TargetPlatformVersion) ^
     -A$(Platform) ^
     -DJSRUNTIMEHOST_CORE_APPRUNTIME=0 ^
+    -DCPPWINRT_INCLUDE_PATH="$(NuGetPackageRoot)microsoft.windows.cppwinrt\$(CppWinRTVersion)\build\native\include" ^
     -S"$(ProjectDir).."' />
     <Exec Command='"MSBuild.exe" ^
       "$(ProjectDir)\..\..\..\react-native\Build\uwp_$(Platform)\ReactNativeBabylon.sln" ^
