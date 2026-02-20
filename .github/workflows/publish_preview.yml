@@ -1,0 +1,38 @@
+name: Publish Package For Preview
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'NPM Release Version'
+        required: true 
+        type: string
+        default: 1.0.0
+      NPM_tag:
+        description: 'NPM Tag'
+        required: true
+        type: string
+        default: 'preview'
+
+jobs:
+  build-typescript:
+    uses: ./.github/workflows/typescript.yml
+
+  package:
+    needs: [build-typescript]
+    uses: ./.github/workflows/package.yml
+
+  publish:
+    runs-on: macos-latest
+    steps:
+      - name: Download Assembled Folder
+        uses: actions/download-artifact@v4
+        with:
+          name: 'Assembled'
+          path: Package/Assembled
+      - name: Version & Publish Package
+        run: |
+          npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
+          npm publish --access public --tag ${{ github.event.inputs.NPM_tag }}
+        working-directory: ./Package/Assembled
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
