@@ -25,11 +25,29 @@ jobs:
     runs-on: macos-latest
     needs: [package]
     steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
       - name: Download Assembled Folder
         uses: actions/download-artifact@v4
         with:
           name: 'Assembled'
           path: Package/Assembled
+      - name: Diagnose NPM Registry Connectivity
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "--- Node & NPM versions ---"
+          node --version
+          npm --version
+          echo "--- NPM config registry ---"
+          npm config get registry
+          echo "--- NPM ping ---"
+          npm ping
+          echo "--- NPM whoami ---"
+          npm whoami
       - name: Version & Publish Package
         run: |
           npm version --no-git-tag-version ${{ github.event.inputs.release_version }}
