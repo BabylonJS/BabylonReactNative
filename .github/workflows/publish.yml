@@ -14,6 +14,7 @@ jobs:
 
   publish:
     runs-on: macos-latest
+    needs: [package]
     steps:
       - name: Download Assembled Folder
         uses: actions/download-artifact@v4
