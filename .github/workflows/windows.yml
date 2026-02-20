@@ -3,50 +3,47 @@ name: 'build windows'
 on:
   workflow_call:
     inputs:
-      react-native-version:
-        required: true
+      WindowsTargetPlatformVersion:
+        description: 'Windows Target Platform Version'
         type: string
-      release-version:
-        required: true
-        type: string
+        default: '10.0.22621.0'
+        required: false
 
 jobs:
-  Build:
+  build-windows:
     runs-on: windows-latest
+    continue-on-error: true
     steps:
+      - name: Support longpaths
+        run: git config --system core.longpaths true
       - name: Checkout Repo
-        uses: actions/checkout@v2.3.3
-        with:
-          submodules: 'true'
+        uses: actions/checkout@v4.2.2
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.0.2
-      - name: Setup Node 16
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - name: Setup NuGet
-        uses: nuget/setup-nuget@v1
-        with:
-          nuget-version: '5.x'
-      - name: NPM Install (Playground)
-        run: npm install
+        uses: microsoft/setup-msbuild@v2
+      - name: Install watchman
+        run: choco install watchman
         working-directory: ./Apps/Playground
-      - name: NPM Install (React Native ${{ inputs.react-native-version }})
-        run: npm run select --reactNative ${{ inputs.react-native-version }}
+
+
+      - name: Setting up developer environment
+        run: |
+          Copy-Item -Path "Apps/Playground/package-windows.json" -Destination "Apps/Playground/package.json" -Force
+          Copy-Item -Path "Apps/Playground/package-lock-windows.json" -Destination "Apps/Playground/package-lock.json" -Force
+          cd Package
+          node setup_dev.js
+        working-directory: ./
+
+      - name: NPM Generate Windows Project
+        run: npx install-windows-test-app
         working-directory: ./Apps/Playground
-      - name: NPM Install (Binary Package)
-        run: npm install
-        working-directory: ./Package
-      - name: Gulp (Windows)
-        run: npx gulp buildUWPPublish --reactNative ${{ inputs.react-native-version }} --releaseVersion ${{ inputs.release-version }}
-        working-directory: ./Package
-      - name: Upload Assembled-Windows Folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: 'Assembled-Windows${{ inputs.react-native-version }}'
-          path: Package/Assembled-Windows
-      - name: Upload Assembled-BaseKit-Windows Folder
-        uses: actions/upload-artifact@v4
-        with:
-          name: 'Assembled-BaseKit-Windows${{ inputs.react-native-version }}'
-          path: Package/Assembled-BaseKit-Windows
+       
+      - name: Nuget restore
+        run: nuget restore Playground.sln
+        working-directory: ./Apps/Playground/windows
+        
+
+      - name: Windows build Playground
+        run: MSBuild /p:Platform="x64" /p:Configuration="Release" /m Playground.sln /v:detailed /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }}
+        working-directory: ./Apps/Playground/windows
+
+        

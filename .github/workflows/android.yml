@@ -1,0 +1,22 @@
+name: 'build android'
+on:
+  workflow_call
+
+jobs:
+  build-android:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4.2.2
+      - name: Setting up developer environment
+        run: node setup_dev.js
+        working-directory: ./Package
+
+      - name: List installed packages
+        run: npm ls
+        working-directory: ./Apps/Playground
+
+      - name: Gulp (Android)
+        run: npx gulp buildAndroid
+        working-directory: ./Package
+  

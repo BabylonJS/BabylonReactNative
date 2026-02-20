@@ -1,0 +1,26 @@
+name: 'build ios'
+
+on:
+  workflow_call
+
+jobs:
+  build-iOS:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4.2.2
+
+      - name: Setting up developer environment
+        run: node setup_dev.js
+        working-directory: ./Package
+
+      - name: Clean and Install Pods
+        run: |
+          cd ios
+          rm -rf Pods Podfile.lock
+          pod install
+        working-directory: ./Apps/Playground
+
+      - name: Gulp (iOS)
+        run: npx gulp buildIOS
+        working-directory: ./Package
