@@ -32,6 +32,7 @@ items = ['/shared/BabylonNative/Repo/Polyfills/Canvas',
   '/_deps/glslang-build/SPIRV',
   '/_deps/urllib-build',
   '/_deps/libwebp-build',
+  '/_deps/libmetal-cpp-build',
   '/_deps/jsruntimehost-build/Polyfills/XMLHttpRequest',
   '/_deps/jsruntimehost-build/Polyfills/Scheduling',
   '/_deps/jsruntimehost-build/Core/JsRuntime',
@@ -103,6 +104,7 @@ Pod::Spec.new do |s|
           'ShaderCache',
           'ShaderCompiler',
           'webp',
+          'metal-cpp'
           'sharpyuv']
 
   if ENV['BABYLON_NATIVE_PLUGIN_NATIVECAMERA'] != '0'
