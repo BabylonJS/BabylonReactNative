@@ -104,7 +104,7 @@ Pod::Spec.new do |s|
           'ShaderCache',
           'ShaderCompiler',
           'webp',
-          'metal-cpp'
+          'metal-cpp',
           'sharpyuv']
 
   if ENV['BABYLON_NATIVE_PLUGIN_NATIVECAMERA'] != '0'
