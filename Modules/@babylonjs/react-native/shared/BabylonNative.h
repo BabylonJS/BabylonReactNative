@@ -27,7 +27,7 @@ namespace BabylonNative
     void Initialize(facebook::jsi::Runtime& jsiRuntime, Dispatcher jsDispatcher);
     void Deinitialize();
 
-    void UpdateView(WindowType window, size_t width, size_t height);
+    void UpdateView(Babylon::Graphics::WindowT window, size_t width, size_t height);
     void UpdateMSAA(uint8_t value);
     void UpdateAlphaPremultiplied(bool enabled);
 
