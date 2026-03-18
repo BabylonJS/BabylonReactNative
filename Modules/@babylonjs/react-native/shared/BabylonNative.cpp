@@ -309,7 +309,7 @@ namespace BabylonNative
         g_nativeModule.reset();
     }
 
-    void UpdateView(WindowType window, size_t width, size_t height)
+    void UpdateView(Babylon::Graphics::WindowT window, size_t width, size_t height)
     {
         if (auto nativeModule{ g_nativeModule.lock() })
         {
