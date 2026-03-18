@@ -84,7 +84,7 @@ namespace BabylonNative
         void UpdateView(WindowType window, size_t width, size_t height)
         {
 #if defined(__APPLE__)
-            m_graphicsConfig.Window = (WindowT)window.layer;
+            m_graphicsConfig.Window = (Babylon::Graphics::WindowT)window.layer;
 #else
             m_graphicsConfig.Window = window;
 #endif
