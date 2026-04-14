@@ -13,11 +13,15 @@
 namespace BabylonNative
 {
     #if defined(__APPLE__)
+        // this needs to be updated in BabylonNative XR impl to use WindowType and not an opaque type
         using WindowType = MTKView*;
+        using WindowTypeUpdate = CA::MetalLayer*;
     #elif defined(ANDROID)
         using WindowType = ANativeWindow*;
+        using WindowTypeUpdate = ANativeWindow*;
     #elif WINAPI_FAMILY == WINAPI_FAMILY_APP
         using WindowType = winrt::Windows::UI::Xaml::Controls::SwapChainPanel;
+        using WindowTypeUpdate = winrt::Windows::UI::Xaml::Controls::SwapChainPanel;
     #else
         #error Unsupported platform
     #endif
@@ -27,7 +31,7 @@ namespace BabylonNative
     void Initialize(facebook::jsi::Runtime& jsiRuntime, Dispatcher jsDispatcher);
     void Deinitialize();
 
-    void UpdateView(Babylon::Graphics::WindowT window, size_t width, size_t height);
+    void UpdateView(WindowTypeUpdate window, size_t width, size_t height);
     void UpdateMSAA(uint8_t value);
     void UpdateAlphaPremultiplied(bool enabled);
 
