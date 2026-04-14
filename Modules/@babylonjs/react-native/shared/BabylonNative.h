@@ -4,6 +4,7 @@
 
 #if defined(__APPLE__)
 #include <MetalKit/MTKView.h>
+#include <QuartzCore/CAMetalLayer.h>
 #elif defined(ANDROID)
 #include <android/native_window.h>
 #elif WINAPI_FAMILY == WINAPI_FAMILY_APP
