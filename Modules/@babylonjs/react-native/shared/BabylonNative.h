@@ -4,7 +4,10 @@
 
 #if defined(__APPLE__)
 #include <MetalKit/MTKView.h>
-#include <QuartzCore/CAMetalLayer.h>
+// Forward-declare CA::MetalLayer so BabylonNative.h is usable from pure C++
+// translation units. The ObjC header <QuartzCore/CAMetalLayer.h> only defines
+// the @interface, not the C++ CA:: namespace class from Metal-cpp.
+namespace CA { class MetalLayer; }
 #elif defined(ANDROID)
 #include <android/native_window.h>
 #elif WINAPI_FAMILY == WINAPI_FAMILY_APP
