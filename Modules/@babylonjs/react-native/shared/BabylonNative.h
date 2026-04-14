@@ -4,6 +4,10 @@
 
 #if defined(__APPLE__)
 #include <MetalKit/MTKView.h>
+// Forward-declare CA::MetalLayer so BabylonNative.h is usable from pure C++
+// translation units. The ObjC header <QuartzCore/CAMetalLayer.h> only defines
+// the @interface, not the C++ CA:: namespace class from Metal-cpp.
+namespace CA { class MetalLayer; }
 #elif defined(ANDROID)
 #include <android/native_window.h>
 #elif WINAPI_FAMILY == WINAPI_FAMILY_APP
@@ -13,11 +17,15 @@
 namespace BabylonNative
 {
     #if defined(__APPLE__)
+        // this needs to be updated in BabylonNative XR impl to use WindowType and not an opaque type
         using WindowType = MTKView*;
+        using WindowTypeUpdate = CA::MetalLayer*;
     #elif defined(ANDROID)
         using WindowType = ANativeWindow*;
+        using WindowTypeUpdate = ANativeWindow*;
     #elif WINAPI_FAMILY == WINAPI_FAMILY_APP
         using WindowType = winrt::Windows::UI::Xaml::Controls::SwapChainPanel;
+        using WindowTypeUpdate = winrt::Windows::UI::Xaml::Controls::SwapChainPanel;
     #else
         #error Unsupported platform
     #endif
@@ -27,7 +35,7 @@ namespace BabylonNative
     void Initialize(facebook::jsi::Runtime& jsiRuntime, Dispatcher jsDispatcher);
     void Deinitialize();
 
-    void UpdateView(WindowType window, size_t width, size_t height);
+    void UpdateView(WindowTypeUpdate window, size_t width, size_t height);
     void UpdateMSAA(uint8_t value);
     void UpdateAlphaPremultiplied(bool enabled);
 
