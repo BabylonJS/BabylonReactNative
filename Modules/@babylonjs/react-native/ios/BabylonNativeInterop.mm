@@ -6,6 +6,7 @@
 #include <ReactCommon/CallInvoker.h>
 
 #import <Foundation/Foundation.h>
+#import <QuartzCore/CAMetalLayer.h>
 
 #import <memory>
 
@@ -59,7 +60,7 @@ static NSMutableArray* activeTouches = [NSMutableArray new];
     const int width = static_cast<int>(mtkView.bounds.size.width * scale);
     const int height = static_cast<int>(mtkView.bounds.size.height * scale);
     if (width != 0 && height != 0) {
-        BabylonNative::UpdateView(mtkView.layer, width, height);
+        BabylonNative::UpdateView(reinterpret_cast<BabylonNative::WindowTypeUpdate>((__bridge void*)(CAMetalLayer*)mtkView.layer), width, height);
     }
 }
 
