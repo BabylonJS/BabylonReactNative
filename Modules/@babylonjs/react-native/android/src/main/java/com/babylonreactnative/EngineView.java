@@ -185,6 +185,21 @@ public final class EngineView extends FrameLayout implements SurfaceHolder.Callb
     // Common
 
     @Override
+    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+        // Prevent parent ReactViewGroup from cancelling our touch sequence
+        // when RN's JS responder system claims the gesture.
+        if (motionEvent.getActionMasked() == MotionEvent.ACTION_DOWN) {
+            getParent().requestDisallowInterceptTouchEvent(true);
+        }
+        return super.dispatchTouchEvent(motionEvent);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+        return true;
+    }
+
+    @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         BabylonNativeInterop.reportMotionEvent(motionEvent);
         return true;

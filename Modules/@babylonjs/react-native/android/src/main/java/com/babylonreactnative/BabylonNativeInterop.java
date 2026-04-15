@@ -111,6 +111,7 @@ public final class BabylonNativeInterop {
         boolean isPointerDown = maskedAction == MotionEvent.ACTION_DOWN || maskedAction == MotionEvent.ACTION_POINTER_DOWN;
         boolean isPointerUp = maskedAction == MotionEvent.ACTION_UP || maskedAction == MotionEvent.ACTION_POINTER_UP;
         boolean isPointerMove = maskedAction == MotionEvent.ACTION_MOVE;
+        boolean isCancel = maskedAction == MotionEvent.ACTION_CANCEL;
 
         if (isPointerDown || isPointerUp) {
             int pointerIndex = motionEvent.getActionIndex();
@@ -118,6 +119,14 @@ public final class BabylonNativeInterop {
             int x = (int)motionEvent.getX(pointerIndex);
             int y = (int)motionEvent.getY(pointerIndex);
             BabylonNative.setTouchButtonState(pointerId, isPointerDown, x, y);
+        } else if (isCancel) {
+            // Treat cancel as pointer up for all active pointers
+            for (int pointerIndex = 0; pointerIndex < motionEvent.getPointerCount(); pointerIndex++) {
+                int pointerId = motionEvent.getPointerId(pointerIndex);
+                int x = (int)motionEvent.getX(pointerIndex);
+                int y = (int)motionEvent.getY(pointerIndex);
+                BabylonNative.setTouchButtonState(pointerId, false, x, y);
+            }
         } else if (isPointerMove) {
             for (int pointerIndex = 0; pointerIndex < motionEvent.getPointerCount(); pointerIndex++) {
                 int pointerId = motionEvent.getPointerId(pointerIndex);
