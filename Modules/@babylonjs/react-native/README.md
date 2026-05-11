@@ -39,6 +39,12 @@ To use the system cmake (e.g. a Homebrew or system install) instead of the cmake
 export BABYLON_USE_SYSTEM_CMAKE=1
 ```
 
+To override the iOS deployment target used by the generated `ReactNativeBabylon.xcodeproj` (defaults to `12.0`), set this variable before running `npm install` so it matches your app's Podfile `platform :ios` value:
+```
+export BABYLON_IOS_DEPLOYMENT_TARGET=16.0
+```
+This avoids Xcode 26 Clang crashing on `DeviceImpl_iOS.mm` when the iOS 12 default is left in place, and removes the need to patch the deployment target from a Podfile `post_install` hook.
+
 ### Plugins selection
 
 Plugins can be disabled at build time. They are all enabled by default and disabling is done with environment variables:
