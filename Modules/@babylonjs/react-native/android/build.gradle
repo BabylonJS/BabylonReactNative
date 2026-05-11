@@ -168,6 +168,12 @@ android {
             cmake {
                 cppFlags "-fexceptions", "-frtti", "-std=c++1y", "-DONANDROID"
                 abiFilters (*reactNativeArchitectures())
+                // NOTE: -DARCORE_LIBPATH below points at the default extracted AAR
+                // (core-1.22.0.aar). The actual resolved ARCore version may be
+                // overridden by a consumer's resolutionStrategy.force, so the
+                // argument is rewritten further down in this script (search for
+                // "arcoreAarFileName") to point at the AAR that Gradle actually
+                // extracted.
                 arguments "-DANDROID_STL=c++_shared",
                         "-DGRAPHICS_API=${graphics_api}",
                         "-DREACT_NATIVE_VERSION=${REACT_NATIVE_VERSION}",
@@ -386,6 +392,39 @@ def nativeBuildDependsOn(dependsOnTask, variant) {
     buildTasks = buildTasks.findAll({ task -> task.name.contains(variant) })
   }
   buildTasks.forEach { task -> task.dependsOn(dependsOnTask) }
+}
+
+// Resolve the actual ARCore AAR name. A consumer project may apply a
+// resolutionStrategy.force to com.google.ar:core (e.g. to resolve a conflict
+// with installreferrer 2.2 that requires com.google.ar:core 1.26+). Gradle
+// extracts the AAR into a folder named after the *resolved* artifact
+// (core-<version>.aar), so the native build's -DARCORE_LIBPATH argument must
+// match that resolved name rather than the hardcoded 1.22.0 declared above.
+def arcoreAarFileName = 'core-1.22.0.aar'
+try {
+    def arcoreAar = configurations.extractLibs.resolvedConfiguration.resolvedArtifacts.find {
+        it.moduleVersion.id.group == 'com.google.ar' && it.name == 'core'
+    }
+    if (arcoreAar != null) {
+        arcoreAarFileName = "${arcoreAar.name}-${arcoreAar.moduleVersion.id.version}.aar"
+    }
+} catch (Exception e) {
+    logger.warn("BabylonReactNative: Failed to resolve com.google.ar:core artifact (${e.message}); falling back to ${arcoreAarFileName}")
+}
+logger.warn("BabylonReactNative: ARCORE AAR: ${arcoreAarFileName}")
+
+def arcoreLibPathArg = "-DARCORE_LIBPATH=${extractedLibDir}/${arcoreAarFileName}/jni".toString()
+def cmakeArgsList = android.defaultConfig.externalNativeBuild.cmake.arguments
+def arcoreArgUpdated = false
+for (int i = 0; i < cmakeArgsList.size(); i++) {
+    if (cmakeArgsList.get(i).toString().startsWith("-DARCORE_LIBPATH=")) {
+        cmakeArgsList.set(i, arcoreLibPathArg)
+        arcoreArgUpdated = true
+        break
+    }
+}
+if (!arcoreArgUpdated) {
+    cmakeArgsList.add(arcoreLibPathArg)
 }
 
 configurations.extractLibs.files.each { file ->
