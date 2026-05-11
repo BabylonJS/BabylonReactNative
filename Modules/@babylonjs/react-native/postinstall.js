@@ -31,9 +31,10 @@ function iosCMake() {
   ];
 
   // Allow the consuming project to override the iOS deployment target used
-  // when generating the Xcode project. The CMakeLists.txt default is 12.0,
-  // which is known to crash Xcode 26's Clang when compiling DeviceImpl_iOS.mm,
-  // so projects targeting iOS 16+ should set this to match their Podfile.
+  // when generating the Xcode project. The CMakeLists.txt default is 16.0
+  // (iOS 12 used to be the default but is known to crash Xcode 26's Clang
+  // when compiling DeviceImpl_iOS.mm); set this if you need a different
+  // minimum to match your Podfile `platform :ios` value.
   const deploymentTarget = process.env.BABYLON_IOS_DEPLOYMENT_TARGET;
   if (deploymentTarget && deploymentTarget.trim() !== '') {
     cmakeArgs.push(`-DDEPLOYMENT_TARGET=${deploymentTarget.trim()}`);

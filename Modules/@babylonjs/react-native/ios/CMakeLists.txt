@@ -15,15 +15,14 @@ set(PLATFORM "OS64COMBINED" CACHE STRING "")
 #   1. -DDEPLOYMENT_TARGET=<x> on the cmake command line (highest priority)
 #   2. BABYLON_IOS_DEPLOYMENT_TARGET environment variable (forwarded by
 #      postinstall.js so consumers can set it before `npm install`)
-#   3. 12.0 (historical default)
-# Defaulting to 12 is preserved for backwards compatibility, but iOS 12 is
-# known to crash Xcode 26's Clang while compiling DeviceImpl_iOS.mm, so
-# projects targeting iOS 16+ should override this to match their Podfile.
+#   3. 16.0 (default). iOS 12 used to be the default, but it is known to crash
+#      Xcode 26's Clang while compiling DeviceImpl_iOS.mm; iOS 16 is now the
+#      supported minimum.
 if(NOT DEFINED DEPLOYMENT_TARGET OR "${DEPLOYMENT_TARGET}" STREQUAL "")
     if(DEFINED ENV{BABYLON_IOS_DEPLOYMENT_TARGET} AND NOT "$ENV{BABYLON_IOS_DEPLOYMENT_TARGET}" STREQUAL "")
         set(DEPLOYMENT_TARGET "$ENV{BABYLON_IOS_DEPLOYMENT_TARGET}" CACHE STRING "iOS deployment target")
     else()
-        set(DEPLOYMENT_TARGET "12" CACHE STRING "iOS deployment target")
+        set(DEPLOYMENT_TARGET "16" CACHE STRING "iOS deployment target")
     endif()
 endif()
 message(STATUS "BabylonReactNative iOS DEPLOYMENT_TARGET: ${DEPLOYMENT_TARGET}")
