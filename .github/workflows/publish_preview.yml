@@ -22,7 +22,7 @@ jobs:
     uses: ./.github/workflows/package.yml
 
   publish:
-    runs-on: macos-latest
+    runs-on: macos-15
     needs: [package]
     steps:
       - name: Setup Node.js
