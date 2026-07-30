@@ -71,16 +71,6 @@ add_library(jsi ALIAS ReactAndroid::jsi)
 set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
 set(BABYLON_REACT_NATIVE_SHARED_DIR "${CMAKE_CURRENT_LIST_DIR}/../shared")
 set(BABYLON_NATIVE_PLUGIN_NATIVEENGINE_WEBP OFF CACHE BOOL "")
-
-# bx's simd128_sse.inl uses SSE4.1 intrinsics (_mm_blendv_ps, _mm_round_ps) under
-# its "SSE4.2 minspec" assumption. Babylon Native only adds -msse4.2 for desktop
-# x86_64 (its guard excludes ANDROID). The x86_64 Android ABI already mandates
-# SSE4.2, but the 32-bit x86 ABI baseline is only SSSE3, so bx fails to compile
-# there without this flag.
-if(ANDROID_ABI STREQUAL "x86" OR ANDROID_ABI STREQUAL "x86_64")
-    add_compile_options(-msse4.2)
-endif()
-
 add_subdirectory(${BABYLON_REACT_NATIVE_SHARED_DIR} ${CMAKE_CURRENT_BINARY_DIR}/shared)
 
 if (TARGET NativeXr)
