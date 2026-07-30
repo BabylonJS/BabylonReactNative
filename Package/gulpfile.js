@@ -380,7 +380,10 @@ const buildBabylonNativeSourceTree = async () => {
   deleteFolderRecursive(`${UNZIP_FOLDER}/Install`);
 
   // dependencies cleanup
-  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx/3rdparty`, ['renderdoc', 'stb', 'sdf']);
+  // Keep only the 3rdparty folders that bgfx/src actually includes:
+  // renderdoc (debug_renderdoc.cpp), metal-cpp (renderer_mtl.h), h264 (video.h),
+  // plus stb/sdf.
+  deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx/3rdparty`, ['renderdoc', 'stb', 'sdf', 'metal-cpp', 'h264']);
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx/examples`,['common']);
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx/bindings`);
   deleteFolderRecursive(`${DEPS_OUTPUT_DIR}/bgfx.cmake-src/bgfx/docs`);
