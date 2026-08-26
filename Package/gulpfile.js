@@ -230,7 +230,7 @@ const createPackage = async () => {
   exec('npm pack', 'Assembled');
 };
 
-const COMMIT_ID = 'a4031689b3c4ec08062f0e044b67970eb2382c9f';
+const COMMIT_ID = 'c7f7895f11262a5731ae99ba91b1618dbd09a0aa';
 const ZIP_URL = `https://github.com/BabylonJS/BabylonNative/archive/${COMMIT_ID}.zip`;
 const TARGET_DIR = path.resolve(__dirname, '../Modules/@babylonjs/react-native/shared/BabylonNative');
 const ZIP_PATH = path.join(TARGET_DIR, `${COMMIT_ID}.zip`);
@@ -272,6 +272,20 @@ async function unzipFile(zipPath, destDir) {
 
 function deleteFile(filePath) {
   return fs.promises.unlink(filePath);
+}
+
+async function renameWithRetries(source, destination) {
+  for (let attempt = 1; attempt <= 5; attempt++) {
+    try {
+      await fs.promises.rename(source, destination);
+      return;
+    } catch (error) {
+      if (error.code !== 'EPERM' || attempt === 5) {
+        throw error;
+      }
+      await new Promise(resolve => setTimeout(resolve, attempt * 250));
+    }
+  }
 }
 
 function runCMake(buildDir) {
@@ -359,10 +373,8 @@ const buildBabylonNativeSourceTree = async () => {
   await deleteFile(ZIP_PATH);
 
   console.log('Renaming BabylonNative-xxx folder ...');
-  await fs.rename(`${TARGET_DIR}/BabylonNative-${COMMIT_ID}`, `${TARGET_DIR}/Repo`, (err) => {
-    if (err) throw err;
-    console.log('Rename complete!');
-  });
+  await renameWithRetries(`${TARGET_DIR}/BabylonNative-${COMMIT_ID}`, `${TARGET_DIR}/Repo`);
+  console.log('Rename complete!');
 
   console.log('Running CMake...');
   await runCMake(UNZIP_FOLDER);

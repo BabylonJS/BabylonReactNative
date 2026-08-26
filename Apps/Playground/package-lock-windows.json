@@ -8,12 +8,11 @@
       "name": "Playground",
       "version": "0.0.1",
       "dependencies": {
-        "@babylonjs/core": "9.0.0",
-        "@babylonjs/loaders": "9.0.0",
+        "@babylonjs/core": "9.22.2",
+        "@babylonjs/loaders": "9.22.2",
         "@babylonjs/react-native": "file:../../Modules/@babylonjs/react-native",
         "@react-native-community/slider": "^4.2.2",
         "@react-native/new-app-screen": "^0.81.4",
-        "@rnx-kit/metro-config": "2.1.0",
         "base-64": "^1.0.0",
         "react": "19.1.4",
         "react-native": "^0.81.4",
@@ -32,6 +31,7 @@
         "@types/jest": "^29.5.13",
         "@types/react": "^19.1.0",
         "@types/react-test-renderer": "^19.1.0",
+        "babel-plugin-dynamic-import-node": "^2.3.3",
         "eslint": "^8.19.0",
         "jest": "^29.6.3",
         "prettier": "2.8.8",
@@ -10461,11 +10461,15 @@
       }
     },
     "node_modules/@babylonjs/core": {
-      "version": "9.0.0",
+      "version": "9.22.2",
+      "resolved": "https://registry.npmjs.org/@babylonjs/core/-/core-9.22.2.tgz",
+      "integrity": "sha512-jCtGm33D9BLdcEivgaaulhcCzOfYDib0oO7lPL2Yk2N3aITpaI/xgbyLscFlUVIerdma3WRs7sI/NZNlbNAo0A==",
       "license": "Apache-2.0"
     },
     "node_modules/@babylonjs/loaders": {
-      "version": "9.0.0",
+      "version": "9.22.2",
+      "resolved": "https://registry.npmjs.org/@babylonjs/loaders/-/loaders-9.22.2.tgz",
+      "integrity": "sha512-OhT6o+xhjT58FUAcOC5SuIpbFCkV6urV8JPRDlE5SgKIzZlc+T5JPLrdzJaoC4ZosgJFcHWFVQKomaByWLua6w==",
       "license": "Apache-2.0",
       "peerDependencies": {
         "@babylonjs/core": "^9.0.0",
@@ -12062,28 +12066,6 @@
         }
       }
     },
-    "node_modules/@rnx-kit/metro-config": {
-      "version": "2.1.0",
-      "license": "MIT",
-      "dependencies": {
-        "@rnx-kit/tools-node": "^3.0.0",
-        "@rnx-kit/tools-react-native": "^2.0.0",
-        "@rnx-kit/tools-workspaces": "^0.2.0"
-      },
-      "engines": {
-        "node": ">=16.17"
-      },
-      "peerDependencies": {
-        "@react-native/metro-config": "*",
-        "react": "*",
-        "react-native": "*"
-      },
-      "peerDependenciesMeta": {
-        "@react-native/metro-config": {
-          "optional": true
-        }
-      }
-    },
     "node_modules/@rnx-kit/react-native-host": {
       "version": "0.5.16",
       "dev": true,
@@ -12097,6 +12079,7 @@
     },
     "node_modules/@rnx-kit/tools-filesystem": {
       "version": "0.2.0",
+      "dev": true,
       "license": "MIT",
       "engines": {
         "node": ">=18.12"
@@ -12112,6 +12095,7 @@
     },
     "node_modules/@rnx-kit/tools-node": {
       "version": "3.0.4",
+      "dev": true,
       "license": "MIT",
       "dependencies": {
         "@rnx-kit/types-node": "^1.0.0"
@@ -12122,6 +12106,7 @@
     },
     "node_modules/@rnx-kit/tools-react-native": {
       "version": "2.3.7",
+      "dev": true,
       "license": "MIT",
       "dependencies": {
         "@rnx-kit/tools-filesystem": "^0.2.0",
@@ -12132,22 +12117,9 @@
         "node": ">=16.17"
       }
     },
-    "node_modules/@rnx-kit/tools-workspaces": {
-      "version": "0.2.3",
-      "license": "MIT",
-      "dependencies": {
-        "fast-glob": "^3.2.7",
-        "find-up": "^5.0.0",
-        "micromatch": "^4.0.0",
-        "read-yaml-file": "^2.1.0",
-        "strip-json-comments": "^3.1.1"
-      },
-      "engines": {
-        "node": ">=16.17"
-      }
-    },
     "node_modules/@rnx-kit/types-bundle-config": {
       "version": "1.0.0",
+      "dev": true,
       "license": "MIT",
       "dependencies": {
         "@rnx-kit/types-metro-serializer-esbuild": "^1.0.0",
@@ -12169,6 +12141,7 @@
     },
     "node_modules/@rnx-kit/types-kit-config": {
       "version": "1.0.0",
+      "dev": true,
       "license": "MIT",
       "dependencies": {
         "@rnx-kit/types-bundle-config": "^1.0.0"
@@ -12179,6 +12152,7 @@
     },
     "node_modules/@rnx-kit/types-metro-serializer-esbuild": {
       "version": "1.0.1",
+      "dev": true,
       "license": "MIT",
       "engines": {
         "node": ">=18.12"
@@ -12186,6 +12160,7 @@
     },
     "node_modules/@rnx-kit/types-node": {
       "version": "1.0.0",
+      "dev": true,
       "license": "MIT",
       "dependencies": {
         "@rnx-kit/types-kit-config": "^1.0.0"
@@ -12196,6 +12171,7 @@
     },
     "node_modules/@rnx-kit/types-plugin-cyclic-dependencies": {
       "version": "1.0.0",
+      "dev": true,
       "license": "MIT",
       "engines": {
         "node": ">=18.12"
@@ -12203,6 +12179,7 @@
     },
     "node_modules/@rnx-kit/types-plugin-duplicates-checker": {
       "version": "1.0.0",
+      "dev": true,
       "license": "MIT",
       "engines": {
         "node": ">=18.12"
@@ -12210,6 +12187,7 @@
     },
     "node_modules/@rnx-kit/types-plugin-typescript": {
       "version": "1.0.0",
+      "dev": true,
       "license": "MIT",
       "engines": {
         "node": ">=18.12"
@@ -12931,6 +12909,16 @@
       },
       "peerDependencies": {
         "@babel/core": "^7.8.0"
+      }
+    },
+    "node_modules/babel-plugin-dynamic-import-node": {
+      "version": "2.3.3",
+      "resolved": "https://registry.npmjs.org/babel-plugin-dynamic-import-node/-/babel-plugin-dynamic-import-node-2.3.3.tgz",
+      "integrity": "sha512-jZVI+s9Zg3IqA/kdi0i6UDCybUI3aSBLnglhYbSSjKlV7yF1F/5LWv8MakQmvYpnbJDS6fcBL2KzHSxNCMtWSQ==",
+      "dev": true,
+      "license": "MIT",
+      "dependencies": {
+        "object.assign": "^4.1.0"
       }
     },
     "node_modules/babel-plugin-istanbul": {
@@ -18695,17 +18683,6 @@
       "dev": true,
       "license": "MIT"
     },
-    "node_modules/read-yaml-file": {
-      "version": "2.1.0",
-      "license": "MIT",
-      "dependencies": {
-        "js-yaml": "^4.0.0",
-        "strip-bom": "^4.0.0"
-      },
-      "engines": {
-        "node": ">=10.13"
-      }
-    },
     "node_modules/readable-stream": {
       "version": "3.6.2",
       "license": "MIT",
@@ -19535,6 +19512,7 @@
     },
     "node_modules/strip-bom": {
       "version": "4.0.0",
+      "dev": true,
       "license": "MIT",
       "engines": {
         "node": ">=8"
@@ -19556,6 +19534,7 @@
     },
     "node_modules/strip-json-comments": {
       "version": "3.1.1",
+      "dev": true,
       "license": "MIT",
       "engines": {
         "node": ">=8"

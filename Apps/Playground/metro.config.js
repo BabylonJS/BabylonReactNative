@@ -1,7 +1,12 @@
 const path = require("path");
 
-const { makeMetroConfig } = require("@rnx-kit/metro-config");
-module.exports = makeMetroConfig({
+const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config");
+
+module.exports = mergeConfig(getDefaultConfig(__dirname), {
+  resolver: {
+    disableHierarchicalLookup: true,
+    nodeModulesPaths: [path.resolve(__dirname, "node_modules")],
+  },
   transformer: {
     getTransformOptions: async () => ({
       transform: {
