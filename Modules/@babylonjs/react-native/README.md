@@ -10,13 +10,20 @@ This package has several **peer dependencies**. If these dependencies are unmet,
 
 The `react-native-permissions` dependency is required for XR capabilities of Babylon.js (to request camera permissions automatically). Be sure to follow the `react-native-permissions` [instructions](https://github.com/react-native-community/react-native-permissions#setup) to update your `Podfile` and `Info.plist` (iOS) and/or `AndroidManifest.xml` (Android). These plugins can be disabled and by such, dependency to `react-native-permissions` is not needed anymore (see below).
 
+### React Native minimum version
+
+| BabylonReactNative version | iOS / Android        | Windows                       |
+| -------------------------- | -------------------- | ----------------------------- |
+| next / main                | react-native 0.81.6+ | react-native-windows 0.81.4+  |
+| 2.0.0 - 2.0.2              | react-native 0.79.4  | react-native-windows 0.79.1   |
+
 ### Android Configuration
 
 The minimum Android SDK version is 21. This must be set as `minSdkVersion` in the consuming project's `build.gradle` file.
 
 ### iOS Configuration
 
-The minimum deployment target version is 12. This must be set as `iOS Deployment Target` in the consuming project's `project.pbxproj`, and must also be set as `platform` in the consuming project's `Podfile`.
+The minimum deployment target version is 16. This must be set as `iOS Deployment Target` in the consuming project's `project.pbxproj`, and must also be set as `platform` in the consuming project's `Podfile`.
 Make sure `pod install` is called from the ios folder after npm install.
 
 #### Workspace
@@ -33,6 +40,17 @@ To disable post install CMake generation, set this variable before running `npm 
 ```
 export BABYLON_NO_CMAKE_POSTINSTALL=1
 ```
+
+To use the system cmake (e.g. a Homebrew or system install) instead of the cmake bundled in the npm package, set this variable before running `npm install`:
+```
+export BABYLON_USE_SYSTEM_CMAKE=1
+```
+
+To override the iOS deployment target used by the generated `ReactNativeBabylon.xcodeproj` (defaults to `16.0`), set this variable before running `npm install` so it matches your app's Podfile `platform :ios` value:
+```
+export BABYLON_IOS_DEPLOYMENT_TARGET=16.0
+```
+The previous default of iOS 12 caused Xcode 26's Clang to crash while compiling `DeviceImpl_iOS.mm`; the default is now `16.0` and this variable lets you raise it further (or, at your own risk, lower it) without patching the deployment target from a Podfile `post_install` hook.
 
 ### Plugins selection
 
@@ -56,6 +74,7 @@ Babylon.js minimal version:
 
 |BabylonReactNative version | Babylon.js version | BabylonNative commit |
 | ----------- | ------------------------ | --- |
+|2.0.2 | 9.0.0 | ce2edf0851e0c8483559832a4f8eb9d39c6b2f53
 |2.0.0 | 8.3.0 | 6c25966e8f8c0f3a0c13fdf77064f1bde790391f
 
 
