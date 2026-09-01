@@ -74,7 +74,7 @@ Babylon.js minimal version:
 
 |BabylonReactNative version | Babylon.js version | BabylonNative commit |
 | ----------- | ------------------------ | --- |
-|2.0.2 | 9.22.2 | 17d3e4e6b1233547d7ccfdf89da04c327340f8fc
+|2.0.2 | 9.0.0 | 17d3e4e6b1233547d7ccfdf89da04c327340f8fc
 |2.0.0 | 8.3.0 | 6c25966e8f8c0f3a0c13fdf77064f1bde790391f
 
 

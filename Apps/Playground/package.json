@@ -10,17 +10,18 @@
     "windows": "react-native run-windows --sln windows/Playground.sln"
   },
   "dependencies": {
-    "@babylonjs/core": "9.22.2",
-    "@babylonjs/loaders": "9.22.2",
+    "@babylonjs/core": "9.0.0",
+    "@babylonjs/loaders": "9.0.0",
     "@babylonjs/react-native": "file:../../Modules/@babylonjs/react-native",
     "@react-native-community/slider": "^4.2.2",
     "@react-native/new-app-screen": "^0.81.6",
+    "@rnx-kit/metro-config": "2.1.0",
     "base-64": "^1.0.0",
     "react": "19.1.4",
     "react-native": "^0.81.6",
-    "react-native-config": "1.5.5",
     "react-native-permissions": "^5.4.1",
-    "react-native-windows": "^0.81.4"
+    "react-native-windows": "^0.81.4",
+    "react-native-config": "1.5.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -34,12 +35,11 @@
     "@types/jest": "^29.5.13",
     "@types/react": "^19.1.0",
     "@types/react-test-renderer": "^19.1.0",
-    "babel-plugin-dynamic-import-node": "^2.3.3",
     "eslint": "^8.19.0",
     "jest": "^29.6.3",
     "prettier": "2.8.8",
-    "react-native-test-app": "^5.0.0",
     "react-test-renderer": "19.1.0",
+    "react-native-test-app": "^5.0.0",
     "typescript": "5.0.4"
   },
   "engines": {
