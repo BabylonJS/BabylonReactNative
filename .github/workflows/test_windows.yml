@@ -53,6 +53,8 @@ jobs:
         shell: pwsh
         run: |
           $project = Resolve-Path ..\node_modules\@babylonjs\react-native\windows\BabylonReactNative\BabylonReactNative.vcxproj
-          $solutionDir = (Resolve-Path .).Path
-          MSBuild $project /restore /m /p:Platform=x64 /p:Configuration=Release /p:SolutionDir=$solutionDir /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:UseExperimentalNuget=true /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
+          $solutionPath = (Resolve-Path Playground.sln).Path
+          $solutionDir = Split-Path $solutionPath
+          $solutionFileName = Split-Path $solutionPath -Leaf
+          MSBuild $project /restore /m /p:Platform=x64 /p:Configuration=Release /p:SolutionPath=$solutionPath /p:SolutionDir=$solutionDir /p:SolutionFileName=$solutionFileName /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:UseExperimentalNuget=true /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
         working-directory: ./Apps/Playground/windows
