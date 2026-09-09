@@ -46,7 +46,7 @@ jobs:
         working-directory: ./Apps/Playground
 
       - name: Generate Windows project
-        run: npx install-windows-test-app --use-fabric --use-nuget
+        run: node generate-windows-test-app.mjs
         working-directory: ./Apps/Playground
 
       - name: Build packaged sources

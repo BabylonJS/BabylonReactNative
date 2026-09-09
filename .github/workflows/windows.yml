@@ -32,7 +32,7 @@ jobs:
           node setup_dev.js
 
       - name: NPM Generate Windows Project
-        run: npx install-windows-test-app --use-fabric --use-nuget
+        run: node generate-windows-test-app.mjs
         working-directory: ./Apps/Playground
 
       - name: Build Babylon React Native
