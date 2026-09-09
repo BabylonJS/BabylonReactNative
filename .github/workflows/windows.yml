@@ -11,7 +11,7 @@ on:
 
 jobs:
   build-windows:
-    runs-on: windows-latest
+    runs-on: windows-2022
     steps:
       - name: Support longpaths
         run: git config --system core.longpaths true
