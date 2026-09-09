@@ -34,12 +34,13 @@
     <BabylonReactNativeDir Condition="'$(BabylonReactNativeDir)' == '' And Exists('$(ProjectDir)\..\..\..\react-native\package.json')">$(ProjectDir)..\..\..\react-native\</BabylonReactNativeDir>
     <BabylonReactNativeDir Condition="'$(BabylonReactNativeDir)' == '' And Exists('$(ProjectDir)\..\..\package.json')">$(ProjectDir)..\..\</BabylonReactNativeDir>
     <BabylonReactNativeDir Condition="'$(BabylonReactNativeDir)' == ''">$(ProjectDir)..\..\</BabylonReactNativeDir>
-    <BabylonNativeBuildRoot Condition="'$(Platform)'=='x64'">$(SolutionDir)\build\BabylonReactNative\uwp_x64</BabylonNativeBuildRoot>
-    <BabylonNativeBuildRoot Condition="'$(Platform)'=='Win32'">$(SolutionDir)\build\BabylonReactNative\uwp_x86</BabylonNativeBuildRoot>
-    <BabylonNativeBuildRoot Condition="'$(Platform)'=='ARM'">$(SolutionDir)\build\BabylonReactNative\uwp_arm</BabylonNativeBuildRoot>
-    <BabylonNativeBuildRoot Condition="'$(Platform)'=='ARM64'">$(SolutionDir)\build\BabylonReactNative\uwp_arm64</BabylonNativeBuildRoot>
+    <BabylonNativeBuildRoot Condition="'$(Platform)'=='x64'">$(SolutionDir)\build\brn\x64</BabylonNativeBuildRoot>
+    <BabylonNativeBuildRoot Condition="'$(Platform)'=='Win32'">$(SolutionDir)\build\brn\x86</BabylonNativeBuildRoot>
+    <BabylonNativeBuildRoot Condition="'$(Platform)'=='ARM'">$(SolutionDir)\build\brn\arm</BabylonNativeBuildRoot>
+    <BabylonNativeBuildRoot Condition="'$(Platform)'=='ARM64'">$(SolutionDir)\build\brn\arm64</BabylonNativeBuildRoot>
     <BabylonNativeCMakeGenerator Condition="'$(BabylonNativeCMakeGenerator)'==''">Visual Studio 17 2022</BabylonNativeCMakeGenerator>
-    <BabylonNativeCMakeGeneratorId>$([System.String]::Copy('$(BabylonNativeCMakeGenerator)').Replace(' ', ''))</BabylonNativeCMakeGeneratorId>
+    <BabylonNativeCMakeGeneratorId Condition="'$(BabylonNativeCMakeGeneratorId)'=='' And '$(BabylonNativeCMakeGenerator)'=='Visual Studio 17 2022'">VS17</BabylonNativeCMakeGeneratorId>
+    <BabylonNativeCMakeGeneratorId Condition="'$(BabylonNativeCMakeGeneratorId)'==''">$([System.String]::Copy('$(BabylonNativeCMakeGenerator)').Replace(' ', ''))</BabylonNativeCMakeGeneratorId>
   </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|ARM">
