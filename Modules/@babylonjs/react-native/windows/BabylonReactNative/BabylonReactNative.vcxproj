@@ -318,7 +318,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(CppWinRTProjectionDir)\winrt\base.h')"
            Text="C++/WinRT projections were not generated at '$(CppWinRTProjectionDir)'. Babylon Native cannot be built with a different projection version." />
-    <Exec Command='cmake -G"$(BabylonNativeCMakeGenerator)" -B"$(BabylonNativeBuildDir)." -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION=$(WindowsTargetPlatformVersion) -A$(Platform) -T$(PlatformToolset) -DJSRUNTIMEHOST_CORE_APPRUNTIME=0 -DCPPWINRT_INCLUDE_PATH="$(CppWinRTProjectionDir)" -S"$(ProjectDir).."' />
+    <Exec Command='cmake -G"$(BabylonNativeCMakeGenerator)" -B"$(BabylonNativeBuildDir)." -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION=$(WindowsTargetPlatformVersion) -A$(Platform) -T$(PlatformToolset) -DJSRUNTIMEHOST_CORE_APPRUNTIME=0 -DCPPWINRT_INCLUDE_PATH="$(CppWinRTProjectionDir)." -S"$(ProjectDir).."' />
     <Exec Command='cmake --build "$(BabylonNativeBuildDir)." --config "$(Configuration)" --target BabylonNative --parallel' />
   </Target>
   <Target Name="EnsureReactNativeWindowsTargets" BeforeTargets="PrepareForBuild">
