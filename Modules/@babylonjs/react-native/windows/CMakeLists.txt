@@ -12,7 +12,8 @@ endif()
 
 project(ReactNativeBabylon)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # BabylonNative CMake entry
 set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
