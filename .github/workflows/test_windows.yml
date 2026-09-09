@@ -50,5 +50,9 @@ jobs:
         working-directory: ./Apps/Playground
 
       - name: Build packaged sources
-        run: MSBuild Playground.sln /restore /m /p:Platform=x64 /p:Configuration=Release /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
+        shell: pwsh
+        run: |
+          $project = Resolve-Path ..\node_modules\@babylonjs\react-native\windows\BabylonReactNative\BabylonReactNative.vcxproj
+          $solutionDir = (Resolve-Path .).Path
+          MSBuild $project /restore /m /p:Platform=x64 /p:Configuration=Release /p:SolutionDir=$solutionDir /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:UseExperimentalNuget=true /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
         working-directory: ./Apps/Playground/windows

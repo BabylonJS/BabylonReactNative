@@ -35,6 +35,10 @@ jobs:
         run: npx install-windows-test-app --use-fabric --use-nuget
         working-directory: ./Apps/Playground
 
-      - name: Windows build Playground
-        run: MSBuild Playground.sln /restore /m /p:Platform=x64 /p:Configuration=Release /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
+      - name: Build Babylon React Native
+        shell: pwsh
+        run: |
+          $project = Resolve-Path ..\node_modules\@babylonjs\react-native\windows\BabylonReactNative\BabylonReactNative.vcxproj
+          $solutionDir = (Resolve-Path .).Path
+          MSBuild $project /restore /m /p:Platform=x64 /p:Configuration=Release /p:SolutionDir=$solutionDir /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:UseExperimentalNuget=true /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
         working-directory: ./Apps/Playground/windows
