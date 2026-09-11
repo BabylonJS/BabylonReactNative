@@ -140,6 +140,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
 
   const onToggleXr = useCallback(async () => {
     setXrError(undefined);
+    const action = xrSession ? "stop" : "start";
 
     try {
       if (xrSession) {
@@ -182,7 +183,7 @@ const EngineScreen: FunctionComponent<ViewProps> = (props: ViewProps) => {
       rootNode.rotate(Vector3.Up(), 3.14159);
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      setXrError(`Unable to start XR: ${message}`);
+      setXrError(`Unable to ${action} XR: ${message}`);
     }
   }, [rootNode, scene, xrSession]);
 

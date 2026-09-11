@@ -2,8 +2,13 @@ import React from "react";
 import TestRenderer, { act } from "react-test-renderer";
 
 const mockEnterXRAsync = jest.fn();
+const mockExitXRAsync = jest.fn();
 const mockCreateDefaultXRExperienceAsync = jest.fn();
 const mockEngine = {};
+const mockXrSession = {
+  exitXRAsync: mockExitXRAsync,
+  onXRSessionEnded: { add: jest.fn() },
+};
 
 jest.mock("@babylonjs/react-native", () => ({
   EngineView: "EngineView",
@@ -73,9 +78,15 @@ import App from "../App";
 describe("Playground controls", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockEnterXRAsync.mockResolvedValue(mockXrSession);
+    mockExitXRAsync.mockResolvedValue(undefined);
     mockCreateDefaultXRExperienceAsync.mockResolvedValue({
       baseExperience: {
         enterXRAsync: mockEnterXRAsync,
+        camera: {
+          trackingState: undefined,
+          onTrackingStateChanged: { add: jest.fn() },
+        },
       },
       renderTarget: {},
     });
@@ -118,5 +129,27 @@ describe("Playground controls", () => {
     expect(
       renderer!.root.findByProps({ testID: "xr-error" }).props.children
     ).toContain("XR is unavailable");
+  });
+
+  it("shows an error when XR cannot stop", async () => {
+    let renderer: TestRenderer.ReactTestRenderer;
+    await act(async () => {
+      renderer = TestRenderer.create(<App />);
+    });
+
+    const startXr = renderer!.root.findByProps({ title: "Start XR" });
+    await act(async () => {
+      await startXr.props.onPress();
+    });
+
+    mockExitXRAsync.mockRejectedValue(new Error("XR shutdown failed"));
+    const stopXr = renderer!.root.findByProps({ title: "Stop XR" });
+    await act(async () => {
+      await stopXr.props.onPress();
+    });
+
+    expect(
+      renderer!.root.findByProps({ testID: "xr-error" }).props.children
+    ).toContain("Unable to stop XR: XR shutdown failed");
   });
 });

@@ -42,6 +42,7 @@ jobs:
           if (-not $package) {
             throw "BabylonReactNative package artifact was not found."
           }
+          npm ci
           npm install --no-save --package-lock=false $package.FullName
         working-directory: ./Apps/Playground
 
@@ -57,4 +58,11 @@ jobs:
           $solutionDir = Split-Path $solutionPath
           $solutionFileName = Split-Path $solutionPath -Leaf
           MSBuild $project /restore /m /p:Platform=x64 /p:Configuration=Release /p:SolutionPath=$solutionPath /p:SolutionDir=$solutionDir /p:SolutionFileName=$solutionFileName /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:UseExperimentalNuget=true /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
+        working-directory: ./Apps/Playground/windows
+
+      - name: Build packaged Windows consumer
+        shell: pwsh
+        run: |
+          $solutionPath = (Resolve-Path Playground.sln).Path
+          MSBuild $solutionPath /restore /m /p:Platform=x64 /p:Configuration=Release /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:UseExperimentalNuget=true /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
         working-directory: ./Apps/Playground/windows

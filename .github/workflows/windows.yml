@@ -44,3 +44,10 @@ jobs:
           $solutionFileName = Split-Path $solutionPath -Leaf
           MSBuild $project /restore /m /p:Platform=x64 /p:Configuration=Release /p:SolutionPath=$solutionPath /p:SolutionDir=$solutionDir /p:SolutionFileName=$solutionFileName /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:UseExperimentalNuget=true /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
         working-directory: ./Apps/Playground/windows
+
+      - name: Build Windows consumer
+        shell: pwsh
+        run: |
+          $solutionPath = (Resolve-Path Playground.sln).Path
+          MSBuild $solutionPath /restore /m /p:Platform=x64 /p:Configuration=Release /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:UseExperimentalNuget=true /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
+        working-directory: ./Apps/Playground/windows
