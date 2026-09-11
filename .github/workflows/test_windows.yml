@@ -64,5 +64,5 @@ jobs:
         shell: pwsh
         run: |
           $solutionPath = (Resolve-Path Playground.sln).Path
-          MSBuild $solutionPath /restore /m /p:Platform=x64 /p:Configuration=Release /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:UseExperimentalNuget=true /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
+          MSBuild $solutionPath /restore /m /p:Platform=x64 /p:Configuration=Release /p:LanguageStandard=stdcpp20 /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:UseExperimentalNuget=true /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
         working-directory: ./Apps/Playground/windows
