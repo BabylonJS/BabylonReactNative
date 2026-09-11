@@ -1,4 +1,4 @@
-name: 'build windows'
+name: 'build test windows'
 
 on:
   workflow_call:
@@ -10,32 +10,47 @@ on:
         required: false
 
 jobs:
-  build-windows:
+  build-test-windows:
     runs-on: windows-2022
     steps:
       - name: Support longpaths
         run: git config --system core.longpaths true
+
       - name: Checkout Repo
         uses: actions/checkout@v4.2.2
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
+
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      - name: Setting up developer environment
-        run: |
-          Copy-Item -Path "Apps/Playground/package-windows.json" -Destination "Apps/Playground/package.json" -Force
-          Copy-Item -Path "Apps/Playground/package-lock-windows.json" -Destination "Apps/Playground/package-lock.json" -Force
-          cd Package
-          node setup_dev.js
+      - name: Download package
+        uses: actions/download-artifact@v4
+        with:
+          name: BabylonReactNative
+          path: ./artifact
 
-      - name: NPM Generate Windows Project
+      - name: Install packaged sources
+        shell: pwsh
+        run: |
+          Copy-Item package-windows.json package.json -Force
+          Copy-Item package-lock-windows.json package-lock.json -Force
+          $package = Get-ChildItem ../../artifact/babylonjs-react-native-*.tgz -File | Select-Object -First 1
+          if (-not $package) {
+            throw "BabylonReactNative package artifact was not found."
+          }
+          npm ci
+          npm install --no-save --package-lock=false $package.FullName
+        working-directory: ./Apps/Playground
+
+      - name: Generate Windows project
         run: node generate-windows-test-app.mjs
         working-directory: ./Apps/Playground
 
-      - name: Build Babylon React Native
+      - name: Build packaged sources
         shell: pwsh
         run: |
           $project = Resolve-Path ..\node_modules\@babylonjs\react-native\windows\BabylonReactNative\BabylonReactNative.vcxproj
@@ -45,7 +60,7 @@ jobs:
           MSBuild $project /restore /m /p:Platform=x64 /p:Configuration=Release /p:SolutionPath=$solutionPath /p:SolutionDir=$solutionDir /p:SolutionFileName=$solutionFileName /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:UseExperimentalNuget=true /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
         working-directory: ./Apps/Playground/windows
 
-      - name: Build Windows consumer
+      - name: Build packaged Windows consumer
         shell: pwsh
         run: |
           $solutionPath = (Resolve-Path Playground.sln).Path

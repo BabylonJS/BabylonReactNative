@@ -9,10 +9,8 @@ jobs:
     uses: ./.github/workflows/android.yml
   build-iOS:
     uses: ./.github/workflows/ios.yml
-  #build-windows:
-  #  uses: ./.github/workflows/windows.yml
-  #  with:
-  #    WindowsTargetPlatformVersion: '10.0.26100.0'
+  build-windows:
+    uses: ./.github/workflows/windows.yml
   build-typescript:
     uses: ./.github/workflows/typescript.yml
 
@@ -27,3 +25,7 @@ jobs:
   test-package-android:
     needs: [package]
     uses: ./.github/workflows/test_android.yml
+
+  test-package-windows:
+    needs: [package]
+    uses: ./.github/workflows/test_windows.yml
