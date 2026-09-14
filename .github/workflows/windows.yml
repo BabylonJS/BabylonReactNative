@@ -63,7 +63,12 @@ jobs:
             "/v:minimal"
           )
 
-          function Build-Project([string]$path) {
+          function Build-Project([string]$path, [bool]$useCpp20 = $false) {
+            $projectBuildProperties = $buildProperties
+            if ($useCpp20) {
+              $projectBuildProperties += "/p:LanguageStandard=stdcpp20"
+            }
+
             [xml]$projectXml = Get-Content $path
             $sourceItemImports = Select-Xml -Xml $projectXml -XPath "//*[local-name()='Import' and contains(@Project, 'Microsoft.ReactNative.Cxx.vcxitems')]"
             if ($sourceItemImports) {
@@ -73,7 +78,7 @@ jobs:
               $projectXml.Save($path)
             }
 
-            $evaluatedProperties = MSBuild $path /p:UseExperimentalNuget=true /getProperty:UseExperimentalNuget,MSBuildProjectFullPath /getItem:ProjectReference,ClCompile @buildProperties | ConvertFrom-Json
+            $evaluatedProperties = MSBuild $path /p:UseExperimentalNuget=true /getProperty:UseExperimentalNuget,MSBuildProjectFullPath /getItem:ProjectReference,ClCompile @projectBuildProperties | ConvertFrom-Json
             if ($evaluatedProperties.Properties.UseExperimentalNuget -ne "true") {
               throw "RNW NuGet mode was not enabled for $path."
             }
@@ -86,12 +91,12 @@ jobs:
               throw "RNW source compile items were enabled for $path."
             }
 
-            MSBuild $path /p:UseExperimentalNuget=true /t:Restore /m /p:RestoreRecursive=false @buildProperties
+            MSBuild $path /p:UseExperimentalNuget=true /t:Restore /m /p:RestoreRecursive=false @projectBuildProperties
             if ($LASTEXITCODE -ne 0) {
               throw "Restore failed for $path."
             }
 
-            MSBuild $path /p:UseExperimentalNuget=true /m /p:BuildProjectReferences=false @buildProperties
+            MSBuild $path /p:UseExperimentalNuget=true /m /p:BuildProjectReferences=false @projectBuildProperties
             if ($LASTEXITCODE -ne 0) {
               throw "Build failed for $path."
             }
@@ -105,5 +110,5 @@ jobs:
             Build-Project (Resolve-Path (Join-Path $projectDirectory $relativePath)).Path
           }
 
-          Build-Project $projectPath
+          Build-Project $projectPath $true
         working-directory: ./Apps/Playground/windows
