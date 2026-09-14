@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <GetCppWinRTDirectWinMDReferencesDependsOn>
-      $(GetCppWinRTDirectWinMDReferencesDependsOn);
+    <CppWinRTSetMidlReferencesDependsOn>
+      $(CppWinRTSetMidlReferencesDependsOn);
       UseReactNativeNuGetWinMD
-    </GetCppWinRTDirectWinMDReferencesDependsOn>
+    </CppWinRTSetMidlReferencesDependsOn>
   </PropertyGroup>
 
   <Target Name="UseReactNativeNuGetWinMD" Condition="'$(UseExperimentalNuget)' == 'true'">
@@ -15,12 +15,15 @@
     <Error Condition="!Exists('$(_ReactNativeNuGetWinMD)')" Text="Microsoft.ReactNative.winmd was not found in the restored Microsoft.ReactNative $(ReactNativeWindowsVersion) package." />
     <ItemGroup>
       <ReferencePath Remove="@(ReferencePath)" Condition="'%(ReferencePath.Filename)%(ReferencePath.Extension)' == 'Microsoft.ReactNative.winmd'" />
-      <ReferencePath Include="$(_ReactNativeNuGetWinMD)">
-        <Implementation>Microsoft.ReactNative.dll</Implementation>
+      <CppWinRTDirectWinMDReferences Remove="@(CppWinRTDirectWinMDReferences)" Condition="'%(CppWinRTDirectWinMDReferences.Filename)%(CppWinRTDirectWinMDReferences.Extension)' == 'Microsoft.ReactNative.winmd'" />
+      <CppWinRTStaticProjectWinMDReferences Remove="@(CppWinRTStaticProjectWinMDReferences)" Condition="'%(CppWinRTStaticProjectWinMDReferences.Filename)%(CppWinRTStaticProjectWinMDReferences.Extension)' == 'Microsoft.ReactNative.winmd'" />
+      <CppWinRTDynamicProjectWinMDReferences Remove="@(CppWinRTDynamicProjectWinMDReferences)" Condition="'%(CppWinRTDynamicProjectWinMDReferences.Filename)%(CppWinRTDynamicProjectWinMDReferences.Extension)' == 'Microsoft.ReactNative.winmd'" />
+      <CppWinRTDirectWinMDReferences Include="$(_ReactNativeNuGetWinMD)">
         <IsSystemReference>false</IsSystemReference>
         <ReferenceSourceTarget>ResolveAssemblyReference</ReferenceSourceTarget>
+        <WinMDPath>$(_ReactNativeNuGetWinMD)</WinMDPath>
         <WinMDFile>true</WinMDFile>
-      </ReferencePath>
+      </CppWinRTDirectWinMDReferences>
     </ItemGroup>
   </Target>
 </Project>
