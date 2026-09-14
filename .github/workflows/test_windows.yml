@@ -129,13 +129,24 @@ jobs:
 
           $mainPagePath = (Resolve-Path ../node_modules/react-native-test-app/windows/UWP/MainPage.cpp).Path
           $mainPageContent = [System.IO.File]::ReadAllText($mainPagePath)
-          $updatedMainPageContent = $mainPageContent.Replace(
-            "co_await LoadFromDevServer({}, {});",
-            "LoadFromDevServer({}, {});"
-          )
-          if ($updatedMainPageContent -eq $mainPageContent) {
-            throw "The expected react-native-test-app IAsyncAction await was not found."
+          $onNavigatedToPattern = "(?s)IAsyncAction MainPage::OnNavigatedTo\(NavigationEventArgs const &e\)\s*\{.*?\}\s*(?=bool MainPage::LoadJSBundleFrom)"
+          if (-not [System.Text.RegularExpressions.Regex]::IsMatch($mainPageContent, $onNavigatedToPattern)) {
+            throw "The expected react-native-test-app OnNavigatedTo implementation was not found."
           }
+          $onNavigatedToReplacement = @(
+            "IAsyncAction MainPage::OnNavigatedTo(NavigationEventArgs const &e)",
+            "{",
+            "    Base::OnNavigatedTo(e);",
+            "    LoadFromDevServer({}, {});",
+            "    co_return;",
+            "}",
+            ""
+          ) -join [System.Environment]::NewLine
+          $updatedMainPageContent = [System.Text.RegularExpressions.Regex]::Replace(
+            $mainPageContent,
+            $onNavigatedToPattern,
+            $onNavigatedToReplacement
+          )
           [System.IO.File]::WriteAllText($mainPagePath, $updatedMainPageContent)
 
           $buildProperties += @(
