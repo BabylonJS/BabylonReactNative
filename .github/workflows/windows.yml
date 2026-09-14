@@ -48,6 +48,8 @@ jobs:
           $solutionFileName = Split-Path $solutionPath -Leaf
           $projectPath = (Resolve-Path ../node_modules/.generated/windows/UWP/ReactTestApp.vcxproj).Path
           $reactNativeNuGetPropsPath = (Resolve-Path ReactNativeNuGet.props).Path
+          $env:UseExperimentalNuget = "true"
+          $env:ForceImportAfterCppDefaultProps = $reactNativeNuGetPropsPath
           $buildProperties = @(
             "/p:Platform=x64",
             "/p:Configuration=Release",
@@ -64,6 +66,11 @@ jobs:
           )
 
           function Build-Project([string]$path) {
+            $evaluatedProperties = MSBuild $path /getProperty:UseExperimentalNuget,ForceImportAfterCppDefaultProps @buildProperties | ConvertFrom-Json
+            if ($evaluatedProperties.Properties.UseExperimentalNuget -ne "true") {
+              throw "RNW NuGet mode was not enabled for $path."
+            }
+
             MSBuild $path /t:Restore /m /p:RestoreRecursive=false @buildProperties
             if ($LASTEXITCODE -ne 0) {
               throw "Restore failed for $path."
