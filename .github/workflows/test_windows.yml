@@ -69,6 +69,9 @@ jobs:
         shell: pwsh
         run: |
           $solutionPath = (Resolve-Path Playground.sln).Path
-          MSBuild $solutionPath /t:Restore /m /p:Platform=x64 /p:Configuration=Release /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:WindowsTargetPlatformMinVersion=${{ inputs.WindowsTargetPlatformMinVersion }} /p:UseExperimentalNuget=true /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
-          MSBuild $solutionPath /m /p:Platform=x64 /p:Configuration=Release /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:WindowsTargetPlatformMinVersion=${{ inputs.WindowsTargetPlatformMinVersion }} /p:UseExperimentalNuget=true /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
+          $solutionDir = "$(Split-Path $solutionPath)\"
+          $solutionFileName = Split-Path $solutionPath -Leaf
+          $projectPath = (Resolve-Path ../node_modules/.generated/windows/UWP/ReactTestApp.vcxproj).Path
+          MSBuild $projectPath /t:Restore /m /p:Platform=x64 /p:Configuration=Release /p:SolutionPath=$solutionPath /p:SolutionDir=$solutionDir /p:SolutionFileName=$solutionFileName /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:WindowsTargetPlatformMinVersion=${{ inputs.WindowsTargetPlatformMinVersion }} /p:UseExperimentalNuget=true /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
+          MSBuild $projectPath /m /p:Platform=x64 /p:Configuration=Release /p:SolutionPath=$solutionPath /p:SolutionDir=$solutionDir /p:SolutionFileName=$solutionFileName /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:WindowsTargetPlatformMinVersion=${{ inputs.WindowsTargetPlatformMinVersion }} /p:UseExperimentalNuget=true /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
         working-directory: ./Apps/Playground/windows
