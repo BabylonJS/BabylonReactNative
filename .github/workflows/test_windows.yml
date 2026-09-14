@@ -74,6 +74,7 @@ jobs:
             "/p:ForceImportAfterCppTargets=$reactNativeNuGetTargetsPath",
             "/p:WindowsAppSDKVerifyTransitiveDependencies=false",
             "/p:AppxBundle=Never",
+            "/p:AppxPackage=false",
             "/p:UseBundle=false",
             "/v:minimal"
           )
