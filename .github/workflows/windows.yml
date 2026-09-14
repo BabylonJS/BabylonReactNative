@@ -88,6 +88,10 @@ jobs:
             if ($path -eq $projectPath -and $evaluatedProperties.Properties.LanguageStandard -ne "stdcpp20") {
               throw "C++20 was not enabled for the generated Windows app."
             }
+            $mainPageCompile = $evaluatedProperties.Items.ClCompile | Where-Object Identity -Like "*\react-native-test-app\windows\UWP\MainPage.cpp"
+            if ($path -eq $projectPath -and ($mainPageCompile.LanguageStandard -ne "stdcpp20" -or $mainPageCompile.AdditionalOptions -match "(^|\s)/await(\s|$)")) {
+              throw "The generated Windows app was not configured for standard C++20 coroutines."
+            }
 
             MSBuild $path /p:UseExperimentalNuget=true /t:Restore /m /p:RestoreRecursive=false @buildProperties
             if ($LASTEXITCODE -ne 0) {
@@ -108,6 +112,9 @@ jobs:
             Build-Project (Resolve-Path (Join-Path $projectDirectory $relativePath)).Path
           }
 
-          $buildProperties += "/p:LanguageStandard=stdcpp20"
+          $buildProperties += @(
+            "/p:LanguageStandard=stdcpp20",
+            "/p:CppWinRTEnableLegacyCoroutines=false"
+          )
           Build-Project $projectPath
         working-directory: ./Apps/Playground/windows
