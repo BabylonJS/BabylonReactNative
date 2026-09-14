@@ -63,12 +63,7 @@ jobs:
             "/v:minimal"
           )
 
-          function Build-Project([string]$path, [bool]$useCpp20 = $false) {
-            $projectBuildProperties = $buildProperties
-            if ($useCpp20) {
-              $projectBuildProperties += "/p:LanguageStandard=stdcpp20"
-            }
-
+          function Build-Project([string]$path) {
             [xml]$projectXml = Get-Content $path
             $sourceItemImports = Select-Xml -Xml $projectXml -XPath "//*[local-name()='Import' and contains(@Project, 'Microsoft.ReactNative.Cxx.vcxitems')]"
             if ($sourceItemImports) {
@@ -78,7 +73,7 @@ jobs:
               $projectXml.Save($path)
             }
 
-            $evaluatedProperties = MSBuild $path /p:UseExperimentalNuget=true /getProperty:UseExperimentalNuget,MSBuildProjectFullPath /getItem:ProjectReference,ClCompile @projectBuildProperties | ConvertFrom-Json
+            $evaluatedProperties = MSBuild $path /p:UseExperimentalNuget=true /getProperty:UseExperimentalNuget,MSBuildProjectFullPath,LanguageStandard /getItem:ProjectReference,ClCompile @buildProperties | ConvertFrom-Json
             if ($evaluatedProperties.Properties.UseExperimentalNuget -ne "true") {
               throw "RNW NuGet mode was not enabled for $path."
             }
@@ -90,13 +85,16 @@ jobs:
             if ($rnwSourceCompile) {
               throw "RNW source compile items were enabled for $path."
             }
+            if ($path -eq $projectPath -and $evaluatedProperties.Properties.LanguageStandard -ne "stdcpp20") {
+              throw "C++20 was not enabled for the generated Windows app."
+            }
 
-            MSBuild $path /p:UseExperimentalNuget=true /t:Restore /m /p:RestoreRecursive=false @projectBuildProperties
+            MSBuild $path /p:UseExperimentalNuget=true /t:Restore /m /p:RestoreRecursive=false @buildProperties
             if ($LASTEXITCODE -ne 0) {
               throw "Restore failed for $path."
             }
 
-            MSBuild $path /p:UseExperimentalNuget=true /m /p:BuildProjectReferences=false @projectBuildProperties
+            MSBuild $path /p:UseExperimentalNuget=true /m /p:BuildProjectReferences=false @buildProperties
             if ($LASTEXITCODE -ne 0) {
               throw "Build failed for $path."
             }
@@ -110,5 +108,6 @@ jobs:
             Build-Project (Resolve-Path (Join-Path $projectDirectory $relativePath)).Path
           }
 
-          Build-Project $projectPath $true
+          $buildProperties += "/p:LanguageStandard=stdcpp20"
+          Build-Project $projectPath
         working-directory: ./Apps/Playground/windows
