@@ -112,6 +112,17 @@ jobs:
             Build-Project (Resolve-Path (Join-Path $projectDirectory $relativePath)).Path
           }
 
+          $mainPagePath = (Resolve-Path ../node_modules/react-native-test-app/windows/UWP/MainPage.cpp).Path
+          $mainPageContent = [System.IO.File]::ReadAllText($mainPagePath)
+          $updatedMainPageContent = $mainPageContent.Replace(
+            "co_await LoadFromDevServer({}, {});",
+            "LoadFromDevServer({}, {});"
+          )
+          if ($updatedMainPageContent -eq $mainPageContent) {
+            throw "The expected react-native-test-app IAsyncAction await was not found."
+          }
+          [System.IO.File]::WriteAllText($mainPagePath, $updatedMainPageContent)
+
           $buildProperties += @(
             "/p:LanguageStandard=stdcpp20",
             "/p:CppWinRTEnableLegacyCoroutines=false"
