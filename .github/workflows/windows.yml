@@ -17,6 +17,9 @@ on:
 jobs:
   build-windows:
     runs-on: windows-2022
+    env:
+      # Native project restore does not propagate custom command-line properties to child evaluations.
+      UseExperimentalNuget: 'true'
     steps:
       - name: Support longpaths
         run: git config --system core.longpaths true
