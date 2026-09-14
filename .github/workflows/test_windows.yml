@@ -62,6 +62,7 @@ jobs:
           $solutionDir = "$(Split-Path $solutionPath)\"
           $solutionFileName = Split-Path $solutionPath -Leaf
           $projectPath = (Resolve-Path ../node_modules/.generated/windows/UWP/ReactTestApp.vcxproj).Path
+          $reactNativeNuGetTargetsPath = (Resolve-Path ReactNativeNuGet.targets).Path
           $buildProperties = @(
             "/p:Platform=x64",
             "/p:Configuration=Release",
@@ -70,6 +71,7 @@ jobs:
             "/p:SolutionFileName=$solutionFileName",
             "/p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }}",
             "/p:WindowsTargetPlatformMinVersion=${{ inputs.WindowsTargetPlatformMinVersion }}",
+            "/p:ForceImportAfterCppTargets=$reactNativeNuGetTargetsPath",
             "/p:WindowsAppSDKVerifyTransitiveDependencies=false",
             "/p:AppxBundle=Never",
             "/p:UseBundle=false",
