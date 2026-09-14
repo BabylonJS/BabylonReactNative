@@ -53,4 +53,23 @@
       <XamlReferencesToCompile Include="$(_ReactNativeNuGetWinMD)" />
     </ItemGroup>
   </Target>
+
+  <Target Name="UseReactNativeNuGetRuntimePayload"
+          BeforeTargets="_GeneratePrisForPortableLibraries"
+          Condition="'$(UseExperimentalNuget)' == 'true'">
+    <PropertyGroup>
+      <_ReactNativeNuGetArchitecture Condition="'$(RnwNewArch)' != 'true'">-old</_ReactNativeNuGetArchitecture>
+      <_ReactNativeNuGetPlatform Condition="'$(Platform)' == 'Win32'">x86</_ReactNativeNuGetPlatform>
+      <_ReactNativeNuGetPlatform Condition="'$(_ReactNativeNuGetPlatform)' == ''">$(Platform)</_ReactNativeNuGetPlatform>
+      <_ReactNativeNuGetRuntimeDirectory>$(NuGetPackageRoot)microsoft.reactnative\$(ReactNativeWindowsVersion)\runtimes\win10-$(_ReactNativeNuGetPlatform)\native$(_ReactNativeNuGetArchitecture)\</_ReactNativeNuGetRuntimeDirectory>
+      <_ReactNativeNuGetRuntimeDLL>$([System.IO.Path]::GetFullPath('$(_ReactNativeNuGetRuntimeDirectory)Microsoft.ReactNative.dll'))</_ReactNativeNuGetRuntimeDLL>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(_ReactNativeNuGetRuntimeDLL)')" Text="Microsoft.ReactNative.dll was not found in the restored Microsoft.ReactNative $(ReactNativeWindowsVersion) package." />
+    <ItemGroup>
+      <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)"
+                               Condition="'%(ReferenceCopyLocalPaths.Filename)%(ReferenceCopyLocalPaths.Extension)' == 'Microsoft.ReactNative.dll' and !$([System.String]::Copy('%(ReferenceCopyLocalPaths.FullPath)').Equals('$(_ReactNativeNuGetRuntimeDLL)', System.StringComparison.OrdinalIgnoreCase))" />
+      <PackagingOutputs Remove="@(PackagingOutputs)"
+                        Condition="'%(PackagingOutputs.Filename)%(PackagingOutputs.Extension)' == 'Microsoft.ReactNative.dll' and !$([System.String]::Copy('%(PackagingOutputs.FullPath)').Equals('$(_ReactNativeNuGetRuntimeDLL)', System.StringComparison.OrdinalIgnoreCase))" />
+    </ItemGroup>
+  </Target>
 </Project>
