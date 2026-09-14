@@ -8,6 +8,11 @@ on:
         type: string
         default: '10.0.22621.0'
         required: false
+      WindowsTargetPlatformMinVersion:
+        description: 'Windows Minimum Target Platform Version'
+        type: string
+        default: '10.0.17763.0'
+        required: false
 
 jobs:
   build-windows:
@@ -49,5 +54,6 @@ jobs:
         shell: pwsh
         run: |
           $solutionPath = (Resolve-Path Playground.sln).Path
-          MSBuild $solutionPath /restore /m /p:Platform=x64 /p:Configuration=Release /p:LanguageStandard=stdcpp20 /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:UseExperimentalNuget=true /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
+          MSBuild $solutionPath /t:Restore /m /p:Platform=x64 /p:Configuration=Release /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:WindowsTargetPlatformMinVersion=${{ inputs.WindowsTargetPlatformMinVersion }} /p:UseExperimentalNuget=true /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
+          MSBuild $solutionPath /m /p:Platform=x64 /p:Configuration=Release /p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }} /p:WindowsTargetPlatformMinVersion=${{ inputs.WindowsTargetPlatformMinVersion }} /p:UseExperimentalNuget=true /p:WindowsAppSDKVerifyTransitiveDependencies=false /v:minimal
         working-directory: ./Apps/Playground/windows
