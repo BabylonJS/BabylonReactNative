@@ -62,9 +62,6 @@ jobs:
           $solutionDir = "$(Split-Path $solutionPath)\"
           $solutionFileName = Split-Path $solutionPath -Leaf
           $projectPath = (Resolve-Path ../node_modules/.generated/windows/UWP/ReactTestApp.vcxproj).Path
-          $reactNativeNuGetPropsPath = (Resolve-Path ReactNativeNuGet.props).Path
-          $env:UseExperimentalNuget = "true"
-          $env:ForceImportAfterCppDefaultProps = $reactNativeNuGetPropsPath
           $buildProperties = @(
             "/p:Platform=x64",
             "/p:Configuration=Release",
@@ -73,7 +70,6 @@ jobs:
             "/p:SolutionFileName=$solutionFileName",
             "/p:WindowsTargetPlatformVersion=${{ inputs.WindowsTargetPlatformVersion }}",
             "/p:WindowsTargetPlatformMinVersion=${{ inputs.WindowsTargetPlatformMinVersion }}",
-            "/p:ForceImportAfterCppDefaultProps=$reactNativeNuGetPropsPath",
             "/p:WindowsAppSDKVerifyTransitiveDependencies=false",
             "/p:AppxBundle=Never",
             "/p:UseBundle=false",
@@ -81,17 +77,21 @@ jobs:
           )
 
           function Build-Project([string]$path) {
-            $evaluatedProperties = MSBuild $path /getProperty:UseExperimentalNuget,ForceImportAfterCppDefaultProps @buildProperties | ConvertFrom-Json
+            $evaluatedProperties = MSBuild $path /p:UseExperimentalNuget=true /getProperty:UseExperimentalNuget,MSBuildProjectFullPath /getItem:ProjectReference @buildProperties | ConvertFrom-Json
             if ($evaluatedProperties.Properties.UseExperimentalNuget -ne "true") {
               throw "RNW NuGet mode was not enabled for $path."
             }
+            $rnwSourceReference = $evaluatedProperties.Items.ProjectReference | Where-Object Identity -Like "*\react-native-windows\Microsoft.ReactNative\Microsoft.ReactNative.vcxproj"
+            if ($rnwSourceReference) {
+              throw "RNW source project reference was enabled for $path."
+            }
 
-            MSBuild $path /t:Restore /m /p:RestoreRecursive=false @buildProperties
+            MSBuild $path /p:UseExperimentalNuget=true /t:Restore /m /p:RestoreRecursive=false @buildProperties
             if ($LASTEXITCODE -ne 0) {
               throw "Restore failed for $path."
             }
 
-            MSBuild $path /m /p:BuildProjectReferences=false @buildProperties
+            MSBuild $path /p:UseExperimentalNuget=true /m /p:BuildProjectReferences=false @buildProperties
             if ($LASTEXITCODE -ne 0) {
               throw "Build failed for $path."
             }
