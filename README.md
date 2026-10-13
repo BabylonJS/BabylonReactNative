@@ -33,7 +33,7 @@ The latest stable npm release is **[@babylonjs/react-native 2.0.6](https://www.n
 | --------------- | -------------------------- | ---------------------------- | -------------------- |
 | 2.0.6 / master  | >=9.0.0                    | 0.81.6                       | 0.81.35              |
 
-The React Native versions above are the Playground baselines, not a guarantee of compatibility with every newer release. The Windows Playground pairs React Native 0.81.4 with React Native Windows 0.81.35. Windows support remains experimental; its npm version is pinned to match the published React Native Windows NuGet packages.
+The React Native versions above are the resolved Playground lockfile baselines, not a guarantee of compatibility with every newer release. For 2.0.6, the Windows Playground locks React Native 0.81.6 with React Native Windows 0.81.35; 0.81.4 is only the lower bound of the manifest's `^0.81.4` React Native range. Windows support remains experimental; its npm version is pinned to match the published React Native Windows NuGet packages.
 
 See the [package README](Modules/@babylonjs/react-native/README.md#supported-versions) for earlier releases and the Babylon Native commit used by each release, and the [release notes](https://github.com/BabylonJS/BabylonReactNative/releases) for changes.
 

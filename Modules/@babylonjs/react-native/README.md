@@ -28,15 +28,15 @@ The native camera and XR plugins can be [disabled at build time](#plugins-select
 
 ### Supported Versions
 
-These are the React Native baselines used by the Playground at each release tag. The permissive `react` and `react-native` peer dependency ranges do **not** guarantee that every newer React Native version is compatible.
+These are the resolved React Native versions in the committed Playground lockfiles at each release tag, not the lower bounds of manifest ranges. The permissive `react` and `react-native` peer dependency ranges do **not** guarantee that every newer React Native version is compatible.
 
 | Babylon React Native version | React Native (iOS / Android) | React Native Windows |
 | ---------------------------- | --------------------------- | -------------------- |
 | 2.0.6 / master               | 0.81.6                      | 0.81.35              |
-| 2.0.5                        | 0.81.6                      | 0.81.4               |
+| 2.0.5                        | 0.81.6                      | 0.81.21              |
 | 2.0.0 - 2.0.4                | 0.79.4                      | 0.79.1               |
 
-For 2.0.6, the Windows Playground uses React Native 0.81.4 with **React Native Windows pinned to 0.81.35** to match the published NuGet packages. Windows project generation uses the legacy renderer and Hermes.
+For 2.0.6, the Windows Playground locks React Native 0.81.6 with **React Native Windows pinned to 0.81.35** to match the published NuGet packages; 0.81.4 is only the lower bound of the manifest's `^0.81.4` React Native range. Windows project generation uses the legacy renderer and Hermes.
 
 The Babylon.js column below records the published package's `@babylonjs/core` peer dependency. The Babylon Native commits are the source pins in `Package/gulpfile.js` at the corresponding release tags.
 
