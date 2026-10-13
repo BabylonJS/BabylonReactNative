@@ -92,9 +92,9 @@ For iOS, install the CocoaPods dependencies separately before launching (from `P
 ```powershell
 cd ..\Apps\Playground\ios
 pod install
-cd ..
-npx react-native run-ios
 ```
+
+Then open `Apps\Playground\ios\BRNPlayground.xcworkspace` in Xcode, select the `Playground` scheme, and run it on an iOS device or simulator. Use this workspace rather than the CLI-selected `Playground.xcworkspace`: it includes the CMake-generated Babylon Native project needed to build and link the native libraries.
 
 For Windows, use the manifest preparation and project generation steps in the [Windows section](#universal-windows-platform-uwp) instead.
 
