@@ -18,7 +18,7 @@ Use the React version required by your React Native application. React Native 0.
 
 To load formats such as glTF, also install `@babylonjs/loaders` at the same version as `@babylonjs/core` and import it in your application.
 
-**2.0.8 is the next preview target, not a published stable release.** It includes the NativeXr EndFrame lifecycle fix described below. Preview publishing assigns the exact prerelease version; use that published version when testing rather than assuming the `preview` npm tag already contains 2.0.8.
+**2.0.8 is being prepared as the next stable release; it is not yet published as stable.** It includes the NativeXr EndFrame lifecycle fix described below. Until it is published, the stable installation command above continues to use 2.0.7.
 
 ### Dependencies
 
@@ -30,23 +30,23 @@ The native camera and XR plugins can be [disabled at build time](#plugins-select
 
 ### Supported Versions
 
-These are the resolved React Native versions in the committed Playground lockfiles at each release tag (or the preview branch for the unreleased 2.0.8 target), not the lower bounds of manifest ranges. The permissive `react` and `react-native` peer dependency ranges do **not** guarantee that every newer React Native version is compatible.
+These are the resolved React Native versions in the committed Playground lockfiles at each release tag (or the release preparation branch for the planned 2.0.8 release), not the lower bounds of manifest ranges. The permissive `react` and `react-native` peer dependency ranges do **not** guarantee that every newer React Native version is compatible.
 
 | Babylon React Native version | React Native (iOS / Android) | React Native Windows |
 | ---------------------------- | --------------------------- | -------------------- |
-| 2.0.8 (preview target)        | 0.81.6                      | 0.81.35              |
+| 2.0.8 (planned)               | 0.81.6                      | 0.81.35              |
 | 2.0.7 / master               | 0.81.6                      | 0.81.35              |
 | 2.0.6                        | 0.81.6                      | 0.81.35              |
 | 2.0.5                        | 0.81.6                      | 0.81.21              |
 | 2.0.0 - 2.0.4                | 0.79.4                      | 0.79.1               |
 
-For 2.0.6, 2.0.7, and the 2.0.8 preview target, the Windows Playground locks React Native 0.81.6 with **React Native Windows pinned to 0.81.35** to match the published NuGet packages; 0.81.4 is only the lower bound of the manifest's `^0.81.4` React Native range. Windows project generation uses the legacy renderer and Hermes.
+For 2.0.6, 2.0.7, and the planned 2.0.8 release, the Windows Playground locks React Native 0.81.6 with **React Native Windows pinned to 0.81.35** to match the published NuGet packages; 0.81.4 is only the lower bound of the manifest's `^0.81.4` React Native range. Windows project generation uses the legacy renderer and Hermes.
 
-The Babylon.js column below records the package's `@babylonjs/core` peer dependency. The Babylon Native commits are the source pins in `Package/gulpfile.js` at the corresponding release tags (or the preview branch for the unreleased 2.0.8 target).
+The Babylon.js column below records the package's `@babylonjs/core` peer dependency. The Babylon Native commits are the source pins in `Package/gulpfile.js` at the corresponding release tags (or the release preparation branch for the planned 2.0.8 release).
 
 | Babylon React Native version | Babylon.js peer dependency | Babylon Native commit |
 | ---------------------------- | -------------------------- | --------------------- |
-| 2.0.8 (preview target)        | >=9.0.0                    | [37d30f54649543290ad25c6c3626c247c1372773](https://github.com/BabylonJS/BabylonNative/commit/37d30f54649543290ad25c6c3626c247c1372773) |
+| 2.0.8 (planned)               | >=9.0.0                    | [37d30f54649543290ad25c6c3626c247c1372773](https://github.com/BabylonJS/BabylonNative/commit/37d30f54649543290ad25c6c3626c247c1372773) |
 | 2.0.7 / master               | >=9.0.0                    | [f4d9efbeeabcfec24105373b99e54fe147669fc1](https://github.com/BabylonJS/BabylonNative/commit/f4d9efbeeabcfec24105373b99e54fe147669fc1) |
 | 2.0.6                        | >=9.0.0                    | [feb0227be8890ec5dcd28c6bfc18275a98bf8d45](https://github.com/BabylonJS/BabylonNative/commit/feb0227be8890ec5dcd28c6bfc18275a98bf8d45) |
 | 2.0.5                        | >=9.0.0                    | [ce2edf0851e0c8483559832a4f8eb9d39c6b2f53](https://github.com/BabylonJS/BabylonNative/commit/ce2edf0851e0c8483559832a4f8eb9d39c6b2f53) |
@@ -56,7 +56,7 @@ The Babylon.js column below records the package's `@babylonjs/core` peer depende
 | 2.0.1                        | >=5.53.1                   | [3ccba7a6f741705ce611819aefacbbb8062393e7](https://github.com/BabylonJS/BabylonNative/commit/3ccba7a6f741705ce611819aefacbbb8062393e7) |
 | 2.0.0                        | >=5.53.1                   | [9a50d722d493524e1b315dd48fed6b0ed6d062c8](https://github.com/BabylonJS/BabylonNative/commit/9a50d722d493524e1b315dd48fed6b0ed6d062c8) |
 
-The 2.0.8 preview target updates Babylon Native to include the [NativeXr EndFrame lifecycle fix](https://github.com/BabylonJS/BabylonNative/pull/1957). It queues EndFrame during FrameStart, preventing a late EndFrame call from consuming the next frame and causing a null-frame assertion. The Babylon.js and React Native baselines are unchanged from 2.0.7.
+2.0.8 updates Babylon Native to include the [NativeXr EndFrame lifecycle fix](https://github.com/BabylonJS/BabylonNative/pull/1957). It queues EndFrame during FrameStart, preventing a late EndFrame call from consuming the next frame and causing a null-frame assertion. The Babylon.js and React Native baselines are unchanged from 2.0.7.
 
 2.0.7 updates Babylon Native and its JsRuntimeHost dependency, and removes obsolete `minz` library links from the iOS podspec and Windows project. The Babylon.js and React Native baselines are unchanged from 2.0.6.
 
@@ -144,7 +144,7 @@ Keep the variables set when running `pod install` and native builds. Disabling p
 
 ### Windows Configuration
 
-Windows support is experimental. The 2.0.6, 2.0.7, and 2.0.8 preview integrations use React Native Windows **0.81.35** and its matching NuGet packages. Keep the React Native Windows npm version aligned with its published NuGet version rather than allowing npm to select a newer release independently.
+Windows support is experimental. The 2.0.6 and 2.0.7 integrations and the planned 2.0.8 release use React Native Windows **0.81.35** and its matching NuGet packages. Keep the React Native Windows npm version aligned with its published NuGet version rather than allowing npm to select a newer release independently.
 
 The module's MSBuild project builds the embedded Babylon Native sources using CMake and the React Native Windows project's generated C++/WinRT projections. See the [repository's Windows instructions](https://github.com/BabylonJS/BabylonReactNative#universal-windows-platform-uwp) and [packaged-consumer build workflow](https://github.com/BabylonJS/BabylonReactNative/blob/master/.github/workflows/test_windows.yml) for the current UWP, legacy-renderer, NuGet, and C++20 configuration.
 
