@@ -18,8 +18,6 @@ Use the React version required by your React Native application. React Native 0.
 
 To load formats such as glTF, also install `@babylonjs/loaders` at the same version as `@babylonjs/core` and import it in your application.
 
-2.0.8 includes the NativeXr EndFrame lifecycle fix described below.
-
 ### Dependencies
 
 The package declares `@babylonjs/core` (>=9.0.0), `react`, `react-native`, and `react-native-permissions` (>=3.0.0) as **peer dependencies**. Add them to your application and resolve any peer dependency errors or warnings during installation.
@@ -55,8 +53,6 @@ The Babylon.js column below records the package's `@babylonjs/core` peer depende
 | 2.0.2                        | >=9.0.0                    | [887a0446c2ce5d379d931d802071cf6f9e008c6a](https://github.com/BabylonJS/BabylonNative/commit/887a0446c2ce5d379d931d802071cf6f9e008c6a) |
 | 2.0.1                        | >=5.53.1                   | [3ccba7a6f741705ce611819aefacbbb8062393e7](https://github.com/BabylonJS/BabylonNative/commit/3ccba7a6f741705ce611819aefacbbb8062393e7) |
 | 2.0.0                        | >=5.53.1                   | [9a50d722d493524e1b315dd48fed6b0ed6d062c8](https://github.com/BabylonJS/BabylonNative/commit/9a50d722d493524e1b315dd48fed6b0ed6d062c8) |
-
-2.0.8 updates Babylon Native to include the [NativeXr EndFrame lifecycle fix](https://github.com/BabylonJS/BabylonNative/pull/1957). It queues EndFrame during FrameStart, preventing a late EndFrame call from consuming the next frame and causing a null-frame assertion. The Babylon.js and React Native baselines are unchanged from 2.0.7.
 
 2.0.7 updates Babylon Native and its JsRuntimeHost dependency, and removes obsolete `minz` library links from the iOS podspec and Windows project. The Babylon.js and React Native baselines are unchanged from 2.0.6.
 

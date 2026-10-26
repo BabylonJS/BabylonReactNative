@@ -29,8 +29,6 @@ Babylon React Native uses JSI for direct synchronous communication between nativ
 
 The latest stable npm release is **[@babylonjs/react-native 2.0.8](https://www.npmjs.com/package/@babylonjs/react-native/v/2.0.8)**. Since 2.0.0, a single package contains the sources for Android, iOS, and Windows; separate platform packages are no longer needed.
 
-2.0.8 updates Babylon Native to [37d30f54649543290ad25c6c3626c247c1372773](https://github.com/BabylonJS/BabylonNative/commit/37d30f54649543290ad25c6c3626c247c1372773), including the [NativeXr EndFrame lifecycle fix](https://github.com/BabylonJS/BabylonNative/pull/1957) that prevents EndFrame from being queued a frame late and hitting a null-frame assertion. The Babylon.js and React Native baselines are unchanged from 2.0.7.
-
 2.0.7 updates Babylon Native to [f4d9efbeeabcfec24105373b99e54fe147669fc1](https://github.com/BabylonJS/BabylonNative/commit/f4d9efbeeabcfec24105373b99e54fe147669fc1), including its JsRuntimeHost dependency update, and removes obsolete `minz` library links from the iOS and Windows builds. The Babylon.js and React Native baselines are unchanged from 2.0.6.
 
 | Package version | Babylon.js peer dependency | React Native (Android / iOS) | React Native Windows |
