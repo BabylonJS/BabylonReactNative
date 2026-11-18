@@ -230,7 +230,7 @@ cd Assembled
 npm pack
 ```
 
-Package content and the resulting `.tgz` are in `Package\Assembled`. The module's source `package.json` uses a development placeholder version; the [publish workflow](.github/workflows/publish.yml) sets the package version from the release tag before publishing.
+Package content and the resulting `.tgz` are in `Package\Assembled`. The module's source `package.json` uses a development placeholder version. Official npm releases (stable and `preview`) are built from `master`, versioned, and published through Microsoft's ESRP release pipeline; this repository's workflows never publish to npm.
 
 The npm README is copied from `Modules\@babylonjs\react-native\README.md` by `copyCommonFiles` in `Package\gulpfile.js`. Update that file for package usage changes; npm receives the updated README when a new package version is published.
 
