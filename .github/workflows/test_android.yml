@@ -9,6 +9,11 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4.2.2
+      - name: Setup CMake
+        # CMake 4.5 rejects the stray argument in Babylon Native's Polyfills/Canvas source_group() calls.
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '4.4.5'
 
       - name: Download artifact
         uses: actions/download-artifact@v4
