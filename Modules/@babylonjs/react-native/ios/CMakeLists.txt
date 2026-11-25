@@ -77,6 +77,8 @@ set(BABYLON_NATIVE_BUILD_APPS OFF CACHE BOOL "")
 set(BABYLON_REACT_NATIVE_SHARED_DIR "${CMAKE_CURRENT_LIST_DIR}/../../react-native/shared")
 add_subdirectory(${BABYLON_REACT_NATIVE_SHARED_DIR} ${CMAKE_CURRENT_BINARY_DIR}/shared)
 
+enable_babylon_native_rtti("${BABYLON_REACT_NATIVE_SHARED_DIR}")
+
 add_library(BabylonNative ${SHARED_SOURCES})
 
 target_include_directories(BabylonNative PRIVATE ${SHARED_INCLUDES})
